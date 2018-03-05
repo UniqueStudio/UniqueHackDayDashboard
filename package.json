@@ -1,0 +1,26 @@
+{
+  "name": "unique-hackday-dashboard",
+  "version": "0.1.0",
+  "description": "The dashboard application for Unique Hackday, designed to be reuseable.",
+  "main": "index.js",
+  "author": "Faraway <hzylovelyl@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/antd": "^1.0.0",
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
+    "autoprefixer": "^8.1.0",
+    "less": "^3.0.1",
+    "parcel": "^0.0.1",
+    "postcss": "^6.0.19",
+    "postcss-modules": "^1.1.0",
+    "tslint": "^5.9.1",
+    "tslint-react": "^3.5.1",
+    "typescript": "^2.7.2"
+  },
+  "dependencies": {
+    "antd": "^3.2.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}
