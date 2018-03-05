@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Layout from 'antd/es/layout';
-import Tooltip from 'antd/es/tooltip';
 import Icon from 'antd/es/icon';
 import Menu from 'antd/es/menu';
 
@@ -30,7 +29,7 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
 
   renderHeader() {
     return (
-      <Layout.Header style={{ backgroundColor: '#fff', borderBottomColor: '#eee' }}>
+      <Layout.Header className={cls['layout-header']}>
         111
       </Layout.Header>
     );
@@ -38,12 +37,12 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
 
   renderSider() {
     return (
-      <Layout.Sider style={{ backgroundColor: '#3F3F3F' }} width="200">
+      <Layout.Sider className={cls['bg-grey']} width="200">
           <div className={cls['header-icon-wrapper']}>
             <img className={cls['header-icon']} src={Logo} alt="UniqueHack"/>
           </div>
 
-          <Menu style={{ backgroundColor: '#3F3F3F' }} theme="dark">
+          <Menu className={cls['bg-grey']} theme="dark">
             <Menu.Item>
               <span className={cls['menu-item']}>
                 <Icon type="desktop" /> 控制台
