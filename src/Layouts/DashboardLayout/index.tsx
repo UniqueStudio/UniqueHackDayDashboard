@@ -19,7 +19,7 @@ export interface IDashboardLayoutProps {
 export default class DashboardLayout extends React.Component<IDashboardLayoutProps> {
   render() {
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ height: '100%' }}>
         {this.renderSider()}
         <Layout.Content>
           {this.renderHeader()}
