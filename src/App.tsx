@@ -1,27 +1,10 @@
 import * as React from 'react';
-import { createStore, combineReducers, applyMiddleware, Action } from 'redux';
-import createHistory from 'history/createHashHistory';
-import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
-import Dashboard from './Views/Dashboard/index';
-
-const history = createHistory();
-
-const middleware = routerMiddleware(history);
-
-const test = (state = {}, action: Action) => {
-  return {};
-};
-
-const store = createStore(
-  combineReducers({
-    ...{ test },
-    router: routerReducer,
-  }),
-  applyMiddleware(middleware),
-);
+import Dashboard from './Views/Dashboard';
+import { store, history } from './redux/store';
 
 export default class App extends React.Component {
   render() {
