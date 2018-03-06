@@ -3,8 +3,9 @@ import { createStore, combineReducers, applyMiddleware, Action } from 'redux';
 import createHistory from 'history/createHashHistory';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
 import { Provider } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 
-import RootRoute from './routes';
+import Dashboard from './Views/Dashboard/index';
 
 const history = createHistory();
 
@@ -27,7 +28,10 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
          <ConnectedRouter history={history}>
-          <RootRoute />
+          <Switch>
+            {/* <Route path="/login" component={}/> */}
+            <Route path="/" component={Dashboard}/>
+          </Switch>
         </ConnectedRouter>
       </Provider>
     );

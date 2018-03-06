@@ -9,12 +9,6 @@ import Tooltip from 'antd/es/tooltip';
 import Logo from '../../assets/images/unique-hackday-icon.png';
 import cls from '../../styles/Dashboard/layout.less';
 
-// export interface IDashboardLayoutProps {
-//   children: React.ReactNode;
-//   className?: string;
-//   onUserMsgClick?: () => void;
-//   onUserAvatarClick?: () => void;
-// }
 export interface IDashboardLayoutProps {
   children: React.ReactNode;
   className?: string;
