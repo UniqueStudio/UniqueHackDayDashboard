@@ -10,6 +10,10 @@
     "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
+    "@types/react-redux": "^5.0.15",
+    "@types/react-router": "^4.0.22",
+    "@types/react-router-dom": "^4.2.4",
+    "@types/react-router-redux": "^5.0.12",
     "autoprefixer": "^8.1.0",
     "less": "^3.0.1",
     "parcel": "^0.0.1",
@@ -21,8 +25,15 @@
   },
   "dependencies": {
     "antd": "^3.2.3",
+    "history": "^4.7.2",
+    "immutable": "^3.8.2",
     "lodash": "^4.17.5",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "redux": "^3.7.2"
   }
 }

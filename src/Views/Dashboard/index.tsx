@@ -1,10 +1,12 @@
 import * as React from 'react';
-import EntryLayout from '../../Layouts/DashboardLayout';
+import DashboardLayout from '../../Layouts/DashboardLayout';
 
-export default class Entry extends React.Component {
+export default class Dashboard extends React.Component {
   render() {
     return (
-      <EntryLayout />
+      <DashboardLayout>
+        11
+      </DashboardLayout>
     );
   }
 }

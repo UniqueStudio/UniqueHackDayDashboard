@@ -8,7 +8,8 @@
     "rules": {
         "quotemark": [true, "single", "jsx-double"],
         "member-access": [true, "no-public"],
-        "ordered-imports": false
+        "ordered-imports": false,
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }
