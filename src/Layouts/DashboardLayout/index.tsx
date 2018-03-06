@@ -6,6 +6,11 @@ import Icon from 'antd/es/icon';
 import Menu from 'antd/es/menu';
 import Tooltip from 'antd/es/tooltip';
 
+import 'antd/lib/layout/style/index.css';
+import 'antd/lib/icon/style/css';
+import 'antd/lib/menu/style/index.css';
+import 'antd/lib/tooltip/style/index.css';
+
 import Logo from '../../assets/images/unique-hackday-icon.png';
 import cls from '../../styles/Dashboard/layout.less';
 
