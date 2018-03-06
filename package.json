@@ -7,6 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/antd": "^1.0.0",
+    "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
     "autoprefixer": "^8.1.0",
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "antd": "^3.2.3",
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }
