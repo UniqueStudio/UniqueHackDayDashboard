@@ -4,9 +4,9 @@ import App from './App';
 
 import 'antd/dist/antd.css';
 
-import main from './styles/main.less';
+import './styles/main.less';
 
 const root = document.getElementById('root') as HTMLElement;
-root.setAttribute('id', main.root);
 
+// haha hehe
 ReactDOM.render(React.createElement(App), root);
