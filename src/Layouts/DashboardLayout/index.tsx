@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { noop } from 'lodash';
+import noop from 'lodash-es/noop';
 
 import Layout from 'antd/es/layout';
 import Icon from 'antd/es/icon';

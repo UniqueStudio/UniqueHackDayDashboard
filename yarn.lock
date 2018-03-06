@@ -12,7 +12,13 @@
   version "4.6.2"
   resolved "http://registry.npm.taobao.org/@types/history/download/@types/history-4.6.2.tgz#12cfaba693ba20f114ed5765467ff25fdf67ddb0"
 
-"@types/lodash@^4.14.104":
+"@types/lodash-es@^4.17.0":
+  version "4.17.0"
+  resolved "http://registry.npm.taobao.org/@types/lodash-es/download/@types/lodash-es-4.17.0.tgz#ed9044d62ee36a93e0650b112701986b1c74c766"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
   version "4.14.104"
   resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.104.tgz#53ee2357fa2e6e68379341d92eb2ecea4b11bb80"
 
