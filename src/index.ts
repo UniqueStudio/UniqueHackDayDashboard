@@ -5,6 +5,7 @@ import App from './App';
 // import 'antd/dist/antd.css';
 
 // import './styles/main.less';
+import './styles/override.css';
 
 import 'antd/lib/style/index.css';
 

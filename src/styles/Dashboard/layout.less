@@ -3,26 +3,53 @@
   height: 64px;
   line-height: 64px;
   font-size: 0;
-  // text-align: center;
+  text-align: center;
+  white-space: nowrap;
 
   margin: 0;
+  .header-icon, .header-icon-text {
+    background-image: url('../../assets/images/unique-hackday-icon.png');
+    background-repeat: no-repeat;
+    background-size: auto 40px;
+    
+    // padding: 0 16px;
+    // height: auto;
+    // position: relative;
+    // left: 10px;
+    display: inline-block;    
+  }
   .header-icon {
-    padding: 0 16px;
-    display: inline-block;
-    height: auto;
-    position: relative;
-    left: 10px;
+    background-position: 0 0;
+    width: 41px;
+    height: 40px;
+    margin: 12px auto;
+    &-text {
+      width: 48px;
+      height: 30px;
+      margin: 17px 10px;
+      background-position: -48px -5px;
+      transform: scale(1.2);
+      transform-origin: center center;
+      transition: width 0s 0s, opacity 0.5s 0s, margin 0s 0s;
+
+      &.hidden {
+        // transition: width 0s 0s, opacity 0.5s 0s, margin 0.5s 0.5s;
+        width: 0;
+        opacity: 0;
+        margin: 0;
+      }
+    }
   }
 }
 
 
-.sider-menu-item {
-  margin-left: 10px;
-  display: inline-block;
-  &:hover {
-    color: #fff;
-  }
-}
+// .sider-menu-item {
+//   // margin-left: 10px;
+//   display: inline-block;
+//   &:hover {
+//     color: #fff;
+//   }
+// }
 
 .bg-grey {
   background-color: #3f3f3f !important;
@@ -39,3 +66,4 @@
     padding: 0 10px !important;
   }
 }
+

@@ -6,7 +6,7 @@ import Loadable from 'react-loadable';
 // import DashboardLayout from '../../Layouts/DashboardLayout';
 const DashboardLayout = Loadable({
   loader: () => import('../../Layouts/DashboardLayout'),
-  loading: () => <div>111</div>,
+  loading: () => <div>正在加载...</div>,
 });
 
 export default class Dashboard extends React.Component<{ location: Location }> {

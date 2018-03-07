@@ -17,5 +17,15 @@
 <body>
   <div id="root"></div>
   <script src="./src/index.ts"></script>
+  <style>
+    /* override */
+    /* .css files will be preprocessed into CSS Modules  */
+    .ant-menu-inline-collapsed {
+      width: 60px;      
+    }
+    .ant-menu-inline-collapsed > .ant-menu-item {
+      padding: 0 22px !important;
+    }
+  </style>
 </body>
 </html>

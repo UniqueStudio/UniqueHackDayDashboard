@@ -25,7 +25,9 @@
     "typescript": "^2.7.2"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.3",
     "antd": "^3.2.3",
+    "classnames": "^2.2.5",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
     "lodash-es": "^4.17.5",
