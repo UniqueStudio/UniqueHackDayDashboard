@@ -11,12 +11,13 @@ import 'antd/lib/layout/style/index.css';
 import 'antd/lib/icon/style/css';
 import 'antd/lib/menu/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
+import '../../styles/main.less';
 
 import cls from '../../styles/Dashboard/layout.less';
 
 export interface IDashboardLayoutProps {
   children: React.ReactNode;
-  mode?: 'mobile' | 'desktop';
+  mode?: 'phone' | 'desktop';
   className?: string;
   onUserMsgClick?: () => void;
   onUserAvatarClick?: () => void;
@@ -71,14 +72,15 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
   }
 
   renderHeader() {
+    const minWidth = this.props.mode === 'phone' ? undefined : '440px';
     return (
-      <Layout.Header className={cls.header} >
+      <Layout.Header className={cls.header} style={{ minWidth }}>
         <Menu
           mode="horizontal"
           style={{ lineHeight: '64px', border: 'none' }}
           onClick={this.handleMenuItemClick}
         >
-          {this.props.mode === 'mobile' && this.renderHeaderLinks()}
+          {this.props.mode !== 'phone' && this.renderHeaderLinks()}
           <Menu.Item className={cls['header-menu-item']} key="mine">
             <Tooltip title="我">
               <Icon type="user"/> 用户名
@@ -106,12 +108,10 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
         className={cls['bg-grey']}
         width="200"
         breakpoint="sm"
-        // onCollapased={}
         collapsedWidth={60}
         onCollapse={this.handleCollapse}
       >
         <div className={cls['header-icon-wrapper']}>
-          {/* <img className={cls['header-icon']} src={Logo} alt="UniqueHack"/> */}
           <span className={cls['header-icon']} />
           <span className={headerIconTextClassName} />
         </div>
@@ -132,5 +132,8 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
         </Menu>
       </Layout.Sider>
     );
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
   }
 }

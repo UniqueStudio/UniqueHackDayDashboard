@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router';
-import { Location } from 'history';
+import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
+
+import { RootState } from '../../redux/reducers';
+import { MediaQuery } from '../../redux/reducers/mediaQuery';
 
 // import DashboardLayout from '../../Layouts/DashboardLayout';
 const DashboardLayout = Loadable({
@@ -9,15 +12,20 @@ const DashboardLayout = Loadable({
   loading: () => <div>正在加载...</div>,
 });
 
-export default class Dashboard extends React.Component<{ location: Location }> {
-  render() {
-    return (
-      <DashboardLayout>
-        <Switch>
-          <Route path="/haha" component={DashboardLayout}/>
-          <Route path="/hehe" component={DashboardLayout}/>
-        </Switch>
-      </DashboardLayout>
-    );
-  }
-}
+const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = (props) => {
+  // props.dispatch();
+  return (
+    <DashboardLayout mode={props.mediaQuery}>
+      <Switch>
+        <Route path="/haha" component={DashboardLayout}/>
+        <Route path="/hehe" component={DashboardLayout}/>
+      </Switch>
+    </DashboardLayout>
+  );
+};
+
+export default connect(
+  (state: RootState) => {
+    return state;
+  },
+)(Dashboard);
