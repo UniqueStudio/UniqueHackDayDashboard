@@ -42,15 +42,6 @@
   }
 }
 
-
-// .sider-menu-item {
-//   // margin-left: 10px;
-//   display: inline-block;
-//   &:hover {
-//     color: #fff;
-//   }
-// }
-
 .bg-grey {
   background-color: #3f3f3f !important;
 }
@@ -67,3 +58,15 @@
   }
 }
 
+.sider-link {
+  color: inherit !important;
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

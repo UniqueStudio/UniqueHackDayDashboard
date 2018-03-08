@@ -13,7 +13,7 @@ import 'antd/lib/menu/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
 import '../../styles/main.less';
 
-import cls from '../../styles/Dashboard/layout.less';
+import cls from './layout.less';
 
 export interface IDashboardLayoutProps {
   children: React.ReactNode;
@@ -47,12 +47,15 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
   }
 
   render() {
+    const { mode } = this.props;
     return (
       <Layout style={{ height: '100%' }}>
         {this.renderSider()}
         <Layout.Content style={{ overflowX: 'auto' }}>
           {this.renderHeader()}
-          {this.props.children}
+          <div style={{ margin: mode === 'desktop' ? '20px' : '10px' }}>
+            {this.props.children}
+          </div>
         </Layout.Content>
       </Layout>
     );
@@ -118,22 +121,23 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
 
         <Menu className={cls['bg-grey']} theme="dark">
           <Menu.Item>
-            <Icon type="desktop" /> <span>控制台</span>
+            <Icon type="desktop" />
+            <span><a className={cls['sider-link']} href="/#/console">控制台</a></span>
           </Menu.Item>
           <Menu.Item>
-            <Icon type="usergroup-add" /> <span>队伍信息</span>
+            <Icon type="usergroup-add" />
+            <span><a className={cls['sider-link']} href="/#/team_info">队伍信息</a></span>
           </Menu.Item>
           <Menu.Item>
-            <Icon type="book" /> <span>比赛项目</span>
+            <Icon type="book" />
+            <span><a className={cls['sider-link']} href="/#/project">比赛项目</a></span>
           </Menu.Item>
           <Menu.Item>
-            <Icon type="eye-o" /> <span>管理员</span>
+            <Icon type="eye-o" />
+            <span><a className={cls['sider-link']} href="/#/admin">管理员</a></span>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
     );
-  }
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
   }
 }

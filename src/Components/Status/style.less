@@ -1,0 +1,59 @@
+@success-color: #52c41a;
+@waring-color: #FFAF40;
+@error-color: #E23C39;
+@status-title-color: #626262;
+
+.icon-title-wrapper {
+  text-align: center;
+  text-align: left;  
+}
+
+.status-title {
+  display: inline-block;
+  color: @status-title-color;
+  font-size: 18px;
+  margin: 0 6px;
+  line-height: 50px;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.icon {
+  &-success, &-waring, &-error {
+    font-size: 40px;
+    margin: 5px;
+  }
+  &-success {
+    color: @success-color;
+  }
+}
+
+@media (min-width: 768px) {
+  .icon-title-wrapper {
+    text-align: left;
+  }
+}
+
+.buttons-wrapper {
+  margin: 10px 0 0;
+  height: 30px;
+  > * {
+    &:first-child {
+      margin-left: 10px;
+    }
+    margin-bottom: 5px;
+    float: right;
+  }
+}
+
+@media (min-width: 768px) {
+  .buttons-wrapper {
+    height: 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  .status-card {
+    padding: 10px 0;
+  }
+}

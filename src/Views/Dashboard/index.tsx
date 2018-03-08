@@ -6,6 +6,8 @@ import Loadable from 'react-loadable';
 import { RootState } from '../../redux/reducers';
 import { MediaQuery } from '../../redux/reducers/mediaQuery';
 
+import Console from '../Console/index';
+
 // import DashboardLayout from '../../Layouts/DashboardLayout';
 const DashboardLayout = Loadable({
   loader: () => import('../../Layouts/DashboardLayout'),
@@ -13,12 +15,10 @@ const DashboardLayout = Loadable({
 });
 
 const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = (props) => {
-  // props.dispatch();
   return (
     <DashboardLayout mode={props.mediaQuery}>
       <Switch>
-        <Route path="/haha" component={DashboardLayout}/>
-        <Route path="/hehe" component={DashboardLayout}/>
+        <Route path="/console" component={Console}/>
       </Switch>
     </DashboardLayout>
   );

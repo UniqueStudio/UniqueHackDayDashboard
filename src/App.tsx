@@ -13,7 +13,6 @@ export default class App extends React.Component {
       <Provider store={store}>
          <ConnectedRouter history={history}>
           <Switch>
-            {/* <Route path="/login" component={}/> */}
             <Route path="/" component={Dashboard}/>
           </Switch>
         </ConnectedRouter>
