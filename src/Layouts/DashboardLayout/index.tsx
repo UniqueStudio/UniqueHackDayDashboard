@@ -51,9 +51,12 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
     return (
       <Layout style={{ height: '100%' }}>
         {this.renderSider()}
-        <Layout.Content style={{ overflowX: 'auto' }}>
+        <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
           {this.renderHeader()}
-          <div style={{ margin: mode === 'desktop' ? '20px' : '10px' }}>
+          <div
+            className={cls['content-wrapper']}
+            style={{ padding: mode === 'desktop' ? '20px' : '10px' }}
+          >
             {this.props.children}
           </div>
         </Layout.Content>

@@ -6,19 +6,21 @@ import Loadable from 'react-loadable';
 import { RootState } from '../../redux/reducers';
 import { MediaQuery } from '../../redux/reducers/mediaQuery';
 
-import Console from '../Console/index';
-
-// import DashboardLayout from '../../Layouts/DashboardLayout';
 const DashboardLayout = Loadable({
   loader: () => import('../../Layouts/DashboardLayout'),
   loading: () => <div>正在加载...</div>,
+});
+
+const ConsoleLoadable = Loadable({
+  loader: () => import('../Console/index'),
+  loading: () => <div>正在加载</div>,
 });
 
 const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = (props) => {
   return (
     <DashboardLayout mode={props.mediaQuery}>
       <Switch>
-        <Route path="/console" component={Console}/>
+        <Route path="/console" component={ConsoleLoadable}/>
       </Switch>
     </DashboardLayout>
   );
