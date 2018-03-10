@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter, replace } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import Throttle from 'lodash-decorators/throttle';
@@ -21,6 +21,7 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
+    store.dispatch(replace('/console'));
     this.onWindowResize = this.onWindowResize.bind(this);
     this.onWindowResize();
     window.addEventListener('resize', this.onWindowResize);

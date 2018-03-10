@@ -122,20 +122,20 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
           <span className={headerIconTextClassName} />
         </div>
 
-        <Menu className={cls['bg-grey']} theme="dark">
-          <Menu.Item>
+        <Menu className={cls['bg-grey']} theme="dark" selectedKeys={[window.location.hash]}>
+          <Menu.Item key="#/console">
             <Icon type="desktop" />
             <span><a className={cls['sider-link']} href="/#/console">控制台</a></span>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item key="#/team_info">
             <Icon type="usergroup-add" />
             <span><a className={cls['sider-link']} href="/#/team_info">队伍信息</a></span>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item key="#/project">
             <Icon type="book" />
             <span><a className={cls['sider-link']} href="/#/project">比赛项目</a></span>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item key="#/admin">
             <Icon type="eye-o" />
             <span><a className={cls['sider-link']} href="/#/admin">管理员</a></span>
           </Menu.Item>

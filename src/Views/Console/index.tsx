@@ -15,7 +15,7 @@ export default class Console extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ paddingBottom: '40px' }}>
         <Status
           type="success"
           statusText="通过审核"
