@@ -42,5 +42,9 @@
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0"
+  },
+  "scripts": {
+    "build": "parcel build index.html --out-dir=build --public-url=./",
+    "start": "parcel ./index.html"
   }
 }
