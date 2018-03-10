@@ -12,7 +12,12 @@ const DashboardLayout = Loadable({
 });
 
 const ConsoleLoadable = Loadable({
-  loader: () => import('../Console/index'),
+  loader: () => import('../Console'),
+  loading: () => <div>正在加载</div>,
+});
+
+const TeamConsoleLoadable = Loadable({
+  loader: () => import('../TeamConsole'),
   loading: () => <div>正在加载</div>,
 });
 
@@ -21,6 +26,7 @@ const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = (props) => {
     <DashboardLayout mode={props.mediaQuery}>
       <Switch>
         <Route path="/console" component={ConsoleLoadable}/>
+        <Route path="/team_info" component={TeamConsoleLoadable}/>
       </Switch>
     </DashboardLayout>
   );

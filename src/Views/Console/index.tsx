@@ -22,7 +22,7 @@ export default class Console extends React.Component {
           buttons={this.renderStatusButtons()}
         />
         {this.renderDivider()}
-        <TeamInfo/>
+        <TeamInfo hasOperatingButton={false}/>
         {this.renderDivider()}
         <HackdayProgress />
       </div>
@@ -32,7 +32,7 @@ export default class Console extends React.Component {
   renderStatusButtons() {
     return [
       <Button key={0} type="primary"> 组队    </Button>,
-      <Button key={1} type="danger">  退出比赛 </Button>,
+      <Button key={1} type="danger" > 退出比赛 </Button>,
     ];
   }
 }
