@@ -9,10 +9,11 @@ import reducer, { RootState } from '../reducers';
 // import sagas from '../sagas';
 const history: History = createHistory();
 
-const composeEnhancers = (
-  process.env.NODE_ENV === 'development' &&
-  window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-) || compose;
+const composeEnhancers =
+  (process.env.NODE_ENV === 'development' &&
+    window &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
 
 const store: Store<RootState> = createStore(
   reducer,

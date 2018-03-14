@@ -13,7 +13,7 @@ export default class TeamConsole extends React.Component {
   render() {
     return (
       <div style={{ paddingBottom: '40px' }}>
-        <TeamInfo hasEditButton={false} hasDissolutionButton={true}/>
+        <TeamInfo hasEditButton={false} hasDissolutionButton={true} />
         <div style={{ height: '20px' }} />
         <DeviceRent />
       </div>

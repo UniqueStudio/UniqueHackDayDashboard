@@ -7,6 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/antd": "^1.0.0",
+    "@types/classnames": "^2.2.3",
     "@types/lodash-es": "^4.17.0",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
@@ -20,12 +21,12 @@
     "parcel": "^0.0.1",
     "postcss": "^6.0.19",
     "postcss-modules": "^1.1.0",
+    "prettier": "^1.11.1",
     "tslint": "^5.9.1",
     "tslint-react": "^3.5.1",
     "typescript": "^2.7.2"
   },
   "dependencies": {
-    "@types/classnames": "^2.2.3",
     "ant-design-pro": "^1.1.0",
     "antd": "^3.2.3",
     "classnames": "^2.2.5",
@@ -45,6 +46,7 @@
   },
   "scripts": {
     "build": "parcel build index.html --out-dir=build --public-url=./",
-    "start": "parcel ./index.html"
+    "start": "parcel ./index.html",
+    "format": "prettier ./src/**/*.{ts,tsx,less}"
   }
 }

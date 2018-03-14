@@ -65,15 +65,11 @@ const DeviceRent = (props: any) => {
       <div className={cls$2['team-info-title-wrapper']}>
         <h1 className={cls$2['team-info-title']}>设备管理</h1>
       </div>
-      <Table
-        dataSource={data}
-        pagination={false}
-        scroll={{x: '500px'}}
-      >
-        <Column title="设备名称" dataIndex="deviceName" key="name"/>
-        <Column title="状态" dataIndex="isReturned" key="status"/>
-        <Column title="租赁时间" dataIndex="rentTime" key="rentTime"/>
-        <Column title="归还时间" dataIndex="returnTime" key="returnTime"/>
+      <Table dataSource={data} pagination={false} scroll={{ x: '500px' }}>
+        <Column title="设备名称" dataIndex="deviceName" key="name" />
+        <Column title="状态" dataIndex="isReturned" key="status" />
+        <Column title="租赁时间" dataIndex="rentTime" key="rentTime" />
+        <Column title="归还时间" dataIndex="returnTime" key="returnTime" />
         {/* <Column title="操作" key="operating"/> */}
       </Table>
     </Card>

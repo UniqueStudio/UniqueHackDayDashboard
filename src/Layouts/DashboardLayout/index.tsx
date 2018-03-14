@@ -40,11 +40,11 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
     } else if (key === 'msg') {
       this.props.onUserMsgClick!();
     }
-  }
+  };
 
   handleCollapse = (collapsed: boolean) => {
     this.setState({ collapsed });
-  }
+  };
 
   render() {
     const { mode } = this.props;
@@ -68,11 +68,15 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
     return [
       // tslint:disable-next-line:jsx-wrap-multiline
       <Menu.Item style={{ border: 'none' }} key="site_hackday">
-        <a href="http://hack.hustunique.com" target="_blank">Hackday 官网</a>
-        </Menu.Item>,
+        <a href="http://hack.hustunique.com" target="_blank">
+          Hackday 官网
+        </a>
+      </Menu.Item>,
       // tslint:disable-next-line:jsx-wrap-multiline
       <Menu.Item style={{ border: 'none' }} key="site_unqiue">
-        <a href="http://www.hustunique.com" target="_blank">联创团队官网</a>
+        <a href="http://www.hustunique.com" target="_blank">
+          联创团队官网
+        </a>
       </Menu.Item>,
     ];
   }
@@ -89,12 +93,12 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
           {this.props.mode !== 'phone' && this.renderHeaderLinks()}
           <Menu.Item className={cls['header-menu-item']} key="mine">
             <Tooltip title="我">
-              <Icon type="user"/> 用户名
+              <Icon type="user" /> 用户名
             </Tooltip>
           </Menu.Item>
           <Menu.Item className={cls['header-menu-item']} key="msg">
             <Tooltip title="消息">
-              <Icon type="message"/> 消息
+              <Icon type="message" /> 消息
             </Tooltip>
           </Menu.Item>
         </Menu>
@@ -103,12 +107,9 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
   }
 
   renderSider() {
-    const headerIconTextClassName = classnames(
-      cls['header-icon-text'],
-      {
-        [cls.hidden]: this.state.collapsed,
-      },
-    );
+    const headerIconTextClassName = classnames(cls['header-icon-text'], {
+      [cls.hidden]: this.state.collapsed,
+    });
     return (
       <Layout.Sider
         className={cls['bg-grey']}
@@ -125,19 +126,35 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
         <Menu className={cls['bg-grey']} theme="dark" selectedKeys={[window.location.hash]}>
           <Menu.Item key="#/console">
             <Icon type="desktop" />
-            <span><a className={cls['sider-link']} href="/#/console">控制台</a></span>
+            <span>
+              <a className={cls['sider-link']} href="/#/console">
+                控制台
+              </a>
+            </span>
           </Menu.Item>
           <Menu.Item key="#/team_info">
             <Icon type="usergroup-add" />
-            <span><a className={cls['sider-link']} href="/#/team_info">队伍信息</a></span>
+            <span>
+              <a className={cls['sider-link']} href="/#/team_info">
+                队伍信息
+              </a>
+            </span>
           </Menu.Item>
           <Menu.Item key="#/project">
             <Icon type="book" />
-            <span><a className={cls['sider-link']} href="/#/project">比赛项目</a></span>
+            <span>
+              <a className={cls['sider-link']} href="/#/project">
+                比赛项目
+              </a>
+            </span>
           </Menu.Item>
           <Menu.Item key="#/admin">
             <Icon type="eye-o" />
-            <span><a className={cls['sider-link']} href="/#/admin">管理员</a></span>
+            <span>
+              <a className={cls['sider-link']} href="/#/admin">
+                管理员
+              </a>
+            </span>
           </Menu.Item>
         </Menu>
       </Layout.Sider>

@@ -25,13 +25,13 @@ const Status = (props: StatusProps) => {
   return (
     <Card bordered={false} type="inner" className={cls['status-card']}>
       <Row>
-        <Col xs={24} sm={15} md={15} >
+        <Col xs={24} sm={15} md={15}>
           <div className={cls['icon-title-wrapper']}>
-            <Icon className={cls['icon-success']} type="check-circle"/>
+            <Icon className={cls['icon-success']} type="check-circle" />
             <h1 className={cls['status-title']}>当前状态: {props.statusText}</h1>
           </div>
         </Col>
-        <Col xs={24} sm={9} md={9} >
+        <Col xs={24} sm={9} md={9}>
           <div className={cls['buttons-wrapper']}>
             {/* // The reason we reverse this array is `float: right` is used. */}
             {props.buttons.reverse()}

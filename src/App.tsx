@@ -11,9 +11,9 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-         <ConnectedRouter history={history}>
+        <ConnectedRouter history={history}>
           <Switch>
-            <Route path="/" component={Dashboard}/>
+            <Route path="/" component={Dashboard} />
           </Switch>
         </ConnectedRouter>
       </Provider>
@@ -35,11 +35,9 @@ export default class App extends React.Component {
   @Throttle(300)
   onWindowResize() {
     store.dispatch({
-      type : 'CHANGE_PLATFORM',
+      type: 'CHANGE_PLATFORM',
       payload: {
-        platform: window.matchMedia('(min-width: 500px)').matches
-          ? 'desktop'
-          : 'phone',
+        platform: window.matchMedia('(min-width: 500px)').matches ? 'desktop' : 'phone',
       },
     });
   }

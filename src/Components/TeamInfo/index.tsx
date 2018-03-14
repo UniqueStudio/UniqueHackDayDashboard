@@ -51,54 +51,67 @@ const TeamInfo = (props: TeamInfoProps) => {
 
   const renderTable = () => {
     const { Column } = Table;
-    const renderOperatingButtons = (user: any) => (
-      user.isTeamLeader
-        ? false
-        : (
-          <span>
-            <a onClick={onOperating.bind({}, data, 'setTeamLeader')}>设为队长</a>
-            <span style={{ display: 'inline-block', width: '20px' }} />
-            <a onClick={onOperating.bind({}, data, 'remove')}>移除</a>
-          </span>
-        )
-    );
+    const renderOperatingButtons = (user: any) =>
+      user.isTeamLeader ? (
+        false
+      ) : (
+        <span>
+          <a onClick={onOperating.bind({}, data, 'setTeamLeader')}>设为队长</a>
+          <span style={{ display: 'inline-block', width: '20px' }} />
+          <a onClick={onOperating.bind({}, data, 'remove')}>移除</a>
+        </span>
+      );
     return (
       <Table
         dataSource={data}
         pagination={false}
-        scroll={{x: hasOperatingButton ? '500px' : '400px'}}
+        scroll={{ x: hasOperatingButton ? '500px' : '400px' }}
       >
         {/* tslint:disable-next-line:jsx-no-lambda */}
-        <Column title="角色" dataIndex="isTeamLeader" key="role" render={(is) => is ? '队长' : '队员'}/>
+        <Column
+          title="角色"
+          dataIndex="isTeamLeader"
+          key="role"
+          render={is => (is ? '队长' : '队员')}
+        />
         <Column title="姓名" dataIndex="name" key="name" />
         {/* tslint:disable-next-line:jsx-no-lambda */}
-        <Column title="审核状态" dataIndex="isAccepted" key="status" render={(is) => is ? '已通过' : '未通过'}/>
+        <Column
+          title="审核状态"
+          dataIndex="isAccepted"
+          key="status"
+          render={is => (is ? '已通过' : '未通过')}
+        />
         <Column title="学校" dataIndex="school" key="school" />
-        {hasOperatingButton && <Column title="操作" key="operating" render={renderOperatingButtons}/>}
+        {hasOperatingButton && (
+          <Column title="操作" key="operating" render={renderOperatingButtons} />
+        )}
       </Table>
     );
   };
 
   const renderDivider = () => {
-    return <div style={{ height: '16px' }}/>;
+    return <div style={{ height: '16px' }} />;
   };
 
   return (
     <Card bordered={false} type="inner">
       <div className={cls['team-info-title-wrapper']}>
         <h1 className={cls['team-info-title']}>队伍信息</h1>
-        {hasEditButton && <Button children="编辑成员" type="primary"/>}
+        {hasEditButton && <Button children="编辑成员" type="primary" />}
       </div>
       <DescriptionList layout={'horizontal'} title="">
-        <Description term="队长" children="梁志博"/>
-        <Description term="队伍人数" children="4"/>
-        <Description term="获奖情况" children="—"/>
-        <Description term="组队时间" children={new Date(Date.now()).toLocaleDateString()}/>
+        <Description term="队长" children="梁志博" />
+        <Description term="队伍人数" children="4" />
+        <Description term="获奖情况" children="—" />
+        <Description term="组队时间" children={new Date(Date.now()).toLocaleDateString()} />
       </DescriptionList>
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
-      {hasDissolutionButton && <Button style={{ float: 'right' }} children="解散队伍" type="danger"/>}
+      {hasDissolutionButton && (
+        <Button style={{ float: 'right' }} children="解散队伍" type="danger" />
+      )}
     </Card>
   );
 };

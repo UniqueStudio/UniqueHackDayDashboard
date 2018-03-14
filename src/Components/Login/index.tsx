@@ -32,13 +32,8 @@ export default class Login extends React.Component {
   render() {
     return (
       <Form layout="horizontal">
-        <Form.Item
-          {...formItemLayout}
-          label="Success"
-          hasFeedback={true}
-          validateStatus="success"
-        >
-          <Input/>
+        <Form.Item {...formItemLayout} label="Success" hasFeedback={true} validateStatus="success">
+          <Input />
         </Form.Item>
       </Form>
     );

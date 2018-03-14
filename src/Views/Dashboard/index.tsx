@@ -21,19 +21,17 @@ const TeamConsoleLoadable = Loadable({
   loading: () => <div>正在加载</div>,
 });
 
-const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = (props) => {
+const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = props => {
   return (
     <DashboardLayout mode={props.mediaQuery}>
       <Switch>
-        <Route path="/console" component={ConsoleLoadable}/>
-        <Route path="/team_info" component={TeamConsoleLoadable}/>
+        <Route path="/console" component={ConsoleLoadable} />
+        <Route path="/team_info" component={TeamConsoleLoadable} />
       </Switch>
     </DashboardLayout>
   );
 };
 
-export default connect(
-  (state: RootState) => {
-    return state;
-  },
-)(Dashboard);
+export default connect((state: RootState) => {
+  return state;
+})(Dashboard);

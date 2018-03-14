@@ -294,8 +294,8 @@ autoprefixer@^8.1.0:
     postcss-value-parser "^3.2.3"
 
 aws-sdk@0.9.x:
-  version "2.206.0"
-  resolved "http://registry.npm.taobao.org/aws-sdk/download/aws-sdk-2.206.0.tgz#235ca109576c888f2467d1c10c33af7e342d3be1"
+  version "2.209.0"
+  resolved "http://registry.npm.taobao.org/aws-sdk/download/aws-sdk-2.209.0.tgz#cfe6ca23736f665932b2d14cc8e4e49d7e9d20cc"
   dependencies:
     buffer "4.9.1"
     events "^1.1.1"
@@ -1422,6 +1422,10 @@ postcss@^6.0.1, postcss@^6.0.19:
     chalk "^2.3.1"
     source-map "^0.6.1"
     supports-color "^5.2.0"
+
+prettier@^1.11.1:
+  version "1.11.1"
+  resolved "http://registry.npm.taobao.org/prettier/download/prettier-1.11.1.tgz#61e43fc4cd44e68f2b0dfc2c38cd4bb0fccdcc75"
 
 promise@^7.1.1:
   version "7.3.1"
