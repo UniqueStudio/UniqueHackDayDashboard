@@ -1,6 +1,6 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-react"],
+  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-react"],
   "jsRules": {},
   "rules": {
     "quotemark": [true, "single", "jsx-double"],

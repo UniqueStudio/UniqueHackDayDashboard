@@ -67,22 +67,23 @@ const TeamInfo = (props: TeamInfoProps) => {
         pagination={false}
         scroll={{ x: hasOperatingButton ? '500px' : '400px' }}
       >
-        {/* tslint:disable-next-line:jsx-no-lambda */}
         <Column
           title="角色"
           dataIndex="isTeamLeader"
           key="role"
-          render={is => (is ? '队长' : '队员')}
+          // tslint:disable-next-line:jsx-no-lambda
+          render={(is: boolean) => (is ? '队长' : '队员')}
         />
         <Column title="姓名" dataIndex="name" key="name" />
-        {/* tslint:disable-next-line:jsx-no-lambda */}
         <Column
           title="审核状态"
           dataIndex="isAccepted"
           key="status"
-          render={is => (is ? '已通过' : '未通过')}
+          // tslint:disable-next-line:jsx-no-lambda
+          render={(is: boolean) => (is ? '已通过' : '未通过')}
         />
         <Column title="学校" dataIndex="school" key="school" />
+        {/*tslint:disable-next-line:jsx-no-multiline-js */}
         {hasOperatingButton && (
           <Column title="操作" key="operating" render={renderOperatingButtons} />
         )}
@@ -109,6 +110,7 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
+      {/*tslint:disable-next-line:jsx-no-multiline-js */}
       {hasDissolutionButton && (
         <Button style={{ float: 'right' }} children="解散队伍" type="danger" />
       )}
