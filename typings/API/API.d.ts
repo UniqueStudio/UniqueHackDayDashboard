@@ -13,23 +13,23 @@ declare namespace API {
     type MissingField = 'MissingField';
     type LoginNeeded = 'LoginNeeded';
     type Forbidden = 'Forbidden';
+    type EmailExists = 'EmailExists';
+    type UsernameInvalid = 'UsernameInvalid';
     type UsernameExists = 'UsernameExists';
     type VerifyCodeNotFound = 'VerifyCodeNotFound';
     type PasswordWrong = 'PasswordWrong';
     type TeamLeaderNotFound = 'TeamLeaderNotFound';
 
-    type FailedMessageType =
-      | MissingField
-      | LoginNeeded
-      | Forbidden
-      | UsernameExists
-      | VerifyCodeNotFound
-      | PasswordWrong
-      | TeamLeaderNotFound;
+    // type Failed =
+    //   | MissingField
+    //   | LoginNeeded
+    //   | Forbidden
+    //   | UsernameExists
+    //   | VerifyCodeNotFound
+    //   | PasswordWrong
+    //   | TeamLeaderNotFound;
 
     type Success = 'Success';
-
-    type SuccessfulMessageType = Success;
   }
 
   type FileID = string;
@@ -50,8 +50,6 @@ declare namespace API {
       | NoDataResponse<400, Message.UsernameExists>
       | NoDataResponse<200, Message.Success>;
 
-    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
     // POST /v1/user/reg_verify
     interface VerifyRegRequest {
       code: string;
@@ -62,10 +60,8 @@ declare namespace API {
       | NoDataResponse<400, Message.VerifyCodeNotFound>
       | NoDataResponse<200, Message.Success>;
 
-    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
     // POST /v1/user/login
-    interface Login {
+    interface LoginRequest {
       username: string;
       password: string;
     }
@@ -75,10 +71,8 @@ declare namespace API {
       | NoDataResponse<400, Message.UsernameExists>
       | Response<200, Message.Success, { token: string }>;
 
-    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
     // POST /v1/user/login
-    interface Detail {
+    interface DetailRequest {
       name: string;
       gentle: string;
       birthday: string;
@@ -121,5 +115,31 @@ declare namespace API {
       | NoDataResponse<400, Message.MissingField>
       | NoDataResponse<400, Message.TeamLeaderNotFound>
       | NoDataResponse<200, Message.Success>;
+
+    type ChangeDetailResponse =
+      | NoDataResponse<400, Message.MissingField>
+      | NoDataResponse<400, Message.TeamLeaderNotFound>
+      | Response<200, Message.Success, Partial<DetailRequest>>;
+  }
+
+  interface ReqWithAuth<P, M, T> extends ReqWithoutAuth<P, M, T> {
+    headers: { Authorization: string };
+  }
+
+  interface ReqWithoutAuth<P, M, T> {
+    endpoint: P;
+    methods: M;
+    body: T;
+  }
+
+  // prettier-ignore
+  interface RequestFunc {
+    (req: ReqWithoutAuth<'/v1/user/reg', 'POST', User.RegisterRequest>): User.RegisterResponse;
+    (req: ReqWithoutAuth<'/v1/user/reg_verify', 'POST', User.VerifyRegRequest>): User.VerifyRegResponse;
+    (req: ReqWithoutAuth<'/v1/user/login', 'POST', User.LoginRequest>): User.LoginResponse;
+
+    (req: ReqWithAuth<'/v1/user/detail', 'POST', User.DetailRequest>): User.DetailResponse;
+    (req: ReqWithAuth<'/v1/user/detail', 'PUT', Partial<User.DetailRequest>>): User.ChangeDetailResponse;
+    // (req: ReqWithAuth<'/v1/user/pwd', 'PUT', { password: string }>): User.RegisterResponse;
   }
 }
