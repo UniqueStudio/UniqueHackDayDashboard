@@ -70,14 +70,10 @@ declare namespace API {
       password: string;
     }
 
-    interface LoginResponseBody {
-      token: string;
-    }
-
     type LoginResponse =
       | NoDataResponse<400, Message.MissingField>
       | NoDataResponse<400, Message.UsernameExists>
-      | Response<200, Message.Success, LoginResponseBody>;
+      | Response<200, Message.Success, { token: string }>;
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
