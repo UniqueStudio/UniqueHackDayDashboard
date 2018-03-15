@@ -34,6 +34,7 @@ declare namespace API {
 
     type VerifyCodeNotFound = 'VerifyCodeNotFound';
     type TeamLeaderNotFound = 'TeamLeaderNotFound';
+    type UserNotFound = 'UserNotFound';
 
     type Forbidden = 'Forbidden';
     type LoginNeeded = 'LoginNeeded';
@@ -129,7 +130,7 @@ declare namespace API {
         >,
       ):
         | ResponseWithoutData<400, Message.MissingField>
-        | ResponseWithoutData<400, Message.UsernameExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
         | Response<200, Message.Success, { token: string }>;
 
       // change: 改密码，提供旧密码 API 直接返回 一个 code，使用该 code 改密码
