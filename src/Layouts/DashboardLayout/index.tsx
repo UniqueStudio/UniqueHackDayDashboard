@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import Layout from 'antd/es/layout';
 import Icon from 'antd/es/icon';
 import Menu from 'antd/es/menu';
-import Tooltip from 'antd/es/tooltip';
 
 import 'antd/lib/layout/style/index.css';
 import 'antd/lib/icon/style/css';

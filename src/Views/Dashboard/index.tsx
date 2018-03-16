@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 
 import { RootState } from '../../redux/reducers';
-import { MediaQuery } from '../../redux/reducers/mediaQuery';
 
 const DashboardLayout = Loadable({
   loader: () => import('../../Layouts/DashboardLayout'),
@@ -21,9 +20,9 @@ const TeamConsoleLoadable = Loadable({
   loading: () => <div>正在加载</div>,
 });
 
-const Dashboard: React.SFC<{ mediaQuery: MediaQuery }> = props => {
+const Dashboard: React.SFC = () => {
   return (
-    <DashboardLayout mode={props.mediaQuery}>
+    <DashboardLayout>
       <Switch>
         <Route path="/console" component={ConsoleLoadable} />
         <Route path="/team_info" component={TeamConsoleLoadable} />

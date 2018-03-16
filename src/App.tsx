@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ConnectedRouter, replace } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import Throttle from 'lodash-decorators/throttle';
 
 import Dashboard from './Views/Dashboard';
 import UserEntry from './Views/UserEntry';

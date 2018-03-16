@@ -60,6 +60,6 @@ class GlobalHeader extends React.Component<{ inUserEntry: boolean }> {
 
 export default connect((state: RootState) => {
   return {
-    inUserEntry: state.route.location.pathname.indexOf('/user_entry') >= 0,
+    inUserEntry: state.route!.location.pathname.indexOf('/user_entry') === 0,
   };
 })(GlobalHeader);

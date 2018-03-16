@@ -2,7 +2,7 @@ import { combineReducers, AnyAction } from 'redux';
 import { routerReducer as route } from 'react-router-redux';
 
 export interface RootState {
-  route: {
+  route?: {
     location: Location;
   };
 }
