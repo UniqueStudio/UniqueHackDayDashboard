@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import Row from 'antd/lib/row';
-import Col from 'antd/lib/col';
-import Card from 'antd/lib/card';
-import Icon from 'antd/lib/icon';
-// import Button from 'antd/lib/button';
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
+import Card from 'antd/es/card';
+import Icon from 'antd/es/icon';
+// import Button from 'antd/es/button';
 
 import 'antd/lib/row/style/css';
 import 'antd/lib/col/style/css';

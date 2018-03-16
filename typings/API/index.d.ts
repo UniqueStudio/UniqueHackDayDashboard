@@ -14,7 +14,7 @@ declare namespace API {
 
   interface RequestWithoutAuth<P, M, T> {
     endpoint: P;
-    methods: M;
+    method: M;
     body: T;
   }
 
@@ -102,6 +102,7 @@ declare namespace API {
       ):
         | ResponseWithoutData<400, Message.MissingField>
         | ResponseWithoutData<400, Message.UsernameExists>
+        | ResponseWithoutData<400, Message.EmailExists>
         | ResponseWithoutData<200, Message.Success>;
 
       // 用邮件里面的 code 去完成注册
@@ -188,7 +189,8 @@ declare namespace API {
         >,
       ):
         | ResponseWithoutData<400, Message.MissingField>
-        | ResponseWithoutData<403, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TShirtSizeInvalid>
+        | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
         | ResponseWithoutData<200, Message.Success>;
 
@@ -202,7 +204,8 @@ declare namespace API {
         >,
       ):
         | ResponseWithoutData<400, Message.MissingField>
-        | ResponseWithoutData<403, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TShirtSizeInvalid>
+        | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
         | ResponseWithoutData<200, Message.Success>;
     }

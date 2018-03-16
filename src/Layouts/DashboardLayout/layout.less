@@ -1,4 +1,4 @@
-.header-icon-wrapper {
+.sider-icon-wrapper {
   width: 100%;
   height: 64px;
   line-height: 64px;
@@ -7,8 +7,8 @@
   white-space: nowrap;
 
   margin: 0;
-  .header-icon,
-  .header-icon-text {
+  .sider-icon,
+  .sider-icon-text {
     background-image: url('../../assets/images/unique-hackday-icon.png');
     background-repeat: no-repeat;
     background-size: auto 40px;
@@ -19,7 +19,7 @@
     // left: 10px;
     display: inline-block;
   }
-  .header-icon {
+  .sider-icon {
     background-position: 0 0;
     width: 41px;
     height: 40px;
@@ -51,11 +51,27 @@
   padding: 0 10px !important;
   background-color: #fff !important;
   border-bottom: 1px solid #eeeeee !important;
+  display: flex;
+
+  &-menu {
+    line-height: 64px;
+    border: none;
+    flex: 1;
+  }
 
   &-menu-item {
     border: none !important;
     float: right !important;
     padding: 0 10px !important;
+  }
+
+  &-left-icon {
+    background-image: url('../../assets/images/hackday.png');
+    width: 200px;
+    height: 63px;
+    background-position: center center;
+    background-size: 78% auto;
+    background-repeat: no-repeat;
   }
 }
 

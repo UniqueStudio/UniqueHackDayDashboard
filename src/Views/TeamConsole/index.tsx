@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Button from 'antd/lib/button';
+import Button from 'antd/es/button';
 
 import 'ant-design-pro/dist/ant-design-pro.min.css';
 import 'antd/lib/button/style/css';

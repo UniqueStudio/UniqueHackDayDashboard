@@ -15,6 +15,8 @@ import '../../styles/main.less';
 
 import cls from './layout.less';
 
+import GlobalHeader from '../../Views/GlobalHeader/index';
+
 export interface IDashboardLayoutProps {
   children: React.ReactNode;
   mode?: 'phone' | 'desktop';
@@ -34,14 +36,6 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
     collapsed: false,
   };
 
-  handleMenuItemClick = ({ key }: { key: string }) => {
-    if (key === 'mine') {
-      this.props.onUserAvatarClick!();
-    } else if (key === 'msg') {
-      this.props.onUserMsgClick!();
-    }
-  };
-
   handleCollapse = (collapsed: boolean) => {
     this.setState({ collapsed });
   };
@@ -52,7 +46,7 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
       <Layout style={{ height: '100%' }}>
         {this.renderSider()}
         <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
-          {this.renderHeader()}
+          <GlobalHeader />
           <div
             className={cls['content-wrapper']}
             style={{ padding: mode === 'desktop' ? '20px' : '10px' }}
@@ -64,50 +58,8 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
     );
   }
 
-  renderHeaderLinks() {
-    return [
-      // tslint:disable-next-line:jsx-wrap-multiline
-      <Menu.Item style={{ border: 'none' }} key="site_hackday">
-        <a href="http://hack.hustunique.com" target="_blank">
-          Hackday 官网
-        </a>
-      </Menu.Item>,
-      // tslint:disable-next-line:jsx-wrap-multiline
-      <Menu.Item style={{ border: 'none' }} key="site_unqiue">
-        <a href="http://www.hustunique.com" target="_blank">
-          联创团队官网
-        </a>
-      </Menu.Item>,
-    ];
-  }
-
-  renderHeader() {
-    const minWidth = this.props.mode === 'phone' ? undefined : '440px';
-    return (
-      <Layout.Header className={cls.header} style={{ minWidth }}>
-        <Menu
-          mode="horizontal"
-          style={{ lineHeight: '64px', border: 'none' }}
-          onClick={this.handleMenuItemClick}
-        >
-          {this.props.mode !== 'phone' && this.renderHeaderLinks()}
-          <Menu.Item className={cls['header-menu-item']} key="mine">
-            <Tooltip title="我">
-              <Icon type="user" /> 用户名
-            </Tooltip>
-          </Menu.Item>
-          <Menu.Item className={cls['header-menu-item']} key="msg">
-            <Tooltip title="消息">
-              <Icon type="message" /> 消息
-            </Tooltip>
-          </Menu.Item>
-        </Menu>
-      </Layout.Header>
-    );
-  }
-
   renderSider() {
-    const headerIconTextClassName = classnames(cls['header-icon-text'], {
+    const headerIconTextClassName = classnames(cls['sider-icon-text'], {
       [cls.hidden]: this.state.collapsed,
     });
     return (
@@ -118,8 +70,8 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
         collapsedWidth={60}
         onCollapse={this.handleCollapse}
       >
-        <div className={cls['header-icon-wrapper']}>
-          <span className={cls['header-icon']} />
+        <div className={cls['sider-icon-wrapper']}>
+          <span className={cls['sider-icon']} />
           <span className={headerIconTextClassName} />
         </div>
 
