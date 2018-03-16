@@ -1,12 +1,14 @@
 declare namespace API {
-  interface Response<S, M, T> extends ResponseWithoutData<S, M> {
-    data: T;
-  }
-
-  interface ResponseWithoutData<S, M> {
+  type Response<S, M, T> = Promise<{
     httpStatusCode: S;
     message: M;
-  }
+    data: T;
+  }>;
+
+  type ResponseWithoutData<S, M> = Promise<{
+    httpStatusCode: S;
+    message: M;
+  }>;
 
   interface RequestWithAuth<P, M, T> extends RequestWithoutAuth<P, M, T> {
     headers: { Authorization: string };
@@ -21,10 +23,11 @@ declare namespace API {
   namespace Message {
     // 下面这些是状态码为 4XX 时的 message
     type MissingField = 'MissingField';
+    type RequestTooOften = 'RequestTooOften';
 
     type UsernameInvalid = 'UsernameInvalid';
     type PasswordInvalid = 'PasswordInvalid';
-    type EmailInvalid = 'PasswordInvalid';
+    type EmailInvalid = 'EmailInvalid';
     type TShirtSizeInvalid = 'TShirtSizeInvalid';
     type FileIdInvalid = 'FileIdInvalid';
 
@@ -50,7 +53,7 @@ declare namespace API {
   namespace User {
     interface UserDetailRequest {
       name: string;
-      gentle: string;
+      gender: string;
       birthday: string;
       phone: string;
       resume: FileID;
@@ -58,7 +61,7 @@ declare namespace API {
       city: string;
       alipay: string;
       school: string;
-      college: string;
+      major: string;
       grade: string;
       graduateTime: Time; // 年月日
       urgentConcat: {
@@ -67,7 +70,7 @@ declare namespace API {
         relationship: string;
       };
 
-      workSet?: FileID;
+      collections?: FileID;
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
@@ -101,8 +104,8 @@ declare namespace API {
         >,
       ):
         | ResponseWithoutData<400, Message.MissingField>
-        | ResponseWithoutData<400, Message.UsernameExists>
         | ResponseWithoutData<400, Message.EmailExists>
+        | ResponseWithoutData<400, Message.EmailInvalid>
         | ResponseWithoutData<200, Message.Success>;
 
       // 用邮件里面的 code 去完成注册
@@ -208,6 +211,22 @@ declare namespace API {
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
         | ResponseWithoutData<200, Message.Success>;
+
+      // 检查是否重复的接口
+      (
+        req: RequestWithAuth<
+          '/v1/user/existence?type=username' | '/v1/user/existence?type=email',
+          'GET',
+          // Partial 意为所有字段可选
+          {
+            valueToCheck: string;
+          }
+        >,
+      ):
+        | ResponseWithoutData<400, Message.MissingField>
+        | ResponseWithoutData<400, Message.UsernameInvalid>
+        | ResponseWithoutData<400, Message.EmailInvalid>
+        | Response<200, Message.Success, { existence: boolean }>;
     }
   }
 
