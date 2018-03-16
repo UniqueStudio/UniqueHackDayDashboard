@@ -12,35 +12,32 @@ import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/icon/style/css';
 
 import { RootState } from '../../redux/reducers';
-import { MediaQuery } from '../../redux/reducers/mediaQuery';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
 
-class GlobalHeader extends React.Component<{ mediaQuery: MediaQuery }> {
+class GlobalHeader extends React.Component<{ inUserEntry: boolean }> {
   renderHeaderLinks() {
     return [
       // tslint:disable-next-line:jsx-wrap-multiline
-      <Menu.Item style={{ border: 'none' }} key="site_hackday">
-        <a href="http://hack.hustunique.com" target="_blank">
-          Hackday 官网
-        </a>
-      </Menu.Item>,
-      // tslint:disable-next-line:jsx-wrap-multiline
-      <Menu.Item style={{ border: 'none' }} key="site_unqiue">
-        <a href="http://www.hustunique.com" target="_blank">
-          联创团队官网
-        </a>
-      </Menu.Item>,
     ];
   }
 
   render() {
-    const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
+    // const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
     return (
-      <Layout.Header className={cls.header} style={{ minWidth }}>
-        {this.renderLeftIcon()}
+      <Layout.Header className={cls.header}>
+        {this.props.inUserEntry && this.renderLeftIcon()}
         <Menu mode="horizontal" className={cls['header-menu']}>
-          {this.props.mediaQuery !== 'phone' && this.renderHeaderLinks()}
+          <Menu.Item className={cls['header-menu-link']} key="site_hackday">
+            <a href="http://hack.hustunique.com" target="_blank">
+              Hackday 官网
+            </a>
+          </Menu.Item>
+          <Menu.Item className={cls['header-menu-link']} key="site_unqiue">
+            <a href="http://www.hustunique.com" target="_blank">
+              联创团队官网
+            </a>
+          </Menu.Item>
           <Menu.Item className={cls['header-menu-item']} key="mine">
             <Tooltip title="我">
               <Icon type="user" /> 用户名
@@ -62,5 +59,7 @@ class GlobalHeader extends React.Component<{ mediaQuery: MediaQuery }> {
 }
 
 export default connect((state: RootState) => {
-  return state;
+  return {
+    inUserEntry: state.route.location.pathname.indexOf('/user_entry') >= 0,
+  };
 })(GlobalHeader);

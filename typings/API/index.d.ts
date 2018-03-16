@@ -212,4 +212,6 @@ declare namespace API {
   }
 
   // namespace
+
+  type RequestFunc = User.RequestFunc;
 }

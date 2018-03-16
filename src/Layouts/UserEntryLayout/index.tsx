@@ -7,6 +7,7 @@ import Layout from 'antd/es/layout';
 import 'antd/lib/row/style/css';
 import 'antd/lib/col/style/css';
 import 'antd/lib/layout/style/index.css';
+
 import GlobalHeader from '../../Views/GlobalHeader/index';
 
 export default class UserEntryLayout extends React.Component {

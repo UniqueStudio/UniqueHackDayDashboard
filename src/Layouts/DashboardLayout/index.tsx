@@ -19,7 +19,6 @@ import GlobalHeader from '../../Views/GlobalHeader/index';
 
 export interface IDashboardLayoutProps {
   children: React.ReactNode;
-  mode?: 'phone' | 'desktop';
   className?: string;
   onUserMsgClick?: () => void;
   onUserAvatarClick?: () => void;
@@ -41,16 +40,12 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
   };
 
   render() {
-    const { mode } = this.props;
     return (
       <Layout style={{ height: '100%' }}>
         {this.renderSider()}
         <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
           <GlobalHeader />
-          <div
-            className={cls['content-wrapper']}
-            style={{ padding: mode === 'desktop' ? '20px' : '10px' }}
-          >
+          <div className={cls['content-wrapper']} style={{ padding: '10px' }}>
             {this.props.children}
           </div>
         </Layout.Content>

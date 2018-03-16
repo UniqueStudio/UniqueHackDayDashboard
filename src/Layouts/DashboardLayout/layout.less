@@ -12,11 +12,6 @@
     background-image: url('../../assets/images/unique-hackday-icon.png');
     background-repeat: no-repeat;
     background-size: auto 40px;
-
-    // padding: 0 16px;
-    // height: auto;
-    // position: relative;
-    // left: 10px;
     display: inline-block;
   }
   .sider-icon {
@@ -48,7 +43,7 @@
 }
 
 .header {
-  padding: 0 10px !important;
+  padding: 0 !important;
   background-color: #fff !important;
   border-bottom: 1px solid #eeeeee !important;
   display: flex;
@@ -67,11 +62,26 @@
 
   &-left-icon {
     background-image: url('../../assets/images/hackday.png');
-    width: 200px;
+    width: 150px;
     height: 63px;
     background-position: center center;
-    background-size: 78% auto;
+    background-size: 140px auto;
     background-repeat: no-repeat;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .header {
+    &-left-icon {
+      margin: 0 25px;
+      width: 50px;
+      background-size: 140px auto;
+      background-position: -17px center;
+    }
+
+    &-menu-link {
+      display: none;
+    }
   }
 }
 
