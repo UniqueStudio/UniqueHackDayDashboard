@@ -10,7 +10,6 @@ import 'antd/lib/layout/style/index.css';
 import 'antd/lib/icon/style/css';
 import 'antd/lib/menu/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
-import '../../styles/main.less';
 
 import cls from './layout.less';
 

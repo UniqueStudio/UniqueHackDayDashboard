@@ -10,17 +10,21 @@ import 'antd/lib/layout/style/index.css';
 
 import GlobalHeader from '../../Views/GlobalHeader/index';
 
+import cls from '../DashboardLayout/layout.less';
+
 export default class UserEntryLayout extends React.Component {
   render() {
     return (
-      <Layout>
+      <Layout style={{ height: '100%' }}>
         <GlobalHeader />
-        <Layout.Content>
-          <Row style={{ height: '100%' }}>
-            <Col xs={24} sm={16} md={8}>
-              {this.props.children}
-            </Col>
-          </Row>
+        <Layout.Content className={cls['content-header-wrapper']}>
+          <div className={cls['login-wrapper']}>
+            <Row className={cls['login-card-wrapper']}>
+              <Col xs={24} sm={16} md={12} style={{ margin: 'auto' }}>
+                {this.props.children}
+              </Col>
+            </Row>
+          </div>
         </Layout.Content>
       </Layout>
     );
