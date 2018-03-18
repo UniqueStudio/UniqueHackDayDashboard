@@ -8,7 +8,7 @@ const UserEntryLayout = Loadable({
 });
 
 const LoginViewLoadable = Loadable({
-  loader: () => import('../LoginView'),
+  loader: () => import('../LoginViewNew'),
   loading: () => <div>正在加载</div>,
 });
 
