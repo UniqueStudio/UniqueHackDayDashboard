@@ -23,9 +23,14 @@ const request = ((req: any) => {
     },
     body: method === 'GET' ? undefined : JSON.stringify(body),
   }).then(async res => {
+    const json = await res.json();
+    const token = json.data && json.data.token;
+    if (token) {
+      localStorage.setItem('token', token);
+    }
     return {
       httpStatusCode: res.status,
-      ...(await res.json()),
+      ...json,
     };
   }) as any;
 }) as API.RequestFunc;
