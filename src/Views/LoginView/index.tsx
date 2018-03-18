@@ -1,4 +1,8 @@
 import * as React from 'react';
+
+import throttle from 'lodash-es/throttle';
+import { Cancelable } from 'lodash';
+
 import Checkbox from 'antd/es/checkbox';
 import Card from 'antd/es/card';
 import Icon from 'antd/es/icon';
@@ -10,13 +14,18 @@ import 'antd/lib/button/style/css';
 import 'antd/lib/card/style/index.css';
 import 'antd/lib/icon/style/css';
 
+import request from '../../lib/API';
+
 const { UserName, Password, Submit, Tab } = Login as any;
 
 export default class LoginView extends React.Component {
-  state = { autoLogin: true };
+  state = { autoLogin: true, isInLoginTab: true };
   rule = {
     username: [
-      { pattern: /^[a-zA-Z0-9_-]{4,16}$/, message: '用户名只能是4～16位数字、字母和下划线的组合' },
+      {
+        pattern: /^[a-zA-Z0-9_-]{4,16}$/,
+        message: '用户名只能是4～16位数字、字母和下划线的组合',
+      },
     ],
     password: [
       {
@@ -31,6 +40,37 @@ export default class LoginView extends React.Component {
       },
     ],
   };
+  // {
+  //   validator: async (rule: any, value: string, callback: any) => {
+  //     if (!/^[a-zA-Z0-9_-]{4,16}$/.test(value)) {
+  //       callback('用户名只能是4～16位数字、字母和下划线的组合');
+  //       return;
+  //     }
+  //     if (this.state.isInLoginTab) {
+  //       callback();
+  //       return;
+  //     }
+  //     const result = await request({
+  //       endpoint: '/v1/user/existence?type=username',
+  //       method: 'GET',
+  //       body: {
+  //         valueToCheck: value,
+  //       },
+  //     });
+
+  //     if (result.httpStatusCode === 200) {
+  //       if (result.data.existence) {
+  //         callback('用户名已存在');
+  //       } else {
+  //         callback();
+  //       }
+  //       return;
+  //     }
+  //     if (result.httpStatusCode >= 400 && result.httpStatusCode < 500) {
+  //       callback(result.message);
+  //     }
+  //   },
+  // },
 
   changeAutoLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ autoLogin: e.target.checked });
@@ -40,6 +80,7 @@ export default class LoginView extends React.Component {
     if (err) {
       return;
     }
+    console.log(err);
     let count = 0;
     for (const key in values) {
       if (values.hasOwnProperty(key)) {
@@ -51,12 +92,16 @@ export default class LoginView extends React.Component {
     }
   };
 
+  onTabChange = (key: string) => {
+    this.setState({ isInLoginTab: key === 'login' });
+  };
+
   render() {
     const rule = this.rule;
 
     return (
       <Card style={{ height: '470px' }} bordered={false}>
-        <Login defaultActiveKey="login" onSubmit={this.onSubmit}>
+        <Login defaultActiveKey="login" onSubmit={this.onSubmit} onTabChange={this.onTabChange}>
           <Tab key="login" tab="登录">
             <UserName name="username" placeholder="请输入用户名" rules={rule.username} />
             <Password name="password" placeholder="请输入密码" rules={rule.password} />
@@ -68,15 +113,15 @@ export default class LoginView extends React.Component {
           </Tab>
 
           <Tab key="reg" tab="注册">
-            <UserName name="reg-username" placeholder="请输入用户名" rules={rule.username} />
+            <UserName name="regUsername" placeholder="请输入用户名" rules={rule.username} />
             <UserName
               name="email"
               placeholder="请输入邮箱"
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
               rules={rule.email}
             />
-            <Password name="reg-password" placeholder="请输入密码" rules={rule.password} />
-            <Password name="reg-re-password" placeholder="请再次输入密码" rules={rule.password} />
+            <Password name="regPassword" placeholder="请输入密码" rules={rule.password} />
+            <Password name="regRePassword" placeholder="请再次输入密码" rules={rule.password} />
             <Submit>注册</Submit>
           </Tab>
         </Login>

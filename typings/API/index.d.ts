@@ -23,10 +23,10 @@ declare namespace API {
   }
 
   interface RequestWithoutAuth<P, M, T> {
-    headers: { [k: string]: string };
+    headers?: { [k: string]: string };
     endpoint: P;
     method: M;
-    body: T;
+    body?: T;
   }
 
   namespace Message {
@@ -226,7 +226,7 @@ declare namespace API {
 
       // 检查是否重复的接口
       (
-        req: RequestWithAuth<
+        req: RequestWithoutAuth<
           '/v1/user/existence?type=username' | '/v1/user/existence?type=email',
           'GET',
           {
@@ -237,6 +237,11 @@ declare namespace API {
         | ResponseWithoutData<400, Message.UsernameInvalid>
         | ResponseWithoutData<400, Message.EmailInvalid>
         | ResponseWithData<200, Message.Success, { existence: boolean }>
+      >;
+
+      // 检查是否已经登陆，服务端可以在这里返回 token 来更新 token
+      (req: RequestWithAuth<'/v1/user/login_status', 'GET', never>): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }
   }

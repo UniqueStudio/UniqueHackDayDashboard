@@ -21,7 +21,12 @@ const request = ((req: any) => {
       ...headers,
       Authorization: authorizationToken || '',
     },
-    body: method === 'GET' ? '' : JSON.stringify(body),
+    body: method === 'GET' ? undefined : JSON.stringify(body),
+  }).then(async res => {
+    return {
+      httpStatusCode: res.status,
+      ...(await res.json()),
+    };
   }) as any;
 }) as API.RequestFunc;
 
