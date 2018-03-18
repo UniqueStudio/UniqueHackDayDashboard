@@ -12,7 +12,7 @@
 //     bundler.middleware(),
 //   ],
 // });
-
+process.env.NODE_ENV = 'development';
 const proxy = require('http-proxy-middleware');
 const Bundler = require('parcel-bundler');
 const express = require('express');

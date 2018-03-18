@@ -10,9 +10,8 @@ import reducer, { RootState } from '../reducers';
 const history: History = createHistory();
 
 const composeEnhancers =
-  (process.env.NODE_ENV === 'development' &&
-    window &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  // process.env.NODE_ENV === 'development' &&
+  (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
 
 const store: Store<RootState> = createStore(
