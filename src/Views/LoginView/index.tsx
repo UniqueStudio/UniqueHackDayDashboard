@@ -33,6 +33,7 @@ export interface LoginViewProps extends FormComponentProps {
   ) => void;
   onAutoLoginChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSwitchTab: () => void;
+  requestExistenceCheck: (type: 'username' | 'email', valueToCheck: string) => void;
   userEntry: UserEntryData;
 }
 
@@ -46,13 +47,10 @@ export interface LoginViewProps extends FormComponentProps {
 class LoginView extends React.Component<LoginViewProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // this.props.form.validateFields(
-    //   fields[this.state.type as 'login' | 'register'],
-    //   { force: true },
-    //   (err, values) => {
-    //     // console.log(err, values);
-    //   },
-    // );
+  };
+
+  onInputBlur = (type: 'username' | 'email', e: React.FocusEvent<HTMLInputElement>) => {
+    this.props.requestExistenceCheck(type, e.target.value);
   };
 
   render() {
@@ -60,9 +58,9 @@ class LoginView extends React.Component<LoginViewProps> {
     return (
       <Card style={{ height: '470px' }} bordered={false} className="login">
         <Form onSubmit={this.handleSubmit}>
-          <Tabs defaultActiveKey="login" animated={false} onChange={onSwitchTab}>
+          <Tabs defaultActiveKey={userEntry.tab.value} animated={false} onChange={onSwitchTab}>
             <Tabs.TabPane tab="登陆" key="login">
-              <Form.Item hasFeedback={true} {...userEntry.username}>
+              <Form.Item {...userEntry.username}>
                 <Input
                   size="large"
                   placeholder="请输入用户名"
@@ -72,7 +70,7 @@ class LoginView extends React.Component<LoginViewProps> {
                 />
               </Form.Item>
 
-              <Form.Item hasFeedback={true} {...userEntry.password}>
+              <Form.Item {...userEntry.password}>
                 <Input
                   size="large"
                   placeholder="请输入密码"
@@ -105,6 +103,7 @@ class LoginView extends React.Component<LoginViewProps> {
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,0.25)' }} />}
                   onChange={onFormFieldsChange.bind(this, 'regUsername')}
                   value={userEntry.regUsername.value}
+                  // onBlur={this.onInputBlur.bind(this, 'username')}
                 />
               </Form.Item>
 
@@ -115,6 +114,7 @@ class LoginView extends React.Component<LoginViewProps> {
                   prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,0.25)' }} />}
                   onChange={onFormFieldsChange.bind(this, 'regEmail')}
                   value={userEntry.regEmail.value}
+                  // onBlur={this.onInputBlur.bind(this, 'email')}
                 />
               </Form.Item>
 
@@ -122,6 +122,7 @@ class LoginView extends React.Component<LoginViewProps> {
                 <Input
                   size="large"
                   placeholder="请输入密码"
+                  type="password"
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,0.25)' }} />}
                   onChange={onFormFieldsChange.bind(this, 'regPassword')}
                   value={userEntry.regPassword.value}
@@ -132,6 +133,7 @@ class LoginView extends React.Component<LoginViewProps> {
                 <Input
                   size="large"
                   placeholder="请再次输入密码"
+                  type="password"
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,0.25)' }} />}
                   onChange={onFormFieldsChange.bind(this, 'regRePassword')}
                   value={userEntry.regRePassword.value}
@@ -159,7 +161,7 @@ export default connect(
     onFormFieldsChange(fieldName: keyof UserEntryData, e: React.ChangeEvent<HTMLInputElement>) {
       dispatch({
         type: 'CHANGE_USER_ENTRY_DATA',
-        payload: { [fieldName]: e.target.value },
+        payload: { fieldName, changedTo: e.target.value },
       });
     },
     onAutoLoginChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -172,6 +174,12 @@ export default connect(
       dispatch({
         type: 'CHANGE_USER_ENTRY_TAB',
         payload: tab,
+      });
+    },
+    requestExistenceCheck(type: 'username' | 'email', valueToCheck: string) {
+      dispatch({
+        type: 'REQUEST_EXISTENCE_CHECK',
+        payload: { type, valueToCheck },
       });
     },
   }),
