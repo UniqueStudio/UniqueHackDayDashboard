@@ -1,28 +1,40 @@
 declare namespace API {
-  type Response<S, M, T> = Promise<{
+  type ResponseWithData<S, M, T> = {
     httpStatusCode: S;
     message: M;
     data: T;
-  }>;
+  };
 
-  type ResponseWithoutData<S, M> = Promise<{
+  type ResponseWithoutData<S, M> = {
     httpStatusCode: S;
     message: M;
-  }>;
+  };
+
+  type Response<T> = Promise<
+    | ResponseWithoutData<500, Message.InternalServerError>
+    | ResponseWithoutData<400, Message.MissingField>
+    | ResponseWithoutData<400, Message.RequestTooOften>
+    | ResponseWithoutData<400, Message.BadJson>
+    | T
+  >;
 
   interface RequestWithAuth<P, M, T> extends RequestWithoutAuth<P, M, T> {
-    headers: { Authorization: string };
+    headers: { Authorization: string; [k: string]: string };
   }
 
   interface RequestWithoutAuth<P, M, T> {
+    headers: { [k: string]: string };
     endpoint: P;
     method: M;
     body: T;
   }
 
   namespace Message {
+    type InternalServerError = 'InternalServerError';
+
     // 下面这些是状态码为 4XX 时的 message
     type MissingField = 'MissingField';
+    type BadJson = 'BadJson';
     type RequestTooOften = 'RequestTooOften';
 
     type UsernameInvalid = 'UsernameInvalid';
@@ -102,11 +114,11 @@ declare namespace API {
             email: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.EmailExists>
         | ResponseWithoutData<400, Message.EmailInvalid>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success>
+      >;
 
       // 用邮件里面的 code 去完成注册
       (
@@ -117,10 +129,10 @@ declare namespace API {
             code: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.VerifyCodeNotFound>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success>
+      >;
 
       // 登陆的接口
       (
@@ -132,12 +144,12 @@ declare namespace API {
             password: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.UserNotFound>
-        | Response<200, Message.Success, { token: string }>;
+        | ResponseWithData<200, Message.Success, { token: string }>
+      >;
 
-      // change: 改密码，提供旧密码 API 直接返回 一个 code，使用该 code 改密码
+      // change: 改密码，提供旧密码和新密码直接修改
       (
         req: RequestWithAuth<
           '/v1/user/password?change',
@@ -147,11 +159,11 @@ declare namespace API {
             newPassword: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.PasswordInvalid>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success>
+      >;
 
       // reset: 重置密码，提供一个邮箱，可以得到一个带有code 的链接
       (
@@ -162,10 +174,10 @@ declare namespace API {
             email: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.EmailNotExists>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success /* to force it break line */>
+      >;
 
       // 重置密码的共用部分
       (
@@ -177,10 +189,10 @@ declare namespace API {
             newPassword: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.PasswordInvalid>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success /* to force it break line */>
+      >;
 
       // 添加 detail 的接口
       (
@@ -190,12 +202,12 @@ declare namespace API {
           // Partial 意为所有字段可选
           UserDetailRequest
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success>
+      >;
 
       // 修改 detail 的接口
       (
@@ -205,28 +217,27 @@ declare namespace API {
           // Partial 意为所有字段可选
           Partial<UserDetailRequest>
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
-        | ResponseWithoutData<200, Message.Success>;
+        | ResponseWithoutData<200, Message.Success>
+      >;
 
       // 检查是否重复的接口
       (
         req: RequestWithAuth<
           '/v1/user/existence?type=username' | '/v1/user/existence?type=email',
           'GET',
-          // Partial 意为所有字段可选
           {
             valueToCheck: string;
           }
         >,
-      ):
-        | ResponseWithoutData<400, Message.MissingField>
+      ): Response<
         | ResponseWithoutData<400, Message.UsernameInvalid>
         | ResponseWithoutData<400, Message.EmailInvalid>
-        | Response<200, Message.Success, { existence: boolean }>;
+        | ResponseWithData<200, Message.Success, { existence: boolean }>
+      >;
     }
   }
 

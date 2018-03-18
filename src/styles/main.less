@@ -1,4 +1,7 @@
 // @import 'antd/lib/style/themes/default';
+* {
+  outline: none;
+}
 
 :global body,
 :global html {
@@ -26,4 +29,15 @@
   width: 100%;
   top: 0;
   left: 0;
+}
+
+:global .ant-form-explain {
+  height: 0;
+  margin-top: 2px !important;
+  position: absolute;
+}
+
+:global .antd-pro-login-login .ant-form-item {
+  height: 40px;
+  margin-bottom: 28px;
 }
