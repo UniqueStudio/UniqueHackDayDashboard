@@ -96,11 +96,18 @@ export default function userEntry(
       }
 
       if (fieldName === 'regPassword' && regRePassword.value) {
-        if (regRePassword.value !== value) {
-          tip.validateStatus = 'error';
-          tip.help = '两次密码输入不一致';
-          return { ...state, [fieldName]: tip };
-        }
+        tip.validateStatus = 'error';
+        tip.help = '两次密码输入不一致';
+        return {
+          ...state,
+          regRePassword: {
+            ...(regRePassword.value !== value ? tip : {}),
+            value: regRePassword.value,
+          },
+          regPassword: {
+            value,
+          },
+        };
       }
       return { ...state, [fieldName]: tip };
     }
