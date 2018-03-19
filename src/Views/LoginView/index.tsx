@@ -20,12 +20,6 @@ import 'antd/lib/checkbox/style/index.css';
 
 import { UserEntryData } from '../../redux/reducers/userEntry';
 
-// const patterns = {
-//   username: /^[a-zA-Z0-9_-]{4,16}$/,
-//   password: /^(?:\d|[a-zA-Z]|[!@#$%^&*]){6,16}$/,
-//   email: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
-// };
-
 export interface LoginViewProps extends FormComponentProps {
   onFormFieldsChange: (
     fieldName: keyof UserEntryData,
@@ -36,13 +30,6 @@ export interface LoginViewProps extends FormComponentProps {
   requestExistenceCheck: (type: 'username' | 'email', valueToCheck: string) => void;
   userEntry: UserEntryData;
 }
-
-// export type LoginViewProps = { userEntry: UserEntryData } & DispatchProp<any>;
-
-// const fields = {
-//   login: ['username', 'password'],
-//   register: ['regUsername', 'regEmail', 'regPassword', 'regRePassword'],
-// };
 
 class LoginView extends React.Component<LoginViewProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -35,7 +35,7 @@ const fieldsMessagesMap = {
   email: '邮箱不合法',
 };
 
-const patterns = {
+export const patterns = {
   username: /^[a-zA-Z0-9_-]{4,16}$/,
   password: /^(?:\d|[a-zA-Z]|[!@#$%^&*]){6,16}$/,
   email: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
@@ -110,6 +110,17 @@ export default function userEntry(
     return {
       ...state,
       tab: { value: action.payload },
+    };
+  }
+
+  if (action.type === 'CHANGE_USER_ENTRY_TIP') {
+    return {
+      ...state,
+      [action.payload.fieldName]: {
+        ...state[action.payload.fieldName as keyof UserEntryData],
+        validateStatus: action.payload.validateStatus,
+        help: action.payload.help,
+      },
     };
   }
   return state;

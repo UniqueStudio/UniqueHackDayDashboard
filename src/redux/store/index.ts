@@ -6,23 +6,22 @@ import createHistory from 'history/createHashHistory';
 import { History } from 'history';
 
 import reducer, { RootState } from '../reducers';
-// import sagas from '../sagas';
+import * as sagas from '../sagas';
+
 const history: History = createHistory();
+
+const sagaMiddleware = createSagaMiddleware();
 
 const composeEnhancers =
   // process.env.NODE_ENV === 'development' &&
-  (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
+  (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const store: Store<RootState> = createStore(
   reducer,
-  composeEnhancers(
-    applyMiddleware(
-      routerMiddleware(history),
-      // createSagaMiddleware(sagas),
-    ),
-  ),
+  composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
 );
+
+sagaMiddleware.run(sagas.watchFetchData);
 
 export { history, store };
 export default store;
