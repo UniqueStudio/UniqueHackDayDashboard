@@ -20,7 +20,7 @@ declare namespace API {
   >;
 
   interface RequestWithAuth<P, M, T> extends RequestWithoutAuth<P, M, T> {
-    headers: { Authorization: string; [k: string]: string };
+    headers?: { Authorization: string; [k: string]: string };
   }
 
   interface RequestWithoutAuth<P, M, T> {
@@ -49,6 +49,9 @@ declare namespace API {
     EmailNotExists = 'EmailNotExists',
     EmailExists = 'EmailExists',
     UsernameExists = 'UsernameExists',
+    PhoneExists = 'PhoneExists',
+
+    CodeNotMatch = 'CodeNotMatch',
 
     VerifyCodeNotFound = 'VerifyCodeNotFound',
     TeamLeaderNotFound = 'TeamLeaderNotFound',
@@ -119,8 +122,11 @@ declare namespace API {
           }
         >,
       ): Response<
-        | ResponseWithoutData<400, Message.EmailExists>
-        | ResponseWithoutData<400, Message.EmailInvalid>
+        | ResponseWithoutData<400, Message.UsernameExists>
+        | ResponseWithoutData<400, Message.UsernameInvalid>
+        | ResponseWithoutData<400, Message.PhoneExists>
+        | ResponseWithoutData<400, Message.PhoneInvalid>
+        | ResponseWithoutData<400, Message.CodeNotMatch>
         | ResponseWithoutData<200, Message.Success>
       >;
 
@@ -137,13 +143,13 @@ declare namespace API {
         ResponseWithoutData<400, Message.PhoneInvalid> | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 登陆的接口
+      // 登录的接口
       (
         req: RequestWithoutAuth<
           '/v1/user/login',
           'POST',
           {
-            usernameOrEmail: string;
+            usernameOrPhone: string;
             password: string;
           }
         >,
@@ -244,7 +250,7 @@ declare namespace API {
         | ResponseWithData<200, Message.Success, { existence: boolean }>
       >;
 
-      // 检查是否已经登陆，服务端可以在这里返回 token 来更新 token
+      // 检查是否已经登录，服务端可以在这里返回 token 来更新 token
       (req: RequestWithAuth<'/v1/user/login_status', 'GET', never>): Response<
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;

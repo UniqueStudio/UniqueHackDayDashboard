@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
+import throttle from 'lodash-es/throttle';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Card from 'antd/es/card';
@@ -9,6 +10,8 @@ import Tabs from 'antd/es/tabs';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 import Checkbox from 'antd/es/checkbox';
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
 
 import 'antd/lib/form/style/index.css';
 import 'antd/lib/card/style/index.css';
@@ -17,6 +20,8 @@ import 'antd/lib/tabs/style/index.css';
 import 'antd/lib/icon/style/css';
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/checkbox/style/index.css';
+import 'antd/lib/row/style/css';
+import 'antd/lib/col/style/css';
 
 import { UserEntryData } from '../../redux/reducers/userEntry';
 
@@ -30,21 +35,43 @@ export interface LoginViewProps extends FormComponentProps {
   onSwitchTab: () => void;
   onLoginSubmit: () => void;
   onRegisterSubmit: () => void;
+  onRequestSMS: () => void;
   userEntry: UserEntryData;
 }
 
-class LoginView extends React.Component<LoginViewProps> {
+class LoginView extends React.Component<LoginViewProps, { count: number }> {
+  timer = 0;
+
+  state = { count: 0 };
+
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
+  handleRequestSMS = () => {
+    let count = 60;
+    this.setState({ count });
+    this.props.onRequestSMS();
+    this.timer = window.setInterval(() => {
+      count -= 1;
+      this.setState({ count });
+      if (count === 0) {
+        clearInterval(this.timer);
+      }
+    }, 1000);
+  };
+
+  handleRequestSMSThrottled = throttle(this.handleRequestSMS, 60 * 1000);
+
   render() {
     const { userEntry, onFormFieldsChange, onAutoLoginChange, onSwitchTab } = this.props;
+    const { count } = this.state;
+
     return (
       <Card style={{ height: '470px' }} bordered={false} className="login">
         <Form onSubmit={this.handleSubmit}>
           <Tabs defaultActiveKey={userEntry.tab.value} animated={false} onChange={onSwitchTab}>
-            <Tabs.TabPane tab="登陆" key="login">
+            <Tabs.TabPane tab="登录" key="login">
               <Form.Item {...userEntry.login.username}>
                 <Input
                   size="large"
@@ -82,7 +109,7 @@ class LoginView extends React.Component<LoginViewProps> {
                   type="primary"
                   htmlType="submit"
                 >
-                  登陆
+                  登录
                 </Button>
               </Form.Item>
             </Tabs.TabPane>
@@ -97,16 +124,6 @@ class LoginView extends React.Component<LoginViewProps> {
                 />
               </Form.Item>
 
-              <Form.Item hasFeedback={true} {...userEntry.register.email}>
-                <Input
-                  size="large"
-                  placeholder="请输入邮箱"
-                  prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,0.25)' }} />}
-                  onChange={onFormFieldsChange.bind(this, 'register', 'email')}
-                  value={userEntry.register.email.value}
-                />
-              </Form.Item>
-
               <Form.Item hasFeedback={true} {...userEntry.register.password}>
                 <Input
                   size="large"
@@ -118,17 +135,44 @@ class LoginView extends React.Component<LoginViewProps> {
                 />
               </Form.Item>
 
-              <Form.Item hasFeedback={true} {...userEntry.register.rePassword}>
+              <Form.Item hasFeedback={true} {...userEntry.register.phone}>
                 <Input
                   size="large"
-                  placeholder="请再次输入密码"
-                  type="password"
-                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,0.25)' }} />}
-                  onChange={onFormFieldsChange.bind(this, 'register', 'rePassword')}
-                  value={userEntry.register.rePassword.value}
+                  placeholder="请输入手机号码"
+                  prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+                  onChange={onFormFieldsChange.bind(this, 'register', 'phone')}
+                  value={userEntry.register.phone.value}
                 />
               </Form.Item>
 
+              <Form.Item hasFeedback={true} {...userEntry.register.code}>
+                <Row gutter={8}>
+                  <Col span={16}>
+                    <Input
+                      size="large"
+                      placeholder="请输入短信验证码"
+                      prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+                      onChange={onFormFieldsChange.bind(this, 'register', 'code')}
+                      value={userEntry.register.code.value}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Button
+                      style={{ width: '100%' }}
+                      size="large"
+                      // tslint:disable-next-line:jsx-no-multiline-js
+                      disabled={
+                        !!this.state.count ||
+                        !userEntry.register.phone.value ||
+                        !userEntry.status.smsButtonEnabled
+                      }
+                      onClick={this.handleRequestSMSThrottled}
+                    >
+                      {count ? `${count} s` : '获取验证码'}
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
               <Form.Item>
                 <Button
                   onClick={this.props.onRegisterSubmit}
@@ -145,6 +189,10 @@ class LoginView extends React.Component<LoginViewProps> {
         </Form>
       </Card>
     );
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.timer);
   }
 }
 
@@ -191,6 +239,11 @@ export default connect(
     onRegisterSubmit() {
       dispatch({
         type: 'USER_ENTRY_REGISTER_SUBMIT',
+      });
+    },
+    onRequestSMS() {
+      dispatch({
+        type: 'REQUEST_SMS',
       });
     },
   }),

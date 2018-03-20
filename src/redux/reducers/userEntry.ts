@@ -19,12 +19,18 @@ export interface UserEntryData {
 
   register: {
     username: UserEntrySingleData;
-    email: UserEntrySingleData;
+    // email: UserEntrySingleData;
+    phone: UserEntrySingleData;
     password: UserEntrySingleData;
-    rePassword: UserEntrySingleData;
+    code: UserEntrySingleData;
+    // rePassword: UserEntrySingleData;
   };
 
   tab: { value: 'login' | 'register' };
+
+  status: {
+    smsButtonEnabled: boolean;
+  };
 }
 
 export default function userEntry(
@@ -37,12 +43,18 @@ export default function userEntry(
 
     register: {
       username: {},
-      email: {},
+      phone: {},
+      // email: {},
       password: {},
-      rePassword: {},
+      code: {},
+      // rePassword: {},
     },
 
     tab: { value: 'login' },
+
+    status: {
+      smsButtonEnabled: false,
+    },
   },
   action: AnyAction,
 ): UserEntryData {
@@ -109,7 +121,31 @@ export default function userEntry(
     };
   }
 
+  if (action.type === 'SMS_BUTTON_ENABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        smsButtonEnabled: true,
+      },
+    };
+  }
+
+  if (action.type === 'SMS_BUTTON_DISABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        smsButtonEnabled: false,
+      },
+    };
+  }
+
   // if (action.type === 'USER_ENTRY_VALIDATE_ALL_LOGIN') {
+
+  // }
+
+  // if (action.type === 'LOGIN_VALIDATE_ALL') {
 
   // }
   return state;

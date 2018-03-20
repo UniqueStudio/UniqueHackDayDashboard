@@ -14,20 +14,25 @@ const getUserEntry = (state: RootState) => state.userEntry;
 const map = {
   username: ['username', '用户名'],
   email: ['email', '邮箱'],
+  phone: ['phone', '手机号码'],
 };
 
 const fieldsNamesMap = {
   username: '用户名',
   password: '密码',
-  rePassword: '密码',
+  // rePassword: '密码',
   email: '邮箱',
+  phone: '手机号码',
+  code: '短信验证码',
 };
 
 const fieldsMessagesMap = {
   username: '用户名必须是4～16位字母、数字或下划线组成字符串',
   password: '密码必须是6～16位字母、数字或特殊符号组成字符串',
-  rePassword: '密码必须是6～16位字母、数字或特殊符号组成字符串',
+  // rePassword: '密码必须是6～16位字母、数字或特殊符号组成字符串',
   email: '邮箱不合法',
+  phone: '手机号码不合法',
+  code: '短信验证码不合法',
 };
 
 export const patterns = {
@@ -35,6 +40,8 @@ export const patterns = {
   password: /^(?:\d|[a-zA-Z]|[!@#$%^&*]){6,16}$/,
   rePassword: /^(?:\d|[a-zA-Z]|[!@#$%^&*]){6,16}$/,
   email: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
+  phone: /^1(3[0-9]|4[579]|5[0-3,5-9]|6[6]|7[013,5-8]|8[0-9]|9[89])\d{8}$/,
+  code: /^[0-9]{6}$/,
 };
 
 function syncValidate(fieldName: KeysToValidate, data: UserEntrySingleData) {
@@ -56,7 +63,7 @@ function syncValidate(fieldName: KeysToValidate, data: UserEntrySingleData) {
 
 async function asyncValidate(fieldName: KeysToValidate, data: UserEntrySingleData) {
   const { value } = data;
-  if (fieldName === 'username' || fieldName === 'email') {
+  if (fieldName === 'username' /* || fieldName === 'email' */ || fieldName === 'phone') {
     const result = (await request({
       endpoint: `/v1/user/existence?type=${fieldName}`,
       method: 'GET',
@@ -69,6 +76,11 @@ async function asyncValidate(fieldName: KeysToValidate, data: UserEntrySingleDat
           help: `${(map as any)[fieldName][1]}已存在`,
         };
       }
+    } else {
+      return {
+        validateStatus: 'warning',
+        help: '检测失败，暂时允许提交',
+      };
     }
   }
 
@@ -110,29 +122,29 @@ function* registerValidate(action: AnyAction) {
   }
 
   // 第二次输入密码不一致 检验
-  if ((fieldName === 'rePassword' || fieldName === 'password') && register.rePassword.value) {
-    if (register.rePassword.value !== register.password.value) {
-      yield put({
-        type: 'REGISTER_FORM_TIP_CHANGE',
-        payload: {
-          fieldName: 'rePassword',
-          validateStatus: 'error',
-          help: '第二次输入密码不一致',
-        },
-      });
-      return;
-    } else {
-      yield put({
-        type: 'REGISTER_FORM_TIP_CHANGE',
-        payload: {
-          fieldName: 'rePassword',
-        },
-      });
-      return;
-    }
-  }
+  // if ((fieldName === 'rePassword' || fieldName === 'password') && register.rePassword.value) {
+  //   if (register.rePassword.value !== register.password.value) {
+  //     yield put({
+  //       type: 'REGISTER_FORM_TIP_CHANGE',
+  //       payload: {
+  //         fieldName: 'rePassword',
+  //         validateStatus: 'error',
+  //         help: '第二次输入密码不一致',
+  //       },
+  //     });
+  //     return;
+  //   } else {
+  //     yield put({
+  //       type: 'REGISTER_FORM_TIP_CHANGE',
+  //       payload: {
+  //         fieldName: 'rePassword',
+  //       },
+  //     });
+  //     return;
+  //   }
+  // }
 
-  if (fieldName !== 'username' && fieldName !== 'email') {
+  if (fieldName !== 'username' && fieldName !== 'phone') {
     return;
   }
 
@@ -167,4 +179,16 @@ export default function validate(type: string) {
     return registerValidate;
   }
   return () => void 0;
+}
+
+export function* refreshSMSButton(action: AnyAction) {
+  const { register } = yield select(getUserEntry);
+  const { fieldName } = action.payload;
+  if (fieldName === 'phone') {
+    if (register.phone.validateStatus !== 'error') {
+      yield put({ type: 'SMS_BUTTON_ENABLE' });
+      return;
+    }
+    yield put({ type: 'SMS_BUTTON_DISABLE' });
+  }
 }
