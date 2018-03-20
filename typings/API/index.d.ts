@@ -42,6 +42,7 @@ declare namespace API {
     UsernameInvalid = 'UsernameInvalid',
     PasswordInvalid = 'PasswordInvalid',
     EmailInvalid = 'EmailInvalid',
+    PhoneInvalid = 'PhoneInvalid',
     TShirtSizeInvalid = 'TShirtSizeInvalid',
     FileIdInvalid = 'FileIdInvalid',
 
@@ -113,7 +114,8 @@ declare namespace API {
           {
             username: string;
             password: string;
-            email: string;
+            phone: string;
+            code: string;
           }
         >,
       ): Response<
@@ -122,18 +124,17 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 用邮件里面的 code 去完成注册
+      // 发短信
       (
         req: RequestWithoutAuth<
-          '/v1/user/reg_verify',
+          '/v1/user/send_sms',
           'POST',
           {
-            code: string;
+            phone: string;
           }
         >,
       ): Response<
-        | ResponseWithoutData<400, Message.VerifyCodeNotFound>
-        | ResponseWithoutData<200, Message.Success>
+        ResponseWithoutData<400, Message.PhoneInvalid> | ResponseWithoutData<200, Message.Success>
       >;
 
       // 登陆的接口
@@ -229,7 +230,9 @@ declare namespace API {
       // 检查是否重复的接口
       (
         req: RequestWithoutAuth<
-          '/v1/user/existence?type=username' | '/v1/user/existence?type=email',
+          | '/v1/user/existence?type=username'
+          | '/v1/user/existence?type=email'
+          | '/v1/user/existence?type=phone',
           'GET',
           {
             valueToCheck: string;
