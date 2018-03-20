@@ -43,7 +43,6 @@ const register = async (username: string, password: string, email: string) => {
 function* loginSaga() {
   while (true) {
     const action = yield take('USER_ENTRY_LOGIN_SUBMIT');
-    // const data = yield select((store: RootState) => store.userEntry);
   }
 }
 
