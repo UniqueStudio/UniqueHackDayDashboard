@@ -23,15 +23,22 @@ const request = ((req: any) => {
     },
     body: method === 'GET' ? undefined : JSON.stringify(body),
   }).then(async res => {
-    const json = await res.json();
-    const token = json.data && json.data.token;
-    if (token) {
-      localStorage.setItem('token', token);
+    try {
+      const json = await res.json();
+      const token = json.data && json.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      return {
+        httpStatusCode: res.status,
+        ...json,
+      };
+    } catch (e) {
+      return {
+        httpStatusCode: 600,
+        message: 'NetworkError',
+      };
     }
-    return {
-      httpStatusCode: res.status,
-      ...json,
-    };
   }) as any;
 }) as API.RequestFunc;
 

@@ -11,6 +11,7 @@ declare namespace API {
   };
 
   type Response<T> = Promise<
+    | ResponseWithoutData<600, Message.NetworkError>
     | ResponseWithoutData<500, Message.InternalServerError>
     | ResponseWithoutData<400, Message.MissingField>
     | ResponseWithoutData<400, Message.RequestTooOften>
@@ -29,34 +30,35 @@ declare namespace API {
     body?: T;
   }
 
-  namespace Message {
-    type InternalServerError = 'InternalServerError';
+  enum Message {
+    InternalServerError = 'InternalServerError',
+    NetworkError = 'NetworkError',
 
     // 下面这些是状态码为 4XX 时的 message
-    type MissingField = 'MissingField';
-    type BadJson = 'BadJson';
-    type RequestTooOften = 'RequestTooOften';
+    MissingField = 'MissingField',
+    BadJson = 'BadJson',
+    RequestTooOften = 'RequestTooOften',
 
-    type UsernameInvalid = 'UsernameInvalid';
-    type PasswordInvalid = 'PasswordInvalid';
-    type EmailInvalid = 'EmailInvalid';
-    type TShirtSizeInvalid = 'TShirtSizeInvalid';
-    type FileIdInvalid = 'FileIdInvalid';
+    UsernameInvalid = 'UsernameInvalid',
+    PasswordInvalid = 'PasswordInvalid',
+    EmailInvalid = 'EmailInvalid',
+    TShirtSizeInvalid = 'TShirtSizeInvalid',
+    FileIdInvalid = 'FileIdInvalid',
 
-    type EmailNotExists = 'EmailNotExists';
-    type EmailExists = 'EmailExists';
-    type UsernameExists = 'UsernameExists';
+    EmailNotExists = 'EmailNotExists',
+    EmailExists = 'EmailExists',
+    UsernameExists = 'UsernameExists',
 
-    type VerifyCodeNotFound = 'VerifyCodeNotFound';
-    type TeamLeaderNotFound = 'TeamLeaderNotFound';
-    type UserNotFound = 'UserNotFound';
+    VerifyCodeNotFound = 'VerifyCodeNotFound',
+    TeamLeaderNotFound = 'TeamLeaderNotFound',
+    UserNotFound = 'UserNotFound',
 
-    type Forbidden = 'Forbidden';
-    type LoginNeeded = 'LoginNeeded';
-    type PasswordWrong = 'PasswordWrong';
+    Forbidden = 'Forbidden',
+    LoginNeeded = 'LoginNeeded',
+    PasswordWrong = 'PasswordWrong',
 
     // 这个是 200 的 message
-    type Success = 'Success';
+    Success = 'Success',
   }
 
   type FileID = string;

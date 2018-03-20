@@ -1,5 +1,9 @@
 import { AnyAction } from 'redux';
 
+// Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
+export type Diff<T extends string, U extends string> = ({ [P in T]: P } &
+  { [P in U]: never } & { [x: string]: never })[T];
+export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
 export interface UserEntrySingleData<T = string> {
   value?: T;
   validateStatus?: 'success' | 'warning' | 'error' | 'validating';
@@ -7,110 +11,65 @@ export interface UserEntrySingleData<T = string> {
 }
 
 export interface UserEntryData {
-  username: UserEntrySingleData;
-  password: UserEntrySingleData;
-  autoLogin: { value: boolean };
+  login: {
+    username: UserEntrySingleData;
+    password: UserEntrySingleData;
+    autoLogin: { value: boolean };
+  };
 
-  regUsername: UserEntrySingleData;
-  regEmail: UserEntrySingleData;
-  regPassword: UserEntrySingleData;
-  regRePassword: UserEntrySingleData;
+  register: {
+    username: UserEntrySingleData;
+    email: UserEntrySingleData;
+    password: UserEntrySingleData;
+    rePassword: UserEntrySingleData;
+  };
 
   tab: { value: 'login' | 'register' };
 }
 
-const fieldsNamesMap = {
-  username: '用户名',
-  password: '密码',
-
-  regUsername: '要注册的用户名',
-  regPassword: '密码',
-  regRePassword: '密码',
-  regEmail: '要注册的邮件',
-};
-
-const fieldsMessagesMap = {
-  username: '用户名必须是4～16位字母、数字或下划线组成字符串',
-  password: '密码必须是6～16位字母、数字或特殊符号组成字符串',
-  email: '邮箱不合法',
-};
-
-export const patterns = {
-  username: /^[a-zA-Z0-9_-]{4,16}$/,
-  password: /^(?:\d|[a-zA-Z]|[!@#$%^&*]){6,16}$/,
-  email: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
-};
-
 export default function userEntry(
   state: UserEntryData = {
-    username: {},
-    password: {},
-    autoLogin: { value: true },
-    regUsername: {},
-    regEmail: {},
-    regPassword: {},
-    regRePassword: {},
+    login: {
+      username: {},
+      password: {},
+      autoLogin: { value: true },
+    },
+
+    register: {
+      username: {},
+      email: {},
+      password: {},
+      rePassword: {},
+    },
 
     tab: { value: 'login' },
   },
   action: AnyAction,
-) {
-  if (action.type === 'CHANGE_USER_ENTRY_DATA') {
-    const { fieldName, changedTo: value } = action.payload;
-    const tip: UserEntrySingleData = { value };
+): UserEntryData {
+  if (action.type === 'LOGIN_FORM_CHANGE') {
+    const { fieldName, changedTo } = action.payload;
+    return {
+      ...state,
+      login: {
+        ...state.login,
+        [fieldName]: {
+          value: changedTo,
+        },
+      },
+    };
+  }
 
-    if (value === '') {
-      tip.validateStatus = 'error';
-      tip.help = `必须键入${(fieldsNamesMap as any)[fieldName]}`;
-      return { ...state, [fieldName]: tip };
-    } else {
-      if (fieldName.toLowerCase().indexOf('username') >= 0) {
-        if (!patterns.username.test(value)) {
-          tip.validateStatus = 'error';
-          tip.help = fieldsMessagesMap.username;
-          return { ...state, [fieldName]: tip };
-        }
-      }
-      if (fieldName.toLowerCase().indexOf('password') >= 0) {
-        if (!patterns.password.test(value)) {
-          tip.validateStatus = 'error';
-          tip.help = fieldsMessagesMap.password;
-          return { ...state, [fieldName]: tip };
-        }
-      }
-      if (fieldName.toLowerCase().indexOf('email') >= 0) {
-        if (!patterns.email.test(value)) {
-          tip.validateStatus = 'error';
-          tip.help = fieldsMessagesMap.email;
-          return { ...state, [fieldName]: tip };
-        }
-      }
-
-      const { regPassword, regRePassword } = state;
-      if (fieldName === 'regRePassword') {
-        if (regPassword.value !== value) {
-          tip.validateStatus = 'error';
-          tip.help = '两次密码输入不一致';
-          return { ...state, [fieldName]: tip };
-        }
-      }
-
-      if (fieldName === 'regPassword' && regRePassword.value) {
-        tip.validateStatus = 'error';
-        tip.help = '两次密码输入不一致';
-        return {
-          ...state,
-          regRePassword: {
-            ...(regRePassword.value !== value ? tip : {}),
-            value: regRePassword.value,
-          },
-          regPassword: {
-            value,
-          },
-        };
-      }
-      return { ...state, [fieldName]: tip };
-    }
+  if (action.type === 'REGISTER_FORM_CHANGE') {
+    const { fieldName, changedTo } = action.payload;
+    return {
+      ...state,
+      register: {
+        ...state.register,
+        [fieldName]: {
+          value: changedTo,
+        },
+      },
+    };
   }
 
   if (action.type === 'CHANGE_USER_ENTRY_TAB') {
@@ -120,15 +79,38 @@ export default function userEntry(
     };
   }
 
-  if (action.type === 'CHANGE_USER_ENTRY_TIP') {
+  if (action.type === 'LOGIN_FORM_TIP_CHANGE') {
+    const { fieldName, validateStatus, help } = action.payload;
     return {
       ...state,
-      [action.payload.fieldName]: {
-        ...state[action.payload.fieldName as keyof UserEntryData],
-        validateStatus: action.payload.validateStatus,
-        help: action.payload.help,
+      login: {
+        ...state.login,
+        [fieldName]: {
+          ...(state.login as any)[fieldName],
+          validateStatus,
+          help,
+        },
       },
     };
   }
+
+  if (action.type === 'REGISTER_FORM_TIP_CHANGE') {
+    const { fieldName, validateStatus, help } = action.payload;
+    return {
+      ...state,
+      register: {
+        ...state.register,
+        [fieldName]: {
+          ...(state.register as any)[fieldName],
+          validateStatus,
+          help,
+        },
+      },
+    };
+  }
+
+  // if (action.type === 'USER_ENTRY_VALIDATE_ALL_LOGIN') {
+
+  // }
   return state;
 }
