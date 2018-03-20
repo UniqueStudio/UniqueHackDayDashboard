@@ -1,10 +1,10 @@
-import { select, put, SelectEffect, PutEffect } from 'redux-saga/effects';
+import { select, put, all, SelectEffect, PutEffect, GenericAllEffect } from 'redux-saga/effects';
 
 import { RootState, AnyAction } from '../reducers/index';
 import request from '../../lib/API';
 import { UserEntryData, UserEntrySingleData, Omit } from '../reducers/userEntry';
 
-export { SelectEffect, PutEffect };
+export { SelectEffect, PutEffect, GenericAllEffect };
 type KeysToValidate =
   | keyof Omit<UserEntryData['login'], 'autoLogin'>
   | keyof UserEntryData['register'];
@@ -167,4 +167,34 @@ export default function validate(type: string) {
     return registerValidate;
   }
   return () => void 0;
+}
+
+export function* loginValidateAll() {
+  // const keys = ['username', 'password'];
+  // keys.reduce((p, key) => {
+  //   return {
+  //     ...p,
+  //     [key]:
+  //   }
+  // }, {})
+  yield all([
+    loginValidate({ type: '', payload: { fieldName: 'username' } }),
+    loginValidate({ type: '', payload: { fieldName: 'password' } }),
+  ]);
+}
+
+export function* registerValidateAll() {
+  // const keys = ['username', 'password'];
+  // keys.reduce((p, key) => {
+  //   return {
+  //     ...p,
+  //     [key]:
+  //   }
+  // }, {})
+  yield all([
+    registerValidate({ type: '', payload: { fieldName: 'username' } }),
+    registerValidate({ type: '', payload: { fieldName: 'password' } }),
+    registerValidate({ type: '', payload: { fieldName: 'phone' } }),
+    registerValidate({ type: '', payload: { fieldName: 'code' } }),
+  ]);
 }
