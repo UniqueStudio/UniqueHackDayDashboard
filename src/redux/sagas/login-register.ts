@@ -40,14 +40,22 @@ const registerRequest = async (username: string, password: string, phone: string
       password,
       phone,
       code,
-      // email,
     },
   });
   if (res.httpStatusCode === 200) {
-    return { successful: true, message: '注册成功' };
-  } else {
-    return { successful: true, message: `注册失败，${messageMap(res.message)}` };
+    const loginRes = await request({
+      endpoint: '/v1/user/login',
+      method: 'POST',
+      body: {
+        usernameOrPhone: username,
+        password,
+      },
+    });
+    if (loginRes.httpStatusCode === 200) {
+      return { successful: true, message: '注册成功' };
+    }
   }
+  return { successful: true, message: `注册失败，${messageMap(res.message)}` };
 };
 
 function* loginSaga() {
