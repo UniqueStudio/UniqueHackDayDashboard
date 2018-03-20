@@ -121,29 +121,6 @@ function* registerValidate(action: AnyAction) {
     return;
   }
 
-  // 第二次输入密码不一致 检验
-  // if ((fieldName === 'rePassword' || fieldName === 'password') && register.rePassword.value) {
-  //   if (register.rePassword.value !== register.password.value) {
-  //     yield put({
-  //       type: 'REGISTER_FORM_TIP_CHANGE',
-  //       payload: {
-  //         fieldName: 'rePassword',
-  //         validateStatus: 'error',
-  //         help: '第二次输入密码不一致',
-  //       },
-  //     });
-  //     return;
-  //   } else {
-  //     yield put({
-  //       type: 'REGISTER_FORM_TIP_CHANGE',
-  //       payload: {
-  //         fieldName: 'rePassword',
-  //       },
-  //     });
-  //     return;
-  //   }
-  // }
-
   if (fieldName !== 'username' && fieldName !== 'phone') {
     return;
   }
@@ -169,6 +146,17 @@ function* registerValidate(action: AnyAction) {
       ...(result || { validateStatus: 'success' }),
     },
   });
+
+  if (fieldName !== 'phone') {
+    return;
+  }
+  if (!validateResult) {
+    if (!result || result.validateStatus !== 'error') {
+      yield put({ type: 'SMS_BUTTON_ENABLE' });
+      return;
+    }
+  }
+  yield put({ type: 'SMS_BUTTON_DISABLE' });
 }
 
 export default function validate(type: string) {
@@ -179,16 +167,4 @@ export default function validate(type: string) {
     return registerValidate;
   }
   return () => void 0;
-}
-
-export function* refreshSMSButton(action: AnyAction) {
-  const { register } = yield select(getUserEntry);
-  const { fieldName } = action.payload;
-  if (fieldName === 'phone') {
-    if (register.phone.validateStatus !== 'error') {
-      yield put({ type: 'SMS_BUTTON_ENABLE' });
-      return;
-    }
-    yield put({ type: 'SMS_BUTTON_DISABLE' });
-  }
 }

@@ -1,17 +1,17 @@
 export default function messageMap(message: API.Message) {
-  if (message === API.Message.LoginNeeded) {
+  if (message === 'LoginNeeded') {
     return '你需要登录！';
   }
 
-  if (message === API.Message.PasswordWrong) {
+  if (message === 'PasswordWrong') {
     return '密码错误';
   }
 
-  if (message === API.Message.UserNotFound) {
+  if (message === 'UserNotFound') {
     return '用户不存在';
   }
 
-  if (message === API.Message.UsernameInvalid) {
+  if (message === 'UsernameInvalid') {
     return '用户名无效';
   }
 
