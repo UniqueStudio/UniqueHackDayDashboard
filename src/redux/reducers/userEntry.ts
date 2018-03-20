@@ -141,9 +141,15 @@ export default function userEntry(
     };
   }
 
-  // if (action.type === 'USER_ENTRY_VALIDATE_ALL_LOGIN') {
-
-  // }
+  if (action.type === 'LOGIN_AUTO_LOGIN_CHANGE') {
+    return {
+      ...state,
+      login: {
+        ...state.login,
+        autoLogin: { value: action.payload },
+      },
+    };
+  }
 
   // if (action.type === 'LOGIN_VALIDATE_ALL') {
 

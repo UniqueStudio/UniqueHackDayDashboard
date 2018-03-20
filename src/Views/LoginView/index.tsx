@@ -221,8 +221,8 @@ export default connect(
     },
     onAutoLoginChange(e: React.ChangeEvent<HTMLInputElement>) {
       dispatch({
-        type: 'CHANGE_USER_ENTRY_DATA',
-        payload: { autoLogin: e.target.checked },
+        type: 'LOGIN_AUTO_LOGIN_CHANGE',
+        payload: e.target.checked,
       });
     },
     onSwitchTab(tab: 'login' | 'register') {

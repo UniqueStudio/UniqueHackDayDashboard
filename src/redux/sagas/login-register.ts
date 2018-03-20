@@ -1,4 +1,4 @@
-import { take, all, select } from 'redux-saga/effects';
+import { take, all, select, put } from 'redux-saga/effects';
 
 import request, { getToken } from '../../lib/API';
 import messageMap from './messages-map';
@@ -14,6 +14,7 @@ import {
 export { SelectEffect, AllEffect, GenericAllEffect, TakeEffect, PutEffect };
 
 import { loginValidateAll, registerValidateAll } from './validate';
+import { replace } from 'react-router-redux';
 
 const loginRequest = async (usernameOrPhone: string, password: string) => {
   const res = await request({
@@ -27,7 +28,7 @@ const loginRequest = async (usernameOrPhone: string, password: string) => {
   if (res.httpStatusCode === 200) {
     return { successful: true, message: '登录成功' };
   } else {
-    return { successful: true, message: `登录失败，${messageMap(res.message)}` };
+    return { successful: false, message: `登录失败，${messageMap(res.message)}` };
   }
 };
 
@@ -60,7 +61,7 @@ const registerRequest = async (username: string, password: string, phone: string
 
 function* loginSaga() {
   while (true) {
-    const action = yield take('USER_ENTRY_LOGIN_SUBMIT');
+    yield take('USER_ENTRY_LOGIN_SUBMIT');
 
     yield loginValidateAll();
 
@@ -70,7 +71,18 @@ function* loginSaga() {
 
     if (username.value && password.value) {
       if (username.validateStatus !== 'error' && password.validateStatus !== 'error') {
-        loginRequest(username.value, password.value);
+        const { successful, message } = yield loginRequest(username.value, password.value);
+        if (successful) {
+          if (autoLogin.value === false) {
+            // request 会自动存储 token，
+            const token = localStorage.getItem('token');
+            localStorage.removeItem('token');
+            sessionStorage.setItem('token', token!);
+          }
+          yield put(replace('/console'));
+        } else {
+          // console.log(message);
+        }
       }
     }
     // console.log(login);
@@ -105,10 +117,5 @@ export async function checkLoginStatus() {
   const result = await request({
     endpoint: '/v1/user/login_status',
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bear ${getToken}`,
-    // },
   });
 }
-
-// (window as any).checkLoginStatus = checkLoginStatus;
