@@ -50,6 +50,7 @@ declare namespace API {
     EmailExists = 'EmailExists',
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
+    PhoneNotExists = 'PhoneNotExists',
 
     CodeNotMatch = 'CodeNotMatch',
 
@@ -119,6 +120,7 @@ declare namespace API {
             password: string;
             phone: string;
             code: string;
+            antiRebotToken: string;
           }
         >,
       ): Response<
@@ -137,6 +139,7 @@ declare namespace API {
           'POST',
           {
             phone: string;
+            antiRebotToken: string;
           }
         >,
       ): Response<
@@ -151,6 +154,7 @@ declare namespace API {
           {
             usernameOrPhone: string;
             password: string;
+            antiRebotToken: string;
           }
         >,
       ): Response<
@@ -174,32 +178,22 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // reset: 重置密码，提供一个邮箱，可以得到一个带有code 的链接
+      // reset: 重置密码
       (
         req: RequestWithoutAuth<
           '/v1/user/password?reset',
           'POST',
           {
-            email: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<400, Message.EmailNotExists>
-        | ResponseWithoutData<200, Message.Success /* to force it break line */>
-      >;
-
-      // 重置密码的共用部分
-      (
-        req: RequestWithoutAuth<
-          '/v1/user/password',
-          'PUT',
-          {
+            phone: string;
             code: string;
             newPassword: string;
+            antiRebotToken: string;
           }
         >,
       ): Response<
         | ResponseWithoutData<400, Message.PasswordInvalid>
+        | ResponseWithoutData<400, Message.PhoneNotExists>
+        | ResponseWithoutData<400, Message.CodeNotMatch>
         | ResponseWithoutData<200, Message.Success /* to force it break line */>
       >;
 
