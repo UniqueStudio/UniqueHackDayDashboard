@@ -53,6 +53,7 @@ declare namespace API {
     PhoneNotExists = 'PhoneNotExists',
 
     CodeNotMatch = 'CodeNotMatch',
+    HumanCheckFailed = 'HumanCheckFailed',
 
     VerifyCodeNotFound = 'VerifyCodeNotFound',
     TeamLeaderNotFound = 'TeamLeaderNotFound',
@@ -120,7 +121,7 @@ declare namespace API {
             password: string;
             phone: string;
             code: string;
-            antiRebotToken: string;
+            antiRobotToken: string;
           }
         >,
       ): Response<
@@ -139,7 +140,7 @@ declare namespace API {
           'POST',
           {
             phone: string;
-            antiRebotToken: string;
+            antiRobotToken: string;
           }
         >,
       ): Response<
@@ -154,7 +155,7 @@ declare namespace API {
           {
             usernameOrPhone: string;
             password: string;
-            antiRebotToken: string;
+            antiRobotToken: string;
           }
         >,
       ): Response<
@@ -187,7 +188,7 @@ declare namespace API {
             phone: string;
             code: string;
             newPassword: string;
-            antiRebotToken: string;
+            antiRobotToken: string;
           }
         >,
       ): Response<

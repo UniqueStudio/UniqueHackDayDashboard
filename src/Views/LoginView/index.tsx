@@ -27,8 +27,9 @@ import 'antd/lib/col/style/css';
 import Recaptcha from 'react-recaptcha';
 
 import { UserEntryData } from '../../redux/reducers/userEntry';
+import WithRecaptcha from '../../lib/withRecaptcha';
 
-export interface LoginViewProps extends FormComponentProps {
+export interface LoginViewProps {
   onFormFieldsChange: (
     tab: keyof UserEntryData,
     fieldName: keyof UserEntryData['login'] | keyof UserEntryData['register'],
@@ -36,34 +37,29 @@ export interface LoginViewProps extends FormComponentProps {
   ) => void;
   onAutoLoginChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSwitchTab: () => void;
-  onLoginSubmit: () => void;
-  onRegisterSubmit: () => void;
-  onRequestSMS: () => void;
+  onLoginSubmit: (token: string) => void;
+  onRegisterSubmit: (token: string) => void;
+  onRequestSMS: (token: string) => void;
   userEntry: UserEntryData;
+  withVerify: any;
+  recaptchaReady: boolean;
 }
 
-class LoginView extends React.Component<
-  LoginViewProps,
-  {
-    count: number;
-    recaptchaLoaded: boolean;
-  }
-> {
+class LoginView extends React.Component<LoginViewProps, { count: number }> {
   timer = 0;
 
   state = {
     count: 0,
-    recaptchaLoaded: false,
   };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  handleRequestSMS = () => {
-    let count = 60;
+  handleRequestSMS = throttle((token: string) => {
+    let count = 59;
     this.setState({ count });
-    this.props.onRequestSMS();
+    this.props.onRequestSMS(token);
     this.timer = window.setInterval(() => {
       count -= 1;
       this.setState({ count });
@@ -71,48 +67,19 @@ class LoginView extends React.Component<
         clearInterval(this.timer);
       }
     }, 1000);
-  };
-
-  handleRequestSMSThrottled = throttle(this.handleRequestSMS, 60 * 1000);
-
-  recaptcha = null;
-  recaptchaRef = (recaptcha: any) => {
-    this.recaptcha = recaptcha;
-  };
-
-  recaptchaResolve = noop;
-  recaptchaReject = noop;
-
-  verifyCallback = (token: string) => {
-    this.recaptchaResolve(token);
-  };
-
-  expiredCallback = () => {
-    this.recaptchaReject();
-  };
-
-  withRecaptcha = (callback: any) => {
-    return async () => {
-      callback(
-        await new Promise((resolve, reject) => {
-          this.recaptchaResolve = resolve;
-          this.recaptchaReject = reject;
-          if (this.recaptcha) {
-            (this.recaptcha as any).execute();
-          }
-        }),
-      );
-    };
-  };
-
-  handleRecaptchaLoaded = () => {
-    this.setState({
-      recaptchaLoaded: true,
-    });
-  };
+  }, 60 * 1000);
 
   render() {
-    const { userEntry, onFormFieldsChange, onAutoLoginChange, onSwitchTab } = this.props;
+    const {
+      userEntry,
+      onFormFieldsChange,
+      onAutoLoginChange,
+      onSwitchTab,
+      withVerify,
+    } = this.props;
+    const onLoginSubmit = withVerify(this.props.onLoginSubmit);
+    const onRegisterSubmit = withVerify(this.props.onRegisterSubmit);
+    const handleRequestSMS = withVerify(this.handleRequestSMS);
     const { count } = this.state;
 
     return (
@@ -151,8 +118,8 @@ class LoginView extends React.Component<
 
               <Form.Item>
                 <Button
-                  disabled={!this.state.recaptchaLoaded}
-                  onClick={this.withRecaptcha(this.props.onLoginSubmit)}
+                  disabled={!this.props.recaptchaReady}
+                  onClick={onLoginSubmit}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
@@ -208,13 +175,13 @@ class LoginView extends React.Component<
                   <Col span={8}>
                     <Button
                       style={{ width: '100%' }}
-                      size="large"
+                      size="large" // tslint:disable-next-line:jsx-no-multiline-js
                       disabled={
                         !!this.state.count ||
                         !userEntry.register.phone.value ||
-                        !userEntry.status.smsButtonEnabled // tslint:disable-next-line:jsx-no-multiline-js
+                        !userEntry.status.smsButtonEnabled
                       }
-                      onClick={this.handleRequestSMSThrottled}
+                      onClick={handleRequestSMS}
                     >
                       {count ? `${count} s` : '获取验证码'}
                     </Button>
@@ -223,8 +190,8 @@ class LoginView extends React.Component<
               </Form.Item>
               <Form.Item>
                 <Button
-                  onClick={this.withRecaptcha(this.props.onRegisterSubmit)}
-                  disabled={!this.state.recaptchaLoaded}
+                  onClick={onRegisterSubmit}
+                  disabled={!this.props.recaptchaReady}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
@@ -235,15 +202,6 @@ class LoginView extends React.Component<
               </Form.Item>
             </Tabs.TabPane>
           </Tabs>
-          <Recaptcha
-            sitekey="6LdC6U0UAAAAAKncjvziQGNOd2vLAPmVu2jTKDg9"
-            size="invisible"
-            render="explicit"
-            onloadCallback={this.handleRecaptchaLoaded}
-            verifyCallback={this.verifyCallback}
-            expiredCallback={this.expiredCallback}
-            ref={this.recaptchaRef}
-          />
         </Form>
       </Card>
     );
@@ -289,20 +247,23 @@ export default connect(
         payload: tab,
       });
     },
-    onLoginSubmit() {
+    onLoginSubmit(token: string) {
       dispatch({
         type: 'USER_ENTRY_LOGIN_SUBMIT',
+        payload: token,
       });
     },
-    onRegisterSubmit() {
+    onRegisterSubmit(token: string) {
       dispatch({
         type: 'USER_ENTRY_REGISTER_SUBMIT',
+        payload: token,
       });
     },
-    onRequestSMS() {
+    onRequestSMS(token: string) {
       dispatch({
         type: 'REQUEST_SMS',
+        payload: token,
       });
     },
   }),
-)(LoginView);
+)(WithRecaptcha(LoginView));

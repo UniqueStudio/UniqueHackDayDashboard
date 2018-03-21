@@ -18,13 +18,14 @@ import { replace, RouterAction } from 'react-router-redux';
 
 export { RouterAction };
 
-const loginRequest = async (usernameOrPhone: string, password: string) => {
+const loginRequest = async (usernameOrPhone: string, password: string, antiRobotToken: string) => {
   const res = await request({
     endpoint: '/v1/user/login',
     method: 'POST',
     body: {
       usernameOrPhone,
       password,
+      antiRobotToken,
     },
   });
   if (res.httpStatusCode === 200) {
@@ -34,7 +35,13 @@ const loginRequest = async (usernameOrPhone: string, password: string) => {
   }
 };
 
-const registerRequest = async (username: string, password: string, phone: string, code: string) => {
+const registerRequest = async (
+  username: string,
+  password: string,
+  phone: string,
+  code: string,
+  antiRobotToken: string,
+) => {
   const res = await request({
     endpoint: '/v1/user/reg',
     method: 'POST',
@@ -43,6 +50,7 @@ const registerRequest = async (username: string, password: string, phone: string
       password,
       phone,
       code,
+      antiRobotToken,
     },
   });
   if (res.httpStatusCode === 200) {
@@ -52,6 +60,7 @@ const registerRequest = async (username: string, password: string, phone: string
       body: {
         usernameOrPhone: username,
         password,
+        antiRobotToken,
       },
     });
     if (loginRes.httpStatusCode === 200) {
@@ -64,7 +73,7 @@ const registerRequest = async (username: string, password: string, phone: string
 
 function* loginSaga() {
   while (true) {
-    yield take('USER_ENTRY_LOGIN_SUBMIT');
+    const { payload: antiRobotToken } = yield take('USER_ENTRY_LOGIN_SUBMIT');
 
     yield loginValidateAll();
 
@@ -74,7 +83,11 @@ function* loginSaga() {
 
     if (username.value && password.value) {
       if (username.validateStatus !== 'error' && password.validateStatus !== 'error') {
-        const { successful, message } = yield loginRequest(username.value, password.value);
+        const { successful, message } = yield loginRequest(
+          username.value,
+          password.value,
+          antiRobotToken,
+        );
         if (successful) {
           if (autoLogin.value === false) {
             // request 会自动存储 token，
@@ -94,7 +107,7 @@ function* loginSaga() {
 
 function* registerSaga() {
   while (true) {
-    yield take('USER_ENTRY_REGISTER_SUBMIT');
+    const { payload: antiRobotToken } = yield take('USER_ENTRY_REGISTER_SUBMIT');
     // if (store.route!.location.pathname.indexOf('/user_entry/') !== 0) {
     //   continue;
     // }
@@ -111,6 +124,7 @@ function* registerSaga() {
           password.value,
           phone.value,
           code.value,
+          antiRobotToken,
         );
         if (successful) {
           yield put(replace('/console'));
