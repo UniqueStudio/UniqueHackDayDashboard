@@ -32,6 +32,9 @@ export interface UserEntryData {
     smsButtonEnabled: boolean;
     loginButtonEnabled: boolean;
     registerButtonEnabled: boolean;
+
+    loginButtonLoading: boolean;
+    registerButtonLoading: boolean;
   };
 }
 
@@ -58,6 +61,9 @@ export default function userEntry(
       smsButtonEnabled: false,
       loginButtonEnabled: false,
       registerButtonEnabled: false,
+
+      loginButtonLoading: false,
+      registerButtonLoading: false,
     },
   },
   action: AnyAction,
@@ -203,6 +209,26 @@ export default function userEntry(
       status: {
         ...state.status,
         registerButtonEnabled: false,
+      },
+    };
+  }
+
+  if (action.type === 'LOGIN_BUTTON_LOADING') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        loginButtonLoading: action.payload,
+      },
+    };
+  }
+
+  if (action.type === 'REGISTER_BUTTON_LOADING') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        registerButtonLoading: action.payload,
       },
     };
   }

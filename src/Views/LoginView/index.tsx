@@ -117,14 +117,19 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
 
               <Form.Item>
                 <Button
-                  disabled={!userEntry.status.loginButtonEnabled || !this.props.recaptchaReady}
+                  // tslint:disable-next-line:jsx-no-multiline-js
+                  disabled={
+                    userEntry.status.loginButtonLoading ||
+                    !userEntry.status.loginButtonEnabled ||
+                    !this.props.recaptchaReady
+                  }
                   onClick={onLoginSubmit}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
                   htmlType="submit"
                 >
-                  登录
+                  {userEntry.status.loginButtonLoading ? <Icon type="loading" /> : '登录'}
                 </Button>
               </Form.Item>
             </Tabs.TabPane>
@@ -190,13 +195,18 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
               <Form.Item>
                 <Button
                   onClick={onRegisterSubmit}
-                  disabled={!userEntry.status.registerButtonEnabled || !this.props.recaptchaReady}
+                  // tslint:disable-next-line:jsx-no-multiline-js
+                  disabled={
+                    userEntry.status.registerButtonLoading ||
+                    !userEntry.status.registerButtonEnabled ||
+                    !this.props.recaptchaReady
+                  }
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
                   htmlType="submit"
                 >
-                  注册
+                  {userEntry.status.registerButtonEnabled ? <Icon type="loading" /> : '注册'}
                 </Button>
               </Form.Item>
             </Tabs.TabPane>

@@ -42,8 +42,6 @@ const registerRequest = async (
   code: string,
   antiRobotToken: string,
 ) => {
-  return { successful: true, message: 'Success' };
-
   const res = await request({
     endpoint: '/v1/user/reg',
     method: 'POST',
@@ -77,6 +75,8 @@ function* loginSaga() {
   while (true) {
     const { payload: antiRobotToken } = yield take('USER_ENTRY_LOGIN_SUBMIT');
 
+    yield put({ type: 'LOGIN_BUTTON_LOADING', payload: true });
+
     yield loginValidateAll();
 
     const { login: { username, password, autoLogin } } = yield select(
@@ -103,6 +103,8 @@ function* loginSaga() {
         }
       }
     }
+
+    yield put({ type: 'LOGIN_BUTTON_LOADING', payload: false });
   }
 }
 
@@ -127,7 +129,7 @@ function* registerSaga() {
         if (successful) {
           yield put(replace('/console'));
         } else {
-          // console.log(message);
+          yield registerErrorTip(message);
         }
       }
     }
@@ -157,4 +159,27 @@ function* loginErrorTip(message: API.Message) {
   }
 
   yield put({ type: 'LOGIN_FORM_TIP_CHANGE', payload: tip });
+}
+
+function* registerErrorTip(message: API.Message) {
+  const tip = {} as any;
+  tip.validateStatus = 'error';
+  tip.help = messageMap(message);
+  if (message === 'PhoneInvalid') {
+    tip.fieldName = 'phone';
+  }
+  if (message === 'PhoneExists') {
+    tip.fieldName = 'phone';
+  }
+  if (message === 'PasswordInvalid') {
+    tip.fieldName = 'password';
+  }
+  if (message === 'UsernameExists') {
+    tip.fieldName = 'username';
+  }
+  if (message === 'UsernameInvalid') {
+    tip.fieldName = 'username';
+  }
+
+  yield put({ type: 'REGISTER_FORM_TIP_CHANGE', payload: tip });
 }
