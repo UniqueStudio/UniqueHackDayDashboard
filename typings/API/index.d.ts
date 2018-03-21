@@ -46,11 +46,11 @@ declare namespace API {
     TShirtSizeInvalid = 'TShirtSizeInvalid',
     FileIdInvalid = 'FileIdInvalid',
 
-    EmailNotExists = 'EmailNotExists',
-    EmailExists = 'EmailExists',
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
     PhoneNotExists = 'PhoneNotExists',
+    TeamNotExists = 'TeamNotExists',
+    InvitationNotExists = 'InvitationNotExists',
 
     CodeNotMatch = 'CodeNotMatch',
     HumanCheckFailed = 'HumanCheckFailed',
@@ -252,7 +252,179 @@ declare namespace API {
     }
   }
 
-  // namespace
+  namespace Team {
+    interface UserInTeam {
+      username: string;
+      name: string;
+      school: string;
+      email?: string;
+    }
+
+    interface RequestFunc {
+      // 搜索用户的接口，在实现时应该注意安全，最多返回 5 个条目，按照匹配程度排序
+      (
+        req: RequestWithAuth<
+          '/v1/user/search',
+          'GET',
+          {
+            keyword: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { users: UserInTeam[] }>
+      >;
+
+      // 创建队伍的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/teams',
+          'POST',
+          {
+            name: string;
+            // members: string[];
+            // teamId: string;
+            // teamLeader: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 删除队伍的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/teams',
+          'POST',
+          {
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 修改队长的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/team_leader',
+          'PUT',
+          {
+            teamId: string;
+            teamLeader: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 添加队员的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/invitations',
+          'POST',
+          {
+            username: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 取消邀请的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/invitations',
+          'DELETE',
+          {
+            username: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.InvitationNotExists>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 同意入队的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/accept',
+          'POST',
+          {
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.InvitationNotExists>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 删除队员的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/members',
+          'DELETE',
+          {
+            username: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 获取队伍信息的接口
+      (
+        req: RequestWithAuth<
+          '/v1/team/teams',
+          'GET',
+          {
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<
+            200,
+            Message.Success,
+            {
+              teamLeader: UserInTeam;
+              members: UserInTeam[];
+              teamedUpTime: string;
+              prizeInfo: string;
+            }
+          >
+      >;
+    }
+  }
 
   type RequestFunc = User.RequestFunc;
 }
