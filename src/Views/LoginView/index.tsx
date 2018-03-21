@@ -2,9 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 import throttle from 'lodash-es/throttle';
-import noop from 'lodash-es/noop';
 
-import Form, { FormComponentProps } from 'antd/es/form';
+import Form from 'antd/es/form';
 import Card from 'antd/es/card';
 import Input from 'antd/es/input';
 import Tabs from 'antd/es/tabs';
@@ -78,8 +77,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       withVerify,
     } = this.props;
     const onLoginSubmit = withVerify(this.props.onLoginSubmit);
-    // const onRegisterSubmit = withVerify(this.props.onRegisterSubmit);
-    const onRegisterSubmit = this.props.onRegisterSubmit;
+    const onRegisterSubmit = withVerify(this.props.onRegisterSubmit);
     const handleRequestSMS = withVerify(this.handleRequestSMS);
     const { count } = this.state;
 

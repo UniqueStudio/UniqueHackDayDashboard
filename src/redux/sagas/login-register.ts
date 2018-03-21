@@ -99,7 +99,6 @@ function* loginSaga() {
           }
           yield put(replace('/console'));
         } else {
-          // console.log(message);
           yield loginErrorTip(message);
         }
       }
