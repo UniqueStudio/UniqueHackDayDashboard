@@ -26,9 +26,9 @@ const loginRequest = async (usernameOrPhone: string, password: string) => {
     },
   });
   if (res.httpStatusCode === 200) {
-    return { successful: true, message: '登录成功' };
+    return { successful: true, message: res.message };
   } else {
-    return { successful: false, message: `登录失败，${messageMap(res.message)}` };
+    return { successful: false, message: res.message };
   }
 };
 
@@ -53,10 +53,11 @@ const registerRequest = async (username: string, password: string, phone: string
       },
     });
     if (loginRes.httpStatusCode === 200) {
-      return { successful: true, message: '注册成功' };
+      return { successful: true, message: loginRes.message };
     }
+    return { successful: false, message: loginRes.message };
   }
-  return { successful: true, message: `注册失败，${messageMap(res.message)}` };
+  return { successful: false, message: res.message };
 };
 
 function* loginSaga() {
@@ -103,7 +104,17 @@ function* registerSaga() {
 
     if (username.value && password.value && phone.value && code.value) {
       if (username.validateStatus !== 'error' && password.validateStatus !== 'error') {
-        registerRequest(username.value, password.value, phone.value, code.value);
+        const { successful, message } = yield registerRequest(
+          username.value,
+          password.value,
+          phone.value,
+          code.value,
+        );
+        if (successful) {
+          yield put(replace('/console'));
+        } else {
+          // console.log(message);
+        }
       }
     }
   }

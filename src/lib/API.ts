@@ -19,6 +19,7 @@ const request = ((req: any) => {
     method,
     headers: {
       ...headers,
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${authorizationToken}` || '',
     },
     body: method === 'GET' ? undefined : JSON.stringify(body),
