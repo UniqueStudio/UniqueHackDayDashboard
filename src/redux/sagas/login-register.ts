@@ -1,6 +1,6 @@
 import { take, all, select, put } from 'redux-saga/effects';
 
-import request, { getToken } from '../../lib/API';
+import request from '../../lib/API';
 import messageMap from './messages-map';
 import { RootState } from '../reducers';
 
@@ -42,6 +42,8 @@ const registerRequest = async (
   code: string,
   antiRobotToken: string,
 ) => {
+  return { successful: true, message: 'Success' };
+
   const res = await request({
     endpoint: '/v1/user/reg',
     method: 'POST',
@@ -98,19 +100,16 @@ function* loginSaga() {
           yield put(replace('/console'));
         } else {
           // console.log(message);
+          yield loginErrorTip(message);
         }
       }
     }
-    // console.log(login);
   }
 }
 
 function* registerSaga() {
   while (true) {
     const { payload: antiRobotToken } = yield take('USER_ENTRY_REGISTER_SUBMIT');
-    // if (store.route!.location.pathname.indexOf('/user_entry/') !== 0) {
-    //   continue;
-    // }
     yield registerValidateAll();
 
     const { register: { username, password, phone, code } } = yield select(
@@ -145,4 +144,18 @@ export async function checkLoginStatus() {
     endpoint: '/v1/user/login_status',
     method: 'GET',
   });
+}
+
+function* loginErrorTip(message: API.Message) {
+  const tip = {} as any;
+  tip.validateStatus = 'error';
+  tip.help = messageMap(message);
+  if (message === 'UserNotFound') {
+    tip.fieldName = 'username';
+  }
+  if (message === 'PasswordWrong') {
+    tip.fieldName = 'password';
+  }
+
+  yield put({ type: 'LOGIN_FORM_TIP_CHANGE', payload: tip });
 }

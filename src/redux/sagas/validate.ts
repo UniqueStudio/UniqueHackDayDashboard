@@ -1,15 +1,23 @@
-import { select, put, all, SelectEffect, PutEffect, GenericAllEffect } from 'redux-saga/effects';
+import {
+  select,
+  put,
+  all,
+  SelectEffect,
+  PutEffect,
+  GenericAllEffect,
+  AllEffect,
+} from 'redux-saga/effects';
 
 import { RootState, AnyAction } from '../reducers/index';
 import request from '../../lib/API';
 import { UserEntryData, UserEntrySingleData, Omit } from '../reducers/userEntry';
 
-export { SelectEffect, PutEffect, GenericAllEffect };
+export { SelectEffect, PutEffect, GenericAllEffect, AllEffect };
 type KeysToValidate =
   | keyof Omit<UserEntryData['login'], 'autoLogin'>
   | keyof UserEntryData['register'];
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const getUserEntry = (state: RootState) => state.userEntry;
 const map = {
   username: ['username', '用户名'],
@@ -76,12 +84,12 @@ async function asyncValidate(fieldName: KeysToValidate, data: UserEntrySingleDat
           help: `${(map as any)[fieldName][1]}已存在`,
         };
       }
-    } else {
-      return {
-        validateStatus: 'warning',
-        help: '检测失败，暂时允许提交',
-      };
+    } else if (result.httpStatusCode === 400) {
+      if (result.message.indexOf('Invalid')) {
+        return { validateStatus: 'error', help: fieldsMessagesMap[fieldName] };
+      }
     }
+    return { validateStatus: 'warning', help: '检测失败，暂时允许提交' };
   }
 
   return null;
@@ -92,16 +100,13 @@ function* loginValidate(action: AnyAction) {
   const { fieldName } = action.payload;
 
   const validateResult = syncValidate(fieldName as any, login[fieldName]);
-  if (validateResult) {
-    yield put({
-      type: 'LOGIN_FORM_TIP_CHANGE',
-      payload: {
-        fieldName,
-        ...validateResult,
-      },
-    });
-    return;
-  }
+  yield put({
+    type: 'LOGIN_FORM_TIP_CHANGE',
+    payload: {
+      fieldName,
+      ...validateResult,
+    },
+  });
 }
 
 function* registerValidate(action: AnyAction) {
@@ -110,14 +115,15 @@ function* registerValidate(action: AnyAction) {
 
   // 常规校验
   const validateResult = syncValidate(fieldName as any, register[fieldName]);
+  yield put({
+    type: 'REGISTER_FORM_TIP_CHANGE',
+    payload: {
+      fieldName,
+      ...validateResult,
+    },
+  });
+
   if (validateResult) {
-    yield put({
-      type: 'REGISTER_FORM_TIP_CHANGE',
-      payload: {
-        fieldName,
-        ...validateResult,
-      },
-    });
     return;
   }
 
@@ -170,31 +176,60 @@ export default function validate(type: string) {
 }
 
 export function* loginValidateAll() {
-  // const keys = ['username', 'password'];
-  // keys.reduce((p, key) => {
-  //   return {
-  //     ...p,
-  //     [key]:
-  //   }
-  // }, {})
   yield all([
     loginValidate({ type: '', payload: { fieldName: 'username' } }),
     loginValidate({ type: '', payload: { fieldName: 'password' } }),
   ]);
+
+  // FIXME: these code will not trigger fetch
+  // const type = 'LOGIN_FORM_CHANGE';
+  // yield all([
+  //   put({ type, payload: { fieldName: 'username' } }),
+  //   put({ type, payload: { fieldName: 'password' } }),
+  // ]);
 }
 
 export function* registerValidateAll() {
-  // const keys = ['username', 'password'];
-  // keys.reduce((p, key) => {
-  //   return {
-  //     ...p,
-  //     [key]:
-  //   }
-  // }, {})
   yield all([
     registerValidate({ type: '', payload: { fieldName: 'username' } }),
     registerValidate({ type: '', payload: { fieldName: 'password' } }),
     registerValidate({ type: '', payload: { fieldName: 'phone' } }),
     registerValidate({ type: '', payload: { fieldName: 'code' } }),
   ]);
+
+  // FIXME: these code will not trigger fetch
+  // const type = 'REGISTER_FORM_CHANGE';
+  // yield put({ type, payload: { fieldName: 'username' } });
+  // yield put({ type, payload: { fieldName: 'password' } });
+  // yield put({ type, payload: { fieldName: 'phone' } });
+  // yield put({ type, payload: { fieldName: 'code' } });
+}
+
+export function hasError(type: string) {
+  let actionType: any;
+  if (type === 'login') {
+    actionType = ['LOGIN_BUTTON_ENABLE', 'LOGIN_BUTTON_DISABLE'];
+  } else if (type === 'register') {
+    actionType = ['REGISTER_BUTTON_ENABLE', 'REGISTER_BUTTON_DISABLE'];
+  }
+  return function*() {
+    const userEntry = yield select(getUserEntry);
+    const data = userEntry[type];
+    const currentStatus = userEntry.status[`${type}ButtonEnabled`];
+    for (const key in data) {
+      if (key && data[key]) {
+        const item = data[key];
+        if (!item.value || item.validateStatus === 'error') {
+          if (currentStatus) {
+            yield put({ type: actionType[1] });
+          }
+          return true;
+        }
+      }
+    }
+    if (!currentStatus) {
+      yield put({ type: actionType[0] });
+    }
+    return false;
+  };
 }

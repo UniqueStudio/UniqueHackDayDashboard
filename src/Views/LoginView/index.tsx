@@ -78,7 +78,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       withVerify,
     } = this.props;
     const onLoginSubmit = withVerify(this.props.onLoginSubmit);
-    const onRegisterSubmit = withVerify(this.props.onRegisterSubmit);
+    // const onRegisterSubmit = withVerify(this.props.onRegisterSubmit);
+    const onRegisterSubmit = this.props.onRegisterSubmit;
     const handleRequestSMS = withVerify(this.handleRequestSMS);
     const { count } = this.state;
 
@@ -118,7 +119,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
 
               <Form.Item>
                 <Button
-                  disabled={!this.props.recaptchaReady}
+                  disabled={!userEntry.status.loginButtonEnabled || !this.props.recaptchaReady}
                   onClick={onLoginSubmit}
                   size="large"
                   style={{ width: '100%' }}
@@ -191,7 +192,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
               <Form.Item>
                 <Button
                   onClick={onRegisterSubmit}
-                  disabled={!this.props.recaptchaReady}
+                  disabled={!userEntry.status.registerButtonEnabled || !this.props.recaptchaReady}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"

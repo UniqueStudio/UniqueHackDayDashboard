@@ -30,6 +30,8 @@ export interface UserEntryData {
 
   status: {
     smsButtonEnabled: boolean;
+    loginButtonEnabled: boolean;
+    registerButtonEnabled: boolean;
   };
 }
 
@@ -54,17 +56,23 @@ export default function userEntry(
 
     status: {
       smsButtonEnabled: false,
+      loginButtonEnabled: false,
+      registerButtonEnabled: false,
     },
   },
   action: AnyAction,
 ): UserEntryData {
   if (action.type === 'LOGIN_FORM_CHANGE') {
     const { fieldName, changedTo } = action.payload;
+    if (changedTo === undefined) {
+      return state;
+    }
     return {
       ...state,
       login: {
         ...state.login,
         [fieldName]: {
+          ...(state.login as any)[fieldName],
           value: changedTo,
         },
       },
@@ -73,11 +81,15 @@ export default function userEntry(
 
   if (action.type === 'REGISTER_FORM_CHANGE') {
     const { fieldName, changedTo } = action.payload;
+    if (changedTo === undefined) {
+      return state;
+    }
     return {
       ...state,
       register: {
         ...state.register,
         [fieldName]: {
+          ...(state.register as any)[fieldName],
           value: changedTo,
         },
       },
@@ -93,6 +105,9 @@ export default function userEntry(
 
   if (action.type === 'LOGIN_FORM_TIP_CHANGE') {
     const { fieldName, validateStatus, help } = action.payload;
+    if (!fieldName) {
+      return state;
+    }
     return {
       ...state,
       login: {
@@ -108,6 +123,9 @@ export default function userEntry(
 
   if (action.type === 'REGISTER_FORM_TIP_CHANGE') {
     const { fieldName, validateStatus, help } = action.payload;
+    if (!fieldName) {
+      return state;
+    }
     return {
       ...state,
       register: {
@@ -151,8 +169,43 @@ export default function userEntry(
     };
   }
 
-  // if (action.type === 'LOGIN_VALIDATE_ALL') {
+  if (action.type === 'LOGIN_BUTTON_ENABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        loginButtonEnabled: true,
+      },
+    };
+  }
+  if (action.type === 'LOGIN_BUTTON_DISABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        loginButtonEnabled: false,
+      },
+    };
+  }
 
-  // }
+  if (action.type === 'REGISTER_BUTTON_ENABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        registerButtonEnabled: true,
+      },
+    };
+  }
+  if (action.type === 'REGISTER_BUTTON_DISABLE') {
+    return {
+      ...state,
+      status: {
+        ...state.status,
+        registerButtonEnabled: false,
+      },
+    };
+  }
+
   return state;
 }

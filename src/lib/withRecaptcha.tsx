@@ -26,6 +26,7 @@ function WithRecaptcha<P>(
     recaptchaResolve = noop;
     recaptchaReject = noop;
     verifyCallback = (token: string) => {
+      (this.recaptcha as any).reset();
       this.recaptchaResolve(token);
     };
     expiredCallback = () => {
