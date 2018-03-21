@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 import throttle from 'lodash-es/throttle';
+import noop from 'lodash-es/noop';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Card from 'antd/es/card';
@@ -23,6 +24,8 @@ import 'antd/lib/checkbox/style/index.css';
 import 'antd/lib/row/style/css';
 import 'antd/lib/col/style/css';
 
+import Recaptcha from 'react-recaptcha';
+
 import { UserEntryData } from '../../redux/reducers/userEntry';
 
 export interface LoginViewProps extends FormComponentProps {
@@ -39,10 +42,19 @@ export interface LoginViewProps extends FormComponentProps {
   userEntry: UserEntryData;
 }
 
-class LoginView extends React.Component<LoginViewProps, { count: number }> {
+class LoginView extends React.Component<
+  LoginViewProps,
+  {
+    count: number;
+    recaptchaLoaded: boolean;
+  }
+> {
   timer = 0;
 
-  state = { count: 0 };
+  state = {
+    count: 0,
+    recaptchaLoaded: false,
+  };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,6 +74,42 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   };
 
   handleRequestSMSThrottled = throttle(this.handleRequestSMS, 60 * 1000);
+
+  recaptcha = null;
+  recaptchaRef = (recaptcha: any) => {
+    this.recaptcha = recaptcha;
+  };
+
+  recaptchaResolve = noop;
+  recaptchaReject = noop;
+
+  verifyCallback = (token: string) => {
+    this.recaptchaResolve(token);
+  };
+
+  expiredCallback = () => {
+    this.recaptchaReject();
+  };
+
+  withRecaptcha = (callback: any) => {
+    return async () => {
+      callback(
+        await new Promise((resolve, reject) => {
+          this.recaptchaResolve = resolve;
+          this.recaptchaReject = reject;
+          if (this.recaptcha) {
+            (this.recaptcha as any).execute();
+          }
+        }),
+      );
+    };
+  };
+
+  handleRecaptchaLoaded = () => {
+    this.setState({
+      recaptchaLoaded: true,
+    });
+  };
 
   render() {
     const { userEntry, onFormFieldsChange, onAutoLoginChange, onSwitchTab } = this.props;
@@ -103,7 +151,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
 
               <Form.Item>
                 <Button
-                  onClick={this.props.onLoginSubmit}
+                  disabled={!this.state.recaptchaLoaded}
+                  onClick={this.withRecaptcha(this.props.onLoginSubmit)}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
@@ -160,11 +209,10 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
                     <Button
                       style={{ width: '100%' }}
                       size="large"
-                      // tslint:disable-next-line:jsx-no-multiline-js
                       disabled={
                         !!this.state.count ||
                         !userEntry.register.phone.value ||
-                        !userEntry.status.smsButtonEnabled
+                        !userEntry.status.smsButtonEnabled // tslint:disable-next-line:jsx-no-multiline-js
                       }
                       onClick={this.handleRequestSMSThrottled}
                     >
@@ -175,7 +223,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
               </Form.Item>
               <Form.Item>
                 <Button
-                  onClick={this.props.onRegisterSubmit}
+                  onClick={this.withRecaptcha(this.props.onRegisterSubmit)}
+                  disabled={!this.state.recaptchaLoaded}
                   size="large"
                   style={{ width: '100%' }}
                   type="primary"
@@ -186,6 +235,15 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
               </Form.Item>
             </Tabs.TabPane>
           </Tabs>
+          <Recaptcha
+            sitekey="6LdC6U0UAAAAAKncjvziQGNOd2vLAPmVu2jTKDg9"
+            size="invisible"
+            render="explicit"
+            onloadCallback={this.handleRecaptchaLoaded}
+            verifyCallback={this.verifyCallback}
+            expiredCallback={this.expiredCallback}
+            ref={this.recaptchaRef}
+          />
         </Form>
       </Card>
     );

@@ -95,6 +95,12 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-recaptcha@^2.3.1":
+  version "2.3.1"
+  resolved "http://registry.npm.taobao.org/@types/react-recaptcha/download/@types/react-recaptcha-2.3.1.tgz#53492f0d2abfa7a35dcd28818ec4b34082ad0adc"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^5.0.15":
   version "5.0.15"
   resolved "http://registry.npm.taobao.org/@types/react-redux/download/@types/react-redux-5.0.15.tgz#420af2c702ac7aab321cf45bb7d3cb2503dd24d5"
@@ -392,11 +398,12 @@ autoprefixer@^8.1.0:
     postcss-value-parser "^3.2.3"
 
 aws-sdk@0.9.x:
-  version "2.211.0"
-  resolved "http://registry.npm.taobao.org/aws-sdk/download/aws-sdk-2.211.0.tgz#902b7525e76ff9fa72cd038b73b8a47c8c671a62"
+  version "2.212.1"
+  resolved "http://registry.npm.taobao.org/aws-sdk/download/aws-sdk-2.212.1.tgz#833dbe8d837d46058a3772ac9bb73b69113136e4"
   dependencies:
     buffer "4.9.1"
-    events "^1.1.1"
+    events "1.1.1"
+    ieee754 "1.1.8"
     jmespath "0.15.0"
     querystring "0.2.0"
     sax "1.2.1"
@@ -2085,7 +2092,7 @@ eventlistener@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/eventlistener/download/eventlistener-0.0.1.tgz#ed2baabb852227af2bcf889152c72c63ca532eb8"
 
-events@^1.0.0, events@^1.1.1:
+events@1.1.1, events@^1.0.0:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/events/download/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
 
@@ -2604,7 +2611,7 @@ icss-replace-symbols@1.1.0, icss-replace-symbols@^1.1.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/icss-replace-symbols/download/icss-replace-symbols-1.1.0.tgz#06ea6f83679a7749e386cfe1fe812ae5db223ded"
 
-ieee754@^1.1.4:
+ieee754@1.1.8, ieee754@^1.1.4:
   version "1.1.8"
   resolved "http://registry.npm.taobao.org/ieee754/download/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
 
@@ -4512,6 +4519,10 @@ react-loadable@^5.3.1:
   resolved "http://registry.npm.taobao.org/react-loadable/download/react-loadable-5.3.1.tgz#9699e9a08fed49bacd69caaa282034b62a76bcdd"
   dependencies:
     prop-types "^15.5.0"
+
+react-recaptcha@^2.3.7:
+  version "2.3.7"
+  resolved "http://registry.npm.taobao.org/react-recaptcha/download/react-recaptcha-2.3.7.tgz#5a10ea4a7a7f59e6b602d4d385caf73a9bd15043"
 
 react-redux@^5.0.7:
   version "5.0.7"

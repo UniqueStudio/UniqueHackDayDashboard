@@ -14,7 +14,9 @@ import {
 export { SelectEffect, AllEffect, GenericAllEffect, TakeEffect, PutEffect };
 
 import { loginValidateAll, registerValidateAll } from './validate';
-import { replace } from 'react-router-redux';
+import { replace, RouterAction } from 'react-router-redux';
+
+export { RouterAction };
 
 const loginRequest = async (usernameOrPhone: string, password: string) => {
   const res = await request({
