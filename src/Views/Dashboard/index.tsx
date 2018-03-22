@@ -5,6 +5,8 @@ import Loadable from 'react-loadable';
 
 import { RootState } from '../../redux/reducers';
 
+import DetailView from '../DetailView/index';
+
 const DashboardLayout = Loadable({
   loader: () => import('../../Layouts/DashboardLayout'),
   loading: () => <div>正在加载...</div>,
@@ -25,12 +27,13 @@ const Dashboard: React.SFC = () => {
     <DashboardLayout>
       <Switch>
         <Route path="/console" component={ConsoleLoadable} />
-        <Route path="/team_info" component={TeamConsoleLoadable} />
+        <Route path="/team_info" component={DetailView} />
+        {/* <Route path="/team_info" component={TeamConsoleLoadable} /> */}
       </Switch>
     </DashboardLayout>
   );
 };
 
 export default connect((state: RootState) => {
-  return state;
+  return {};
 })(Dashboard);

@@ -73,7 +73,7 @@ declare namespace API {
   namespace User {
     interface UserDetailRequest {
       name: string;
-      gender: string;
+      gender: 'boy' | 'girl' | 'other';
       birthday: string;
       phone: string;
       resume: FileID;

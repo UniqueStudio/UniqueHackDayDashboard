@@ -84,6 +84,7 @@ async function asyncValidate(fieldName: KeysToValidate, data: UserEntrySingleDat
           help: `${(map as any)[fieldName][1]}已存在`,
         };
       }
+      return null;
     } else if (result.httpStatusCode === 400) {
       if (result.message.indexOf('Invalid')) {
         return { validateStatus: 'error', help: fieldsMessagesMap[fieldName] };

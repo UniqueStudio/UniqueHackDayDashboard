@@ -23,8 +23,6 @@ import 'antd/lib/checkbox/style/index.css';
 import 'antd/lib/row/style/css';
 import 'antd/lib/col/style/css';
 
-import Recaptcha from 'react-recaptcha';
-
 import { UserEntryData } from '../../redux/reducers/userEntry';
 import WithRecaptcha from '../../lib/withRecaptcha';
 
@@ -206,7 +204,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
                   type="primary"
                   htmlType="submit"
                 >
-                  {userEntry.status.registerButtonEnabled ? <Icon type="loading" /> : '注册'}
+                  {userEntry.status.registerButtonLoading ? <Icon type="loading" /> : '注册'}
                 </Button>
               </Form.Item>
             </Tabs.TabPane>

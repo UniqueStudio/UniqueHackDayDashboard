@@ -24,7 +24,7 @@ const app = express();
 app.use(
   '/',
   proxy(pathname => pathname.indexOf('/v1/') >= 0, {
-    target: 'http://localhost:8000/',
+    target: 'http://192.168.1.165:8000/',
   }),
 );
 
