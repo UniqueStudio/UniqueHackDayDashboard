@@ -9,6 +9,7 @@ import Input from 'antd/es/input';
 import Select from 'antd/es/select';
 import DatePicker from 'antd/es/date-picker';
 import Tabs from 'antd/es/tabs';
+import Upload from 'antd/es/upload';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 import Checkbox from 'antd/es/checkbox';
@@ -21,6 +22,7 @@ import 'antd/lib/input/style/index.css';
 import 'antd/lib/select/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
 import 'antd/lib/tabs/style/index.css';
+import 'antd/lib/upload/style/index.css';
 import 'antd/lib/icon/style/css';
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/checkbox/style/index.css';
@@ -108,23 +110,99 @@ class DetailView extends React.Component {
 
           <Form.Item {...formItemLayout} label="紧急联系人姓名:">
             <Input
-              placeholder="请输入你的紧急联系人姓名"
+              placeholder="输入紧急联系人姓名"
               prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
             />
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="紧急联系人电话:">
             <Input
-              placeholder="请输入你的紧急联系人电话"
+              placeholder="输入紧急联系人电话"
               prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
             />
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="与紧急联系人关系:">
             <Input
-              placeholder="请输入你的紧急联系人电话"
+              placeholder="输入你和紧急联系人关系"
               prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
             />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="特殊需要:">
+            <Input.TextArea placeholder="在饮食、出行等方面的特殊需要" rows={4} />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="Github:">
+            <Input
+              placeholder="输入你的 Github 账号"
+              prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+            />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="LinkedIn:">
+            <Input
+              placeholder="输入你的 LinkedIn 账号"
+              prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+            />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="Coding.Net:">
+            <Input
+              placeholder="输入你的 Coding.Net 账号"
+              prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+            />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="个人博客">
+            <Input
+              placeholder="输入你的个人博客的地址"
+              prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+            />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="你的角色:">
+            <Select placeholder="请选择你的角色">
+              <Select.Option value="前端">前端</Select.Option>
+              <Select.Option value="产品">产品</Select.Option>
+              <Select.Option value="设计">设计</Select.Option>
+              <Select.Option value="后端">后端</Select.Option>
+              <Select.Option value="机器学习">机器学习</Select.Option>
+              <Select.Option value="硬件开发">硬件开发</Select.Option>
+              <Select.Option value="其他">其他</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="你的技能:">
+            <Select placeholder="请选择你的技能" mode="multiple">
+              <Select.Option value="C/C++">C/C++</Select.Option>
+              <Select.Option value="PhotoShop">PhotoShop</Select.Option>
+              <Select.Option value="JavaScript">JavaScript</Select.Option>
+              <Select.Option value="Go">Go</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="参加过几次hackday">
+            <Input
+              placeholder="参加过几次hackday"
+              prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+            />
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} label="上传你的简历">
+            <Upload name="resume" listType="picture">
+              <Button>
+                <Icon type="upload" /> 点击上传简历
+              </Button>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} required={false} label="上传你的作品集">
+            <Upload name="collection" action="/v1/file/files" listType="picture">
+              <Button>
+                <Icon type="upload" /> 点击上传作品集
+              </Button>
+            </Upload>
           </Form.Item>
         </Form>
       </Card>

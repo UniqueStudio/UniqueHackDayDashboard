@@ -1,7 +1,7 @@
 import * as url from 'url';
 import * as qs from 'querystring';
 
-const authorizationToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+const authorizationToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
 
 const request = ((req: any) => {
   const { method, body, headers } = req;
@@ -20,7 +20,7 @@ const request = ((req: any) => {
     headers: {
       ...headers,
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${authorizationToken}` || '',
+      Authorization: `Bearer ${authorizationToken()}` || '',
     },
     body: method === 'GET' ? undefined : JSON.stringify(body),
   }).then(async res => {

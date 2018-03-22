@@ -54,19 +54,7 @@ const registerRequest = async (
     },
   });
   if (res.httpStatusCode === 200) {
-    const loginRes = await request({
-      endpoint: '/v1/user/login',
-      method: 'POST',
-      body: {
-        usernameOrPhone: username,
-        password,
-        antiRobotToken,
-      },
-    });
-    if (loginRes.httpStatusCode === 200) {
-      return { successful: true, message: loginRes.message };
-    }
-    return { successful: false, message: loginRes.message };
+    return { successful: true, message: res.message };
   }
   return { successful: false, message: res.message };
 };
@@ -111,6 +99,9 @@ function* loginSaga() {
 function* registerSaga() {
   while (true) {
     const { payload: antiRobotToken } = yield take('USER_ENTRY_REGISTER_SUBMIT');
+
+    yield put({ type: 'REGISTER_BUTTON_LOADING', payload: true });
+
     yield registerValidateAll();
 
     const { register: { username, password, phone, code } } = yield select(
@@ -133,6 +124,8 @@ function* registerSaga() {
         }
       }
     }
+
+    yield put({ type: 'REGISTER_BUTTON_LOADING', payload: false });
   }
 }
 
