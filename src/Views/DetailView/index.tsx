@@ -22,18 +22,23 @@ import 'antd/lib/card/style/index.css';
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/select/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
-import 'antd/lib/tabs/style/index.css';
 import 'antd/lib/upload/style/index.css';
 import 'antd/lib/icon/style/css';
 import 'antd/lib/button/style/index.css';
-import 'antd/lib/checkbox/style/index.css';
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
+// import 'antd/lib/checkbox/style/index.css';
+// import 'antd/lib/row/style/css';
+// import 'antd/lib/col/style/css';
+
+// For upload progress
 import 'antd/lib/progress/style/index.css';
 
 import { patterns } from '../../redux/sagas/validate';
 
 class DetailView extends React.Component<FormComponentProps> {
+  state = {
+    isUploadingResume: false,
+  };
+
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
@@ -44,7 +49,13 @@ class DetailView extends React.Component<FormComponentProps> {
   };
 
   eventToFileId = (e: UploadChangeParam) => {
+    this.setState({ isUploadingResume: true });
     const uploaded = e.fileList.filter(file => file.status === 'done');
+
+    if (e.fileList.length === uploaded.length) {
+      this.setState({ isUploadingResume: false });
+    }
+
     if (uploaded.length > 0) {
       return uploaded.map(file => file.response.fileId);
     }
@@ -334,7 +345,7 @@ class DetailView extends React.Component<FormComponentProps> {
               rules: [
                 {
                   required: true,
-                  message: '请输入真实姓名',
+                  message: '请输入你担任的角色',
                 },
               ],
             })(
@@ -377,7 +388,14 @@ class DetailView extends React.Component<FormComponentProps> {
             )}
           </Form.Item>
 
-          <Form.Item {...formItemLayout} hasFeedback={false} label="上传你的简历">
+          <Form.Item
+            {...formItemLayout}
+            hasFeedback={false}
+            // avoid flash when uploading
+            validateStatus={this.state.isUploadingResume ? 'warning' : undefined}
+            help={this.state.isUploadingResume ? '正在上传...' : undefined}
+            label="上传你的简历"
+          >
             {getFieldDecorator('resume', {
               rules: [
                 {
