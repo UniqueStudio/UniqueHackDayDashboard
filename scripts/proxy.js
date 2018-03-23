@@ -8,7 +8,6 @@ const bundler = new Bundler('index.html');
 const app = express();
 
 app.post('/v1/file/files', (req, res) => {
-  req.on('data', () => console.log('...'));
   req.on('end', () =>
     res.json({
       message: 'Success',
