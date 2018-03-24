@@ -73,10 +73,10 @@ declare namespace API {
   namespace User {
     interface UserDetailRequest {
       name: string;
-      gender: 'boy' | 'girl' | 'other';
+      gender: '男' | '女' | '其他';
       birthday: string;
       phone: string;
-      resume: FileID;
+      resume: FileID[];
       tShirtSize: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
       city: string;
       alipay: string;
@@ -84,30 +84,20 @@ declare namespace API {
       major: string;
       grade: string;
       graduateTime: Time; // 年月日
-      urgentConcat: {
-        name: string;
-        phone: string;
-        relationship: string;
-      };
+      urgentConcatName: string;
+      urgentConcatPhone: string;
+      urgentConcatRelationship: string;
 
-      collections?: FileID;
+      collections?: FileID[];
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
       codeingDotNet?: string;
       blog?: string;
-      otherAccount?: {
-        platform: string;
-        username: string;
-      };
 
       role: string[]; // 产品，设计，前端，后端，机器学习，硬件开发，其他
       skills: string[];
       hackdayTimes: number;
-      hasTeamedUp?: {
-        teamLeaderName: string;
-        teamLeaderEmail: string;
-      };
     }
 
     interface RequestFunc {
@@ -209,7 +199,6 @@ declare namespace API {
       ): Response<
         | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamLeaderNotFound>
         | ResponseWithoutData<200, Message.Success>
       >;
 

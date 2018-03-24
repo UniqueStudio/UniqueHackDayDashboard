@@ -1,23 +1,21 @@
 import { AnyAction } from 'redux';
 
-export interface RegisterData {
+export interface LoginData {
   username: any;
   password: any;
-  phone: any;
-  code: any;
+  autoLogin: any;
 }
 
-export default function register(
-  state: RegisterData = {
+export default function login(
+  state: LoginData = {
     username: {},
     password: {},
-    phone: {},
-    code: {},
+    autoLogin: {},
   },
   action: AnyAction,
 ) {
   switch (action.type) {
-    case 'REGISTER_FORM_CHANGE':
+    case 'LOGIN_FORM_CHANGE':
       return {
         ...state,
         ...action.payload,

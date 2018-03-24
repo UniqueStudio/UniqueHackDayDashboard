@@ -14,16 +14,14 @@ import { patterns } from '../../redux/sagas/validate';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
 import { usernameValidator, phoneValidator } from './validators';
 import { RootState } from '../../redux/reducers';
+import { RegisterData } from '../../redux/reducers/register';
 
 export { RecaptchaProps };
 
-export interface RegisterFormProps {
-  onFormChange: (keyValue: { [k: string]: string }) => any;
-
-  username: string;
-  password: string;
-  phone: string;
-  code: string;
+export interface RegisterFormProps extends RegisterData {
+  onFormChange: (keyValue: { [k: string]: any }) => any;
+  onSubmit: (token: string) => void;
+  onSMSSubmit: (token: string) => void;
 }
 
 class RegisterForm extends React.Component<
@@ -49,6 +47,7 @@ class RegisterForm extends React.Component<
   reallyRequestSMS = throttle((token: string) => {
     let count = 59;
     this.setState({ count });
+    this.props.onSMSSubmit(token);
     this.timer = window.setInterval(() => {
       count -= 1;
       this.setState({ count });
@@ -62,7 +61,7 @@ class RegisterForm extends React.Component<
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
       if (!err) {
-        // console.log('Received values of form: ', JSON.stringify(values));
+        this.props.withVerify(this.props.onSubmit)();
       }
     });
   };
@@ -177,21 +176,30 @@ export default connect(
     return state.register;
   },
   dispatch => ({
-    onFormChange(...args) {
-      console.log(args);
+    onFormChange(value: any) {
+      dispatch({
+        type: 'REGISTER_FORM_CHANGE',
+        payload: value,
+      });
+    },
+    onSubmit(token: string) {
+      dispatch({ type: 'REGISTER_FORM_SUBMIT', payload: token });
+    },
+    onSMSSubmit(token: string) {
+      dispatch({ type: 'REGISTER_FORM_SMS_SUBMIT', payload: token });
     },
   }),
 )(
   Form.create<RegisterFormProps>({
-    onValuesChange(props, value) {
-      props.onFormChange(value);
+    onFieldsChange(props, value) {
+      props.onFormChange(value as any);
     },
     mapPropsToFields(props) {
       return {
-        username: Form.createFormField({ value: props.username }),
-        password: Form.createFormField({ value: props.password }),
-        phone: Form.createFormField({ value: props.phone }),
-        code: Form.createFormField({ value: props.code }),
+        username: Form.createFormField(props.username),
+        password: Form.createFormField(props.password),
+        phone: Form.createFormField(props.phone),
+        code: Form.createFormField(props.code),
       };
     },
   })(RegisterForm),

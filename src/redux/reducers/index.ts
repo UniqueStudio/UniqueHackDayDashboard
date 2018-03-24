@@ -3,20 +3,24 @@ import { routerReducer as route } from 'react-router-redux';
 
 // import userEntry, { UserEntryData } from './userEntry';
 import register, { RegisterData } from './register';
+import login, { LoginData } from './login';
+import detail, { DetailData } from './detail';
 
 export interface RootState {
   route?: {
     location: Location;
   };
-  // userEntry: UserEntryData;
   register: RegisterData;
+  login: LoginData;
+  detail: DetailData;
 }
 
 export { AnyAction };
 export default combineReducers<RootState>({
   route,
-  // userEntry,
   register,
+  login,
+  detail,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

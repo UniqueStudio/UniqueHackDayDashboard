@@ -1,7 +1,7 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
-// import { connect } from 'react-redux';
-// import { RootState } from '../../redux/reducers';
+import { connect } from 'react-redux';
+import { RootState } from '../../redux/reducers';
 // import throttle from 'lodash-es/throttle';
 
 import Form, { FormComponentProps } from 'antd/es/form';
@@ -33,10 +33,44 @@ import 'antd/lib/button/style/index.css';
 import 'antd/lib/progress/style/index.css';
 
 import { patterns } from '../../redux/sagas/validate';
+import { DetailData } from '../../redux/reducers/detail';
 
-class DetailView extends React.Component<FormComponentProps> {
+export interface DetailFormProps {
+  onFormChange: (keyValue: { [k: string]: any }) => any;
+  onSubmit: (token: string) => any;
+
+  name: any;
+  gender: any;
+  birthday: any;
+  phone: any;
+  resume: any;
+  tShirtSize: any;
+  city: any;
+  alipay: any;
+  school: any;
+  major: any;
+  grade: any;
+  graduateTime: any; // 年月日
+  urgentConcatName: any;
+  urgentConcatPhone: any;
+  urgentConcatRelationship: any;
+
+  collections?: any;
+  specialNeeds?: any;
+  github?: any;
+  linkedIn?: any;
+  codeingDotNet?: any;
+  blog?: any;
+
+  role: any; // 产品，设计，前端，后端，机器学习，硬件开发，其他
+  skills: any;
+  hackdayTimes: number;
+}
+
+class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
   state = {
     isUploadingResume: false,
+    isUploadingCollection: false,
   };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,14 +82,25 @@ class DetailView extends React.Component<FormComponentProps> {
     });
   };
 
-  eventToFileId = (e: UploadChangeParam) => {
+  // not easy to use transaction
+  eventToFileIdResume = (e: UploadChangeParam) => {
     this.setState({ isUploadingResume: true });
     const uploaded = e.fileList.filter(file => file.status === 'done');
-
     if (e.fileList.length === uploaded.length) {
       this.setState({ isUploadingResume: false });
     }
+    if (uploaded.length > 0) {
+      return uploaded.map(file => file.response.fileId);
+    }
+    return null;
+  };
 
+  eventToFileIdCollection = (e: UploadChangeParam) => {
+    this.setState({ isUploadingCollection: true });
+    const uploaded = e.fileList.filter(file => file.status === 'done');
+    if (e.fileList.length === uploaded.length) {
+      this.setState({ isUploadingCollection: false });
+    }
     if (uploaded.length > 0) {
       return uploaded.map(file => file.response.fileId);
     }
@@ -218,7 +263,7 @@ class DetailView extends React.Component<FormComponentProps> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="紧急联系人姓名:">
-            {getFieldDecorator('urgentConcat.name', {
+            {getFieldDecorator('urgentConcatName', {
               rules: [
                 {
                   required: true,
@@ -234,7 +279,7 @@ class DetailView extends React.Component<FormComponentProps> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="紧急联系人电话:">
-            {getFieldDecorator('urgentConcat.phone', {
+            {getFieldDecorator('urgentConcatPhone', {
               rules: [
                 {
                   required: true,
@@ -254,7 +299,7 @@ class DetailView extends React.Component<FormComponentProps> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="与紧急联系人关系:">
-            {getFieldDecorator('urgentConcat.relationship', {
+            {getFieldDecorator('urgentConcatRelationship', {
               rules: [
                 {
                   required: true,
@@ -380,7 +425,7 @@ class DetailView extends React.Component<FormComponentProps> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="参加过几次hackday">
-            {getFieldDecorator('hackdayTime', {})(
+            {getFieldDecorator('hackdayTimes', {})(
               <Input
                 placeholder="参加过几次hackday"
                 prefix={<Icon type="trophy" style={{ color: 'rgba(0,0,0,0.25)' }} />}
@@ -403,7 +448,7 @@ class DetailView extends React.Component<FormComponentProps> {
                   message: '请上传简历',
                 },
               ],
-              getValueFromEvent: this.eventToFileId,
+              getValueFromEvent: this.eventToFileIdResume,
             })(
               <Upload multiple={false} name="resume" action="/v1/file/files" listType="picture">
                 <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
@@ -413,9 +458,15 @@ class DetailView extends React.Component<FormComponentProps> {
             )}
           </Form.Item>
 
-          <Form.Item {...formItemLayout} hasFeedback={false} label="上传你的作品集">
+          <Form.Item
+            {...formItemLayout}
+            hasFeedback={false}
+            validateStatus={this.state.isUploadingCollection ? 'warning' : undefined}
+            help={this.state.isUploadingCollection ? '正在上传...' : undefined}
+            label="上传你的作品集"
+          >
             {getFieldDecorator('collection', {
-              getValueFromEvent: this.eventToFileId,
+              getValueFromEvent: this.eventToFileIdCollection,
             })(
               <Upload multiple={false} name="collection" action="/v1/file/files" listType="picture">
                 <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
@@ -444,4 +495,34 @@ class DetailView extends React.Component<FormComponentProps> {
   }
 }
 
-export default Form.create()(DetailView);
+export default connect(
+  (state: RootState) => {
+    return state.detail;
+  },
+  dispatch => ({
+    onFormChange(value: any) {
+      dispatch({
+        type: 'DETAIL_FORM_CHANGE',
+        payload: value,
+      });
+    },
+    onSubmit(token: string) {
+      dispatch({ type: 'DETAIL_FORM_SUBMIT', payload: token });
+    },
+  }),
+)(
+  Form.create<DetailFormProps>({
+    onFieldsChange(props, value) {
+      props.onFormChange(value as any);
+    },
+    mapPropsToFields(props) {
+      return Object.keys(props).reduce(
+        (p, key) => ({
+          ...p,
+          [key]: Form.createFormField((props as any)[key]),
+        }),
+        {},
+      );
+    },
+  })(DetailView),
+);

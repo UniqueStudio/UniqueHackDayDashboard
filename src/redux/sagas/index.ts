@@ -1,21 +1,40 @@
-import { takeLatest, takeEvery, all } from 'redux-saga/effects';
+import { take, select, call } from 'redux-saga/effects';
 
-import { ForkEffect, PutEffect, SelectEffect, AllEffect } from 'redux-saga/effects';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect };
+import {
+  ForkEffect,
+  PutEffect,
+  SelectEffect,
+  AllEffect,
+  TakeEffect,
+  CallEffect,
+} from 'redux-saga/effects';
+export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
-import validate, { hasError, delay } from './validate';
-import loginRegisterSaga from './login-register';
-import sendSMSSaga from './sms-send';
+import { loginRequest, registerRequest } from './login-register';
+import sendSMS from './sms-send';
 
-export function* watchUserEntryData() {
-  yield takeLatest('REGISTER_FORM_CHANGE', validate('register'));
-  yield takeLatest('LOGIN_FORM_CHANGE', validate('login'));
-  yield takeEvery('REQUEST_SMS', sendSMSSaga);
-  yield takeEvery('LOGIN_FORM_TIP_CHANGE', hasError('login'));
-  yield takeEvery('REGISTER_FORM_TIP_CHANGE', hasError('register'));
-  yield delay(100);
-  yield hasError('login')();
-  yield hasError('register')();
+export function* loginSaga() {
+  while (true) {
+    const { payload: token } = yield take('LOGIN_FORM_SUBMIT');
+    const { login: { username, password, autoLogin } } = yield select();
+    yield call(loginRequest, username.value, password.value, autoLogin.value, token);
+
+    yield take('LOGOUT_CLICKED');
+  }
 }
 
-export { loginRegisterSaga };
+export function* registerSaga() {
+  while (true) {
+    const { payload: token } = yield take('REGISTER_FORM_SUBMIT');
+    const { register: { username, password, phone, code } } = yield select();
+    yield call(registerRequest, username.value, password.value, phone.value, code.value, token);
+  }
+}
+
+export function* smsSaga() {
+  while (true) {
+    const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
+    const { register } = yield select();
+    yield call(sendSMS, register.phone.value, token);
+  }
+}

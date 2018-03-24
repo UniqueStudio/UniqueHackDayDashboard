@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
-import throttle from 'lodash-es/throttle';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Button from 'antd/es/button';
@@ -12,14 +11,20 @@ import Checkbox from 'antd/es/checkbox';
 
 import { patterns } from '../../redux/sagas/validate';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
+import { LoginData } from '../../redux/reducers/login';
+
+export interface LoginFormProps extends LoginData {
+  onFormChange: (keyValue: { [k: string]: any }) => any;
+  onSubmit: () => void;
+}
 
 export { RecaptchaProps };
-class LoginForm extends React.Component<RecaptchaProps & FormComponentProps> {
+class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormComponentProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
       if (!err) {
-        // console.log('Received values of form: ', JSON.stringify(values));
+        this.props.withVerify(this.props.onSubmit)();
       }
     });
   };
@@ -79,7 +84,6 @@ class LoginForm extends React.Component<RecaptchaProps & FormComponentProps> {
 
         <Form.Item>
           <Button size="large" style={{ width: '100%' }} type="primary" htmlType="submit">
-            {/* {userEntry.status.loginButtonLoading ? <Icon type="loading" /> : '登录'} */}
             登录
           </Button>
         </Form.Item>
@@ -88,4 +92,37 @@ class LoginForm extends React.Component<RecaptchaProps & FormComponentProps> {
   }
 }
 
-export default Form.create()(LoginForm);
+// export default Form.create()(LoginForm);
+
+export default connect(
+  (state: RootState) => {
+    return state.login;
+  },
+  dispatch => ({
+    onFormChange(value: any) {
+      dispatch({
+        type: 'LOGIN_FORM_CHANGE',
+        payload: value,
+      });
+    },
+    onSubmit(token: string) {
+      dispatch({
+        type: 'LOGIN_FORM_SUBMIT',
+        payload: token,
+      });
+    },
+  }),
+)(
+  Form.create<LoginFormProps>({
+    onFieldsChange(props, value) {
+      props.onFormChange(value as any);
+    },
+    mapPropsToFields(props) {
+      return {
+        username: Form.createFormField(props.username),
+        password: Form.createFormField(props.password),
+        autoLogin: Form.createFormField(props.autoLogin),
+      };
+    },
+  })(LoginForm),
+);

@@ -18,6 +18,8 @@ export const usernameValidator = (() => {
       }
     } else if (result.httpStatusCode === 400 && result.message === 'UsernameInvalid') {
       error = new Error('用户名不合法');
+    } else if (result.httpStatusCode > 500) {
+      error = new Error('网络错误!');
     }
     callbacks.forEach(callback => callback(error));
   }, 500);
@@ -44,6 +46,8 @@ export const phoneValidator = (() => {
       }
     } else if (result.httpStatusCode === 400 && result.message === 'PhoneInvalid') {
       error = new Error('手机号码不合法!');
+    } else if (result.httpStatusCode > 500) {
+      error = new Error('网络错误!');
     }
     callbacks.forEach(callback => callback(error));
   }, 500);

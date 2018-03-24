@@ -21,8 +21,9 @@ const store: Store<RootState> = createStore(
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
 );
 
-// sagaMiddleware.run(sagas.watchUserEntryData);
-// sagaMiddleware.run(sagas.loginRegisterSaga);
+sagaMiddleware.run(sagas.loginSaga);
+sagaMiddleware.run(sagas.registerSaga);
+sagaMiddleware.run(sagas.smsSaga);
 
 export { history, store };
 export default store;
