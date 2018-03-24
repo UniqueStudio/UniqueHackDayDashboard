@@ -9,7 +9,7 @@ import Input from 'antd/es/input';
 import Icon from 'antd/es/icon';
 import Checkbox from 'antd/es/checkbox';
 
-import { patterns } from '../../redux/sagas/validate';
+import { patterns } from '../../lib/patterns';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
 import { LoginData } from '../../redux/reducers/login';
 

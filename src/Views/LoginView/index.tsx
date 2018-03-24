@@ -1,6 +1,5 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
-import throttle from 'lodash-es/throttle';
 
 import Card from 'antd/es/card';
 import Tabs from 'antd/es/tabs';
@@ -15,23 +14,11 @@ import 'antd/lib/checkbox/style/index.css';
 import 'antd/lib/row/style/css';
 import 'antd/lib/col/style/css';
 
-import { UserEntryData } from '../../redux/reducers/userEntry';
 import WithRecaptcha from '../../lib/withRecaptcha';
 import LoginForm from '../../Components/LoginForm';
 import RegisterForm from '../../Components/RegisterForm';
 
 export interface LoginViewProps {
-  onFormFieldsChange: (
-    tab: keyof UserEntryData,
-    fieldName: keyof UserEntryData['login'] | keyof UserEntryData['register'],
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  onAutoLoginChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSwitchTab: () => void;
-  onLoginSubmit: (token: string) => void;
-  onRegisterSubmit: (token: string) => void;
-  onRequestSMS: (token: string) => void;
-  userEntry: UserEntryData;
   withVerify: any;
   recaptchaReady: boolean;
 }
@@ -42,23 +29,6 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   state = {
     count: 0,
   };
-
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  handleRequestSMS = throttle((token: string) => {
-    let count = 59;
-    this.setState({ count });
-    this.props.onRequestSMS(token);
-    this.timer = window.setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.timer);
-      }
-    }, 1000);
-  }, 60 * 1000);
 
   render() {
     return (

@@ -32,7 +32,7 @@ import 'antd/lib/button/style/index.css';
 // For upload progress
 import 'antd/lib/progress/style/index.css';
 
-import { patterns } from '../../redux/sagas/validate';
+import { patterns } from '../../lib/patterns';
 import { DetailData } from '../../redux/reducers/detail';
 
 export interface DetailFormProps {

@@ -10,7 +10,7 @@ import Icon from 'antd/es/icon';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
-import { patterns } from '../../redux/sagas/validate';
+import { patterns } from '../../lib/patterns';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
 import { usernameValidator, phoneValidator } from './validators';
 import { RootState } from '../../redux/reducers';
