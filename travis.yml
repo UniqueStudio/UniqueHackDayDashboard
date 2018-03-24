@@ -1,0 +1,11 @@
+sudo: false
+dist: trusty
+script:
+#  - mkdir tmp
+#  - mv ./markdown ./*.* ./tmp
+ - yarn
+ - yarn build
+ - chmod +x ./ossutil64
+ - ./ossutil64 config -e $OSS_ENDPOINT -i $OSS_ID -k $OSS_KEY
+ - ./ossutil64 cp -r ./build oss://$OSS_BUCKETNAME --update
+ 
