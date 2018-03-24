@@ -1,9 +1,15 @@
 sudo: false
 dist: trusty
+language: node_js
+node_js:
+  - "8"
+
+cache:
+  directories:
+    - "node_modules"
 script:
 #  - mkdir tmp
 #  - mv ./markdown ./*.* ./tmp
- - yarn
  - yarn build
  - chmod +x ./ossutil64
  - ./ossutil64 config -e $OSS_ENDPOINT -i $OSS_ID -k $OSS_KEY
