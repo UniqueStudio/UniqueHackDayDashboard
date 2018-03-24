@@ -76,3 +76,15 @@ export async function checkLoginStatus() {
     method: 'GET',
   });
 }
+
+export async function detailRequest(detail: API.User.UserDetailRequest) {
+  const res = await request({
+    endpoint: '/v1/user/detail',
+    method: 'POST',
+    body: detail,
+  });
+  if (res.httpStatusCode === 200) {
+    return { successful: true, message: res.message };
+  }
+  return { successful: false, message: res.message };
+}

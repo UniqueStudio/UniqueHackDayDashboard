@@ -10,7 +10,7 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
-import { loginRequest, registerRequest } from './login-register';
+import { loginRequest, registerRequest, detailRequest } from './login-register';
 import sendSMS from './sms-send';
 
 export function* loginSaga() {
@@ -36,5 +36,19 @@ export function* smsSaga() {
     const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
     const { register } = yield select();
     yield call(sendSMS, register.phone.value, token);
+  }
+}
+
+export function* detailSaga() {
+  while (true) {
+    yield take('DETAIL_FORM_SUBMIT');
+    const { detail } = yield select();
+    yield call(detailRequest, Object.keys(detail).reduce(
+      (p, key) => ({
+        ...p,
+        [key]: detail[key].value,
+      }),
+      {},
+    ) as any);
   }
 }

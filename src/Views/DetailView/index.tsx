@@ -37,7 +37,7 @@ import { DetailData } from '../../redux/reducers/detail';
 
 export interface DetailFormProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
-  onSubmit: (token: string) => any;
+  onSubmit: () => any;
 
   name: any;
   gender: any;
@@ -75,9 +75,9 @@ class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
+    this.props.form.validateFieldsAndScroll((err: any) => {
       if (!err) {
-        // console.log('Received values of form: ', JSON.stringify(values));
+        this.props.onSubmit();
       }
     });
   };
@@ -506,8 +506,8 @@ export default connect(
         payload: value,
       });
     },
-    onSubmit(token: string) {
-      dispatch({ type: 'DETAIL_FORM_SUBMIT', payload: token });
+    onSubmit() {
+      dispatch({ type: 'DETAIL_FORM_SUBMIT' });
     },
   }),
 )(
