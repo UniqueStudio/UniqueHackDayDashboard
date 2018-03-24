@@ -2,7 +2,7 @@ import * as React from 'react';
 import Recaptcha from 'react-recaptcha';
 import noop from 'lodash-es/noop';
 
-export interface InjectedProps {
+export interface RecaptchaProps {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
   recaptchaReady: boolean;
 }
@@ -12,7 +12,7 @@ export interface InjectedState {
 }
 
 function WithRecaptcha<P>(
-  WrappedComponent: React.ComponentType<P & InjectedProps>,
+  WrappedComponent: React.ComponentType<P & RecaptchaProps>,
 ): React.ComponentClass<P> {
   return class extends React.Component<P, InjectedState> {
     state = {

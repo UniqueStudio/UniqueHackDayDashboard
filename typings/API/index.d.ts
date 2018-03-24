@@ -241,6 +241,7 @@ declare namespace API {
         >,
       ): Response<
         | ResponseWithoutData<400, Message.UsernameInvalid>
+        | ResponseWithoutData<400, Message.PhoneInvalid>
         | ResponseWithoutData<400, Message.EmailInvalid>
         | ResponseWithData<200, Message.Success, { existence: boolean }>
       >;

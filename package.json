@@ -53,6 +53,7 @@
   "scripts": {
     "build": "parcel build index.html --out-dir=build --public-url=./",
     "start": "parcel ./index.html",
+    "start:proxy": "node ./scripts/proxy.js",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}"
   }
