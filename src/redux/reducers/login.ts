@@ -20,6 +20,12 @@ export default function login(
         ...state,
         ...action.payload,
       };
+    case 'CLEAR_LOGIN':
+      return {
+        username: {},
+        password: {},
+        autoLogin: {},
+      };
     default:
       return state;
   }

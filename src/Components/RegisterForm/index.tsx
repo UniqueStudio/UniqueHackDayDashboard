@@ -24,6 +24,7 @@ export interface RegisterFormProps extends RegisterData {
   onSMSSubmit: (token: string) => void;
 
   registerLoading: boolean;
+  smsLoading: boolean;
 }
 
 class RegisterForm extends React.Component<
@@ -153,10 +154,20 @@ class RegisterForm extends React.Component<
               <Button
                 style={{ width: '100%' }}
                 size="large"
-                disabled={!!this.state.count || !this.props.recaptchaReady}
+                disabled={!!this.state.count || !this.props.recaptchaReady || this.props.smsLoading}
                 onClick={this.handleSMSRequest}
               >
-                {this.props.recaptchaReady ? (count ? `${count} s` : '获取验证码') : '正在加载'}
+                {this.props.smsLoading ? (
+                  <Icon type="loading" />
+                ) : this.props.recaptchaReady ? (
+                  count ? (
+                    `${count} s`
+                  ) : (
+                    '获取验证码'
+                  )
+                ) : (
+                  '正在加载'
+                )}
               </Button>
             </Col>
           </Row>
@@ -183,6 +194,7 @@ export default connect(
     return {
       ...state.register,
       registerLoading: state.loadingStatus.registerLoading,
+      smsLoading: state.loadingStatus.smsLoading,
     };
   },
   dispatch => ({

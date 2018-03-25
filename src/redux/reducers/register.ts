@@ -22,6 +22,13 @@ export default function register(
         ...state,
         ...action.payload,
       };
+    case 'CLEAR_REGISTER':
+      return {
+        username: {},
+        password: {},
+        phone: {},
+        code: {},
+      };
     default:
       return state;
   }

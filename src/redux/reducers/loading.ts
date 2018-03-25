@@ -35,6 +35,16 @@ export default function loadingStatus(
         ...state,
         registerLoading: false,
       };
+    case 'SMS_LOADING_START':
+      return {
+        ...state,
+        smsLoading: true,
+      };
+    case 'SMS_LOADING_END':
+      return {
+        ...state,
+        smsLoading: false,
+      };
     default:
       return state;
   }
