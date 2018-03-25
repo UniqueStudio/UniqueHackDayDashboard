@@ -1,31 +1,24 @@
 import { AnyAction } from 'redux';
 
 export interface ErrorStatus {
-  loginError: boolean;
-  registerError: boolean;
-  smsError: boolean;
+  loginError: string;
+  registerError: string;
 }
 
 export default function loadingStatus(
   state: ErrorStatus = {
-    loginError: false,
-    registerError: false,
-    smsError: false,
+    loginError: '',
+    registerError: '',
   },
   action: AnyAction,
 ) {
-  switch (action.type) {
-    case 'SET_LOGIN_ERROR':
-      return {
-        ...state,
-        loginError: action.payload,
-      };
-    case 'CLEAR_LOGIN_ERROR':
-      return {
-        ...state,
-        loginError: '',
-      };
-    default:
-      return state;
+  const [_, op, type] = action.type.match(/^(SET|CLEAR)_(.+)_ERROR$/) || new Array(3);
+  if (op && type) {
+    return {
+      ...state,
+      [`${type.toLowerCase()}Error`]: op === 'SET' ? action.payload : '',
+    };
   }
+
+  return state;
 }

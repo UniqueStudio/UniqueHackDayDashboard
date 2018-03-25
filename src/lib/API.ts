@@ -1,6 +1,8 @@
 import * as url from 'url';
 import * as qs from 'querystring';
 
+import messageMap from './message';
+
 const authorizationToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
 
 const request = (async (req: any) => {
@@ -29,6 +31,7 @@ const request = (async (req: any) => {
     try {
       const json = await res.json();
       const token = json.data && json.data.token;
+      json.message = (messageMap as any)[json.message];
       if (token) {
         localStorage.setItem('token', token);
       }
@@ -39,13 +42,13 @@ const request = (async (req: any) => {
     } catch (e) {
       return {
         httpStatusCode: 600,
-        message: 'NetworkError',
+        message: messageMap['NetworkError'],
       };
     }
   } catch (e) {
     return {
       httpStatusCode: 600,
-      message: 'NetworkError',
+      message: messageMap['NetworkError'],
     };
   }
 }) as API.RequestFunc;

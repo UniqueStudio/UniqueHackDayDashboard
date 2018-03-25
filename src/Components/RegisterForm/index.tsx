@@ -9,6 +9,7 @@ import Input from 'antd/es/input';
 import Icon from 'antd/es/icon';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
+import Alert from 'antd/es/alert';
 
 import { patterns } from '../../lib/patterns';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
@@ -25,6 +26,7 @@ export interface RegisterFormProps extends RegisterData {
 
   registerLoading: boolean;
   smsLoading: boolean;
+  registerError: string;
 }
 
 class RegisterForm extends React.Component<
@@ -72,10 +74,14 @@ class RegisterForm extends React.Component<
   handleSMSRequest = this.withValidate(['phone'], this.props.withVerify(this.reallyRequestSMS));
 
   render() {
-    const { form: { getFieldDecorator } } = this.props;
+    const { form: { getFieldDecorator }, registerError } = this.props;
     const { count } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
+        {registerError && (
+          <Alert message={registerError} showIcon={true} type="error" closable={true} />
+        )}
+
         <Form.Item hasFeedback={true}>
           {getFieldDecorator('username', {
             rules: [
@@ -195,6 +201,7 @@ export default connect(
       ...state.register,
       registerLoading: state.loadingStatus.registerLoading,
       smsLoading: state.loadingStatus.smsLoading,
+      registerError: state.errorStatus.registerError,
     };
   },
   dispatch => ({

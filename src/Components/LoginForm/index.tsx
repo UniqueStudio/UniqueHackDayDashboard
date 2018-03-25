@@ -8,6 +8,7 @@ import Button from 'antd/es/button';
 import Input from 'antd/es/input';
 import Icon from 'antd/es/icon';
 import Checkbox from 'antd/es/checkbox';
+import Alert from 'antd/es/alert';
 
 import { patterns } from '../../lib/patterns';
 import { RecaptchaProps } from '../../lib/withRecaptcha';
@@ -17,6 +18,7 @@ export interface LoginFormProps extends LoginData {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => void;
   loginLoading: boolean;
+  loginError: string;
 }
 
 export { RecaptchaProps };
@@ -31,9 +33,11 @@ class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormCo
   };
 
   render() {
-    const { form: { getFieldDecorator } } = this.props;
+    const { form: { getFieldDecorator }, loginError } = this.props;
     return (
       <Form onSubmit={this.handleSubmit}>
+        {loginError && <Alert message={loginError} showIcon={true} type="error" closable={true} />}
+
         <Form.Item hasFeedback={true}>
           {getFieldDecorator('username', {
             rules: [
@@ -104,6 +108,7 @@ export default connect(
     return {
       ...state.login,
       loginLoading: state.loadingStatus.loginLoading,
+      loginError: state.errorStatus.loginError,
     };
   },
   dispatch => ({

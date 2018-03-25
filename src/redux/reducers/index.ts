@@ -6,6 +6,7 @@ import register, { RegisterData } from './register';
 import login, { LoginData } from './login';
 import detail, { DetailData } from './detail';
 import loadingStatus, { LoadingStatus } from './loading';
+import errorStatus, { ErrorStatus } from './error';
 
 export interface RootState {
   route?: {
@@ -15,6 +16,7 @@ export interface RootState {
   login: LoginData;
   detail: DetailData;
   loadingStatus: LoadingStatus;
+  errorStatus: ErrorStatus;
 }
 
 export { AnyAction };
@@ -24,6 +26,7 @@ export default combineReducers<RootState>({
   login,
   detail,
   loadingStatus,
+  errorStatus,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &
