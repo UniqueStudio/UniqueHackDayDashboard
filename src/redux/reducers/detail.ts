@@ -9,7 +9,7 @@ export default function detail(
     name: {},
     gender: {},
     birthday: {},
-    phone: {},
+    email: {},
     resume: {},
     tShirtSize: {},
     city: {},

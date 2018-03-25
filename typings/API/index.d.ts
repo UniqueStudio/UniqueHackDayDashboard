@@ -75,7 +75,7 @@ declare namespace API {
       name: string;
       gender: '男' | '女' | '其他';
       birthday: string;
-      phone: string;
+      email: string;
       resume: FileID[];
       tShirtSize: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
       city: string;

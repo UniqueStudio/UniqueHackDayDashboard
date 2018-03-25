@@ -26,7 +26,7 @@ export interface DetailFormProps {
   name: any;
   gender: any;
   birthday: any;
-  phone: any;
+  email: any;
   resume: any;
   tShirtSize: any;
   city: any;
@@ -70,11 +70,11 @@ class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
   eventToFileIdResume = (e: UploadChangeParam) => {
     this.setState({ isUploadingResume: true });
     const uploaded = e.fileList.filter(file => file.status === 'done');
-    if (e.fileList.length === uploaded.length) {
+    if (e.fileList.length === uploaded.length || e.file.status === 'error') {
       this.setState({ isUploadingResume: false });
     }
     if (uploaded.length > 0) {
-      return uploaded.map(file => file.response.fileId);
+      return uploaded.map(file => file.response.data.fileId);
     }
     return null;
   };
@@ -82,11 +82,11 @@ class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
   eventToFileIdCollection = (e: UploadChangeParam) => {
     this.setState({ isUploadingCollection: true });
     const uploaded = e.fileList.filter(file => file.status === 'done');
-    if (e.fileList.length === uploaded.length) {
+    if (e.fileList.length === uploaded.length || e.file.status === 'error') {
       this.setState({ isUploadingCollection: false });
     }
     if (uploaded.length > 0) {
-      return uploaded.map(file => file.response.fileId);
+      return uploaded.map(file => file.response.data.fileId);
     }
     return null;
   };
@@ -144,6 +144,26 @@ class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
                 },
               ],
             })(<DatePicker />)}
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} label="邮箱:">
+            {getFieldDecorator('email', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入邮箱',
+                },
+                {
+                  pattern: patterns.email,
+                  message: '邮箱不合法',
+                },
+              ],
+            })(
+              <Input
+                placeholder="请输入邮箱"
+                prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,0.25)' }} />}
+              />,
+            )}
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="T-shirt尺寸:">
@@ -244,6 +264,17 @@ class DetailView extends React.Component<DetailFormProps & FormComponentProps> {
                 <Select.Option value="3">大三</Select.Option>
               </Select>,
             )}
+          </Form.Item>
+
+          <Form.Item {...formItemLayout} label="毕业时间">
+            {getFieldDecorator('graduateTime', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入毕业时间',
+                },
+              ],
+            })(<DatePicker />)}
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="紧急联系人姓名:">
