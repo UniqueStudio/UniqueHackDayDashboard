@@ -1,8 +1,4 @@
-import { take, all, select, put } from 'redux-saga/effects';
-
 import request from '../../lib/API';
-import messageMap from './messages-map';
-import { RootState } from '../reducers';
 
 import {
   SelectEffect,
@@ -12,10 +8,6 @@ import {
   PutEffect,
 } from 'redux-saga/effects';
 export { SelectEffect, AllEffect, GenericAllEffect, TakeEffect, PutEffect };
-
-import { replace, RouterAction } from 'react-router-redux';
-
-export { RouterAction };
 
 export const loginRequest = async (
   usernameOrPhone: string,

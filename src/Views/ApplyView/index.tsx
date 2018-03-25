@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
-import Icon from 'antd/es/icon';
 
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import DetailForm from '../../Components/DetailForm/index';

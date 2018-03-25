@@ -22,6 +22,8 @@ export interface RegisterFormProps extends RegisterData {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: (token: string) => void;
   onSMSSubmit: (token: string) => void;
+
+  registerLoading: boolean;
 }
 
 class RegisterForm extends React.Component<
@@ -161,9 +163,14 @@ class RegisterForm extends React.Component<
         </Form.Item>
 
         <Form.Item>
-          <Button size="large" style={{ width: '100%' }} type="primary" htmlType="submit">
-            {/* {userEntry.status.loginButtonLoading ? <Icon type="loading" /> : '登录'} */}
-            注册
+          <Button
+            size="large"
+            style={{ width: '100%' }}
+            type="primary"
+            htmlType="submit"
+            disabled={this.props.registerLoading}
+          >
+            {this.props.registerLoading ? <Icon type="loading" /> : '注册'}
           </Button>
         </Form.Item>
       </Form>
@@ -173,7 +180,10 @@ class RegisterForm extends React.Component<
 
 export default connect(
   (state: RootState) => {
-    return state.register;
+    return {
+      ...state.register,
+      registerLoading: state.loadingStatus.registerLoading,
+    };
   },
   dispatch => ({
     onFormChange(value: any) {

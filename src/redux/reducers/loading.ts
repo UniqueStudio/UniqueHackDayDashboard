@@ -25,6 +25,16 @@ export default function loadingStatus(
         ...state,
         loginLoading: false,
       };
+    case 'REGISTER_LOADING_START':
+      return {
+        ...state,
+        registerLoading: true,
+      };
+    case 'REGISTER_LOADING_END':
+      return {
+        ...state,
+        registerLoading: false,
+      };
     default:
       return state;
   }
