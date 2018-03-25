@@ -14,38 +14,13 @@ export default function loadingStatus(
   },
   action: AnyAction,
 ) {
-  switch (action.type) {
-    case 'LOGIN_LOADING_START':
-      return {
-        ...state,
-        loginLoading: true,
-      };
-    case 'LOGIN_LOADING_END':
-      return {
-        ...state,
-        loginLoading: false,
-      };
-    case 'REGISTER_LOADING_START':
-      return {
-        ...state,
-        registerLoading: true,
-      };
-    case 'REGISTER_LOADING_END':
-      return {
-        ...state,
-        registerLoading: false,
-      };
-    case 'SMS_LOADING_START':
-      return {
-        ...state,
-        smsLoading: true,
-      };
-    case 'SMS_LOADING_END':
-      return {
-        ...state,
-        smsLoading: false,
-      };
-    default:
-      return state;
+  const [_, type, op] = action.type.match(/^([A-Z]+)_LOADING_(START|END)$/) || new Array(3);
+
+  if (op && type) {
+    return {
+      ...state,
+      [`${type.toLowerCase()}Loading`]: op === 'START',
+    };
   }
+  return state;
 }
