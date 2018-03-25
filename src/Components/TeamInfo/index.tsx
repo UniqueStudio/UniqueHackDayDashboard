@@ -92,9 +92,8 @@ const TeamInfo = (props: TeamInfoProps) => {
   };
 
   return (
-    <Card bordered={false} type="inner">
+    <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
-        <h1 className={cls['team-info-title']}>队伍信息</h1>
         {hasEditButton && <Button children="编辑成员" type="primary" />}
       </div>
       <DescriptionList layout={'horizontal'} title="">

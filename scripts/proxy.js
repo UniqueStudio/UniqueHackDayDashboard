@@ -7,19 +7,10 @@ const bundler = new Bundler('index.html');
 
 const app = express();
 
-// app.post('/v1/file/files', (req, res) => {
-//   req.on('end', () =>
-//     res.json({
-//       message: 'Success',
-//       fileId: '111111111',
-//     }),
-//   );
-// });
-
 app.use(
   '/',
   proxy(pathname => pathname.indexOf('/v1/') >= 0, {
-    target: 'http://localhost:8000/',
+    target: 'https://backend.fredliang.cn/',
   }),
 );
 

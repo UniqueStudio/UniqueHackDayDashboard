@@ -16,6 +16,7 @@ import { LoginData } from '../../redux/reducers/login';
 export interface LoginFormProps extends LoginData {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => void;
+  loginLoading: boolean;
 }
 
 export { RecaptchaProps };
@@ -83,8 +84,14 @@ class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormCo
         </Form.Item>
 
         <Form.Item>
-          <Button size="large" style={{ width: '100%' }} type="primary" htmlType="submit">
-            登录
+          <Button
+            size="large"
+            style={{ width: '100%' }}
+            type="primary"
+            htmlType="submit"
+            disabled={this.props.loginLoading}
+          >
+            {this.props.loginLoading ? <Icon type="loading" /> : '登录'}
           </Button>
         </Form.Item>
       </Form>
@@ -92,11 +99,12 @@ class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormCo
   }
 }
 
-// export default Form.create()(LoginForm);
-
 export default connect(
   (state: RootState) => {
-    return state.login;
+    return {
+      ...state.login,
+      loginLoading: state.loadingStatus.loginLoading,
+    };
   },
   dispatch => ({
     onFormChange(value: any) {

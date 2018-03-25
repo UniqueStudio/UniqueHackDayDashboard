@@ -10,14 +10,14 @@ import cls from './layout.less';
 
 import GlobalHeader from '../../Views/GlobalHeader/index';
 
-export interface IDashboardLayoutProps {
+export interface DashboardLayoutProps {
   children: React.ReactNode;
   className?: string;
   onUserMsgClick?: () => void;
   onUserAvatarClick?: () => void;
 }
 
-export default class DashboardLayout extends React.Component<IDashboardLayoutProps> {
+export default class DashboardLayout extends React.Component<DashboardLayoutProps> {
   static defaultProps = {
     className: '',
     onUserAvatarClick: noop,
@@ -72,10 +72,10 @@ export default class DashboardLayout extends React.Component<IDashboardLayoutPro
               </a>
             </span>
           </Menu.Item>
-          <Menu.Item key="#/team_info">
+          <Menu.Item key="#/apply">
             <Icon type="usergroup-add" />
             <span>
-              <a className={cls['sider-link']} href="/#/team_info">
+              <a className={cls['sider-link']} href="/#/apply">
                 队伍信息
               </a>
             </span>

@@ -5,6 +5,7 @@ import { routerReducer as route } from 'react-router-redux';
 import register, { RegisterData } from './register';
 import login, { LoginData } from './login';
 import detail, { DetailData } from './detail';
+import loadingStatus, { LoadingStatus } from './loading';
 
 export interface RootState {
   route?: {
@@ -13,6 +14,7 @@ export interface RootState {
   register: RegisterData;
   login: LoginData;
   detail: DetailData;
+  loadingStatus: LoadingStatus;
 }
 
 export { AnyAction };
@@ -21,6 +23,7 @@ export default combineReducers<RootState>({
   register,
   login,
   detail,
+  loadingStatus,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

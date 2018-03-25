@@ -5,15 +5,14 @@ import { RootState } from '../../redux/reducers';
 
 import DashboardLayout from '../../Layouts/DashboardLayout';
 import ConsoleView from '../Console';
-import DetailView from '../DetailView';
+import ApplyView from '../ApplyView';
 
 const Dashboard: React.SFC = () => {
   return (
     <DashboardLayout>
       <Switch>
         <Route path="/console" component={ConsoleView} />
-        <Route path="/team_info" component={DetailView} />
-        {/* <Route path="/team_info" component={TeamConsoleLoadable} /> */}
+        <Route path="/apply" component={ApplyView} />
       </Switch>
     </DashboardLayout>
   );

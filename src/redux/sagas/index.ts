@@ -1,4 +1,4 @@
-import { take, select, call } from 'redux-saga/effects';
+import { take, select, call, put } from 'redux-saga/effects';
 
 import {
   ForkEffect,
@@ -16,10 +16,20 @@ import sendSMS from './sms-send';
 export function* loginSaga() {
   while (true) {
     const { payload: token } = yield take('LOGIN_FORM_SUBMIT');
+    yield put({ type: 'LOGIN_LOADING_START' });
     const { login: { username, password, autoLogin } } = yield select();
-    yield call(loginRequest, username.value, password.value, autoLogin.value, token);
-
-    yield take('LOGOUT_CLICKED');
+    const { success, message } = yield call(
+      loginRequest,
+      username.value,
+      password.value,
+      autoLogin.value,
+      token,
+    );
+    if (success) {
+      yield take('LOGOUT_CLICKED');
+    }
+    yield put({ type: 'LOGIN_LOADING_END' });
+    yield put({ type: 'LOGIN_FAILED', payload: message });
   }
 }
 

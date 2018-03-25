@@ -15,12 +15,13 @@ const request = ((req: any) => {
       endpoint = `${pathname}?${composedQuery}`;
     }
   }
+  endpoint = `https://backend.fredliang.cn${endpoint}`;
   return fetch(endpoint, {
     method,
     headers: {
       ...headers,
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${authorizationToken()}` || '',
+      Authorization: `Bearer ${authorizationToken()}`,
     },
     body: method === 'GET' ? undefined : JSON.stringify(body),
   }).then(async res => {
