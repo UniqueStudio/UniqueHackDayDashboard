@@ -22,7 +22,7 @@ export { RecaptchaProps };
 class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormComponentProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
+    this.props.form.validateFieldsAndScroll((err: any) => {
       if (!err) {
         this.props.withVerify(this.props.onSubmit)();
       }

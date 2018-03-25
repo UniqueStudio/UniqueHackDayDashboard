@@ -7,9 +7,6 @@ import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';
 
-import 'antd/lib/card/style/index.css';
-import 'antd/lib/table/style/index.css';
-import 'antd/lib/button/style/index.css';
 // import Icon from 'antd/es/icon';
 
 import cls$2 from '../TeamInfo/style.less';

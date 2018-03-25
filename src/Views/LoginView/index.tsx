@@ -4,16 +4,6 @@ import * as React from 'react';
 import Card from 'antd/es/card';
 import Tabs from 'antd/es/tabs';
 
-import 'antd/lib/form/style/index.css';
-import 'antd/lib/card/style/index.css';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/tabs/style/index.css';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/button/style/index.css';
-import 'antd/lib/checkbox/style/index.css';
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
-
 import WithRecaptcha from '../../lib/withRecaptcha';
 import LoginForm from '../../Components/LoginForm';
 import RegisterForm from '../../Components/RegisterForm';

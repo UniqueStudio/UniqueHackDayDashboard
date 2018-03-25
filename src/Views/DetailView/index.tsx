@@ -13,24 +13,8 @@ import DatePicker from 'antd/es/date-picker';
 import Upload, { UploadChangeParam } from 'antd/es/upload';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
-// import Checkbox from 'antd/es/checkbox';
-// import Row from 'antd/es/row';
-// import Col from 'antd/es/col';
-
-import 'antd/lib/form/style/index.css';
-import 'antd/lib/card/style/index.css';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/select/style/index.css';
-import 'antd/lib/date-picker/style/index.css';
-import 'antd/lib/upload/style/index.css';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/button/style/index.css';
-// import 'antd/lib/checkbox/style/index.css';
-// import 'antd/lib/row/style/css';
-// import 'antd/lib/col/style/css';
 
 // For upload progress
-import 'antd/lib/progress/style/index.css';
 
 import { patterns } from '../../lib/patterns';
 import { DetailData } from '../../redux/reducers/detail';

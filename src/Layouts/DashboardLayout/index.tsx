@@ -6,11 +6,6 @@ import Layout from 'antd/es/layout';
 import Icon from 'antd/es/icon';
 import Menu from 'antd/es/menu';
 
-import 'antd/lib/layout/style/index.css';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/menu/style/index.css';
-import 'antd/lib/tooltip/style/index.css';
-
 import cls from './layout.less';
 
 import GlobalHeader from '../../Views/GlobalHeader/index';

@@ -4,10 +4,6 @@ import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 import Layout from 'antd/es/layout';
 
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
-import 'antd/lib/layout/style/index.css';
-
 import GlobalHeader from '../../Views/GlobalHeader/index';
 
 import cls from '../DashboardLayout/layout.less';

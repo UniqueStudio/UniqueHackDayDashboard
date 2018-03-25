@@ -6,12 +6,6 @@ import Card from 'antd/es/card';
 import Icon from 'antd/es/icon';
 // import Button from 'antd/es/button';
 
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
-import 'antd/lib/card/style/index.css';
-import 'antd/lib/icon/style/css';
-// import 'antd/lib/button/style/css';
-
 import cls from './style.less';
 
 export interface StatusProps {
