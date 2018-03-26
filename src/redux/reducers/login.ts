@@ -10,7 +10,7 @@ export default function login(
   state: LoginData = {
     username: {},
     password: {},
-    autoLogin: {},
+    autoLogin: { value: true },
   },
   action: AnyAction,
 ) {
@@ -24,7 +24,7 @@ export default function login(
       return {
         username: {},
         password: {},
-        autoLogin: {},
+        autoLogin: { value: true },
       };
     default:
       return state;

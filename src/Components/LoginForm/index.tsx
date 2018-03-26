@@ -81,7 +81,7 @@ class LoginForm extends React.Component<LoginFormProps & RecaptchaProps & FormCo
         </Form.Item>
 
         <Form.Item style={{ marginBottom: '20px' }}>
-          {getFieldDecorator('autoLogin')(<Checkbox>自动登录</Checkbox>)}
+          {getFieldDecorator('autoLogin')(<Checkbox defaultChecked={true}>自动登录</Checkbox>)}
           <a style={{ float: 'right' }} href="">
             忘记密码
           </a>
