@@ -276,12 +276,13 @@ declare namespace API {
     }
 
     interface RequestFunc {
-      // 创建队伍的接口
+      // 创建队伍的接口，任意用户可调用，管理员调用时，必须提供teamLeader
       (
         req: RequestWithAuth<
           '/v1/team/teams',
           'POST',
           {
+            teamLeader?: string;
             name: string;
           }
         >,
