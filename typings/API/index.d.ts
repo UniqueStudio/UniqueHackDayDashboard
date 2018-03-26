@@ -10,6 +10,7 @@ declare namespace API {
     message: M;
   };
 
+  // 这是公共的错误，所有响应都应包含下面的错误提示
   type Response<T> = Promise<
     | ResponseWithoutData<600, Message.NetworkError>
     | ResponseWithoutData<500, Message.InternalServerError>
@@ -48,6 +49,7 @@ declare namespace API {
 
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
+    TeamNameExists = 'TeamNameExists',
     PhoneNotExists = 'PhoneNotExists',
     TeamNotExists = 'TeamNotExists',
     InvitationNotExists = 'InvitationNotExists',
@@ -58,6 +60,9 @@ declare namespace API {
     VerifyCodeNotFound = 'VerifyCodeNotFound',
     TeamLeaderNotFound = 'TeamLeaderNotFound',
     UserNotFound = 'UserNotFound',
+
+    TeamFull = 'TeamFull',
+    AlreadyTeamedUp = 'AlreadyTeamedUp',
 
     Forbidden = 'Forbidden',
     LoginNeeded = 'LoginNeeded',
@@ -189,14 +194,7 @@ declare namespace API {
       >;
 
       // 添加 detail 的接口
-      (
-        req: RequestWithAuth<
-          '/v1/user/detail',
-          'POST',
-          // Partial 意为所有字段可选
-          UserDetailRequest
-        >,
-      ): Response<
+      (req: RequestWithAuth<'/v1/user/detail', 'POST', UserDetailRequest>): Response<
         | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<200, Message.Success>
@@ -239,6 +237,32 @@ declare namespace API {
       (req: RequestWithAuth<'/v1/user/login_status', 'GET', never>): Response<
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
+
+      (req: RequestWithAuth<'/v1/user/user_info', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<
+            200,
+            Message.Success,
+            {
+              isAdmin: boolean;
+              // 一定已注册了
+              registrered: true;
+              applied: boolean;
+              teamId: string | null;
+              // (applied && isAccepted === null) 意味着是 pending 状态
+              isAccepted: boolean | null;
+              confirmed: boolean | null;
+              checkedIn: boolean | null;
+              projectId: string | null;
+              awardId: string | null;
+              // 报销: 0: 不需要报销但是已经确认报销数据  null: 未进行到报销流程, 其他数字: 报销金额
+              reimbursement: number | null;
+              awardMoneyGiven: boolean | null;
+              awardItemGiven: boolean | null;
+              invoiceRevived: boolean | null;
+            }
+          >
+      >;
     }
   }
 
@@ -246,25 +270,12 @@ declare namespace API {
     interface UserInTeam {
       username: string;
       name: string;
+      isAccepted: boolean;
       school: string;
       email?: string;
     }
 
     interface RequestFunc {
-      // 搜索用户的接口，在实现时应该注意安全，最多返回 5 个条目，按照匹配程度排序
-      (
-        req: RequestWithAuth<
-          '/v1/user/search',
-          'GET',
-          {
-            keyword: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithData<200, Message.Success, { users: UserInTeam[] }>
-      >;
-
       // 创建队伍的接口
       (
         req: RequestWithAuth<
@@ -272,106 +283,17 @@ declare namespace API {
           'POST',
           {
             name: string;
-            // members: string[];
-            // teamId: string;
-            // teamLeader: string;
           }
         >,
       ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<400, Message.TeamNameExists>
         | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
+        | ResponseWithData<200, Message.Success, { teamId: string }>
       >;
 
-      // 删除队伍的接口
-      (
-        req: RequestWithAuth<
-          '/v1/team/teams',
-          'POST',
-          {
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 修改队长的接口
-      (
-        req: RequestWithAuth<
-          '/v1/team/team_leader',
-          'PUT',
-          {
-            teamId: string;
-            teamLeader: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.UserNotFound>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 添加队员的接口
-      (
-        req: RequestWithAuth<
-          '/v1/team/invitations',
-          'POST',
-          {
-            username: string;
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.UserNotFound>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 取消邀请的接口
-      (
-        req: RequestWithAuth<
-          '/v1/team/invitations',
-          'DELETE',
-          {
-            username: string;
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.InvitationNotExists>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.UserNotFound>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 同意入队的接口
-      (
-        req: RequestWithAuth<
-          '/v1/team/accept',
-          'POST',
-          {
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.InvitationNotExists>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 删除队员的接口
+      // 删除队员的接口，只有队长身份 / 管理员可以调用
       (
         req: RequestWithAuth<
           '/v1/team/members',
@@ -389,10 +311,66 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 获取队伍信息的接口
+      // 不需要队长验证
       (
         req: RequestWithAuth<
-          '/v1/team/teams',
+          '/v1/team/members',
+          'POST',
+          {
+            username: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.TeamFull>
+        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
+        | ResponseWithoutData<400, Message.TeamLeaderNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 转移队长身份的接口，只有队长身份 / 管理员可以调用
+      (
+        req: RequestWithAuth<
+          '/v1/team/team_leader',
+          'PUT',
+          {
+            username: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 填写队长信息获取team_id
+      (
+        req: RequestWithAuth<
+          '/v1/team/team_id',
+          'POST',
+          {
+            teamLeaderName: string;
+            teamLeaderPhone: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.TeamLeaderNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, { teamId: string }>
+      >;
+
+      // 获取队伍信息
+      (
+        req: RequestWithAuth<
+          '/v1/team/team_info',
           'GET',
           {
             teamId: string;
@@ -406,9 +384,10 @@ declare namespace API {
             200,
             Message.Success,
             {
+              name: string;
               teamLeader: UserInTeam;
               members: UserInTeam[];
-              teamedUpTime: string;
+              createdTime: string;
               prizeInfo: string;
             }
           >
