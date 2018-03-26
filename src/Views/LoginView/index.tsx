@@ -63,7 +63,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       <UserEntryLayout>
         <Card style={{ height: '470px' }} bordered={false} className="login">
           <Switch>
-            <Route path={`${this.props.match.url}/reset_pwd`} component={this.renderResetPwdForm} />
+            <Route path={`${this.props.match.url}/reset_pwd`} render={this.renderResetPwdForm} />
             <Route path={`${this.props.match.url}/`} render={this.renderTab} />
           </Switch>
         </Card>
