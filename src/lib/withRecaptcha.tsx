@@ -32,7 +32,7 @@ function WithRecaptcha<P>(
     expiredCallback = () => {
       this.recaptchaReject();
     };
-    withRecaptcha = (callback: (token: string) => any) => {
+    withVerify = (callback: (token: string) => any) => {
       return async () => {
         await callback((await new Promise((resolve, reject) => {
           this.recaptchaResolve = resolve;
@@ -54,7 +54,7 @@ function WithRecaptcha<P>(
         <React.Fragment>
           <WrappedComponent
             {...this.props}
-            withVerify={this.withRecaptcha}
+            withVerify={this.withVerify}
             recaptchaReady={this.state.recaptchaLoaded}
           />
           <Recaptcha
