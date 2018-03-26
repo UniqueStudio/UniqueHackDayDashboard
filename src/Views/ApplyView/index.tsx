@@ -4,18 +4,25 @@ import Steps from 'antd/es/steps';
 
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import DetailForm from '../../Components/DetailForm/index';
+import TeamUpForms from '../../Components/TeamUpForms/index';
 
 export default class ApplyView extends React.Component<RouteComponentProps<{ _: string }>> {
   render() {
+    const endpoints = ['detail', 'team_up', 'done'];
+    const current = endpoints.findIndex(
+      endpoint => this.props.location.pathname.indexOf(endpoint) >= 0,
+    );
     return (
       <Card bordered={false} title="完善报名信息">
-        <Steps current={0} size="small">
+        <Steps current={current} size="small">
           <Steps.Step title="填写信息" />
           <Steps.Step title="组队" />
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
           <Route path={`${this.props.match.url}/detail`} component={DetailForm} />
+          <Route path={`${this.props.match.url}/team_up`} component={TeamUpForms} />
+          <Route path={`${this.props.match.url}/done`} component={TeamUpForms} />
         </Switch>
       </Card>
     );

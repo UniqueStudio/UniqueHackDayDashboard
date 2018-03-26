@@ -100,7 +100,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="detail" style={{ paddingTop: '20px' }}>
+      <Form onSubmit={this.handleSubmit} className="detail" style={{ marginTop: '20px' }}>
         <Form.Item {...formItemLayout} label="真实姓名:">
           {getFieldDecorator('name', {
             rules: [

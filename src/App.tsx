@@ -22,6 +22,7 @@ import 'antd/lib/date-picker/style/index.css';
 import 'antd/lib/upload/style/index.css';
 import 'antd/lib/progress/style/index.css';
 import 'antd/lib/alert/style/index.css';
+import 'antd/lib/radio/style/index.css';
 
 import 'ant-design-pro/dist/ant-design-pro.min.css';
 

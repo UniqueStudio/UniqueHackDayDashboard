@@ -7,6 +7,7 @@ import login, { LoginData } from './login';
 import detail, { DetailData } from './detail';
 import loadingStatus, { LoadingStatus } from './loading';
 import errorStatus, { ErrorStatus } from './error';
+import teamForm, { TeamFormData } from './team';
 
 export interface RootState {
   route?: {
@@ -17,6 +18,7 @@ export interface RootState {
   detail: DetailData;
   loadingStatus: LoadingStatus;
   errorStatus: ErrorStatus;
+  teamForm: TeamFormData;
 }
 
 export { AnyAction };
@@ -25,6 +27,7 @@ export default combineReducers<RootState>({
   register,
   login,
   detail,
+  teamForm,
   loadingStatus,
   errorStatus,
 });
