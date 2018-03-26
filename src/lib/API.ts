@@ -3,7 +3,7 @@ import * as qs from 'querystring';
 
 import messageMap from './message';
 
-const authorizationToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
+const authorizationToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
 
 const request = (async (req: any) => {
   const { method, body, headers } = req;
@@ -33,7 +33,7 @@ const request = (async (req: any) => {
       const token = json.data && json.data.token;
       json.message = (messageMap as any)[json.message];
       if (token) {
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
       }
       return {
         httpStatusCode: res.status,

@@ -131,7 +131,20 @@ declare namespace API {
       // 发短信
       (
         req: RequestWithoutAuth<
-          '/v1/user/send_sms',
+          '/v1/user/send_sms/register',
+          'POST',
+          {
+            phone: string;
+            antiRobotToken: string;
+          }
+        >,
+      ): Response<
+        ResponseWithoutData<400, Message.PhoneInvalid> | ResponseWithoutData<200, Message.Success>
+      >;
+
+      (
+        req: RequestWithoutAuth<
+          '/v1/user/send_sms/reset',
           'POST',
           {
             phone: string;

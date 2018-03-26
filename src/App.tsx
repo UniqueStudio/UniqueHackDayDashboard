@@ -29,7 +29,7 @@ import 'ant-design-pro/dist/ant-design-pro.min.css';
 import './styles/main.less';
 
 import Dashboard from './Views/Dashboard';
-import UserEntry from './Views/UserEntry';
+import LoginView from './Views/LoginView';
 import { store, history } from './redux/store';
 
 export default class App extends React.Component {
@@ -38,7 +38,7 @@ export default class App extends React.Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <Switch>
-            <Route path="/user_entry" component={UserEntry} />
+            <Route path="/user_entry" component={LoginView} />
             <Route path="/" component={Dashboard} />
           </Switch>
         </ConnectedRouter>

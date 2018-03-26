@@ -3,9 +3,25 @@ import request from '../../lib/API';
 
 export { SelectEffect, PutEffect };
 
-export default async function sendSMS(phone: string, antiRobotToken: string) {
+export async function sendSMSRegister(phone: string, antiRobotToken: string) {
   const res = await request({
-    endpoint: '/v1/user/send_sms',
+    endpoint: '/v1/user/send_sms/register',
+    method: 'POST',
+    body: {
+      phone,
+      antiRobotToken,
+    },
+  });
+  if (res.httpStatusCode === 200) {
+    return { successful: true, message: res.message };
+  } else {
+    return { successful: false, message: res.message };
+  }
+}
+
+export async function sendSMSReset(phone: string, antiRobotToken: string) {
+  const res = await request({
+    endpoint: '/v1/user/send_sms/reset',
     method: 'POST',
     body: {
       phone,

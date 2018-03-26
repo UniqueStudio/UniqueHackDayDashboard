@@ -11,7 +11,7 @@ import {
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
 import { loginRequest, registerRequest, detailRequest } from './login-register';
-import sendSMS from './sms-send';
+import { sendSMSRegister } from './sms-send';
 import { replace } from 'react-router-redux';
 
 export function* loginSaga() {
@@ -66,7 +66,7 @@ export function* smsSaga() {
     const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
     yield put({ type: 'SMS_LOADING_START' });
     const { register } = yield select();
-    const { successful, message } = yield call(sendSMS, register.phone.value, token);
+    const { successful, message } = yield call(sendSMSRegister, register.phone.value, token);
     yield put({ type: 'SMS_LOADING_END' });
     if (!successful) {
       yield put({ type: 'SMS_FAILED', payload: message });

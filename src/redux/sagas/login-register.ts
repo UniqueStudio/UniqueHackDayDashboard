@@ -25,11 +25,11 @@ export const loginRequest = async (
     },
   });
   if (res.httpStatusCode === 200) {
-    if (!autoLogin) {
-      const token = localStorage.getItem('token');
-      localStorage.removeItem('token');
+    if (autoLogin) {
+      const token = sessionStorage.getItem('token');
+      sessionStorage.removeItem('token');
       if (token) {
-        sessionStorage.setItem('token', token);
+        localStorage.setItem('token', token);
       }
     }
     return { successful: true, message: res.message };
