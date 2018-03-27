@@ -10,7 +10,7 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
-import { loginRequest, registerRequest, detailRequest } from './login-register';
+import { loginRequest, registerRequest, detailRequest, checkLoginStatus } from './login-register';
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
 
@@ -27,13 +27,17 @@ export function* loginSaga() {
       token,
     );
     yield put({ type: 'LOGIN_LOADING_END' });
-    if (successful) {
-      yield put(replace('/console'));
-      yield put({ type: 'CLEAR_LOGIN' });
-      yield take('LOGOUT_CLICKED');
-    } else {
+    if (!successful) {
       yield put({ type: 'LOGIN_FAILED', payload: message });
+      continue;
     }
+    yield put({ type: 'CLEAR_LOGIN' });
+    yield put({ type: 'SET_LOGGED_IN' });
+    yield put(replace('/'));
+
+    yield take('LOGOUT_CLICKED');
+    yield put({ type: 'SET_NOT_LOGGED_IN' });
+    yield put(replace('/user_entry'));
   }
 }
 
@@ -51,13 +55,15 @@ export function* registerSaga() {
       token,
     );
     yield put({ type: 'REGISTER_LOADING_END' });
-    if (successful) {
-      yield put(replace('/console'));
-      yield put({ type: 'CLEAR_REGISTER' });
-      yield take('LOGOUT_CLICKED');
-    } else {
+    if (!successful) {
       yield put({ type: 'REGISTER_FAILED', payload: message });
+      continue;
     }
+    yield put({ type: 'CLEAR_REGISTER' });
+    yield put({ type: 'SET_LOGGED_IN' });
+    yield put(replace('/'));
+
+    yield take('LOGOUT_CLICKED');
   }
 }
 
@@ -98,5 +104,19 @@ export function* detailSaga() {
       }),
       {},
     ) as any);
+  }
+}
+
+export function* loginStatusSaga() {
+  while (true) {
+    yield take('LOAD_LOGIN_STATUS');
+    yield put({ type: 'LOGIN_STATUS_LOADING_START' });
+    const { successful, message } = yield call(checkLoginStatus);
+    if (!successful) {
+      yield put({ type: 'SET_NOT_LOGGED_IN' });
+    } else {
+      yield put({ type: 'SET_LOGGED_IN' });
+    }
+    yield put({ type: 'LOGIN_STATUS_LOADING_END' });
   }
 }

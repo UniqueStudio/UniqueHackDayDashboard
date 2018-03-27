@@ -63,10 +63,14 @@ export const registerRequest = async (
 };
 
 export async function checkLoginStatus() {
-  const result = await request({
+  const res = await request({
     endpoint: '/v1/user/login_status',
     method: 'GET',
   });
+  if (res.httpStatusCode === 200) {
+    return { successful: true, message: res.message };
+  }
+  return { successful: false, message: res.message };
 }
 
 export async function detailRequest(detail: API.User.UserDetailRequest) {

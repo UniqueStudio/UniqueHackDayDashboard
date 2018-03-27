@@ -27,6 +27,7 @@ sagaMiddleware.run(sagas.registerSaga);
 sagaMiddleware.run(sagas.registerSMSSaga);
 sagaMiddleware.run(sagas.resetPwdSMSSaga);
 sagaMiddleware.run(sagas.detailSaga);
+sagaMiddleware.run(sagas.loginStatusSaga);
 sagaMiddleware.run(errorTipSaga);
 
 export { history, store };

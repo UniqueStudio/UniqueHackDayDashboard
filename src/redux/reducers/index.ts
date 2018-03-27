@@ -8,6 +8,7 @@ import loadingStatus, { LoadingStatus } from './loading';
 import errorStatus, { ErrorStatus } from './error';
 import teamForm, { TeamFormData } from './team';
 import resetPwd, { ResetPwdData } from './reset-pwd';
+import auth, { AuthData } from './auth';
 
 export interface RootState {
   route?: {
@@ -20,6 +21,7 @@ export interface RootState {
   errorStatus: ErrorStatus;
   teamForm: TeamFormData;
   resetPwd: ResetPwdData;
+  auth: AuthData;
 }
 
 export { AnyAction };
@@ -32,6 +34,7 @@ export default combineReducers<RootState>({
   loadingStatus,
   errorStatus,
   resetPwd,
+  auth,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

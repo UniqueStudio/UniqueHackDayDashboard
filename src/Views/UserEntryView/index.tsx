@@ -5,7 +5,7 @@ import { RootState } from '../../redux/reducers';
 
 import Card from 'antd/es/card';
 import Tabs from 'antd/es/tabs';
-import { Switch, Route, RouteComponentProps } from 'react-router';
+import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 
 import UserEntryLayout from '../../Layouts/UserEntryLayout/index';
 import WithRecaptcha from '../../lib/withRecaptcha';
@@ -48,6 +48,8 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
   registerError: string;
   loginError: string;
   resetPwdError: string;
+
+  loggedIn: boolean;
 }
 
 class LoginView extends React.Component<LoginViewProps, { count: number }> {
@@ -129,6 +131,9 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   };
 
   render() {
+    if (this.props.loggedIn) {
+      return <Redirect to="/" />;
+    }
     return (
       <UserEntryLayout>
         <Card style={{ height: '470px' }} bordered={false} className="login">
@@ -162,6 +167,8 @@ export default connect(
 
       registerError: state.errorStatus.registerError,
       loginError: state.errorStatus.loginError,
+
+      loggedIn: state.auth.loggedIn,
     };
   },
   dispatch => ({

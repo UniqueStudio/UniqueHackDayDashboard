@@ -33,7 +33,15 @@ import UserEntryView from './Views/UserEntryView';
 import { store, history } from './redux/store';
 
 export default class App extends React.Component {
+  state = {
+    isLoadingLoginStatus: false,
+  };
+
+  unsubcribe = () => void 0;
   render() {
+    if (this.state.isLoadingLoginStatus) {
+      return null;
+    }
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -44,5 +52,26 @@ export default class App extends React.Component {
         </ConnectedRouter>
       </Provider>
     );
+  }
+
+  componentWillMount() {
+    let preIsLoadingLoginStatus = false;
+    this.unsubcribe = store.subscribe(() => {
+      const isLoadingLoginStatus = store.getState().loadingStatus.loginStatusLoading;
+      if (isLoadingLoginStatus === !preIsLoadingLoginStatus) {
+        this.setState({ isLoadingLoginStatus });
+        if (!isLoadingLoginStatus) {
+          this.unsubcribe();
+        }
+      }
+      preIsLoadingLoginStatus = isLoadingLoginStatus;
+    }) as any;
+    store.dispatch({ type: 'LOAD_LOGIN_STATUS' });
+  }
+
+  componentWillUnmount() {
+    if (this.unsubcribe) {
+      this.unsubcribe();
+    }
   }
 }

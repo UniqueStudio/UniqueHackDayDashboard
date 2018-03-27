@@ -5,6 +5,8 @@ export interface LoadingStatus {
   registerLoading: boolean;
   resetPwdSMSLoading: boolean;
   registerSMSLoading: boolean;
+
+  loginStatusLoading: boolean;
 }
 
 export default function loadingStatus(
@@ -13,6 +15,8 @@ export default function loadingStatus(
     registerLoading: false,
     resetPwdSMSLoading: false,
     registerSMSLoading: false,
+
+    loginStatusLoading: false,
   },
   action: AnyAction,
 ) {
