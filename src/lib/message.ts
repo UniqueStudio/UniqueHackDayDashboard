@@ -5,5 +5,6 @@ const messageMap = {
   UsernameInvalid: '用户名不合法',
   NetworkError: '网络错误',
   InternalServerError: '服务器错误',
+  MissingField: '字段缺失',
 };
 export default messageMap;

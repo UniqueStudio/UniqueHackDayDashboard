@@ -4,6 +4,7 @@ import * as PropTypes from 'prop-types';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Alert from 'antd/es/alert';
+import delay from '../delay';
 
 const AnyAlert = Alert as any;
 
@@ -26,7 +27,8 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     showMessage: false,
   };
 
-  handleMessageClose = () => {
+  handleMessageClose = async () => {
+    await delay(1000);
     this.setState({
       showMessage: false,
     });
@@ -34,18 +36,19 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
 
   render() {
     const { children, message } = this.props;
-    // const { showMessage } = this.state;
+    const { showMessage } = this.state;
     return (
       <Form className="my-form">
-        {message && (
-          <AnyAlert
-            message={message.value}
-            showIcon={true}
-            type={message.type}
-            closable={true}
-            afterClose={this.handleMessageClose}
-          />
-        )}
+        {message &&
+          showMessage && (
+            <AnyAlert
+              message={message.value}
+              showIcon={true}
+              type={message.type}
+              closable={true}
+              onClose={this.handleMessageClose}
+            />
+          )}
         {children}
       </Form>
     );
@@ -64,6 +67,15 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     onSubmit: PropTypes.func,
     isSubmitting: PropTypes.bool,
   };
+
+  componentWillReceiveProps(nextProps: MyFormProps) {
+    const { message: nextMessage, isSubmitting: nextIsSubmitting } = nextProps;
+    if (!this.state.showMessage) {
+      if (nextMessage && !nextIsSubmitting) {
+        this.setState({ showMessage: true });
+      }
+    }
+  }
 }
 
 export default Form.create<MyFormProps>({
