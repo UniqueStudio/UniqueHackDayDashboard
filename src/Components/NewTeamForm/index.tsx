@@ -31,33 +31,6 @@ class NewTeamForm extends React.Component<NewTeamFormProps> {
     // const { form: { getFieldDecorator } } = this.props;
 
     return (
-      // <Form onSubmit={this.handleSubmit} className="team-form">
-      //   <Alert message="你可以随时更改队伍名称" showIcon={true} />
-      //   <Form.Item {...formItemLayout} label="队伍名称">
-      //     {getFieldDecorator('teamName', {
-      //       rules: [{ required: true }],
-      //     })(
-      //       <Input
-      //         placeholder="请输入队伍的名称"
-      //         prefix={<Icon type="usergroup-add" style={{ color: 'rgba(0,0,0,0.25)' }} />}
-      //       />,
-      //     )}
-      //   </Form.Item>
-
-      //   <Form.Item
-      //     wrapperCol={{
-      //       xl: { push: 4, span: 8 },
-      //       lg: { push: 6, span: 10 },
-      //       md: { push: 7, span: 12 },
-      //       xs: 24,
-      //       sm: 24,
-      //     }}
-      //   >
-      //     <Button type="primary" htmlType="submit">
-      //       创建队伍
-      //     </Button>
-      //   </Form.Item>
-      // </Form>
       <MyForm
         onFormChange={this.props.onFormChange}
         data={this.props.data}

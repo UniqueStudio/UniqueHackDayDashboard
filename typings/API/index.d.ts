@@ -325,7 +325,7 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 不需要队长验证
+      // 不需要队长验证，队员加队长
       (
         req: RequestWithAuth<
           '/v1/team/members',
@@ -340,7 +340,26 @@ declare namespace API {
         | ResponseWithoutData<400, Message.TeamNotExists>
         | ResponseWithoutData<400, Message.TeamFull>
         | ResponseWithoutData<400, Message.AlreadyTeamedUp>
-        | ResponseWithoutData<400, Message.TeamLeaderNotFound>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 队长输入某人的姓名和电话，以及teamId，使这个人加入队伍，不他需要验证
+      (
+        req: RequestWithAuth<
+          '/v1/team/members',
+          'POST',
+          {
+            name: string;
+            phone: string;
+            teamId: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<400, Message.TeamFull>
+        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
         | ResponseWithoutData<403, Message.Forbidden>
         | ResponseWithoutData<200, Message.Success>
       >;

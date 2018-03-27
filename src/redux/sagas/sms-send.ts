@@ -19,7 +19,7 @@ export async function sendSMSRegister(phone: string, antiRobotToken: string) {
   }
 }
 
-export async function sendSMSReset(phone: string, antiRobotToken: string) {
+export async function sendSMSResetPwd(phone: string, antiRobotToken: string) {
   const res = await request({
     endpoint: '/v1/user/send_sms/reset',
     method: 'POST',

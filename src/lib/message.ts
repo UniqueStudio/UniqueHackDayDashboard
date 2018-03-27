@@ -4,5 +4,6 @@ const messageMap = {
   UserNotFound: '用户名不存在',
   UsernameInvalid: '用户名不合法',
   NetworkError: '网络错误',
+  InternalServerError: '服务器错误',
 };
 export default messageMap;

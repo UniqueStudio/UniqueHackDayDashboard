@@ -11,7 +11,7 @@ import {
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
 import { loginRequest, registerRequest, detailRequest } from './login-register';
-import { sendSMSRegister } from './sms-send';
+import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
 
 export function* loginSaga() {
@@ -61,15 +61,28 @@ export function* registerSaga() {
   }
 }
 
-export function* smsSaga() {
+export function* registerSMSSaga() {
   while (true) {
     const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
-    yield put({ type: 'SMS_LOADING_START' });
+    yield put({ type: 'REGISTER_SMS_LOADING_START' });
     const { register } = yield select();
     const { successful, message } = yield call(sendSMSRegister, register.phone.value, token);
-    yield put({ type: 'SMS_LOADING_END' });
+    yield put({ type: 'REGISTER_SMS_LOADING_END' });
     if (!successful) {
-      yield put({ type: 'SMS_FAILED', payload: message });
+      yield put({ type: 'REGISTER_SMS_FAILED', payload: message });
+    }
+  }
+}
+
+export function* resetPwdSMSSaga() {
+  while (true) {
+    const { payload: token } = yield take('RESET_PWD_FORM_SMS_SUBMIT');
+    yield put({ type: 'RESET_PWD_SMS_LOADING_START' });
+    const { resetPwd } = yield select();
+    const { successful, message } = yield call(sendSMSResetPwd, resetPwd.phone.value, token);
+    yield put({ type: 'RESET_PWD_SMS_LOADING_END' });
+    if (!successful) {
+      yield put({ type: 'RESET_PWD_SMS_FAILED', payload: message });
     }
   }
 }

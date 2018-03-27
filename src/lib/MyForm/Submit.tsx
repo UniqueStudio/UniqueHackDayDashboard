@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
 import Form from 'antd/es/form';
-
+import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 
 export default function Submit(props: any, context: any) {
@@ -18,22 +18,27 @@ export default function Submit(props: any, context: any) {
   }
   return (
     <Form.Item
-      wrapperCol={{
-        xl: { push: 4, span: 8 },
-        lg: { push: 6, span: 10 },
-        md: { push: 7, span: 12 },
-        xs: 24,
-        sm: 24,
-      }}
+      wrapperCol={
+        props.fullWidth
+          ? undefined
+          : {
+              xl: { push: 4, span: 8 },
+              lg: { push: 6, span: 10 },
+              md: { push: 7, span: 12 },
+              xs: 24,
+              sm: 24,
+            }
+      }
     >
       <Button
         type="primary"
-        style={{ marginTop: '16px' }}
+        style={{ marginTop: '16px', ...(props.fullWidth ? { width: '100%' } : {}) }}
         size="large"
         htmlType="submit"
         onClick={handleSubmit}
+        disabled={context.isSubmitting}
       >
-        创建队伍
+        {context.isSubmitting ? <Icon type="loading" /> : props.title}
       </Button>
     </Form.Item>
   );
@@ -42,4 +47,5 @@ export default function Submit(props: any, context: any) {
 (Submit as any).contextTypes = {
   form: PropTypes.object,
   onSubmit: PropTypes.func,
+  isSubmitting: PropTypes.bool,
 };

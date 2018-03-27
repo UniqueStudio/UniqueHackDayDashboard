@@ -3,23 +3,29 @@ import { AnyAction } from 'redux';
 export interface LoadingStatus {
   loginLoading: boolean;
   registerLoading: boolean;
-  smsLoading: boolean;
+  resetPwdSMSLoading: boolean;
+  registerSMSLoading: boolean;
 }
 
 export default function loadingStatus(
   state: LoadingStatus = {
     loginLoading: false,
     registerLoading: false,
-    smsLoading: false,
+    resetPwdSMSLoading: false,
+    registerSMSLoading: false,
   },
   action: AnyAction,
 ) {
-  const [_, type, op] = action.type.match(/^([A-Z]+)_LOADING_(START|END)$/) || new Array(3);
+  const regexp = /^([A-Z_]+?)_(SMS_)?LOADING_(START|END)$/;
+  const [_, type, isSMS, op] = action.type.match(regexp) || new Array(4);
 
   if (op && type) {
     return {
       ...state,
-      [`${type.toLowerCase()}Loading`]: op === 'START',
+      [`${type.toLowerCase().replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}${
+        isSMS ? 'SMS' : ''
+      }Loading`]:
+        op === 'START',
     };
   }
   return state;
