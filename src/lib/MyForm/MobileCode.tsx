@@ -54,7 +54,7 @@ export default class MobileCode extends React.Component<MobileCodeProps> {
     const { form: { getFieldDecorator } } = this.context;
     const { count } = this.state;
     return (
-      <Form.Item hasFeedback={true}>
+      <Form.Item hasFeedback={false}>
         <Row gutter={8}>
           <Col span={16}>
             {getFieldDecorator('code', {

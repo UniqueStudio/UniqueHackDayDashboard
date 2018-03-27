@@ -74,29 +74,31 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       <Tabs animated={false}>
         <Tabs.TabPane tab="登录" key="login">
           <MyForm
+            size="large"
             data={loginData}
             onFormChange={this.props.onLoginFormChange}
             onSubmit={this.onLoginSubmit}
             isSubmitting={loginLoading}
             message={loginError ? { value: loginError, type: 'error' } : undefined}
           >
-            <Username />
-            <Password />
+            <Username noLayout={true} />
+            <Password noLayout={true} />
             <AutoLogin />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="登录" />
           </MyForm>
         </Tabs.TabPane>
         <Tabs.TabPane tab="注册" key="register">
           <MyForm
+            size="large"
             data={registerData}
             onFormChange={this.props.onRegisterFormChange}
             onSubmit={this.onRegisterSubmit}
             isSubmitting={registerLoading}
             message={registerError ? { value: registerError, type: 'error' } : undefined}
           >
-            <Username validator={usernameValidator} />
-            <Password />
-            <Phone validator={phoneValidator} />
+            <Username validator={usernameValidator} noLayout={true} />
+            <Password noLayout={true} />
+            <Phone validator={phoneValidator} noLayout={true} />
             <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSLoading} />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
           </MyForm>
@@ -115,6 +117,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
         title="重置密码"
       >
         <MyForm
+          size="large"
           data={resetPwdData}
           onFormChange={this.props.onResetPwdFormChange}
           onSubmit={this.onResetPwdSubmit}

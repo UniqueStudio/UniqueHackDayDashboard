@@ -31,9 +31,9 @@ export default function Submit(props: any, context: any) {
       }
     >
       <Button
+        size={context.size}
         type="primary"
-        style={{ marginTop: '16px', ...(props.fullWidth ? { width: '100%' } : {}) }}
-        size="large"
+        style={{ marginTop: '0px', ...(props.fullWidth ? { width: '100%' } : {}) }}
         htmlType="submit"
         onClick={handleSubmit}
         disabled={context.isSubmitting}
@@ -48,4 +48,5 @@ export default function Submit(props: any, context: any) {
   form: PropTypes.object,
   onSubmit: PropTypes.func,
   isSubmitting: PropTypes.bool,
+  size: PropTypes.string,
 };

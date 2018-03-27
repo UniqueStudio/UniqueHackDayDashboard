@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
@@ -5,11 +6,26 @@ import { RootState } from '../../redux/reducers';
 import Form, { FormComponentProps } from 'antd/es/form';
 import Radio from 'antd/es/radio';
 
-import NewTeamForm from '../NewTeamForm';
-import JoinTeamForm from '../JoinTeamForm/index';
+import MyForm from '../../lib/MyForm/MyForm';
+import Text from '../../lib/MyForm/Text';
+import Submit from '../../lib/MyForm/Submit';
+import { patterns } from '../../lib/patterns';
+import Alert from 'antd/es/alert';
+import Button from 'antd/es/button';
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
 
 export interface TeamUpFormsProps {
   onSubmit: () => void;
+
+  newTeamData: any;
+  joinTeamData: any;
+
+  onNewTeamFormChange: (keyValue: { [k: string]: any }) => any;
+  onJoinTeamFormChange: (keyValue: { [k: string]: any }) => any;
+
+  onNewTeamSubmit: () => void;
+  onJoinTeamSubmit: () => void;
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -32,16 +48,143 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
     return (
       <div style={{ marginTop: '20px' }}>
         <Form.Item {...formItemLayout} label="我的角色:">
-          <Radio.Group size="large" defaultValue="0" onChange={this.handleRadioChange}>
+          <Radio.Group defaultValue="0" onChange={this.handleRadioChange}>
             <Radio.Button value="0">队长</Radio.Button>
             <Radio.Button value="1">队员</Radio.Button>
             <Radio.Button value="2">暂不组队</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        {[<NewTeamForm key="0" />, <JoinTeamForm key="1" />][this.state.formIndex]}
+        {
+          [this.renderNewTeamForm(), this.renderJoinTeamForm(), this.renderNoTeamUp()][
+            this.state.formIndex
+          ]
+        }
       </div>
     );
   }
+
+  renderNewTeamForm = () => {
+    const { newTeamData, onNewTeamFormChange, onNewTeamSubmit } = this.props;
+    return (
+      <div>
+        <Row>
+          <Col
+            {...{
+              xl: { push: 4, span: 8 },
+              lg: { push: 6, span: 10 },
+              md: { push: 7, span: 12 },
+              xs: 24,
+              sm: 24,
+            }}
+          >
+            <Alert
+              showIcon={true}
+              type="info"
+              description="你可以在作品提交结束之前随时修改队伍名"
+              message="提示"
+            />
+          </Col>
+        </Row>
+        <MyForm
+          data={newTeamData}
+          onFormChange={onNewTeamFormChange}
+          onSubmit={onNewTeamSubmit}
+          isSubmitting={false}
+        >
+          <Text required={true} id="teamName" fieldName="队伍名" label="队伍名" />
+          <Submit title="创建队伍" />
+        </MyForm>
+      </div>
+    );
+  };
+
+  renderJoinTeamForm = () => {
+    const { joinTeamData, onJoinTeamFormChange, onJoinTeamSubmit } = this.props;
+    return (
+      <MyForm
+        data={joinTeamData}
+        onFormChange={onJoinTeamFormChange}
+        onSubmit={onJoinTeamSubmit}
+        isSubmitting={false}
+      >
+        <Text
+          required={true}
+          label="队长用户名"
+          id="teamLeaderName"
+          fieldName="队长用户名"
+          pattern={patterns.username}
+        />
+        <Text
+          required={true}
+          label="队长手机号"
+          id="teamLeaderPhone"
+          fieldName="队长手机号"
+          pattern={patterns.phone}
+        />
+        <Submit title="查找并加入" />
+      </MyForm>
+    );
+  };
+
+  renderNoTeamUp = () => {
+    return (
+      <div style={{ marginBottom: '24px' }}>
+        <Row>
+          <Col
+            {...{
+              xl: { push: 4, span: 8 },
+              lg: { push: 6, span: 10 },
+              md: { push: 7, span: 12 },
+              xs: 24,
+              sm: 24,
+            }}
+          >
+            <Alert
+              showIcon={true}
+              type="warning"
+              description="我们推荐尽早组队，但是只要作品提交未结束你可以随时进行组队"
+              message="注意"
+            />
+            <Button type="primary" style={{ marginTop: '10px' }}>
+              好的，下一步
+            </Button>
+          </Col>
+        </Row>
+      </div>
+    );
+  };
 }
 
-export default TeamUpForms;
+export default connect(
+  ({ teamForm }: RootState) => {
+    return {
+      newTeamData: {
+        teamName: teamForm.teamName,
+      },
+      joinTeamData: {
+        teamLeaderName: teamForm.teamLeaderName,
+        teamLeaderPhone: teamForm.teamLeaderPhone,
+      },
+    };
+  },
+  dispatch => ({
+    onNewTeamFormChange(value: any) {
+      dispatch({
+        type: 'NEW_TEAM_FORM_CHANGE',
+        payload: value,
+      });
+    },
+    onNewTeamSubmit() {
+      dispatch({ type: 'NEW_TEAM_FORM_SUBMIT' });
+    },
+    onJoinTeamFormChange(value: any) {
+      dispatch({
+        type: 'JOIN_TEAM_FORM_CHANGE',
+        payload: value,
+      });
+    },
+    onJoinTeamSubmit() {
+      dispatch({ type: 'JOIN_TEAM_FORM_SUBMIT' });
+    },
+  }),
+)(TeamUpForms);

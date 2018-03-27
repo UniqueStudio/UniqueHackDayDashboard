@@ -16,13 +16,19 @@ export interface TextProps {
   inputType?: string;
   iconType?: string;
   validator?: (_: any, value: string, callback: (error?: Error) => any) => void;
+  noLayout?: boolean;
 }
 
 export default function Text(props: TextProps, context: any) {
   const { form: { getFieldDecorator } } = context;
-  const { validator } = props;
+  const { validator, noLayout } = props;
+  const formItemLayout = {
+    labelCol: { xl: 4, lg: 6, md: 7, xs: 24, sm: 24 },
+    wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
+    hasFeedback: true,
+  };
   return (
-    <Form.Item hasFeedback={true} label={props.label}>
+    <Form.Item hasFeedback={true} {...(!noLayout ? formItemLayout : {})} label={props.label}>
       {getFieldDecorator(props.id, {
         rules: [
           { required: props.required, message: `请输入${props.fieldName}` },
@@ -32,7 +38,7 @@ export default function Text(props: TextProps, context: any) {
         validateFirst: true,
       })(
         <Input
-          size="large"
+          size={context.size}
           type={props.inputType}
           placeholder={`请输入${props.fieldName}`}
           prefix={<Icon type={props.iconType || 'user'} style={{ color: 'rgba(0,0,0,0.25)' }} />}
@@ -44,4 +50,5 @@ export default function Text(props: TextProps, context: any) {
 
 (Text as any).contextTypes = {
   form: PropTypes.object,
+  size: PropTypes.string,
 };
