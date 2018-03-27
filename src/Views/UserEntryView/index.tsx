@@ -122,7 +122,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           <Phone />
           <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSLoading} />
           <Password inputType="text" />
-          <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
+          <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
         </MyForm>
       </Card>
     );
