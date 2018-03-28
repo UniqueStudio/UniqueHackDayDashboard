@@ -14,8 +14,8 @@ const Dashboard = ({ loggedIn }: { loggedIn: boolean }) => {
   return (
     <DashboardLayout>
       <Switch>
-        <Route path="/console" component={ConsoleView} />
         <Route path="/apply" component={ApplyView} />
+        <Route path="/" component={ConsoleView} />
       </Switch>
     </DashboardLayout>
   );

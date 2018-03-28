@@ -6,6 +6,7 @@ import { RootState } from '../../redux/reducers';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import AntdSelect from 'antd/es/select';
+import Divider from 'antd/es/divider';
 
 import { patterns } from '../../lib/patterns';
 import MyForm from '../../lib/MyForm/MyForm';
@@ -59,14 +60,25 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
         onSubmit={this.props.onSubmit}
         isSubmitting={false}
       >
+        <Divider>基本信息</Divider>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
+
         <Select required={true} id="gender" fieldName="性别" label="性别">
           <AntdSelect.Option value="男">男</AntdSelect.Option>
           <AntdSelect.Option value="女">女</AntdSelect.Option>
           <AntdSelect.Option value="其他">其他</AntdSelect.Option>
         </Select>
+
         <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
+
         <Text required={true} id="email" fieldName="邮箱" label="邮箱" />
+
+        <Divider>报销和赠礼</Divider>
+
+        <Text required={true} id="city" fieldName="所在城市" label="所在城市" />
+
+        <Text required={true} id="alipay" fieldName="报销收款支付宝" label="支付宝" />
+
         <Select required={true} id="tShirtSize" fieldName="T-shirt尺寸" label="T-shirt尺寸">
           <AntdSelect.Option value="XS">XS</AntdSelect.Option>
           <AntdSelect.Option value="S">S</AntdSelect.Option>
@@ -76,10 +88,13 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           <AntdSelect.Option value="XXL">XXL</AntdSelect.Option>
           <AntdSelect.Option value="XXXL">XXXL</AntdSelect.Option>
         </Select>
-        <Text required={true} id="city" fieldName="所在城市" label="所在城市" />
-        <Text required={true} id="alipay" fieldName="报销收款支付宝" label="支付宝" />
+
+        <Divider>教育信息</Divider>
+
         <Text required={true} id="school" fieldName="学校" label="学校" />
+
         <Text required={true} id="marjor" fieldName="专业" label="专业" />
+
         <Select required={true} id="grade" fieldName="年级" label="年级">
           <AntdSelect.Option value="大一">大一</AntdSelect.Option>
           <AntdSelect.Option value="大二">大二</AntdSelect.Option>
@@ -90,13 +105,18 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           <AntdSelect.Option value="研三">研三</AntdSelect.Option>
           <AntdSelect.Option value="博士">博士</AntdSelect.Option>
         </Select>
+
         <DatePicker id="graduateTime" label="毕业时间" required={true} fieldName="毕业时间" />
+
+        <Divider>紧急联系人</Divider>
+
         <Text
           required={true}
           id="urgentConcatName"
           fieldName="紧急联系人姓名"
           label="紧急联系人姓名"
         />
+
         <Text
           pattern={patterns.phone}
           required={true}
@@ -104,23 +124,34 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           fieldName="紧急联系人电话"
           label="紧急联系人电话"
         />
+
         <Text
           required={true}
           id="urgentConcatRelationship"
           fieldName="与紧急联系人关系"
           label="与紧急联系人关系"
         />
+
+        <Divider>社交相关</Divider>
+
+        <Text required={false} id="github" fieldName="Github" label="Github" />
+
+        <Text required={false} id="linkedIn" fieldName="LinkedIn" label="LinkedIn" />
+
+        <Text required={false} id="codingDotNet" fieldName="Coding.Net" label="Coding.Net" />
+
+        <Text required={false} id="blog" fieldName="个人博客" label="个人博客" />
+
+        <Divider>比赛相关</Divider>
+
         <TextArea
           required={false}
           id="specialNeeds"
-          fieldName="特殊需要"
+          fieldName="比赛中的特殊需要，如饮食、出行方面"
           label="特殊需要"
           rows={4}
         />
-        <Text required={false} id="github" fieldName="Github" label="Github" />
-        <Text required={false} id="linkedIn" fieldName="LinkedIn" label="LinkedIn" />
-        <Text required={false} id="codingDotNet" fieldName="Coding.Net" label="Coding.Net" />
-        <Text required={false} id="blog" fieldName="个人博客" label="个人博客" />
+
         <Select required={true} id="roles" fieldName="角色" label="角色">
           <AntdSelect.Option value="前端">前端</AntdSelect.Option>
           <AntdSelect.Option value="产品">产品</AntdSelect.Option>
@@ -158,7 +189,10 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           rows={4}
         />
 
+        <Divider>附件</Divider>
+
         <File id="resume" required={true} fieldName="你的简历" label="你的简历" />
+
         <File id="collection" required={false} fieldName="你的作品集" label="你的作品集" />
 
         <Submit title="提交" />

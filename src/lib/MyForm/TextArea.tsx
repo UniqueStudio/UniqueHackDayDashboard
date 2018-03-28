@@ -21,7 +21,7 @@ export default function TextArea(props: TextAreaProps, context: any) {
   const { form: { getFieldDecorator } } = context;
   const { noLayout } = props;
   const formItemLayout = {
-    labelCol: { xl: 4, lg: 6, md: 7, xs: 24, sm: 24 },
+    labelCol: { xl: 8, lg: 6, md: 7, xs: 24, sm: 24 },
     wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
     hasFeedback: true,
   };

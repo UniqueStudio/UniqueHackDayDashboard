@@ -48,7 +48,7 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
             <Row>
               <Col
                 {...{
-                  xl: { push: 4, span: 8 },
+                  xl: { push: 8, span: 8 },
                   lg: { push: 6, span: 10 },
                   md: { push: 7, span: 12 },
                   xs: 24,
