@@ -14,37 +14,41 @@ import TextArea from '../../lib/MyForm/TextArea';
 import DatePicker from '../../lib/MyForm/DatePicker';
 import Select from '../../lib/MyForm/Select';
 import File from '../../lib/MyForm/File';
+import Submit from '../../lib/MyForm/Submit';
+import { DetailData } from '../../redux/reducers/detail';
 
 export interface DetailFormProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
 
-  name: any;
-  gender: any;
-  birthday: any;
-  email: any;
-  resume: any;
-  tShirtSize: any;
-  city: any;
-  alipay: any;
-  school: any;
-  major: any;
-  grade: any;
-  graduateTime: any; // 年月日
-  urgentConcatName: any;
-  urgentConcatPhone: any;
-  urgentConcatRelationship: any;
+  detailData: {
+    name: any;
+    gender: any;
+    birthday: any;
+    email: any;
+    resume: any;
+    tShirtSize: any;
+    city: any;
+    alipay: any;
+    school: any;
+    major: any;
+    grade: any;
+    graduateTime: any; // 年月日
+    urgentConcatName: any;
+    urgentConcatPhone: any;
+    urgentConcatRelationship: any;
 
-  collections?: any;
-  specialNeeds?: any;
-  github?: any;
-  linkedIn?: any;
-  codeingDotNet?: any;
-  blog?: any;
+    collections?: any;
+    specialNeeds?: any;
+    github?: any;
+    linkedIn?: any;
+    codeingDotNet?: any;
+    blog?: any;
 
-  role: any; // 产品，设计，前端，后端，机器学习，硬件开发，其他
-  skills: any;
-  hackdayTimes: number;
+    role: any; // 产品，设计，前端，后端，机器学习，硬件开发，其他
+    skills: any;
+    hackdayTimes: number;
+  };
 }
 
 class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
@@ -71,7 +75,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
     const { getFieldDecorator } = this.props.form;
     return (
-      <MyForm data={{}}>
+      <MyForm data={this.props.detailData} onFormChange={this.props.onFormChange}>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
         <Select required={true} id="gender" fieldName="性别" label="性别">
           <AntdSelect.Option value="男">男</AntdSelect.Option>
@@ -124,7 +128,13 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           label="与紧急联系人关系"
         />
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
-        <TextArea required={false} id="name" fieldName="姓名" label="姓名" rows={4} />
+        <TextArea
+          required={false}
+          id="specialNeeds"
+          fieldName="特殊需要"
+          label="特殊需要"
+          rows={4}
+        />
         <Text required={false} id="github" fieldName="Github" label="Github" />
         <Text required={false} id="linkedIn" fieldName="LinkedIn" label="LinkedIn" />
         <Text required={false} id="codingDotNet" fieldName="Coding.Net" label="Coding.Net" />
@@ -168,6 +178,8 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <File id="resume" required={true} fieldName="你的简历" label="你的简历" />
         <File id="collection" required={false} fieldName="你的作品集" label="你的作品集" />
+
+        <Submit title="提交" />
       </MyForm>
     );
   }
@@ -175,7 +187,9 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
 export default connect(
   (state: RootState) => {
-    return state.detail;
+    return {
+      detailData: state.detail,
+    };
   },
   dispatch => ({
     onFormChange(value: any) {

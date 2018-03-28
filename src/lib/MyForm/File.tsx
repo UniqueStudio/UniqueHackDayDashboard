@@ -43,7 +43,7 @@ export default class File extends React.Component<FileProps> {
     return (
       <Form.Item
         {...(!noLayout ? formItemLayout : {})}
-        hasFeedback={true}
+        hasFeedback={false}
         validateStatus={this.state.isUploading ? 'warning' : undefined}
         help={this.state.isUploading ? '正在上传...' : undefined}
         label={`上传${this.props.label}`}
