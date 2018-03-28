@@ -39,15 +39,16 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
     this.setState({ formIndex: parseInt(e.target.value, 10) });
   };
 
+  formItemLayout = {
+    labelCol: { xl: 8, lg: 6, md: 7, xs: 24, sm: 24 },
+    wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
+    hasFeedback: true,
+  };
+
   render() {
-    const formItemLayout = {
-      labelCol: { xl: 4, lg: 6, md: 7, xs: 24, sm: 24 },
-      wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
-      hasFeedback: true,
-    };
     return (
       <div style={{ marginTop: '20px' }}>
-        <Form.Item {...formItemLayout} label="我的角色:">
+        <Form.Item {...this.formItemLayout} label="我的角色:">
           <Radio.Group defaultValue="0" onChange={this.handleRadioChange}>
             <Radio.Button value="0">队长</Radio.Button>
             <Radio.Button value="1">队员</Radio.Button>
@@ -70,7 +71,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
         <Row>
           <Col
             {...{
-              xl: { push: 4, span: 8 },
+              xl: { push: 8, span: 8 },
               lg: { push: 6, span: 10 },
               md: { push: 7, span: 12 },
               xs: 24,
@@ -132,7 +133,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
         <Row>
           <Col
             {...{
-              xl: { push: 4, span: 8 },
+              xl: { push: 8, span: 8 },
               lg: { push: 6, span: 10 },
               md: { push: 7, span: 12 },
               xs: 24,

@@ -36,14 +36,14 @@ export default class File extends React.Component<FileProps> {
     const { form: { getFieldDecorator } } = this.context;
     const { noLayout } = this.props;
     const formItemLayout = {
-      labelCol: { xl: 4, lg: 6, md: 7, xs: 24, sm: 24 },
+      labelCol: { xl: 8, lg: 6, md: 7, xs: 24, sm: 24 },
       wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
       hasFeedback: true,
     };
     return (
       <Form.Item
         {...(!noLayout ? formItemLayout : {})}
-        hasFeedback={true}
+        hasFeedback={false}
         validateStatus={this.state.isUploading ? 'warning' : undefined}
         help={this.state.isUploading ? '正在上传...' : undefined}
         label={`上传${this.props.label}`}

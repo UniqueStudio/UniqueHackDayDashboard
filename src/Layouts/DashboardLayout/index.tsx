@@ -64,10 +64,10 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
         </div>
 
         <Menu className={cls['bg-grey']} theme="dark" selectedKeys={[window.location.hash]}>
-          <Menu.Item key="#/console">
+          <Menu.Item key="#/">
             <Icon type="desktop" />
             <span>
-              <a className={cls['sider-link']} href="/#/console">
+              <a className={cls['sider-link']} href="/#/">
                 控制台
               </a>
             </span>
