@@ -276,6 +276,20 @@ declare namespace API {
             }
           >
       >;
+
+      (
+        req: RequestWithAuth<
+          '/v1/user/username',
+          'GET',
+          {
+            name: string;
+            phone: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { username: string }>
+      >;
     }
   }
 
@@ -325,33 +339,16 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 不需要队长验证，队员加队长
+      // 鉴权提示
+      // 队员加队长: 要求1.登录、2.队伍存在、3.用户名是自己 即可
+      // 队长加队员: 要求1.队伍是自己的、2.用户名不是自己、即可
+      // 权限不满足，返回 forbidden
       (
         req: RequestWithAuth<
           '/v1/team/members',
           'POST',
           {
             username: string;
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.TeamFull>
-        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 队长输入某人的姓名和电话，以及teamId，使这个人加入队伍，不他需要验证
-      (
-        req: RequestWithAuth<
-          '/v1/team/members',
-          'POST',
-          {
-            name: string;
-            phone: string;
             teamId: string;
           }
         >,
@@ -434,6 +431,36 @@ declare namespace API {
       (req: RequestWithAuth<'/v1/file/files', 'POST', {}>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { fileId: string }>
+      >;
+    }
+  }
+
+  namespace Message {
+    enum MessageType {
+      NewTeammete = 'NewTeammete', // 新的队友加入
+      LoginElseWhere = 'LoginElseWhere', // 别处登录，被迫下线
+      Accepted = 'Accepted', // 通过审核
+      Rejected = 'Rejected', // 被拒绝参赛
+    }
+    interface SingleMessage {
+      type: MessageType;
+      value: string;
+      time: number; // Timestamp
+    }
+    interface RequestFunc {
+      // 如果该用户有消息，立刻返回所有消息，并清除这些消息。
+      // 如果用户没有消息，等待 1min 返回
+      // 如果在等待的过程中，有新的消息，立刻返回
+      (req: RequestWithAuth<'/v1/message/messages/new', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 没有等待。
+      // 直接返回所有的消息
+      (req: RequestWithAuth<'/v1/message/messages/all', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
       >;
     }
   }
