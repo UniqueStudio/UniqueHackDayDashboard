@@ -4,7 +4,7 @@ import Steps from 'antd/es/steps';
 
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import DetailForm from '../../Components/DetailForm/index';
-import TeamUpForms from '../../Components/TeamUpForms/index';
+import TeamUpView from '../../Views/TeamUpView/index';
 
 export default class ApplyView extends React.Component<RouteComponentProps<{ _: string }>> {
   render() {
@@ -21,8 +21,8 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
         </Steps>
         <Switch>
           <Route path={`${this.props.match.url}/detail`} component={DetailForm} />
-          <Route path={`${this.props.match.url}/team_up`} component={TeamUpForms} />
-          <Route path={`${this.props.match.url}/done`} component={TeamUpForms} />
+          <Route path={`${this.props.match.url}/team_up`} component={TeamUpView} />
+          <Route path={`${this.props.match.url}/done`} component={TeamUpView} />
         </Switch>
       </Card>
     );
