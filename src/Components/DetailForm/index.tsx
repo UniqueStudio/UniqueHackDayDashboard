@@ -15,7 +15,6 @@ import DatePicker from '../../lib/MyForm/DatePicker';
 import Select from '../../lib/MyForm/Select';
 import File from '../../lib/MyForm/File';
 import Submit from '../../lib/MyForm/Submit';
-import { DetailData } from '../../redux/reducers/detail';
 
 export interface DetailFormProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
@@ -52,30 +51,14 @@ export interface DetailFormProps {
 }
 
 class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
-  state = {
-    isUploadingResume: false,
-    isUploadingCollection: false,
-  };
-
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err: any) => {
-      if (!err) {
-        this.props.onSubmit();
-      }
-    });
-  };
-
   render() {
-    const formItemLayout = {
-      labelCol: { xl: 4, lg: 6, md: 7, xs: 24, sm: 24 },
-      wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
-      hasFeedback: true,
-    };
-
-    const { getFieldDecorator } = this.props.form;
     return (
-      <MyForm data={this.props.detailData} onFormChange={this.props.onFormChange}>
+      <MyForm
+        data={this.props.detailData}
+        onFormChange={this.props.onFormChange}
+        onSubmit={this.props.onSubmit}
+        isSubmitting={false}
+      >
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
         <Select required={true} id="gender" fieldName="性别" label="性别">
           <AntdSelect.Option value="男">男</AntdSelect.Option>
@@ -127,7 +110,6 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           fieldName="与紧急联系人关系"
           label="与紧急联系人关系"
         />
-        <Text required={true} id="name" fieldName="姓名" label="姓名" />
         <TextArea
           required={false}
           id="specialNeeds"
