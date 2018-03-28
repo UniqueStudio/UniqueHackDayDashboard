@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
-// import throttle from 'lodash-es/throttle';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import AntdSelect from 'antd/es/select';
@@ -152,7 +151,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           rows={4}
         />
 
-        <Select required={true} id="roles" fieldName="角色" label="角色">
+        <Select required={true} id="roles" fieldName="角色" label="角色" mode="tags">
           <AntdSelect.Option value="前端">前端</AntdSelect.Option>
           <AntdSelect.Option value="产品">产品</AntdSelect.Option>
           <AntdSelect.Option value="设计">设计</AntdSelect.Option>
@@ -162,7 +161,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           <AntdSelect.Option value="其他">其他</AntdSelect.Option>
         </Select>
 
-        <Select required={true} id="skills" fieldName="技能" label="技能">
+        <Select required={true} id="skills" fieldName="技能" label="技能" mode="tags">
           <AntdSelect.Option value="JavaScript">JavaScript</AntdSelect.Option>
           <AntdSelect.Option value="CSS/HTML">CSS/HTML</AntdSelect.Option>
           <AntdSelect.Option value="Swift">Swift</AntdSelect.Option>

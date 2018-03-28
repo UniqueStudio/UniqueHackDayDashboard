@@ -3,7 +3,7 @@ import * as React from 'react';
 import Steps from 'antd/es/steps';
 import Card from 'antd/es/card';
 
-import cls from '../Status/style.less';
+// import cls from '../Status/style.less';
 
 const HackdayProgress = () => {
   return (

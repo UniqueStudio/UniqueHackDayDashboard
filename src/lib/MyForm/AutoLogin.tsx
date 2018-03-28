@@ -5,7 +5,7 @@ import Form from 'antd/es/form';
 
 import Checkbox from 'antd/es/checkbox';
 
-export default function AutoLogin(props: any, context: any) {
+export default function AutoLogin(_: any, context: any) {
   const { form: { getFieldDecorator } } = context;
   return (
     <Form.Item style={{ marginBottom: 0 }}>

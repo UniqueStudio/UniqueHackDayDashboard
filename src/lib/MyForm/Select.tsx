@@ -15,7 +15,7 @@ export interface SelectProps {
 
   children?: React.ReactNode;
 
-  multiple?: boolean;
+  mode?: 'default' | 'multiple' | 'tags' | 'combobox';
 }
 
 export default function Select(props: SelectProps, context: any) {
@@ -30,7 +30,11 @@ export default function Select(props: SelectProps, context: any) {
     <Form.Item hasFeedback={true} {...(!noLayout ? formItemLayout : {})} label={props.label}>
       {getFieldDecorator(props.id, {
         rules: [{ required: props.required, message: `请选择${props.fieldName}` }],
-      })(<AntdSelect placeholder={`请选择${props.fieldName}`}>{props.children}</AntdSelect>)}
+      })(
+        <AntdSelect mode={props.mode} placeholder={`请选择${props.fieldName}`}>
+          {props.children}
+        </AntdSelect>,
+      )}
     </Form.Item>
   );
 }
