@@ -257,6 +257,9 @@ declare namespace API {
             200,
             Message.Success,
             {
+              username: string;
+              phone: string;
+              name: string | null;
               isAdmin: boolean;
               // 一定已注册了
               registrered: true;
