@@ -24,6 +24,7 @@ export interface MyFormProps {
 
   size?: string;
   data: { [k: string]: any };
+  noLayout?: boolean;
 }
 
 class MyForm extends React.Component<MyFormProps & FormComponentProps> {
@@ -47,13 +48,15 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
           showMessage && (
             <Row>
               <Col
-                {...{
-                  xl: { push: 8, span: 8 },
-                  lg: { push: 6, span: 10 },
-                  md: { push: 7, span: 12 },
-                  xs: 24,
-                  sm: 24,
-                }}
+                {...(this.props.noLayout
+                  ? {}
+                  : {
+                      xl: { push: 8, span: 8 },
+                      lg: { push: 6, span: 10 },
+                      md: { push: 7, span: 12 },
+                      xs: 24,
+                      sm: 24,
+                    })}
               >
                 <AnyAlert
                   message={message.value}

@@ -79,6 +79,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onFormChange={this.props.onLoginFormChange}
             onSubmit={this.onLoginSubmit}
             isSubmitting={loginLoading}
+            noLayout={true}
             message={loginError ? { value: loginError, type: 'error' } : undefined}
           >
             <Username noLayout={true} />
@@ -94,6 +95,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onFormChange={this.props.onRegisterFormChange}
             onSubmit={this.onRegisterSubmit}
             isSubmitting={registerLoading}
+            noLayout={true}
             message={registerError ? { value: registerError, type: 'error' } : undefined}
           >
             <Username validator={usernameValidator} noLayout={true} />
@@ -122,11 +124,12 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           onFormChange={this.props.onResetPwdFormChange}
           onSubmit={this.onResetPwdSubmit}
           isSubmitting={resetPwdLoading}
+          noLayout={true}
           message={resetPwdError ? { value: resetPwdError, type: 'error' } : undefined}
         >
-          <Phone />
+          <Phone noLayout={true} />
           <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSLoading} />
-          <Password inputType="text" />
+          <Password inputType="text" noLayout={true} />
           <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
         </MyForm>
       </Card>

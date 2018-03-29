@@ -10,13 +10,7 @@ import { RootState } from '../../redux/reducers';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
 
-class GlobalHeader extends React.Component<{ inUserEntry: boolean }> {
-  renderHeaderLinks() {
-    return [
-      // tslint:disable-next-line:jsx-wrap-multiline
-    ];
-  }
-
+class GlobalHeader extends React.Component<{ inUserEntry: boolean; loggedIn: boolean }> {
   render() {
     // const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
     return (
@@ -56,5 +50,6 @@ class GlobalHeader extends React.Component<{ inUserEntry: boolean }> {
 export default connect((state: RootState) => {
   return {
     inUserEntry: state.route!.location.pathname.indexOf('/user_entry') === 0,
+    loggedIn: state.auth.loggedIn,
   };
 })(GlobalHeader);
