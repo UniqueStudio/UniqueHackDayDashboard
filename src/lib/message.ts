@@ -6,5 +6,6 @@ const messageMap = {
   NetworkError: '网络错误',
   InternalServerError: '服务器错误',
   MissingField: '字段缺失',
+  HumanCheckFailed: '你可能是网络机器人，请重试',
 };
 export default messageMap;
