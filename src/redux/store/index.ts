@@ -25,11 +25,15 @@ const store: Store<RootState> = createStore(
 
 sagaMiddleware.run(sagas.loginSaga);
 sagaMiddleware.run(sagas.registerSaga);
+
 sagaMiddleware.run(sagas.registerSMSSaga);
 sagaMiddleware.run(sagas.resetPwdSMSSaga);
+
 sagaMiddleware.run(sagas.detailSaga);
+
 sagaMiddleware.run(sagas.loginStatusSaga);
 sagaMiddleware.run(sagas.loginStatusLoopSaga);
+
 sagaMiddleware.run(errorTipSaga);
 
 export { history, store };

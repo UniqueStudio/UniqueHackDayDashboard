@@ -12,7 +12,7 @@ export default function loadingStatus(
   },
   action: AnyAction,
 ) {
-  const [_, op, type] = action.type.match(/^(SET|CLEAR)_(.+)_ERROR$/) || new Array(2);
+  const [, op, type] = action.type.match(/^(SET|CLEAR)_(.+)_ERROR$/) || new Array(2);
   if (op && type) {
     return {
       ...state,
