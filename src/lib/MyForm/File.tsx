@@ -21,10 +21,10 @@ export default class File extends React.Component<FileProps> {
   };
 
   eventToFileId = (e: UploadChangeParam) => {
-    this.setState({ isUploadingResume: true });
+    this.setState({ isUploading: true });
     const uploaded = e.fileList.filter(file => file.status === 'done');
     if (e.fileList.length === uploaded.length || e.file.status === 'error') {
-      this.setState({ isUploadingResume: false });
+      this.setState({ isUploading: false });
     }
     if (uploaded.length > 0) {
       return uploaded.map(file => file.response.data.fileId);
@@ -57,7 +57,12 @@ export default class File extends React.Component<FileProps> {
           ],
           getValueFromEvent: this.eventToFileId,
         })(
-          <Upload multiple={false} name="resume" action="/v1/file/files" listType="picture">
+          <Upload
+            multiple={false}
+            name={this.props.id}
+            action="https://backend.fredliang.cn/v1/file/files"
+            listType="picture"
+          >
             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
               <Icon type="upload" /> 点击上传{this.props.fieldName}
             </Button>
