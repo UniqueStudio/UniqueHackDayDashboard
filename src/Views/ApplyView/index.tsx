@@ -24,7 +24,7 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
         <Switch>
           <Route path={`${baseURL}/team_up`} component={TeamUpView} />
           <Route path={`${baseURL}/done`} component={TeamUpView} />
-          <Route path={`${baseURL}/detail`} component={TeamUpView} />
+          <Route path={`${baseURL}/detail`} component={DetailForm} />
           <Route path={`${baseURL}/`} component={DetailForm} />
         </Switch>
       </Card>

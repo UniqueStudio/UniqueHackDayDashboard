@@ -110,10 +110,10 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
       >
         <Text
           required={true}
-          label="队长用户名"
+          label="队长姓名"
           id="teamLeaderName"
-          fieldName="队长用户名"
-          pattern={patterns.username}
+          fieldName="队长姓名"
+          // pattern={patterns.username}
         />
         <Text
           required={true}

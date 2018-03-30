@@ -13,6 +13,7 @@ export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect 
 import { loginRequest, registerRequest, detailRequest, checkLoginStatus } from './login-register';
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
+import delay from '../../lib/delay';
 
 export function* loginSaga() {
   while (true) {
@@ -112,6 +113,20 @@ export function* loginStatusSaga() {
     yield take('LOAD_LOGIN_STATUS');
     yield put({ type: 'LOGIN_STATUS_LOADING_START' });
     const { successful, message } = yield call(checkLoginStatus);
+    if (!successful) {
+      yield put({ type: 'SET_NOT_LOGGED_IN' });
+    } else {
+      yield put({ type: 'SET_LOGGED_IN' });
+    }
+    yield put({ type: 'LOGIN_STATUS_LOADING_END' });
+  }
+}
+
+export function* loginStatusLoopSaga() {
+  while (true) {
+    yield delay(60 * 1000);
+    yield put({ type: 'LOGIN_STATUS_LOADING_START' });
+    const { successful } = yield call(checkLoginStatus);
     if (!successful) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
     } else {
