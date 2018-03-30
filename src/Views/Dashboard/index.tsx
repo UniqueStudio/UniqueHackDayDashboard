@@ -9,7 +9,7 @@ import ApplyView from '../ApplyView';
 
 const Dashboard = ({ loggedIn }: { loggedIn: boolean }) => {
   if (!loggedIn) {
-    return <Redirect to="/user_entry" />;
+    // return <Redirect to="/user_entry" />;
   }
   return (
     <DashboardLayout>

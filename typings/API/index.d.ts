@@ -319,6 +319,7 @@ declare namespace API {
       ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
         | ResponseWithoutData<400, Message.TeamNameExists>
         | ResponseWithoutData<403, Message.Forbidden>
         | ResponseWithData<200, Message.Success, { teamId: string }>
@@ -440,16 +441,42 @@ declare namespace API {
 
   namespace Message {
     enum MessageType {
-      NewTeammete = 'NewTeammete', // 新的队友加入
       LoginElseWhere = 'LoginElseWhere', // 别处登录，被迫下线
+      NewTeammate = 'NewTeammate', // 新的队友加入
       Accepted = 'Accepted', // 通过审核
       Rejected = 'Rejected', // 被拒绝参赛
+      OtherMessage = 'OtherMessage',
     }
-    interface SingleMessage {
-      type: MessageType;
-      value: string;
-      time: number; // Timestamp
-    }
+
+    type MessageValue = string | { en: string; zh: string };
+
+    type SingleMessage =
+      | {
+          type: MessageType.LoginElseWhere;
+          time: number; // Timestamp
+        }
+      | {
+          type: MessageType.Rejected;
+          rejectedReason: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          type: MessageType.Accepted;
+          rejectedExtraMsg?: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          type: MessageType.OtherMessage;
+          value: MessageValue;
+          title: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          type: MessageType.NewTeammate;
+          newTeammateInfo: API.Team.UserInTeam;
+          time: number; // Timestamp
+        };
+
     interface RequestFunc {
       // 如果该用户有消息，立刻返回所有消息，并清除这些消息。
       // 如果用户没有消息，等待 1min 返回

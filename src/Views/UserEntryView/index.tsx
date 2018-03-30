@@ -69,6 +69,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       registerLoading,
       loginLoading,
       registerSMSLoading,
+
+      recaptchaReady,
     } = this.props;
     return (
       <Tabs animated={false}>
@@ -78,7 +80,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             data={loginData}
             onFormChange={this.props.onLoginFormChange}
             onSubmit={this.onLoginSubmit}
-            isSubmitting={loginLoading}
+            isSubmitting={loginLoading || !recaptchaReady}
             noLayout={true}
             message={loginError ? { value: loginError, type: 'error' } : undefined}
           >
@@ -94,7 +96,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             data={registerData}
             onFormChange={this.props.onRegisterFormChange}
             onSubmit={this.onRegisterSubmit}
-            isSubmitting={registerLoading}
+            isSubmitting={registerLoading || !recaptchaReady}
             noLayout={true}
             message={registerError ? { value: registerError, type: 'error' } : undefined}
           >
@@ -110,7 +112,13 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   };
 
   renderResetPwdForm = () => {
-    const { resetPwdData, resetPwdLoading, resetPwdError, resetPwdSMSLoading } = this.props;
+    const {
+      resetPwdData,
+      resetPwdLoading,
+      resetPwdError,
+      resetPwdSMSLoading,
+      recaptchaReady,
+    } = this.props;
     return (
       <Card
         bordered={false}
@@ -123,7 +131,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           data={resetPwdData}
           onFormChange={this.props.onResetPwdFormChange}
           onSubmit={this.onResetPwdSubmit}
-          isSubmitting={resetPwdLoading}
+          isSubmitting={resetPwdLoading || !recaptchaReady}
           noLayout={true}
           message={resetPwdError ? { value: resetPwdError, type: 'error' } : undefined}
         >
