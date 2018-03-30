@@ -1,20 +1,20 @@
 import { AnyAction } from 'redux';
 
 export interface LoadingStatus {
-  loginLoading: boolean;
-  registerLoading: boolean;
-  resetPwdSMSLoading: boolean;
-  registerSMSLoading: boolean;
+  loginSubmitting: boolean;
+  registerSubmitting: boolean;
+  resetPwdSMSSubmitting: boolean;
+  registerSMSSubmitting: boolean;
 
   loginStatusLoading: boolean;
 }
 
 export default function loadingStatus(
   state: LoadingStatus = {
-    loginLoading: false,
-    registerLoading: false,
-    resetPwdSMSLoading: false,
-    registerSMSLoading: false,
+    loginSubmitting: false,
+    registerSubmitting: false,
+    resetPwdSMSSubmitting: false,
+    registerSMSSubmitting: false,
 
     loginStatusLoading: false,
   },

@@ -7,5 +7,6 @@ const messageMap = {
   InternalServerError: '服务器错误',
   MissingField: '字段缺失',
   HumanCheckFailed: '你可能是网络机器人，请重试',
+  PhoneInvalid: '电话号码不合法',
 };
 export default messageMap;

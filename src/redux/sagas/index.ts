@@ -18,7 +18,7 @@ import delay from '../../lib/delay';
 export function* loginSaga() {
   while (true) {
     const { payload: token } = yield take('LOGIN_FORM_SUBMIT');
-    yield put({ type: 'LOGIN_LOAD_START' });
+    yield put({ type: 'LOGIN_SUBMIT_START' });
     const { login: { username, password, autoLogin } } = yield select();
     const { successful, message } = yield call(
       loginRequest,
@@ -27,7 +27,7 @@ export function* loginSaga() {
       autoLogin.value,
       token,
     );
-    yield put({ type: 'LOGIN_LOAD_END' });
+    yield put({ type: 'LOGIN_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'LOGIN_FAILED', payload: message });
       continue;
@@ -45,7 +45,7 @@ export function* loginSaga() {
 export function* registerSaga() {
   while (true) {
     const { payload: token } = yield take('REGISTER_FORM_SUBMIT');
-    yield put({ type: 'REGISTER_LOAD_START' });
+    yield put({ type: 'REGISTER_SUBMIT_START' });
     const { register: { username, password, phone, code } } = yield select();
     const { successful, message } = yield call(
       registerRequest,
@@ -55,7 +55,7 @@ export function* registerSaga() {
       code.value,
       token,
     );
-    yield put({ type: 'REGISTER_LOAD_END' });
+    yield put({ type: 'REGISTER_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'REGISTER_FAILED', payload: message });
       continue;
@@ -71,10 +71,10 @@ export function* registerSaga() {
 export function* registerSMSSaga() {
   while (true) {
     const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
-    yield put({ type: 'REGISTER_SMS_LOAD_START' });
+    yield put({ type: 'REGISTER_SMS_SUBMIT_START' });
     const { register } = yield select();
     const { successful, message } = yield call(sendSMSRegister, register.phone.value, token);
-    yield put({ type: 'REGISTER_SMS_LOAD_END' });
+    yield put({ type: 'REGISTER_SMS_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'REGISTER_SMS_FAILED', payload: message });
     }
@@ -84,10 +84,10 @@ export function* registerSMSSaga() {
 export function* resetPwdSMSSaga() {
   while (true) {
     const { payload: token } = yield take('RESET_PWD_FORM_SMS_SUBMIT');
-    yield put({ type: 'RESET_PWD_SMS_LOAD_START' });
+    yield put({ type: 'RESET_PWD_SMS_SUBMIT_START' });
     const { resetPwd } = yield select();
     const { successful, message } = yield call(sendSMSResetPwd, resetPwd.phone.value, token);
-    yield put({ type: 'RESET_PWD_SMS_LOAD_END' });
+    yield put({ type: 'RESET_PWD_SMS_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'RESET_PWD_SMS_FAILED', payload: message });
     }
