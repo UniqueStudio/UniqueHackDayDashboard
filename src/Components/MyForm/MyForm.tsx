@@ -7,7 +7,7 @@ import Alert from 'antd/es/alert';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
-import delay from '../delay';
+import delay from '../../lib/delay';
 
 const AnyAlert = Alert as any;
 

@@ -5,7 +5,7 @@ import * as React from 'react';
 // import Input from 'antd/es/input';
 // import Icon from 'antd/es/icon';
 
-import { patterns } from '../patterns';
+import { patterns } from '../../lib/patterns';
 
 import Text from './Text';
 
