@@ -16,6 +16,8 @@ import Select from '../../lib/MyForm/Select';
 import File from '../../lib/MyForm/File';
 import Submit from '../../lib/MyForm/Submit';
 
+import moment from 'moment';
+
 export interface DetailFormProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
@@ -202,8 +204,20 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
 export default connect(
   (state: RootState) => {
+    const props = state.detail;
     return {
-      detailData: state.detail,
+      detailData: Object.keys(props).reduce(
+        (p, key) => ({
+          ...p,
+          [key]: isDateValue(key)
+            ? Form.createFormField({
+                ...(props as any)[key],
+                value: moment((props as any)[key].value),
+              })
+            : Form.createFormField((props as any)[key]),
+        }),
+        {},
+      ),
     };
   },
   dispatch => ({
@@ -217,19 +231,8 @@ export default connect(
       dispatch({ type: 'DETAIL_FORM_SUBMIT' });
     },
   }),
-)(
-  Form.create<DetailFormProps>({
-    onFieldsChange(props, value) {
-      props.onFormChange(value as any);
-    },
-    mapPropsToFields(props) {
-      return Object.keys(props).reduce(
-        (p, key) => ({
-          ...p,
-          [key]: Form.createFormField((props as any)[key]),
-        }),
-        {},
-      );
-    },
-  })(DetailForm),
-);
+)(DetailForm);
+
+function isDateValue(props: string) {
+  return props === 'birthday' || props === 'graduateTime';
+}

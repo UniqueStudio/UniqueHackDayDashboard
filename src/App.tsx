@@ -28,6 +28,7 @@ import 'antd/lib/divider/style/index.css';
 import 'ant-design-pro/dist/ant-design-pro.min.css';
 
 import './styles/main.less';
+import './styles/antd-override.less';
 
 import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
