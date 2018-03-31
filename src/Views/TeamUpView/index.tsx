@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 
 import Form, { FormComponentProps } from 'antd/es/form';
-import Radio from 'antd/es/radio';
+import Radio, { RadioChangeEvent } from 'antd/es/radio';
 
-import MyForm from '../../lib/MyForm/MyForm';
-import Text from '../../lib/MyForm/Text';
-import Submit from '../../lib/MyForm/Submit';
+import MyForm from '../../Components/MyForm/MyForm';
+import Text from '../../Components/MyForm/Text';
+import Submit from '../../Components/MyForm/Submit';
 import { patterns } from '../../lib/patterns';
 import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
@@ -35,7 +35,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
 
   handleSubmit = () => void 0;
 
-  handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleRadioChange = (e: RadioChangeEvent) => {
     this.setState({ formIndex: parseInt(e.target.value, 10) });
   };
 

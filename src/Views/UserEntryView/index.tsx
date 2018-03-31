@@ -10,14 +10,14 @@ import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 import UserEntryLayout from '../../Layouts/UserEntryLayout/index';
 import WithRecaptcha from '../../lib/withRecaptcha';
 
-import MyForm from '../../lib/MyForm/MyForm';
-import Username from '../../lib/MyForm/Username';
-import Password from '../../lib/MyForm/Password';
-import AutoLogin from '../../lib/MyForm/AutoLogin';
-import Phone from '../../lib/MyForm/Phone';
-import MobileCode from '../../lib/MyForm/MobileCode';
-import Submit from '../../lib/MyForm/Submit';
-import { usernameValidator, phoneValidator } from '../../lib/MyForm/validators';
+import MyForm from '../../Components/MyForm/MyForm';
+import Username from '../../Components/MyForm/Username';
+import Password from '../../Components/MyForm/Password';
+import AutoLogin from '../../Components/MyForm/AutoLogin';
+import Phone from '../../Components/MyForm/Phone';
+import MobileCode from '../../Components/MyForm/MobileCode';
+import Submit from '../../Components/MyForm/Submit';
+import { usernameValidator, phoneValidator } from '../../Components/MyForm/validators';
 
 export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;

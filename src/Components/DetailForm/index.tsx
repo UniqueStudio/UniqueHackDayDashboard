@@ -8,13 +8,13 @@ import AntdSelect from 'antd/es/select';
 import Divider from 'antd/es/divider';
 
 import { patterns } from '../../lib/patterns';
-import MyForm from '../../lib/MyForm/MyForm';
-import Text from '../../lib/MyForm/Text';
-import TextArea from '../../lib/MyForm/TextArea';
-import DatePicker from '../../lib/MyForm/DatePicker';
-import Select from '../../lib/MyForm/Select';
-import File from '../../lib/MyForm/File';
-import Submit from '../../lib/MyForm/Submit';
+import MyForm from '../../Components/MyForm/MyForm';
+import Text from '../../Components/MyForm/Text';
+import TextArea from '../../Components/MyForm/TextArea';
+import DatePicker from '../../Components/MyForm/DatePicker';
+import Select from '../../Components/MyForm/Select';
+import File from '../../Components/MyForm/File';
+import Submit from '../../Components/MyForm/Submit';
 
 import moment from 'moment';
 
