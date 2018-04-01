@@ -24,6 +24,7 @@ export const loginRequest = async (
       antiRobotToken,
     },
   });
+  const message = `登录失败：${res.message}`;
   if (res.httpStatusCode === 200) {
     if (autoLogin) {
       const token = sessionStorage.getItem('token');
@@ -32,9 +33,9 @@ export const loginRequest = async (
         localStorage.setItem('token', token);
       }
     }
-    return { successful: true, message: res.message };
+    return { successful: true, message };
   } else {
-    return { successful: false, message: res.message };
+    return { successful: false, message };
   }
 };
 
@@ -56,10 +57,11 @@ export const registerRequest = async (
       antiRobotToken,
     },
   });
+  const message = `注册失败：${res.message}`;
   if (res.httpStatusCode === 200) {
-    return { successful: true, message: res.message };
+    return { successful: true, message };
   }
-  return { successful: false, message: res.message };
+  return { successful: false, message };
 };
 
 export async function checkLoginStatus() {
@@ -67,10 +69,11 @@ export async function checkLoginStatus() {
     endpoint: '/v1/user/login_status',
     method: 'GET',
   });
+  const message = `获取登录信息失败：${res.message}`;
   if (res.httpStatusCode === 200) {
-    return { successful: true, message: res.message };
+    return { successful: true, message };
   }
-  return { successful: false, message: res.message };
+  return { successful: false, message };
 }
 
 export async function detailRequest(detail: API.User.UserDetailRequest) {
@@ -79,8 +82,9 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
     method: 'POST',
     body: detail,
   });
+  const message = `提交详情失败：${res.message}`;
   if (res.httpStatusCode === 200) {
-    return { successful: true, message: res.message };
+    return { successful: true, message };
   }
-  return { successful: false, message: res.message };
+  return { successful: false, message };
 }

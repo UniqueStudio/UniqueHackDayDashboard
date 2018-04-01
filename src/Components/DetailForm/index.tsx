@@ -39,7 +39,7 @@ export interface DetailFormProps {
     urgentConcatPhone: any;
     urgentConcatRelationship: any;
 
-    collections?: any;
+    collection?: any;
     specialNeeds?: any;
     github?: any;
     linkedIn?: any;
@@ -72,13 +72,19 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
 
-        <Text required={true} id="email" fieldName="邮箱" label="邮箱" />
+        <Text required={true} id="email" fieldName="邮箱" label="邮箱" iconType="mail" />
 
         <Divider>报销和赠礼</Divider>
 
-        <Text required={true} id="city" fieldName="所在城市" label="所在城市" />
+        <Text required={true} id="city" fieldName="所在城市" label="所在城市" iconType="home" />
 
-        <Text required={true} id="alipay" fieldName="报销收款支付宝" label="支付宝" />
+        <Text
+          required={true}
+          id="alipay"
+          fieldName="报销收款支付宝"
+          label="支付宝"
+          iconType="alipay"
+        />
 
         <Select required={true} id="tShirtSize" fieldName="T-shirt尺寸" label="T-shirt尺寸">
           <AntdSelect.Option value="XS">XS</AntdSelect.Option>
@@ -92,9 +98,9 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <Divider>教育信息</Divider>
 
-        <Text required={true} id="school" fieldName="学校" label="学校" />
+        <Text required={true} id="school" fieldName="学校" label="学校" iconType="book" />
 
-        <Text required={true} id="marjor" fieldName="专业" label="专业" />
+        <Text required={true} id="marjor" fieldName="专业" label="专业" iconType="book" />
 
         <Select required={true} id="grade" fieldName="年级" label="年级">
           <AntdSelect.Option value="大一">大一</AntdSelect.Option>
@@ -116,6 +122,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatName"
           fieldName="紧急联系人姓名"
           label="紧急联系人姓名"
+          iconType="user"
         />
 
         <Text
@@ -124,6 +131,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatPhone"
           fieldName="紧急联系人电话"
           label="紧急联系人电话"
+          iconType="phone"
         />
 
         <Text
@@ -131,15 +139,28 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatRelationship"
           fieldName="与紧急联系人关系"
           label="与紧急联系人关系"
+          iconType="team"
         />
 
         <Divider>社交相关</Divider>
 
-        <Text required={false} id="github" fieldName="Github" label="Github" />
+        <Text required={false} id="github" fieldName="Github" label="Github" iconType="github" />
 
-        <Text required={false} id="linkedIn" fieldName="LinkedIn" label="LinkedIn" />
+        <Text
+          required={false}
+          id="linkedIn"
+          fieldName="LinkedIn"
+          label="LinkedIn"
+          iconType="linkedin"
+        />
 
-        <Text required={false} id="codingDotNet" fieldName="Coding.Net" label="Coding.Net" />
+        <Text
+          required={false}
+          id="codingDotNet"
+          fieldName="coding.net"
+          label="coding.net"
+          iconType="trophy"
+        />
 
         <Text required={false} id="blog" fieldName="个人博客" label="个人博客" />
 

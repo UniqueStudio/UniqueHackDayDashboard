@@ -21,7 +21,7 @@ const initialState = {
   urgentConcatPhone: {},
   urgentConcatRelationship: {},
 
-  collections: {},
+  collection: {},
   specialNeeds: {},
   github: {},
   linkedIn: {},
@@ -45,7 +45,11 @@ export default function detail(
         ...state,
         ...action.payload,
       };
-      localStorage.setItem('detailForm', JSON.stringify(ret));
+
+      const retBackedup = JSON.parse(JSON.stringify(ret));
+      delete retBackedup.resume;
+      delete retBackedup.collection;
+      localStorage.setItem('detailForm', JSON.stringify(retBackedup));
       return ret;
     default:
       return state;

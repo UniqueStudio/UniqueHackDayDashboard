@@ -7,7 +7,8 @@ import { History } from 'history';
 
 import reducer, { RootState } from '../reducers';
 import * as sagas from '../sagas';
-import errorTipSaga from '../sagas/error-tip';
+import * as applySagas from '../sagas/apply';
+// import errorTipSaga from '../sagas/error-tip';
 
 const history: History = createHistory();
 
@@ -34,7 +35,9 @@ sagaMiddleware.run(sagas.detailSaga);
 sagaMiddleware.run(sagas.loginStatusSaga);
 sagaMiddleware.run(sagas.loginStatusLoopSaga);
 
-sagaMiddleware.run(errorTipSaga);
+sagaMiddleware.run(applySagas.newTeamSaga);
+
+// sagaMiddleware.run(errorTipSaga);
 
 export { history, store };
 export default store;

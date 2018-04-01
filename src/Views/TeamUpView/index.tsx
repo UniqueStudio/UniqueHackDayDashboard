@@ -26,6 +26,9 @@ export interface TeamUpFormsProps {
 
   onNewTeamSubmit: () => void;
   onJoinTeamSubmit: () => void;
+
+  newTeamSubmitting: boolean;
+  newTeamError: string;
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -65,7 +68,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
   }
 
   renderNewTeamForm = () => {
-    const { newTeamData, onNewTeamFormChange, onNewTeamSubmit } = this.props;
+    const { newTeamData, onNewTeamFormChange, onNewTeamSubmit, newTeamError } = this.props;
     return (
       <div>
         <Row>
@@ -90,7 +93,8 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
           data={newTeamData}
           onFormChange={onNewTeamFormChange}
           onSubmit={onNewTeamSubmit}
-          isSubmitting={false}
+          isSubmitting={this.props.newTeamSubmitting}
+          message={newTeamError ? { value: newTeamError, type: 'error' } : undefined}
         >
           <Text required={true} id="teamName" fieldName="队伍名" label="队伍名" />
           <Submit title="创建队伍" />
@@ -157,7 +161,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
 }
 
 export default connect(
-  ({ teamForm }: RootState) => {
+  ({ teamForm, loadingStatus, errorStatus }: RootState) => {
     return {
       newTeamData: {
         teamName: teamForm.teamName,
@@ -166,6 +170,9 @@ export default connect(
         teamLeaderName: teamForm.teamLeaderName,
         teamLeaderPhone: teamForm.teamLeaderPhone,
       },
+
+      newTeamSubmitting: loadingStatus.newTeamSubmitting,
+      newTeamError: errorStatus.newTeamError,
     };
   },
   dispatch => ({

@@ -93,7 +93,7 @@ declare namespace API {
       urgentConcatPhone: string;
       urgentConcatRelationship: string;
 
-      collections?: FileID[];
+      collection?: FileID[];
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
@@ -495,5 +495,5 @@ declare namespace API {
     }
   }
 
-  type RequestFunc = User.RequestFunc;
+  type RequestFunc = User.RequestFunc & Team.RequestFunc & File.RequestFunc & Message.RequestFunc;
 }
