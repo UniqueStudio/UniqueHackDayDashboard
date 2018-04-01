@@ -452,26 +452,35 @@ declare namespace API {
 
     type SingleMessage =
       | {
+          id: string;
           type: MessageType.LoginElseWhere;
           time: number; // Timestamp
         }
       | {
+          id: string;
+
           type: MessageType.Rejected;
           rejectedReason: MessageValue;
           time: number; // Timestamp
         }
       | {
+          id: string;
+
           type: MessageType.Accepted;
           rejectedExtraMsg?: MessageValue;
           time: number; // Timestamp
         }
       | {
+          id: string;
+
           type: MessageType.OtherMessage;
           value: MessageValue;
           title: MessageValue;
           time: number; // Timestamp
         }
       | {
+          id: string;
+
           type: MessageType.NewTeammate;
           newTeammateInfo: API.Team.UserInTeam;
           time: number; // Timestamp
@@ -487,10 +496,24 @@ declare namespace API {
       >;
 
       // 没有等待。
-      // 直接返回所有的消息
+      // 直接返回**所有未读**的消息
+      (req: RequestWithAuth<'/v1/message/messages/all?filter=unread', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 没有等待。
+      // 直接返回**所有**的消息
       (req: RequestWithAuth<'/v1/message/messages/all', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 将一条消息设为已读
+      (
+        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: string; status: 'read' }>,
+      ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }
   }
