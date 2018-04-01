@@ -29,6 +29,9 @@ export interface TeamUpFormsProps {
 
   newTeamSubmitting: boolean;
   newTeamError: string;
+
+  joinTeamSubmitting: boolean;
+  joinTeamError: string;
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -104,13 +107,20 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
   };
 
   renderJoinTeamForm = () => {
-    const { joinTeamData, onJoinTeamFormChange, onJoinTeamSubmit } = this.props;
+    const {
+      joinTeamData,
+      onJoinTeamFormChange,
+      onJoinTeamSubmit,
+      joinTeamSubmitting,
+      joinTeamError,
+    } = this.props;
     return (
       <MyForm
         data={joinTeamData}
         onFormChange={onJoinTeamFormChange}
         onSubmit={onJoinTeamSubmit}
-        isSubmitting={false}
+        isSubmitting={joinTeamSubmitting}
+        message={joinTeamError ? { value: joinTeamError, type: 'error' } : undefined}
       >
         <Text
           required={true}
@@ -173,6 +183,8 @@ export default connect(
 
       newTeamSubmitting: loadingStatus.newTeamSubmitting,
       newTeamError: errorStatus.newTeamError,
+      joinTeamSubmitting: loadingStatus.joinTeamSubmitting,
+      joinTeamError: errorStatus.joinTeamError,
     };
   },
   dispatch => ({

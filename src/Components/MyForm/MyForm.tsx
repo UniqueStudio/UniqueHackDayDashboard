@@ -39,6 +39,14 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     });
   };
 
+  scrollDiv: HTMLDivElement | null = null;
+
+  scrollDivRef = (ele: HTMLDivElement) => {
+    if (ele) {
+      this.scrollDiv = ele;
+    }
+  };
+
   render() {
     const { children, message } = this.props;
     const { showMessage } = this.state;
@@ -58,6 +66,7 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
                       sm: 24,
                     })}
               >
+                <div ref={this.scrollDivRef} />
                 <AnyAlert
                   message={message.value}
                   showIcon={true}
@@ -94,6 +103,10 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     const { message: nextMessage, isSubmitting: nextIsSubmitting } = nextProps;
     if (!this.state.showMessage) {
       if (nextMessage && !nextIsSubmitting) {
+        if (this.scrollDiv) {
+          this.scrollDiv.scrollIntoView();
+        }
+
         this.setState({ showMessage: true });
       }
     }

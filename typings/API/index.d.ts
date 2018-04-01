@@ -386,8 +386,8 @@ declare namespace API {
       // 填写队长信息获取team_id
       (
         req: RequestWithAuth<
-          '/v1/team/team_id',
-          'POST',
+          '/v1/team/id',
+          'GET',
           {
             teamLeaderName: string;
             teamLeaderPhone: string;

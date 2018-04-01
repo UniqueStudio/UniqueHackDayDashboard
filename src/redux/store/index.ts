@@ -36,6 +36,7 @@ sagaMiddleware.run(sagas.loginStatusSaga);
 sagaMiddleware.run(sagas.loginStatusLoopSaga);
 
 sagaMiddleware.run(applySagas.newTeamSaga);
+sagaMiddleware.run(applySagas.joinTeamSaga);
 
 // sagaMiddleware.run(errorTipSaga);
 

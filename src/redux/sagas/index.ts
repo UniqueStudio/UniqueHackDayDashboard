@@ -97,7 +97,7 @@ export function* resetPwdSMSSaga() {
 export function* detailSaga() {
   while (true) {
     yield take('DETAIL_FORM_SUBMIT');
-    yield put({ type: 'DETAIL_SUBMIT_START' });
+    yield put({ type: 'DETAIL_FORM_SUBMIT_START' });
     const { detail } = yield select();
     const { successful, message } = yield call(detailRequest, Object.keys(detail).reduce(
       (p, key) => ({
@@ -106,9 +106,9 @@ export function* detailSaga() {
       }),
       {},
     ) as any);
-    yield put({ type: 'DETAIL_SUBMIT_END' });
+    yield put({ type: 'DETAIL_FORM_SUBMIT_END' });
     if (!successful) {
-      yield put({ type: 'DETAIL_SUBMIT_FAILED', payload: message });
+      yield put({ type: 'DETAIL_FORM_SUBMIT_FAILED', payload: message });
     }
   }
 }

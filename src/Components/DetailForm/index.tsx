@@ -32,7 +32,7 @@ export interface DetailFormProps {
     city: any;
     alipay: any;
     school: any;
-    major: any;
+    marjor: any;
     grade: any;
     graduateTime: any; // 年月日
     urgentConcatName: any;
@@ -50,16 +50,27 @@ export interface DetailFormProps {
     skills: any;
     hackdayTimes: number;
   };
+
+  detailFormSubmitting: boolean;
+  detailFormError: string;
 }
 
 class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
   render() {
+    const {
+      detailFormError,
+      onSubmit,
+      onFormChange,
+      detailData,
+      detailFormSubmitting,
+    } = this.props;
     return (
       <MyForm
-        data={this.props.detailData}
-        onFormChange={this.props.onFormChange}
-        onSubmit={this.props.onSubmit}
-        isSubmitting={false}
+        data={detailData}
+        onFormChange={onFormChange}
+        onSubmit={onSubmit}
+        isSubmitting={detailFormSubmitting}
+        message={detailFormError ? { value: detailFormError, type: 'error' } : undefined}
       >
         <Divider>基本信息</Divider>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
@@ -233,12 +244,15 @@ export default connect(
           [key]: isDateValue(key)
             ? Form.createFormField({
                 ...(props as any)[key],
-                value: moment((props as any)[key].value),
+                value: (props as any)[key].value ? moment((props as any)[key].value) : undefined,
               })
             : Form.createFormField((props as any)[key]),
         }),
         {},
       ),
+
+      detailFormSubmitting: state.loadingStatus.detailFormSubmitting,
+      detailFormError: state.errorStatus.detailFormError,
     };
   },
   dispatch => ({
