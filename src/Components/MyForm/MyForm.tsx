@@ -52,6 +52,7 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     const { showMessage } = this.state;
     return (
       <Form className="my-form">
+        <div ref={this.scrollDivRef} />
         {message &&
           showMessage && (
             <Row>
@@ -66,7 +67,6 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
                       sm: 24,
                     })}
               >
-                <div ref={this.scrollDivRef} />
                 <AnyAlert
                   message={message.value}
                   showIcon={true}
@@ -101,12 +101,14 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
 
   componentWillReceiveProps(nextProps: MyFormProps) {
     const { message: nextMessage, isSubmitting: nextIsSubmitting } = nextProps;
-    if (!this.state.showMessage) {
-      if (nextMessage && !nextIsSubmitting) {
+    if (nextMessage && !nextIsSubmitting) {
+      setTimeout(() => {
         if (this.scrollDiv) {
           this.scrollDiv.scrollIntoView();
         }
+      }, 100);
 
+      if (!this.state.showMessage) {
         this.setState({ showMessage: true });
       }
     }
