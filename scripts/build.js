@@ -19,13 +19,8 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const config = require('../webpack.config.prod');
+const paths = require('./paths');
 
-const paths = {
-  appBuild: path.resolve(__dirname, '../dist'),
-  appPublic: config.output.publicPath,
-  appPackageJson: path.resolve(__dirname, '../package.json'),
-  yarnLockFile: path.resolve(__dirname, '../yarn.lock'),
-};
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
