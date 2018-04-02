@@ -2,7 +2,7 @@ import * as React from 'react';
 
 // import Row from 'antd/es/row';
 // import Col from 'antd/es/col';
-import DescriptionList from 'ant-design-pro/lib/DescriptionList';
+import DescriptionList from 'ant-design-pro/es/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';

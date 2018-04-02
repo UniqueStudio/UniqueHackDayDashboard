@@ -1,5 +1,5 @@
-import { takeEvery, ForkEffect, put } from 'redux-saga/effects';
-import { AnyAction } from 'redux';
+import { ForkEffect } from 'redux-saga/effects';
+// import { AnyAction } from 'redux';
 
 export { ForkEffect };
 

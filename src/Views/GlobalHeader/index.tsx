@@ -6,7 +6,7 @@ import Menu from 'antd/es/menu';
 import Tooltip from 'antd/es/tooltip';
 import Icon from 'antd/es/icon';
 
-import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
+import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
 
 import { RootState } from '../../redux/reducers';
 
