@@ -69,9 +69,7 @@
     "redux-saga": "^0.16.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production parcel build index.html --out-dir=build --public-url=./",
-    "start": "NODE_ENV=development parcel ./index.html",
-    "start:proxy": "NODE_ENV=development node ./scripts/proxy.js",
+    "build": "node ./scripts/build.js",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}"
   }
