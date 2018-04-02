@@ -84,11 +84,11 @@ measureFileSizesBeforeBuild(paths.appBuild)
       );
       console.log();
 
-      const appPackage = require(paths.appPackageJson);
-      const publicUrl = paths.publicUrl;
-      const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), paths.appBuild);
-      printHostingInstructions(appPackage, publicUrl, publicPath, buildFolder, useYarn);
+      // const appPackage = require(paths.appPackageJson);
+      // const publicUrl = paths.publicUrl;
+      // const publicPath = config.output.publicPath;
+      // const buildFolder = path.relative(process.cwd(), paths.appBuild);
+      // printHostingInstructions(appPackage, publicUrl, publicPath, buildFolder, useYarn);
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
@@ -116,19 +116,19 @@ function build(previousFileSizes) {
         }
         return reject(new Error(messages.errors.join('\n\n')));
       }
-      if (
-        process.env.CI &&
-        (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
-        messages.warnings.length
-      ) {
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n',
-          ),
-        );
-        return reject(new Error(messages.warnings.join('\n\n')));
-      }
+      // if (
+      //   process.env.CI &&
+      //   (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
+      //   messages.warnings.length
+      // ) {
+      //   console.log(
+      //     chalk.yellow(
+      //       '\nTreating warnings as errors because process.env.CI = true.\n' +
+      //         'Most CI servers set it automatically.\n',
+      //     ),
+      //   );
+      //   return reject(new Error(messages.warnings.join('\n\n')));
+      // }
       return resolve({
         stats,
         previousFileSizes,
@@ -138,9 +138,9 @@ function build(previousFileSizes) {
   });
 }
 
-function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
-    dereference: true,
-    filter: file => file !== paths.appHtml,
-  });
-}
+// function copyPublicFolder() {
+//   fs.copySync(paths.appPublic, paths.appBuild, {
+//     dereference: true,
+//     filter: file => file !== paths.appHtml,
+//   });
+// }
