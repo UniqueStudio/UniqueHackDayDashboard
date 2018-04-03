@@ -1,11 +1,8 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: './src/index.ts',
   output: {
     path: require('./scripts/paths').appBuild,
@@ -13,26 +10,24 @@ module.exports = {
     publicPath: require('./scripts/paths').appPublic,
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: '[name].[hash].css',
-      publicPath: require('./scripts/paths').appPublic,
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.template.html'),
     }),
   ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // set to true if you want JS source maps
-      }),
-      new OptimizeCSSAssetsPlugin({}),
-      new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, 'index.template.html'),
-      }),
-    ],
+
+  devServer: {
+    hot: true,
   },
+  // optimization: {
+  //   minimizer: [
+  //     new UglifyJsPlugin({
+  //       cache: true,
+  //       parallel: true,
+  //       sourceMap: true, // set to true if you want JS source maps
+  //     }),
+  //     new OptimizeCSSAssetsPlugin({}),
+  //   ],
+  // },
   module: {
     rules: [
       {
@@ -47,7 +42,7 @@ module.exports = {
         test: /\.(less|css)$/,
         include: /node_modules/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -66,7 +61,7 @@ module.exports = {
         test: /\.(less|css)$/,
         exclude: /node_modules/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
