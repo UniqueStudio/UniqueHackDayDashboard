@@ -90,14 +90,14 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
   return { successful: false, message };
 }
 
-export async function userInfoRequest(): Promise<UserData | null> {
+export async function userInfoRequest(): Promise<[UserData | null, number]> {
   const res = await request({
     endpoint: '/v1/user/info',
     method: 'GET',
   });
 
   if (res.httpStatusCode === 200) {
-    return res.data;
+    return [res.data, res.httpStatusCode];
   }
-  return null;
+  return [null, res.httpStatusCode];
 }

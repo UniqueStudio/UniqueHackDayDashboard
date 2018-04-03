@@ -22,7 +22,7 @@ import { replace } from 'react-router-redux';
 import delay from '../../lib/delay';
 // import { UserData } from '../reducers/user';
 // import { AnyAction } from 'redux';
-// import Message from 'antd/es/message';
+import Message from 'antd/es/message';
 
 export function* loginSaga() {
   while (true) {
@@ -126,12 +126,18 @@ export function* userInfoSaga() {
   while (true) {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
-    const res = yield call(userInfoRequest);
+    const [res, code] = yield call(userInfoRequest);
     yield put({ type: 'USER_INFO_LOAD_END' });
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       yield put(replace('/user_entry'));
-      // Message.error('需要重新登录！');
+      if (code === 401) {
+        Message.error('需要重新登录！');
+      } else if (code === 600) {
+        Message.error('网络错误，暂时无法登录！');
+      } else if (code === 500) {
+        Message.error('服务端发生了异常，暂时无法登录！');
+      }
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
@@ -146,17 +152,20 @@ export function* userInfoLoopSaga() {
     if (!auth.loggedIn) {
       break;
     }
-    yield put({ type: 'USER_INFO_LOAD_START' });
-    const res = yield call(userInfoRequest);
-    yield put({ type: 'USER_INFO_LOAD_END' });
-    if (!res) {
-      yield put({ type: 'SET_NOT_LOGGED_IN' });
-      yield put(replace('/user_entry'));
-      // Message.error('需要重新登录！');
-    } else {
-      yield put({ type: 'SET_LOGGED_IN' });
-      yield put({ type: 'SET_USER_INFO', payload: res });
-    }
+    yield put({ type: 'LOAD_USER_INFO' });
+    // yield put({ type: 'USER_INFO_LOAD_START' });
+    // const [res, code] = yield call(userInfoRequest);
+    // yield put({ type: 'USER_INFO_LOAD_END' });
+    // if (!res) {
+    //   yield put({ type: 'SET_NOT_LOGGED_IN' });
+    //   yield put(replace('/user_entry'));
+    //   if (code === 401) {
+    //     Message.error('需要重新登录！');
+    //   }
+    // } else {
+    //   yield put({ type: 'SET_LOGGED_IN' });
+    //   yield put({ type: 'SET_USER_INFO', payload: res });
+    // }
   }
 }
 
