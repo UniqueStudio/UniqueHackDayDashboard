@@ -1,22 +1,22 @@
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const paths = require('./scripts/paths');
 
 module.exports = {
   mode: 'development',
   entry: './src/index.ts',
   output: {
-    path: require('./scripts/paths').appBuild,
+    path: paths.appBuild,
     filename: '[name].[hash].js',
-    publicPath: require('./scripts/paths').appPublic,
+    publicPath: paths.appPublic,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.template.html'),
     }),
   ],
-  devServer: {
-    hot: true,
-  },
   module: {
     rules: [
       {
@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         test: /\.(less|css)$/,
-        include: /node_modules/,
+        include: /node_modules\/antd/,
         use: [
           'style-loader',
           {
@@ -40,15 +40,13 @@ module.exports = {
           },
           {
             loader: 'less-loader',
-            options: {
-              noIeCompat: true,
-            },
+            options: JSON.parse(fs.readFileSync('.lessrc')),
           },
         ],
       },
       {
         test: /\.(less|css)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/antd/,
         use: [
           'style-loader',
           {
@@ -60,9 +58,7 @@ module.exports = {
           },
           {
             loader: 'less-loader',
-            options: {
-              noIeCompat: true,
-            },
+            options: JSON.parse(fs.readFileSync('.lessrc')),
           },
         ],
       },
@@ -79,9 +75,8 @@ module.exports = {
       },
     ],
   },
-};
 
-//   resolve: {
-//     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
-//   },
-// }
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
+  },
+};
