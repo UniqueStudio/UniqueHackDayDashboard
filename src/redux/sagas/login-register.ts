@@ -90,7 +90,7 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
   return { successful: false, message };
 }
 
-export async function userInfoRequest(): Promise<UserData> {
+export async function userInfoRequest(): Promise<UserData | null> {
   const res = await request({
     endpoint: '/v1/user/info',
     method: 'GET',
@@ -99,5 +99,5 @@ export async function userInfoRequest(): Promise<UserData> {
   if (res.httpStatusCode === 200) {
     return res.data;
   }
-  return {};
+  return null;
 }

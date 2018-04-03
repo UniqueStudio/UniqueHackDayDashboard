@@ -37,12 +37,12 @@ import { store, history } from './redux/store';
 
 class App extends React.Component {
   state = {
-    isLoadingLoginStatus: false,
+    isLoadingUserInfo: false,
   };
 
   unsubcribe = () => void 0;
   render() {
-    if (this.state.isLoadingLoginStatus) {
+    if (this.state.isLoadingUserInfo) {
       return null;
     }
     return (
@@ -58,18 +58,19 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    let preIsLoadingLoginStatus = false;
+    let preIsLoadingUserInfo = false;
     this.unsubcribe = store.subscribe(() => {
-      const isLoadingLoginStatus = store.getState().loadingStatus.loginStatusLoading;
-      if (isLoadingLoginStatus === !preIsLoadingLoginStatus) {
-        this.setState({ isLoadingLoginStatus });
-        if (!isLoadingLoginStatus) {
-          this.unsubcribe();
-        }
+      const isLoadingUserInfo = store.getState().loadingStatus.userInfoLoading;
+      if (isLoadingUserInfo === !preIsLoadingUserInfo) {
+        this.setState({ isLoadingUserInfo });
+        // if (!isLoadingUserInfo) {
+        //   this.unsubcribe();
+        // }
       }
-      preIsLoadingLoginStatus = isLoadingLoginStatus;
+      preIsLoadingUserInfo = isLoadingUserInfo;
     }) as any;
-    store.dispatch({ type: 'LOAD_LOGIN_STATUS' });
+    // store.dispatch({ type: 'LOAD_LOGIN_STATUS' });
+    store.dispatch({ type: 'LOAD_USER_INFO' });
   }
 
   componentWillUnmount() {

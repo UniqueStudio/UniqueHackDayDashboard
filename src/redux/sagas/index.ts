@@ -14,13 +14,15 @@ import {
   loginRequest,
   registerRequest,
   detailRequest,
-  checkLoginStatus,
+  // checkLoginStatus,
   userInfoRequest,
 } from './login-register';
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
 import delay from '../../lib/delay';
-import { UserData } from '../reducers/user';
+// import { UserData } from '../reducers/user';
+// import { AnyAction } from 'redux';
+import Message from 'antd/es/message';
 
 export function* loginSaga() {
   while (true) {
@@ -72,7 +74,6 @@ export function* registerSaga() {
     }
     yield put({ type: 'CLEAR_REGISTER' });
     yield put({ type: 'SET_LOGGED_IN' });
-    yield put({ type: 'LOAD_USER_INFO' });
     yield put(replace('/'));
 
     yield take('LOGOUT_CLICKED');
@@ -124,44 +125,46 @@ export function* detailSaga() {
   }
 }
 
-export function* loginStatusSaga() {
+export function* userInfoSaga() {
   while (true) {
-    yield take('LOAD_LOGIN_STATUS');
-    yield put({ type: 'LOGIN_STATUS_LOAD_START' });
-    const { successful } = yield call(checkLoginStatus);
-    if (!successful) {
+    yield take('LOAD_USER_INFO');
+    yield put({ type: 'USER_INFO_LOAD_START' });
+    const res = yield call(userInfoRequest);
+    yield put({ type: 'USER_INFO_LOAD_END' });
+    if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
+      yield put(replace('/user_entry'));
+      Message.error('需要重新登录！');
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
-      yield put({ type: 'LOAD_USER_INFO' });
+      yield put({ type: 'SET_USER_INFO', payload: res });
     }
-    yield put({ type: 'LOGIN_STATUS_LOAD_END' });
   }
 }
 
-export function* loginStatusLoopSaga() {
+export function* userInfoLoopSaga() {
   while (true) {
     yield delay(60 * 1000);
     const { auth } = yield select();
     if (!auth.loggedIn) {
       break;
     }
-    yield put({ type: 'LOGIN_STATUS_LOADING_START' });
-    const { successful } = yield call(checkLoginStatus);
-    if (!successful) {
+    yield put({ type: 'USER_INFO_LOAD_START' });
+    const res = yield call(userInfoRequest);
+    yield put({ type: 'USER_INFO_LOAD_END' });
+    if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       yield put(replace('/user_entry'));
+      Message.error('需要重新登录！');
+    } else {
+      yield put({ type: 'SET_LOGGED_IN' });
+      yield put({ type: 'SET_USER_INFO', payload: res });
     }
-    yield put({ type: 'LOGIN_STATUS_LOADING_END' });
   }
 }
 
-export function* userInfoSaga() {
-  while (true) {
-    yield take('LOAD_USER_INFO');
-    yield put({ type: 'LOAD_USER_INFO_START' });
-    const res: UserData = yield call(userInfoRequest);
-    yield put({ type: 'LOAD_USER_INFO_END' });
-    yield put({ type: 'SET_USER_INFO', payload: res });
-  }
-}
+// export function* userInfoSetSaga() {
+//   yield takeEvery('SET_USER_INFO', (action: AnyAction) => {
+//     // console.log(action);
+//   });
+// }
