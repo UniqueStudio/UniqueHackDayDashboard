@@ -25,6 +25,7 @@ import 'antd/lib/progress/style';
 import 'antd/lib/alert/style';
 import 'antd/lib/radio/style';
 import 'antd/lib/divider/style';
+import 'antd/lib/message/style';
 
 // import 'ant-design-pro/dist/ant-design-pro.min.css';
 

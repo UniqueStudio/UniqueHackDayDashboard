@@ -37,6 +37,8 @@ export function* loginSaga() {
     yield put(replace('/'));
 
     yield take('LOGOUT_CLICKED');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
     yield put({ type: 'SET_NOT_LOGGED_IN' });
     yield put(replace('/user_entry'));
   }
