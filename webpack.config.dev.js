@@ -8,15 +8,16 @@ module.exports = {
   mode: 'production',
   entry: './src/index.ts',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: require('./scripts/paths').appBuild,
     filename: '[name].[hash].js',
-    publicPath: '/',
+    publicPath: require('./scripts/paths').appPublic,
   },
   plugins: [
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: '[name].[hash].css',
+      publicPath: require('./scripts/paths').appPublic,
     }),
   ],
   optimization: {
