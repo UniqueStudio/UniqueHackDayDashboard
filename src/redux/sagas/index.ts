@@ -130,6 +130,10 @@ export function* loginStatusSaga() {
 export function* loginStatusLoopSaga() {
   while (true) {
     yield delay(60 * 1000);
+    const { auth } = yield select();
+    if (!auth.loggedIn) {
+      break;
+    }
     yield put({ type: 'LOGIN_STATUS_LOADING_START' });
     const { successful } = yield call(checkLoginStatus);
     if (!successful) {
