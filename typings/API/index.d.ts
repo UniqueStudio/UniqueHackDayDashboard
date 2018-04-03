@@ -260,6 +260,7 @@ declare namespace API {
               username: string;
               phone: string;
               name: string | null;
+              isDetailSubmitted: boolean;
               isAdmin: boolean;
               // 一定已注册了
               registrered: true;

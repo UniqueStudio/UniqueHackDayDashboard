@@ -1,4 +1,7 @@
 {
   "presets": ["env", "react", "stage-2"],
-  "plugins": [["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }]]
+  "plugins": [
+    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }],
+    "react-hot-loader/babel"
+  ]
 }
