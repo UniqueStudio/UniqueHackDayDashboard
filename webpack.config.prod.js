@@ -45,7 +45,7 @@ module.exports = {
       },
       {
         test: /\.(less|css)$/,
-        include: /node_modules/,
+        include: /node_modules\/antd/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -62,7 +62,7 @@ module.exports = {
       },
       {
         test: /\.(less|css)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/antd/,
         use: [
           MiniCssExtractPlugin.loader,
           {

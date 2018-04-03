@@ -14,20 +14,9 @@ module.exports = {
       template: path.resolve(__dirname, 'index.template.html'),
     }),
   ],
-
   devServer: {
     hot: true,
   },
-  // optimization: {
-  //   minimizer: [
-  //     new UglifyJsPlugin({
-  //       cache: true,
-  //       parallel: true,
-  //       sourceMap: true, // set to true if you want JS source maps
-  //     }),
-  //     new OptimizeCSSAssetsPlugin({}),
-  //   ],
-  // },
   module: {
     rules: [
       {
@@ -90,8 +79,9 @@ module.exports = {
       },
     ],
   },
-
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
-  },
 };
+
+//   resolve: {
+//     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
+//   },
+// }
