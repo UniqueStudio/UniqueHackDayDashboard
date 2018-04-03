@@ -32,7 +32,7 @@ export interface DetailFormProps {
     city: any;
     alipay: any;
     school: any;
-    marjor: any;
+    major: any;
     grade: any;
     graduateTime: any; // 年月日
     urgentConcatName: any;
@@ -111,7 +111,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <Text required={true} id="school" fieldName="学校" label="学校" iconType="book" />
 
-        <Text required={true} id="marjor" fieldName="专业" label="专业" iconType="book" />
+        <Text required={true} id="major" fieldName="专业" label="专业" iconType="book" />
 
         <Select required={true} id="grade" fieldName="年级" label="年级">
           <AntdSelect.Option value="大一">大一</AntdSelect.Option>
@@ -185,7 +185,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           rows={4}
         />
 
-        <Select required={true} id="roles" fieldName="角色" label="角色" mode="tags">
+        <Select required={true} id="role" fieldName="角色" label="角色" mode="tags">
           <AntdSelect.Option value="前端">前端</AntdSelect.Option>
           <AntdSelect.Option value="产品">产品</AntdSelect.Option>
           <AntdSelect.Option value="设计">设计</AntdSelect.Option>
