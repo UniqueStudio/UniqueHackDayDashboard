@@ -1,3 +1,5 @@
+const path = require('path');
+
 const paths = {
   appBuild: path.resolve(__dirname, '../dist'),
   appPublic: config.output.publicPath,
