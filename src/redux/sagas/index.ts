@@ -155,7 +155,7 @@ export function* userInfoSaga() {
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       const { route } = yield select();
-      if (route && route.location.pathname !== '/user_entry/reset_pwd') {
+      if (route && route.location && route.location.pathname !== '/user_entry/reset_pwd') {
         // avoid redirect when user just want to reset pwd
         yield put(replace('/user_entry'));
         if (authorizationToken()) {
