@@ -10,5 +10,7 @@ const messageMap = {
   PhoneInvalid: '电话号码不合法',
   CodeNotMatch: '验证码不匹配',
   LoginNeeded: '请刷新并重新登录',
+  TeamNameExists: '队伍名已存在',
+  AlreadyTeamedUp: '你已经加入了某个队伍',
 };
 export default messageMap;

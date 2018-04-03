@@ -9,6 +9,7 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { take, select, call, put } from 'redux-saga/effects';
+import { replace } from 'react-router-redux';
 
 export async function newTeamRequest(teamName: string) {
   const res = await request({
@@ -31,7 +32,10 @@ export function* newTeamSaga() {
     yield put({ type: 'NEW_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'NEW_TEAM_SUBMIT_FAILED', payload: message });
+      continue;
     }
+
+    yield put(replace('/apply/done'));
   }
 }
 
@@ -76,6 +80,9 @@ export function* joinTeamSaga() {
     yield put({ type: 'JOIN_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'JOIN_TEAM_SUBMIT_FAILED', payload: message });
+      continue;
     }
+
+    yield put(replace('/apply/done'));
   }
 }

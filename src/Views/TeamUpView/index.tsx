@@ -14,6 +14,7 @@ import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
+import { replace } from 'react-router-redux';
 
 export interface TeamUpFormsProps {
   onSubmit: () => void;
@@ -26,6 +27,7 @@ export interface TeamUpFormsProps {
 
   onNewTeamSubmit: () => void;
   onJoinTeamSubmit: () => void;
+  onNoTeamUpClick: () => void;
 
   newTeamSubmitting: boolean;
   newTeamError: { value: string; time: number };
@@ -160,7 +162,11 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
               description="我们推荐尽早组队，但是只要作品提交未结束你可以随时进行组队"
               message="注意"
             />
-            <Button type="primary" style={{ marginTop: '10px' }}>
+            <Button
+              type="primary"
+              style={{ marginTop: '10px' }}
+              onClick={this.props.onNoTeamUpClick}
+            >
               好的，下一步
             </Button>
           </Col>
@@ -205,6 +211,10 @@ export default connect(
     },
     onJoinTeamSubmit() {
       dispatch({ type: 'JOIN_TEAM_FORM_SUBMIT' });
+    },
+
+    onNoTeamUpClick() {
+      dispatch(replace('/apply/done'));
     },
   }),
 )(TeamUpForms);

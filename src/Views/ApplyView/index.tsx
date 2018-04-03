@@ -40,7 +40,6 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
             component={isD ? TeamUpView : GenRedirect('/detail')}
           />
           <Route path={`${baseURL}/detail`} component={DetailForm} />
-          {/* <Route path={`${baseURL}/`} component={DetailForm} /> */}
         </Switch>
       </Card>
     );
