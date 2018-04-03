@@ -22,7 +22,7 @@ import { replace } from 'react-router-redux';
 import delay from '../../lib/delay';
 // import { UserData } from '../reducers/user';
 // import { AnyAction } from 'redux';
-import Message from 'antd/es/message';
+// import Message from 'antd/es/message';
 
 export function* loginSaga() {
   while (true) {
@@ -42,9 +42,7 @@ export function* loginSaga() {
       continue;
     }
     yield put({ type: 'CLEAR_LOGIN' });
-    yield put({ type: 'SET_LOGGED_IN' });
     yield put({ type: 'LOAD_USER_INFO' });
-    yield put(replace('/'));
 
     yield take('LOGOUT_CLICKED');
     sessionStorage.removeItem('token');
@@ -73,8 +71,7 @@ export function* registerSaga() {
       continue;
     }
     yield put({ type: 'CLEAR_REGISTER' });
-    yield put({ type: 'SET_LOGGED_IN' });
-    yield put(replace('/'));
+    yield put({ type: 'LOAD_USER_INFO' });
 
     yield take('LOGOUT_CLICKED');
   }
@@ -134,7 +131,7 @@ export function* userInfoSaga() {
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       yield put(replace('/user_entry'));
-      Message.error('需要重新登录！');
+      // Message.error('需要重新登录！');
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
@@ -155,7 +152,7 @@ export function* userInfoLoopSaga() {
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       yield put(replace('/user_entry'));
-      Message.error('需要重新登录！');
+      // Message.error('需要重新登录！');
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
@@ -163,8 +160,12 @@ export function* userInfoLoopSaga() {
   }
 }
 
-// export function* userInfoSetSaga() {
-//   yield takeEvery('SET_USER_INFO', (action: AnyAction) => {
-//     // console.log(action);
-//   });
-// }
+export function* userInfoSetSaga() {
+  while (true) {
+    const res = yield take('SET_USER_INFO');
+    // console.log(res);
+    if (res) {
+      // yield put({ type: 'SET_LOGGED_IN' });
+    }
+  }
+}
