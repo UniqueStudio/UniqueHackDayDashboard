@@ -7,6 +7,7 @@ import {
   TakeEffect,
   PutEffect,
 } from 'redux-saga/effects';
+import { UserData } from '../reducers/user';
 export { SelectEffect, AllEffect, GenericAllEffect, TakeEffect, PutEffect };
 
 export const loginRequest = async (
@@ -87,4 +88,16 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
     return { successful: true, message };
   }
   return { successful: false, message };
+}
+
+export async function userInfoRequest(): Promise<UserData> {
+  const res = await request({
+    endpoint: '/v1/user/info',
+    method: 'GET',
+  });
+
+  if (res.httpStatusCode === 200) {
+    return res.data;
+  }
+  return {};
 }

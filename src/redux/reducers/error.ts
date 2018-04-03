@@ -5,7 +5,7 @@ export interface ErrorStatus {
   // registerError: string;
 
   // newTeamError: string;
-  [k: string]: string;
+  [k: string]: { value: string; time: number };
 }
 
 export default function loadingStatus(
@@ -20,9 +20,10 @@ export default function loadingStatus(
   if (type) {
     return {
       ...state,
-      [`${type
-        .toLowerCase()
-        .replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}Error`]: action.payload,
+      [`${type.toLowerCase().replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}Error`]: {
+        value: action.payload,
+        time: Date.now(),
+      },
     };
   }
 

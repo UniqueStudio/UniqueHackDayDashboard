@@ -26,6 +26,7 @@ const store: Store<RootState> = createStore(
 
 sagaMiddleware.run(sagas.loginSaga);
 sagaMiddleware.run(sagas.registerSaga);
+sagaMiddleware.run(sagas.userInfoSaga);
 
 sagaMiddleware.run(sagas.registerSMSSaga);
 sagaMiddleware.run(sagas.resetPwdSMSSaga);

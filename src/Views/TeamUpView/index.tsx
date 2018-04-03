@@ -28,10 +28,10 @@ export interface TeamUpFormsProps {
   onJoinTeamSubmit: () => void;
 
   newTeamSubmitting: boolean;
-  newTeamError: string;
+  newTeamError: { value: string; time: number };
 
   joinTeamSubmitting: boolean;
-  joinTeamError: string;
+  joinTeamError: { value: string; time: number };
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -97,7 +97,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
           onFormChange={onNewTeamFormChange}
           onSubmit={onNewTeamSubmit}
           isSubmitting={this.props.newTeamSubmitting}
-          message={newTeamError ? { value: newTeamError, type: 'error' } : undefined}
+          message={newTeamError ? { ...newTeamError, type: 'error' } : undefined}
         >
           <Text required={true} id="teamName" fieldName="队伍名" label="队伍名" />
           <Submit title="创建队伍" />
@@ -120,7 +120,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
         onFormChange={onJoinTeamFormChange}
         onSubmit={onJoinTeamSubmit}
         isSubmitting={joinTeamSubmitting}
-        message={joinTeamError ? { value: joinTeamError, type: 'error' } : undefined}
+        message={joinTeamError ? { ...joinTeamError, type: 'error' } : undefined}
       >
         <Text
           required={true}

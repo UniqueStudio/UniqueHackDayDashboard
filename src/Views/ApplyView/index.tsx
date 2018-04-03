@@ -12,7 +12,6 @@ const GenRedirect = (to: string) => () => <Redirect to={to} />;
 
 export interface ApplyViewProps {
   isDetailFormSubmitted: boolean;
-  isTeamFormSubmitted: boolean;
 }
 
 class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _: string }>> {
@@ -23,7 +22,7 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
     );
 
     const baseURL = this.props.match.url;
-    const { isDetailFormSubmitted: isD, isTeamFormSubmitted: isT } = this.props;
+    const { isDetailFormSubmitted: isD } = this.props;
     return (
       <Card bordered={false} title="完善报名信息">
         <Steps current={current + 1 ? current : 0} size="small">
@@ -32,16 +31,13 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
-          <Route
-            path={`${baseURL}/done`}
-            component={isD && isT ? TeamUpView : GenRedirect('/team_up')}
-          />
+          <Route path={`${baseURL}/done`} component={isD ? TeamUpView : GenRedirect('/detail')} />
           <Route
             path={`${baseURL}/team_up`}
-            component={isD ? TeamUpView : GenRedirect('/team_up')}
+            component={isD ? TeamUpView : GenRedirect('/detail')}
           />
           <Route path={`${baseURL}/detail`} component={DetailForm} />
-          <Route path={`${baseURL}/`} component={DetailForm} />
+          {/* <Route path={`${baseURL}/`} component={DetailForm} /> */}
         </Switch>
       </Card>
     );
@@ -50,5 +46,4 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
 
 export default connect((state: RootState) => ({
   isDetailFormSubmitted: state.user.isDetailFormSubmitted,
-  isTeamFormSubmitted: state.user.isTeamFormSubmitted,
 }))(ApplyView);

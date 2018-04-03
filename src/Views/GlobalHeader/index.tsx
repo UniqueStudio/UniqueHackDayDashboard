@@ -70,7 +70,7 @@ class GlobalHeader extends React.Component<{
     const subMenu = (
       <Menu>
         <Menu.Item key="0" style={{ width: '150px' }}>
-          <a href="#/apply">
+          <a href="#/apply/detail">
             <Icon type="edit" style={{ marginRight: '4px' }} /> 编辑报名信息
           </a>
         </Menu.Item>

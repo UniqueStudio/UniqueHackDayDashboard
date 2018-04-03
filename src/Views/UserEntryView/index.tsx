@@ -45,9 +45,9 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
   SMSLoading: boolean;
   resetPwdLoading: boolean;
 
-  registerError: string;
-  loginError: string;
-  resetPwdError: string;
+  registerError: { value: string; time: number };
+  loginError: { value: string; time: number };
+  resetPwdError: { value: string; time: number };
 
   loggedIn: boolean;
 }
@@ -82,7 +82,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onSubmit={this.onLoginSubmit}
             isSubmitting={loginSubmitting || !recaptchaReady}
             noLayout={true}
-            message={loginError ? { value: loginError, type: 'error' } : undefined}
+            message={loginError ? { ...loginError, type: 'error' } : undefined}
           >
             <Username noLayout={true} />
             <Password noLayout={true} />
@@ -98,7 +98,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onSubmit={this.onRegisterSubmit}
             isSubmitting={registerSubmitting || !recaptchaReady}
             noLayout={true}
-            message={registerError ? { value: registerError, type: 'error' } : undefined}
+            message={registerError ? { ...registerError, type: 'error' } : undefined}
           >
             <Username validator={usernameValidator} noLayout={true} />
             <Password noLayout={true} />
@@ -133,7 +133,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           onSubmit={this.onResetPwdSubmit}
           isSubmitting={resetPwdLoading || !recaptchaReady}
           noLayout={true}
-          message={resetPwdError ? { value: resetPwdError, type: 'error' } : undefined}
+          message={resetPwdError ? { ...resetPwdError, type: 'error' } : undefined}
         >
           <Phone noLayout={true} />
           <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSSubmitting} />

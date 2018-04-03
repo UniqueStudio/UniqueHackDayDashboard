@@ -10,10 +10,17 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
-import { loginRequest, registerRequest, detailRequest, checkLoginStatus } from './login-register';
+import {
+  loginRequest,
+  registerRequest,
+  detailRequest,
+  checkLoginStatus,
+  userInfoRequest,
+} from './login-register';
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
 import delay from '../../lib/delay';
+import { UserData } from '../reducers/user';
 
 export function* loginSaga() {
   while (true) {
@@ -34,6 +41,7 @@ export function* loginSaga() {
     }
     yield put({ type: 'CLEAR_LOGIN' });
     yield put({ type: 'SET_LOGGED_IN' });
+    yield put({ type: 'LOAD_USER_INFO' });
     yield put(replace('/'));
 
     yield take('LOGOUT_CLICKED');
@@ -64,6 +72,7 @@ export function* registerSaga() {
     }
     yield put({ type: 'CLEAR_REGISTER' });
     yield put({ type: 'SET_LOGGED_IN' });
+    yield put({ type: 'LOAD_USER_INFO' });
     yield put(replace('/'));
 
     yield take('LOGOUT_CLICKED');
@@ -124,6 +133,7 @@ export function* loginStatusSaga() {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
+      yield put({ type: 'LOAD_USER_INFO' });
     }
     yield put({ type: 'LOGIN_STATUS_LOAD_END' });
   }
@@ -143,5 +153,15 @@ export function* loginStatusLoopSaga() {
       yield put(replace('/user_entry'));
     }
     yield put({ type: 'LOGIN_STATUS_LOADING_END' });
+  }
+}
+
+export function* userInfoSaga() {
+  while (true) {
+    yield take('LOAD_USER_INFO');
+    yield put({ type: 'LOAD_USER_INFO_START' });
+    const res: UserData = yield call(userInfoRequest);
+    yield put({ type: 'LOAD_USER_INFO_END' });
+    yield put({ type: 'SET_USER_INFO', payload: res });
   }
 }

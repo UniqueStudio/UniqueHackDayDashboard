@@ -52,7 +52,7 @@ export interface DetailFormProps {
   };
 
   detailFormSubmitting: boolean;
-  detailFormError: string;
+  detailFormError: { value: string; time: number };
 }
 
 class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
@@ -70,7 +70,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
         onFormChange={onFormChange}
         onSubmit={onSubmit}
         isSubmitting={detailFormSubmitting}
-        message={detailFormError ? { value: detailFormError, type: 'error' } : undefined}
+        message={detailFormError ? { ...detailFormError, type: 'error' } : undefined}
       >
         <Divider>基本信息</Divider>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
