@@ -298,6 +298,18 @@ declare namespace API {
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { username: string }>
       >;
+
+      (
+        req: RequestWithAuth<
+          '/v1/user/team_form_submit_status',
+          'POST',
+          {
+            submitted: boolean;
+          }
+        >,
+      ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<403, Message.Forbidden>
+      >;
     }
   }
 

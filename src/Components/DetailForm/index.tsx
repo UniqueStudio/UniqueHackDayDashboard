@@ -83,7 +83,14 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
 
-        <Text required={true} id="email" fieldName="邮箱" label="邮箱" iconType="mail" />
+        <Text
+          required={true}
+          id="email"
+          fieldName="邮箱"
+          label="邮箱"
+          iconType="mail"
+          pattern={patterns.email}
+        />
 
         <Divider>报销和赠礼</Divider>
 
