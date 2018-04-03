@@ -10,12 +10,12 @@ import {
 import { UserData } from '../reducers/user';
 export { SelectEffect, AllEffect, GenericAllEffect, TakeEffect, PutEffect };
 
-export const loginRequest = async (
+export async function loginRequest(
   usernameOrPhone: string,
   password: string,
   autoLogin: boolean,
   antiRobotToken: string,
-) => {
+) {
   const res = await request({
     endpoint: '/v1/user/login',
     method: 'POST',
@@ -38,15 +38,15 @@ export const loginRequest = async (
   } else {
     return { successful: false, message };
   }
-};
+}
 
-export const registerRequest = async (
+export async function registerRequest(
   username: string,
   password: string,
   phone: string,
   code: string,
   antiRobotToken: string,
-) => {
+) {
   const res = await request({
     endpoint: '/v1/user/reg',
     method: 'POST',
@@ -63,7 +63,7 @@ export const registerRequest = async (
     return { successful: true, message };
   }
   return { successful: false, message };
-};
+}
 
 export async function checkLoginStatus() {
   const res = await request({
@@ -100,4 +100,27 @@ export async function userInfoRequest(): Promise<[UserData | null, number]> {
     return [res.data, res.httpStatusCode];
   }
   return [null, res.httpStatusCode];
+}
+
+export async function resetPwdRequest(
+  phone: string,
+  code: string,
+  newPassword: string,
+  antiRobotToken: string,
+) {
+  const res = await request({
+    endpoint: '/v1/user/password?reset',
+    method: 'POST',
+    body: {
+      phone,
+      code,
+      newPassword,
+      antiRobotToken,
+    },
+  });
+  const message = `重置密码失败：${res.message}`;
+  if (res.httpStatusCode === 200) {
+    return { successful: true, message };
+  }
+  return { successful: false, message };
 }

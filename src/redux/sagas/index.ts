@@ -16,6 +16,7 @@ import {
   detailRequest,
   // checkLoginStatus,
   userInfoRequest,
+  resetPwdRequest,
 } from './login-register';
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
@@ -99,6 +100,25 @@ export function* resetPwdSMSSaga() {
     yield put({ type: 'RESET_PWD_SMS_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'RESET_PWD_SMS_FAILED', payload: message });
+    }
+  }
+}
+
+export function* resetPwdSaga() {
+  while (true) {
+    const { payload: token } = yield take('RESET_PWD_FORM_SUBMIT');
+    yield put({ type: 'RESET_PWD_SUBMIT_START' });
+    const { resetPwd: { phone, code, newPassword } } = yield select();
+    const { successful, message } = yield call(
+      resetPwdRequest,
+      phone.value,
+      code.value,
+      newPassword.value,
+      token,
+    );
+    yield put({ type: 'RESET_PWD_SUBMIT_END' });
+    if (!successful) {
+      yield put({ type: 'RESET_PWD_FAILED', payload: message });
     }
   }
 }
