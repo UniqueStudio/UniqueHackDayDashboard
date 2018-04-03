@@ -1,16 +1,30 @@
 import * as React from 'react';
 import Button from 'antd/es/button';
+import { Redirect } from 'react-router';
 
 import Status from '../../Components/Status';
 import TeamInfo from '../../Components/TeamInfo';
 import HackdayProgress from '../../Components/HackdayProgress';
+import { RootState } from '../../redux/reducers';
+import { connect } from 'react-redux';
 
-export default class Console extends React.Component {
+class Console extends React.Component<{
+  isDetailFormSubmitted: boolean;
+  isTeamFormSubmitted: boolean;
+}> {
   renderDivider() {
     return <div style={{ height: '20px' }} />;
   }
 
   render() {
+    if (!this.props.isDetailFormSubmitted) {
+      return <Redirect to="/apply/detail" />;
+    }
+
+    if (this.props.isDetailFormSubmitted && !this.props.isTeamFormSubmitted) {
+      return <Redirect to="/apply/team_up" />;
+    }
+
     return (
       <div style={{ paddingBottom: '40px' }}>
         <Status type="success" statusText="通过审核" buttons={this.renderStatusButtons()} />
@@ -33,3 +47,8 @@ export default class Console extends React.Component {
     ];
   }
 }
+
+export default connect((state: RootState) => ({
+  isDetailFormSubmitted: state.user.isDetailFormSubmitted,
+  isTeamFormSubmitted: state.user.isDetailFormSubmitted,
+}))(Console);

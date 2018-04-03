@@ -2,11 +2,20 @@ import * as React from 'react';
 import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
 
-import { Switch, Route, RouteComponentProps } from 'react-router';
+import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 import DetailForm from '../../Components/DetailForm/index';
 import TeamUpView from '../../Views/TeamUpView/index';
+import { connect } from 'react-redux';
+import { RootState } from '../../redux/reducers';
 
-export default class ApplyView extends React.Component<RouteComponentProps<{ _: string }>> {
+const GenRedirect = (to: string) => () => <Redirect to={to} />;
+
+export interface ApplyViewProps {
+  isDetailFormSubmitted: boolean;
+  isTeamFormSubmitted: boolean;
+}
+
+class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _: string }>> {
   render() {
     const endpoints = ['detail', 'team_up', 'done'];
     const current = endpoints.findIndex(
@@ -14,6 +23,7 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
     );
 
     const baseURL = this.props.match.url;
+    const { isDetailFormSubmitted: isD, isTeamFormSubmitted: isT } = this.props;
     return (
       <Card bordered={false} title="完善报名信息">
         <Steps current={current + 1 ? current : 0} size="small">
@@ -22,8 +32,14 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
-          <Route path={`${baseURL}/team_up`} component={TeamUpView} />
-          <Route path={`${baseURL}/done`} component={TeamUpView} />
+          <Route
+            path={`${baseURL}/done`}
+            component={isD && isT ? TeamUpView : GenRedirect('/team_up')}
+          />
+          <Route
+            path={`${baseURL}/team_up`}
+            component={isD ? TeamUpView : GenRedirect('/team_up')}
+          />
           <Route path={`${baseURL}/detail`} component={DetailForm} />
           <Route path={`${baseURL}/`} component={DetailForm} />
         </Switch>
@@ -31,3 +47,8 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
     );
   }
 }
+
+export default connect((state: RootState) => ({
+  isDetailFormSubmitted: state.user.isDetailFormSubmitted,
+  isTeamFormSubmitted: state.user.isTeamFormSubmitted,
+}))(ApplyView);
