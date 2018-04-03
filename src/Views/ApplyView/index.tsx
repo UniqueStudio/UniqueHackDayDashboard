@@ -31,7 +31,10 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
-          <Route path={`${baseURL}/done`} component={isD ? TeamUpView : GenRedirect('/detail')} />
+          <Route
+            path={`${baseURL}/done`}
+            component={isD ? () => <div>完成</div> : GenRedirect('/detail')}
+          />
           <Route
             path={`${baseURL}/team_up`}
             component={isD ? TeamUpView : GenRedirect('/detail')}

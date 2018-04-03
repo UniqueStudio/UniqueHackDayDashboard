@@ -3,7 +3,8 @@ import * as qs from 'querystring';
 
 import messageMap from './message';
 
-const authorizationToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
+export const authorizationToken = () =>
+  sessionStorage.getItem('token') || localStorage.getItem('token');
 
 const request = (async (req: any) => {
   const { method, body, headers } = req;

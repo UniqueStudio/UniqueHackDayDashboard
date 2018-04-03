@@ -70,7 +70,10 @@ class App extends React.Component {
       preIsLoadingUserInfo = isLoadingUserInfo;
     }) as any;
     // store.dispatch({ type: 'LOAD_LOGIN_STATUS' });
+    // const hash = window.location.hash;
+    // if (hash === '#/' || hash === '#/user_entry') {
     store.dispatch({ type: 'LOAD_USER_INFO' });
+    // }
   }
 
   componentWillUnmount() {

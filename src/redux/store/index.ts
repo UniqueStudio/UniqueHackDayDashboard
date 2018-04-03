@@ -24,6 +24,24 @@ const store: Store<RootState> = createStore(
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
 );
 
+if ((module as any).hot) {
+  // Enable Webpack hot module replacement for reducers
+  (module as any).hot.accept('../reducers', () => {
+    const nextRootReducer = require('../reducers').default;
+    store.replaceReducer(nextRootReducer);
+  });
+
+  (module as any).hot.accept('../sagas', () => {
+    const nextRootReducer = require('../reducers').default;
+    store.replaceReducer(nextRootReducer);
+  });
+
+  (module as any).hot.accept('../sagas/apply', () => {
+    const nextRootReducer = require('../reducers').default;
+    store.replaceReducer(nextRootReducer);
+  });
+}
+
 sagaMiddleware.run(sagas.loginSaga);
 sagaMiddleware.run(sagas.registerSaga);
 sagaMiddleware.run(sagas.userInfoSaga);

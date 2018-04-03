@@ -8,14 +8,7 @@ export interface ErrorStatus {
   [k: string]: { value: string; time: number };
 }
 
-export default function loadingStatus(
-  state: ErrorStatus = {
-    // loginError: '',
-    // registerError: '',
-    // newTeamError: '',
-  },
-  action: AnyAction,
-) {
+export default function loadingStatus(state: ErrorStatus = {}, action: AnyAction) {
   const [, type] = action.type.match(/^([A-Z_]+?)_(SUBMIT_)?FAILED$/) || new Array(3);
   if (type) {
     return {

@@ -21,9 +21,9 @@ import {
 import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
 import { replace } from 'react-router-redux';
 import delay from '../../lib/delay';
-// import { UserData } from '../reducers/user';
-// import { AnyAction } from 'redux';
 import Message from 'antd/es/message';
+import { authorizationToken } from '../../lib/API';
+import { UserData } from '../reducers/user';
 
 export function* loginSaga() {
   while (true) {
@@ -136,9 +136,14 @@ export function* detailSaga() {
       {},
     ) as any);
     yield put({ type: 'DETAIL_FORM_SUBMIT_END' });
+
     if (!successful) {
       yield put({ type: 'DETAIL_FORM_SUBMIT_FAILED', payload: message });
+      continue;
     }
+
+    yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
+    yield put(replace('/apply/team_up'));
   }
 }
 
@@ -147,21 +152,28 @@ export function* userInfoSaga() {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
     const [res, code] = yield call(userInfoRequest);
-    yield put({ type: 'USER_INFO_LOAD_END' });
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
-      yield put(replace('/user_entry'));
-      if (code === 401) {
-        Message.error('需要重新登录！');
-      } else if (code === 600) {
-        Message.error('网络错误，暂时无法登录！');
-      } else if (code === 500) {
-        Message.error('服务端发生了异常，暂时无法登录！');
+      const { route } = yield select();
+      if (route && route.location.pathname !== '/user_entry/reset_pwd') {
+        // avoid redirect when user just want to reset pwd
+        yield put(replace('/user_entry'));
+        if (authorizationToken()) {
+          if (code === 403) {
+            Message.error('需要重新登录！');
+          } else if (code === 600) {
+            Message.error('网络错误，暂时无法登录！');
+          } else if (code === 500) {
+            Message.error('服务端发生了异常，暂时无法登录！');
+          }
+        }
       }
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
     }
+    // put this at the end to
+    yield put({ type: 'USER_INFO_LOAD_END' });
   }
 }
 
@@ -170,7 +182,7 @@ export function* userInfoLoopSaga() {
     yield delay(60 * 1000);
     const { auth } = yield select();
     if (!auth.loggedIn) {
-      break;
+      continue;
     }
     yield put({ type: 'LOAD_USER_INFO' });
     // yield put({ type: 'USER_INFO_LOAD_START' });
@@ -191,10 +203,11 @@ export function* userInfoLoopSaga() {
 
 export function* userInfoSetSaga() {
   while (true) {
-    const res = yield take('SET_USER_INFO');
-    // console.log(res);
+    const { payload: res }: { payload: UserData } = yield take('SET_USER_INFO');
     if (res) {
-      // yield put({ type: 'SET_LOGGED_IN' });
+      if (!res.isDetailFormSubmitted) {
+        yield put(replace('/apply/detail'));
+      }
     }
   }
 }
