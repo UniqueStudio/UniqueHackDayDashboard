@@ -10,14 +10,14 @@ import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 import UserEntryLayout from '../../Layouts/UserEntryLayout/index';
 import WithRecaptcha from '../../lib/withRecaptcha';
 
-import MyForm from '../../lib/MyForm/MyForm';
-import Username from '../../lib/MyForm/Username';
-import Password from '../../lib/MyForm/Password';
-import AutoLogin from '../../lib/MyForm/AutoLogin';
-import Phone from '../../lib/MyForm/Phone';
-import MobileCode from '../../lib/MyForm/MobileCode';
-import Submit from '../../lib/MyForm/Submit';
-import { usernameValidator, phoneValidator } from '../../lib/MyForm/validators';
+import MyForm from '../../Components/MyForm/MyForm';
+import Username from '../../Components/MyForm/Username';
+import Password from '../../Components/MyForm/Password';
+import AutoLogin from '../../Components/MyForm/AutoLogin';
+import Phone from '../../Components/MyForm/Phone';
+import MobileCode from '../../Components/MyForm/MobileCode';
+import Submit from '../../Components/MyForm/Submit';
+import { usernameValidator, phoneValidator } from '../../Components/MyForm/validators';
 
 export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
@@ -37,10 +37,10 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
   onRegisterSMSSubmit: () => void;
   onResetPwdSMSSubmit: () => void;
 
-  registerLoading: boolean;
-  loginLoading: boolean;
-  resetPwdSMSLoading: boolean;
-  registerSMSLoading: boolean;
+  registerSubmitting: boolean;
+  loginSubmitting: boolean;
+  resetPwdSMSSubmitting: boolean;
+  registerSMSSubmitting: boolean;
 
   SMSLoading: boolean;
   resetPwdLoading: boolean;
@@ -66,9 +66,11 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       registerData,
       registerError,
       loginError,
-      registerLoading,
-      loginLoading,
-      registerSMSLoading,
+      registerSubmitting,
+      loginSubmitting,
+      registerSMSSubmitting,
+
+      recaptchaReady,
     } = this.props;
     return (
       <Tabs animated={false}>
@@ -78,7 +80,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             data={loginData}
             onFormChange={this.props.onLoginFormChange}
             onSubmit={this.onLoginSubmit}
-            isSubmitting={loginLoading}
+            isSubmitting={loginSubmitting || !recaptchaReady}
+            noLayout={true}
             message={loginError ? { value: loginError, type: 'error' } : undefined}
           >
             <Username noLayout={true} />
@@ -93,13 +96,14 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             data={registerData}
             onFormChange={this.props.onRegisterFormChange}
             onSubmit={this.onRegisterSubmit}
-            isSubmitting={registerLoading}
+            isSubmitting={registerSubmitting || !recaptchaReady}
+            noLayout={true}
             message={registerError ? { value: registerError, type: 'error' } : undefined}
           >
             <Username validator={usernameValidator} noLayout={true} />
             <Password noLayout={true} />
             <Phone validator={phoneValidator} noLayout={true} />
-            <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSLoading} />
+            <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSSubmitting} />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
           </MyForm>
         </Tabs.TabPane>
@@ -108,7 +112,13 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   };
 
   renderResetPwdForm = () => {
-    const { resetPwdData, resetPwdLoading, resetPwdError, resetPwdSMSLoading } = this.props;
+    const {
+      resetPwdData,
+      resetPwdLoading,
+      resetPwdError,
+      resetPwdSMSSubmitting,
+      recaptchaReady,
+    } = this.props;
     return (
       <Card
         bordered={false}
@@ -121,12 +131,13 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           data={resetPwdData}
           onFormChange={this.props.onResetPwdFormChange}
           onSubmit={this.onResetPwdSubmit}
-          isSubmitting={resetPwdLoading}
+          isSubmitting={resetPwdLoading || !recaptchaReady}
+          noLayout={true}
           message={resetPwdError ? { value: resetPwdError, type: 'error' } : undefined}
         >
-          <Phone />
-          <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSLoading} />
-          <Password inputType="text" />
+          <Phone noLayout={true} />
+          <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSSubmitting} />
+          <Password inputType="text" noLayout={true} />
           <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
         </MyForm>
       </Card>
@@ -162,11 +173,11 @@ export default connect(
       resetPwdData: {
         ...state.resetPwd,
       },
-      registerLoading: state.loadingStatus.registerLoading,
-      loginLoading: state.loadingStatus.loginLoading,
+      registerSubmitting: state.loadingStatus.registerSubmitting,
+      loginSubmitting: state.loadingStatus.loginSubmitting,
 
-      resetPwdSMSLoading: state.loadingStatus.resetPwdSMSLoading,
-      registerSMSLoading: state.loadingStatus.registerSMSLoading,
+      resetPwdSMSSubmitting: state.loadingStatus.resetPwdSMSSubmitting,
+      registerSMSSubmitting: state.loadingStatus.registerSMSSubmitting,
 
       registerError: state.errorStatus.registerError,
       loginError: state.errorStatus.loginError,

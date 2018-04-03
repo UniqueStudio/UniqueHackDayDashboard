@@ -1,0 +1,4 @@
+{
+  "noIeCompat": true,
+  "modifyVars": { "primary-color": "purple" }
+}

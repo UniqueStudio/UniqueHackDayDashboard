@@ -2,20 +2,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
-// import throttle from 'lodash-es/throttle';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import AntdSelect from 'antd/es/select';
 import Divider from 'antd/es/divider';
 
 import { patterns } from '../../lib/patterns';
-import MyForm from '../../lib/MyForm/MyForm';
-import Text from '../../lib/MyForm/Text';
-import TextArea from '../../lib/MyForm/TextArea';
-import DatePicker from '../../lib/MyForm/DatePicker';
-import Select from '../../lib/MyForm/Select';
-import File from '../../lib/MyForm/File';
-import Submit from '../../lib/MyForm/Submit';
+import MyForm from '../../Components/MyForm/MyForm';
+import Text from '../../Components/MyForm/Text';
+import TextArea from '../../Components/MyForm/TextArea';
+import DatePicker from '../../Components/MyForm/DatePicker';
+import Select from '../../Components/MyForm/Select';
+import File from '../../Components/MyForm/File';
+import Submit from '../../Components/MyForm/Submit';
+
+import moment from 'moment';
 
 export interface DetailFormProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
@@ -31,14 +32,14 @@ export interface DetailFormProps {
     city: any;
     alipay: any;
     school: any;
-    major: any;
+    marjor: any;
     grade: any;
     graduateTime: any; // 年月日
     urgentConcatName: any;
     urgentConcatPhone: any;
     urgentConcatRelationship: any;
 
-    collections?: any;
+    collection?: any;
     specialNeeds?: any;
     github?: any;
     linkedIn?: any;
@@ -49,16 +50,27 @@ export interface DetailFormProps {
     skills: any;
     hackdayTimes: number;
   };
+
+  detailFormSubmitting: boolean;
+  detailFormError: string;
 }
 
 class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
   render() {
+    const {
+      detailFormError,
+      onSubmit,
+      onFormChange,
+      detailData,
+      detailFormSubmitting,
+    } = this.props;
     return (
       <MyForm
-        data={this.props.detailData}
-        onFormChange={this.props.onFormChange}
-        onSubmit={this.props.onSubmit}
-        isSubmitting={false}
+        data={detailData}
+        onFormChange={onFormChange}
+        onSubmit={onSubmit}
+        isSubmitting={detailFormSubmitting}
+        message={detailFormError ? { value: detailFormError, type: 'error' } : undefined}
       >
         <Divider>基本信息</Divider>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
@@ -71,13 +83,19 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
 
-        <Text required={true} id="email" fieldName="邮箱" label="邮箱" />
+        <Text required={true} id="email" fieldName="邮箱" label="邮箱" iconType="mail" />
 
         <Divider>报销和赠礼</Divider>
 
-        <Text required={true} id="city" fieldName="所在城市" label="所在城市" />
+        <Text required={true} id="city" fieldName="所在城市" label="所在城市" iconType="home" />
 
-        <Text required={true} id="alipay" fieldName="报销收款支付宝" label="支付宝" />
+        <Text
+          required={true}
+          id="alipay"
+          fieldName="报销收款支付宝"
+          label="支付宝"
+          iconType="alipay"
+        />
 
         <Select required={true} id="tShirtSize" fieldName="T-shirt尺寸" label="T-shirt尺寸">
           <AntdSelect.Option value="XS">XS</AntdSelect.Option>
@@ -91,9 +109,9 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <Divider>教育信息</Divider>
 
-        <Text required={true} id="school" fieldName="学校" label="学校" />
+        <Text required={true} id="school" fieldName="学校" label="学校" iconType="book" />
 
-        <Text required={true} id="marjor" fieldName="专业" label="专业" />
+        <Text required={true} id="marjor" fieldName="专业" label="专业" iconType="book" />
 
         <Select required={true} id="grade" fieldName="年级" label="年级">
           <AntdSelect.Option value="大一">大一</AntdSelect.Option>
@@ -115,6 +133,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatName"
           fieldName="紧急联系人姓名"
           label="紧急联系人姓名"
+          iconType="user"
         />
 
         <Text
@@ -123,6 +142,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatPhone"
           fieldName="紧急联系人电话"
           label="紧急联系人电话"
+          iconType="phone"
         />
 
         <Text
@@ -130,15 +150,28 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           id="urgentConcatRelationship"
           fieldName="与紧急联系人关系"
           label="与紧急联系人关系"
+          iconType="team"
         />
 
         <Divider>社交相关</Divider>
 
-        <Text required={false} id="github" fieldName="Github" label="Github" />
+        <Text required={false} id="github" fieldName="Github" label="Github" iconType="github" />
 
-        <Text required={false} id="linkedIn" fieldName="LinkedIn" label="LinkedIn" />
+        <Text
+          required={false}
+          id="linkedIn"
+          fieldName="LinkedIn"
+          label="LinkedIn"
+          iconType="linkedin"
+        />
 
-        <Text required={false} id="codingDotNet" fieldName="Coding.Net" label="Coding.Net" />
+        <Text
+          required={false}
+          id="codingDotNet"
+          fieldName="coding.net"
+          label="coding.net"
+          iconType="trophy"
+        />
 
         <Text required={false} id="blog" fieldName="个人博客" label="个人博客" />
 
@@ -152,7 +185,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           rows={4}
         />
 
-        <Select required={true} id="roles" fieldName="角色" label="角色">
+        <Select required={true} id="roles" fieldName="角色" label="角色" mode="tags">
           <AntdSelect.Option value="前端">前端</AntdSelect.Option>
           <AntdSelect.Option value="产品">产品</AntdSelect.Option>
           <AntdSelect.Option value="设计">设计</AntdSelect.Option>
@@ -162,7 +195,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           <AntdSelect.Option value="其他">其他</AntdSelect.Option>
         </Select>
 
-        <Select required={true} id="skills" fieldName="技能" label="技能">
+        <Select required={true} id="skills" fieldName="技能" label="技能" mode="tags">
           <AntdSelect.Option value="JavaScript">JavaScript</AntdSelect.Option>
           <AntdSelect.Option value="CSS/HTML">CSS/HTML</AntdSelect.Option>
           <AntdSelect.Option value="Swift">Swift</AntdSelect.Option>
@@ -203,8 +236,23 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
 export default connect(
   (state: RootState) => {
+    const props = state.detail;
     return {
-      detailData: state.detail,
+      detailData: Object.keys(props).reduce(
+        (p, key) => ({
+          ...p,
+          [key]: isDateValue(key)
+            ? Form.createFormField({
+                ...(props as any)[key],
+                value: (props as any)[key].value ? moment((props as any)[key].value) : undefined,
+              })
+            : Form.createFormField((props as any)[key]),
+        }),
+        {},
+      ),
+
+      detailFormSubmitting: state.loadingStatus.detailFormSubmitting,
+      detailFormError: state.errorStatus.detailFormError,
     };
   },
   dispatch => ({
@@ -218,19 +266,8 @@ export default connect(
       dispatch({ type: 'DETAIL_FORM_SUBMIT' });
     },
   }),
-)(
-  Form.create<DetailFormProps>({
-    onFieldsChange(props, value) {
-      props.onFormChange(value as any);
-    },
-    mapPropsToFields(props) {
-      return Object.keys(props).reduce(
-        (p, key) => ({
-          ...p,
-          [key]: Form.createFormField((props as any)[key]),
-        }),
-        {},
-      );
-    },
-  })(DetailForm),
-);
+)(DetailForm);
+
+function isDateValue(props: string) {
+  return props === 'birthday' || props === 'graduateTime';
+}

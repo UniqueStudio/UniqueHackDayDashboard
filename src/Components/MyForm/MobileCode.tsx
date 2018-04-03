@@ -9,7 +9,7 @@ import Icon from 'antd/es/icon';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
-import { patterns } from '../patterns';
+import { patterns } from '../../lib/patterns';
 
 export interface MobileCodeProps {
   isReady?: boolean;

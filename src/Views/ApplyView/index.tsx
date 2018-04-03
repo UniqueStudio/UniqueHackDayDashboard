@@ -12,6 +12,8 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
     const current = endpoints.findIndex(
       endpoint => this.props.location.pathname.indexOf(endpoint) >= 0,
     );
+
+    const baseURL = this.props.match.url;
     return (
       <Card bordered={false} title="完善报名信息">
         <Steps current={current + 1 ? current : 0} size="small">
@@ -20,10 +22,10 @@ export default class ApplyView extends React.Component<RouteComponentProps<{ _: 
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
-          <Route path={`${this.props.match.url}/team_up`} component={TeamUpView} />
-          <Route path={`${this.props.match.url}/done`} component={TeamUpView} />
-          <Route path={`${this.props.match.url}/detail`} component={TeamUpView} />
-          <Route path={`${this.props.match.url}/`} component={DetailForm} />
+          <Route path={`${baseURL}/team_up`} component={TeamUpView} />
+          <Route path={`${baseURL}/done`} component={TeamUpView} />
+          <Route path={`${baseURL}/detail`} component={DetailForm} />
+          <Route path={`${baseURL}/`} component={DetailForm} />
         </Switch>
       </Card>
     );

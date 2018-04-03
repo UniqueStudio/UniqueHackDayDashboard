@@ -93,7 +93,7 @@ declare namespace API {
       urgentConcatPhone: string;
       urgentConcatRelationship: string;
 
-      collections?: FileID[];
+      collection?: FileID[];
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
@@ -257,6 +257,9 @@ declare namespace API {
             200,
             Message.Success,
             {
+              username: string;
+              phone: string;
+              name: string | null;
               isAdmin: boolean;
               // 一定已注册了
               registrered: true;
@@ -275,6 +278,20 @@ declare namespace API {
               invoiceRevived: boolean | null;
             }
           >
+      >;
+
+      (
+        req: RequestWithAuth<
+          '/v1/user/username',
+          'GET',
+          {
+            name: string;
+            phone: string;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { username: string }>
       >;
     }
   }
@@ -302,6 +319,7 @@ declare namespace API {
       ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.UserNotFound>
+        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
         | ResponseWithoutData<400, Message.TeamNameExists>
         | ResponseWithoutData<403, Message.Forbidden>
         | ResponseWithData<200, Message.Success, { teamId: string }>
@@ -325,33 +343,16 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 不需要队长验证，队员加队长
+      // 鉴权提示
+      // 队员加队长: 要求1.登录、2.队伍存在、3.用户名是自己 即可
+      // 队长加队员: 要求1.队伍是自己的、2.用户名不是自己、即可
+      // 权限不满足，返回 forbidden
       (
         req: RequestWithAuth<
           '/v1/team/members',
           'POST',
           {
             username: string;
-            teamId: string;
-          }
-        >,
-      ): Response<
-        | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithoutData<400, Message.TeamNotExists>
-        | ResponseWithoutData<400, Message.TeamFull>
-        | ResponseWithoutData<400, Message.AlreadyTeamedUp>
-        | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithoutData<200, Message.Success>
-      >;
-
-      // 队长输入某人的姓名和电话，以及teamId，使这个人加入队伍，不他需要验证
-      (
-        req: RequestWithAuth<
-          '/v1/team/members',
-          'POST',
-          {
-            name: string;
-            phone: string;
             teamId: string;
           }
         >,
@@ -385,8 +386,8 @@ declare namespace API {
       // 填写队长信息获取team_id
       (
         req: RequestWithAuth<
-          '/v1/team/team_id',
-          'POST',
+          '/v1/team/id',
+          'GET',
           {
             teamLeaderName: string;
             teamLeaderPhone: string;
@@ -438,5 +439,84 @@ declare namespace API {
     }
   }
 
-  type RequestFunc = User.RequestFunc;
+  namespace Message {
+    enum MessageType {
+      LoginElseWhere = 'LoginElseWhere', // 别处登录，被迫下线
+      NewTeammate = 'NewTeammate', // 新的队友加入
+      Accepted = 'Accepted', // 通过审核
+      Rejected = 'Rejected', // 被拒绝参赛
+      OtherMessage = 'OtherMessage',
+    }
+
+    type MessageValue = string | { en: string; zh: string };
+
+    type SingleMessage =
+      | {
+          id: string;
+          type: MessageType.LoginElseWhere;
+          time: number; // Timestamp
+        }
+      | {
+          id: string;
+
+          type: MessageType.Rejected;
+          rejectedReason: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          id: string;
+
+          type: MessageType.Accepted;
+          rejectedExtraMsg?: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          id: string;
+
+          type: MessageType.OtherMessage;
+          value: MessageValue;
+          title: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          id: string;
+
+          type: MessageType.NewTeammate;
+          newTeammateInfo: API.Team.UserInTeam;
+          time: number; // Timestamp
+        };
+
+    interface RequestFunc {
+      // 如果该用户有消息，立刻返回所有消息，并清除这些消息。
+      // 如果用户没有消息，等待 1min 返回
+      // 如果在等待的过程中，有新的消息，立刻返回
+      (req: RequestWithAuth<'/v1/message/messages/new', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 没有等待。
+      // 直接返回**所有未读**的消息
+      (req: RequestWithAuth<'/v1/message/messages/all?filter=unread', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 没有等待。
+      // 直接返回**所有**的消息
+      (req: RequestWithAuth<'/v1/message/messages/all', 'GET', never>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, { messages: SingleMessage[] }>
+      >;
+
+      // 将一条消息设为已读
+      (
+        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: string; status: 'read' }>,
+      ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
+      >;
+    }
+  }
+
+  type RequestFunc = User.RequestFunc & Team.RequestFunc & File.RequestFunc & Message.RequestFunc;
 }

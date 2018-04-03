@@ -1,0 +1,4 @@
+{
+  "presets": ["env", "react", "stage-2"],
+  "plugins": [["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }]]
+}

@@ -5,12 +5,10 @@ import * as React from 'react';
 // import DescriptionList from 'ant-design-pro/lib/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
-import Button from 'antd/es/button';
 
 // import Icon from 'antd/es/icon';
 
 import cls$2 from '../TeamInfo/style.less';
-import cls from './style.less';
 
 // const Description = DescriptionList.Description;
 
@@ -22,7 +20,7 @@ import cls from './style.less';
 // }
 
 // const TeamInfo = (props: DeviceRentProps) => {
-const DeviceRent = (props: any) => {
+const DeviceRent = (_: any) => {
   const data = [
     {
       key: '2142jk5h34jbj3b5njuhtbn5egukhjb',

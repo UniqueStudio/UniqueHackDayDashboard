@@ -1,22 +1,28 @@
 import { AnyAction } from 'redux';
 
 export interface ErrorStatus {
-  loginError: string;
-  registerError: string;
+  // loginError: string;
+  // registerError: string;
+
+  // newTeamError: string;
+  [k: string]: string;
 }
 
 export default function loadingStatus(
   state: ErrorStatus = {
-    loginError: '',
-    registerError: '',
+    // loginError: '',
+    // registerError: '',
+    // newTeamError: '',
   },
   action: AnyAction,
 ) {
-  const [_, op, type] = action.type.match(/^(SET|CLEAR)_(.+)_ERROR$/) || new Array(3);
-  if (op && type) {
+  const [, type] = action.type.match(/^([A-Z_]+?)_(SUBMIT_)?FAILED$/) || new Array(3);
+  if (type) {
     return {
       ...state,
-      [`${type.toLowerCase()}Error`]: op === 'SET' ? action.payload : '',
+      [`${type
+        .toLowerCase()
+        .replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}Error`]: action.payload,
     };
   }
 

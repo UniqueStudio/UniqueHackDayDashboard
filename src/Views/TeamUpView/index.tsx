@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 
 import Form, { FormComponentProps } from 'antd/es/form';
-import Radio from 'antd/es/radio';
+import Radio, { RadioChangeEvent } from 'antd/es/radio';
 
-import MyForm from '../../lib/MyForm/MyForm';
-import Text from '../../lib/MyForm/Text';
-import Submit from '../../lib/MyForm/Submit';
+import MyForm from '../../Components/MyForm/MyForm';
+import Text from '../../Components/MyForm/Text';
+import Submit from '../../Components/MyForm/Submit';
 import { patterns } from '../../lib/patterns';
 import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
@@ -26,6 +26,12 @@ export interface TeamUpFormsProps {
 
   onNewTeamSubmit: () => void;
   onJoinTeamSubmit: () => void;
+
+  newTeamSubmitting: boolean;
+  newTeamError: string;
+
+  joinTeamSubmitting: boolean;
+  joinTeamError: string;
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -35,7 +41,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
 
   handleSubmit = () => void 0;
 
-  handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleRadioChange = (e: RadioChangeEvent) => {
     this.setState({ formIndex: parseInt(e.target.value, 10) });
   };
 
@@ -65,7 +71,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
   }
 
   renderNewTeamForm = () => {
-    const { newTeamData, onNewTeamFormChange, onNewTeamSubmit } = this.props;
+    const { newTeamData, onNewTeamFormChange, onNewTeamSubmit, newTeamError } = this.props;
     return (
       <div>
         <Row>
@@ -90,7 +96,8 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
           data={newTeamData}
           onFormChange={onNewTeamFormChange}
           onSubmit={onNewTeamSubmit}
-          isSubmitting={false}
+          isSubmitting={this.props.newTeamSubmitting}
+          message={newTeamError ? { value: newTeamError, type: 'error' } : undefined}
         >
           <Text required={true} id="teamName" fieldName="队伍名" label="队伍名" />
           <Submit title="创建队伍" />
@@ -100,20 +107,27 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
   };
 
   renderJoinTeamForm = () => {
-    const { joinTeamData, onJoinTeamFormChange, onJoinTeamSubmit } = this.props;
+    const {
+      joinTeamData,
+      onJoinTeamFormChange,
+      onJoinTeamSubmit,
+      joinTeamSubmitting,
+      joinTeamError,
+    } = this.props;
     return (
       <MyForm
         data={joinTeamData}
         onFormChange={onJoinTeamFormChange}
         onSubmit={onJoinTeamSubmit}
-        isSubmitting={false}
+        isSubmitting={joinTeamSubmitting}
+        message={joinTeamError ? { value: joinTeamError, type: 'error' } : undefined}
       >
         <Text
           required={true}
-          label="队长用户名"
+          label="队长姓名"
           id="teamLeaderName"
-          fieldName="队长用户名"
-          pattern={patterns.username}
+          fieldName="队长姓名"
+          // pattern={patterns.username}
         />
         <Text
           required={true}
@@ -157,7 +171,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
 }
 
 export default connect(
-  ({ teamForm }: RootState) => {
+  ({ teamForm, loadingStatus, errorStatus }: RootState) => {
     return {
       newTeamData: {
         teamName: teamForm.teamName,
@@ -166,6 +180,11 @@ export default connect(
         teamLeaderName: teamForm.teamLeaderName,
         teamLeaderPhone: teamForm.teamLeaderPhone,
       },
+
+      newTeamSubmitting: loadingStatus.newTeamSubmitting,
+      newTeamError: errorStatus.newTeamError,
+      joinTeamSubmitting: loadingStatus.joinTeamSubmitting,
+      joinTeamError: errorStatus.joinTeamError,
     };
   },
   dispatch => ({

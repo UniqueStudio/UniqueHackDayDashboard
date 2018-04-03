@@ -7,7 +7,7 @@ import Alert from 'antd/es/alert';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
-import delay from '../delay';
+import delay from '../../lib/delay';
 
 const AnyAlert = Alert as any;
 
@@ -24,6 +24,7 @@ export interface MyFormProps {
 
   size?: string;
   data: { [k: string]: any };
+  noLayout?: boolean;
 }
 
 class MyForm extends React.Component<MyFormProps & FormComponentProps> {
@@ -38,22 +39,33 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     });
   };
 
+  scrollDiv: HTMLDivElement | null = null;
+
+  scrollDivRef = (ele: HTMLDivElement) => {
+    if (ele) {
+      this.scrollDiv = ele;
+    }
+  };
+
   render() {
     const { children, message } = this.props;
     const { showMessage } = this.state;
     return (
       <Form className="my-form">
+        <div ref={this.scrollDivRef} />
         {message &&
           showMessage && (
             <Row>
               <Col
-                {...{
-                  xl: { push: 8, span: 8 },
-                  lg: { push: 6, span: 10 },
-                  md: { push: 7, span: 12 },
-                  xs: 24,
-                  sm: 24,
-                }}
+                {...(this.props.noLayout
+                  ? {}
+                  : {
+                      xl: { push: 8, span: 8 },
+                      lg: { push: 6, span: 10 },
+                      md: { push: 7, span: 12 },
+                      xs: 24,
+                      sm: 24,
+                    })}
               >
                 <AnyAlert
                   message={message.value}
@@ -89,8 +101,14 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
 
   componentWillReceiveProps(nextProps: MyFormProps) {
     const { message: nextMessage, isSubmitting: nextIsSubmitting } = nextProps;
-    if (!this.state.showMessage) {
-      if (nextMessage && !nextIsSubmitting) {
+    if (nextMessage && !nextIsSubmitting) {
+      setTimeout(() => {
+        if (this.scrollDiv) {
+          this.scrollDiv.scrollIntoView();
+        }
+      }, 100);
+
+      if (!this.state.showMessage) {
         this.setState({ showMessage: true });
       }
     }
