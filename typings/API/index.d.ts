@@ -251,7 +251,7 @@ declare namespace API {
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
 
-      (req: RequestWithAuth<'/v1/user/user_info', 'GET', never>): Response<
+      (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<
             200,
