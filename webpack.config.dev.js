@@ -29,7 +29,6 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              babelrc: true,
               plugins: ['react-hot-loader/babel'],
             },
           },
