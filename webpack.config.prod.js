@@ -5,17 +5,20 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const paths = require('./scripts/paths');
+
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
   output: {
-    path: path.resolve(__dirname, './build'),
+    path: paths.appBuild,
     filename: '[name].[hash].js',
-    publicPath: '/',
+    publicPath: paths.appPublic,
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].[hash].css',
+      publicPath: paths.appPublic,
     }),
   ],
   optimization: {
