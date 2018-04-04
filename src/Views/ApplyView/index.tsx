@@ -3,7 +3,7 @@ import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
 
 import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
-import DetailForm from '../../Components/DetailForm/index';
+import DetailForm from '../../Views/DetailView';
 import TeamUpView from '../../Views/TeamUpView/index';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';

@@ -18,7 +18,7 @@ import Submit from '../../Components/MyForm/Submit';
 
 import moment from 'moment';
 
-export interface DetailFormProps {
+export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
 
@@ -55,7 +55,7 @@ export interface DetailFormProps {
   detailFormError: { value: string; time: number };
 }
 
-class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
+class DetailView extends React.Component<DetailViewProps & FormComponentProps> {
   render() {
     const {
       detailFormError,
@@ -273,7 +273,7 @@ export default connect(
       dispatch({ type: 'DETAIL_FORM_SUBMIT' });
     },
   }),
-)(DetailForm);
+)(DetailView);
 
 function isDateValue(props: string) {
   return props === 'birthday' || props === 'graduateTime';

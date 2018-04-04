@@ -1,5 +1,7 @@
-import { take, select, call, put } from 'redux-saga/effects';
+import { take, fork, cancel, all } from 'redux-saga/effects';
 
+import { SagaMiddleware } from 'redux-saga';
+import { Store } from 'redux';
 import {
   ForkEffect,
   PutEffect,
@@ -9,205 +11,57 @@ import {
   CallEffect,
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
+import { RootState } from '../reducers';
 
-import {
-  loginRequest,
-  registerRequest,
-  detailRequest,
-  // checkLoginStatus,
-  userInfoRequest,
-  resetPwdRequest,
-} from './login-register';
-import { sendSMSRegister, sendSMSResetPwd } from './sms-send';
-import { replace } from 'react-router-redux';
-import delay from '../../lib/delay';
-import Message from 'antd/es/message';
-import { authorizationToken } from '../../lib/API';
-import { UserData } from '../reducers/user';
+import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga } from './user';
+import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
+import { joinTeamSaga, newTeamSaga, detailSaga } from './apply';
 
-export function* loginSaga() {
-  while (true) {
-    const { payload: token } = yield take('LOGIN_FORM_SUBMIT');
-    yield put({ type: 'LOGIN_SUBMIT_START' });
-    const { login: { username, password, autoLogin } } = yield select();
-    const { successful, message } = yield call(
-      loginRequest,
-      username.value,
-      password.value,
-      autoLogin.value,
-      token,
-    );
-    yield put({ type: 'LOGIN_SUBMIT_END' });
-    if (!successful) {
-      yield put({ type: 'LOGIN_FAILED', payload: message });
-      continue;
-    }
-    yield put({ type: 'CLEAR_LOGIN' });
-    yield put({ type: 'LOAD_USER_INFO' });
+export function* mainSaga() {
+  yield all([
+    // about user
+    loginSaga(),
+    registerSaga(),
+    userInfoSaga(),
+    resetPwdSaga(),
 
-    yield take('LOGOUT_CLICKED');
-    sessionStorage.removeItem('token');
-    localStorage.removeItem('token');
-    yield put({ type: 'SET_NOT_LOGGED_IN' });
-    yield put(replace('/user_entry'));
+    // something about sms
+    registerSMSSaga(),
+    resetPwdSMSSaga(),
+
+    // about apply
+    detailSaga(),
+    joinTeamSaga(),
+    newTeamSaga(),
+  ]);
+}
+
+// for scaleable
+const sagas = [mainSaga];
+
+export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
+
+function createAbortableSaga(saga: typeof mainSaga) {
+  if (process.env.NODE_ENV === 'development') {
+    return function*() {
+      const sagaTask = yield fork(saga);
+      yield take(CANCEL_SAGAS_HMR);
+      yield cancel(sagaTask);
+    };
+  } else {
+    return saga;
   }
 }
 
-export function* registerSaga() {
-  while (true) {
-    const { payload: token } = yield take('REGISTER_FORM_SUBMIT');
-    yield put({ type: 'REGISTER_SUBMIT_START' });
-    const { register: { username, password, phone, code } } = yield select();
-    const { successful, message } = yield call(
-      registerRequest,
-      username.value,
-      password.value,
-      phone.value,
-      code.value,
-      token,
-    );
-    yield put({ type: 'REGISTER_SUBMIT_END' });
-    if (!successful) {
-      yield put({ type: 'REGISTER_FAILED', payload: message });
-      continue;
-    }
-    yield put({ type: 'CLEAR_REGISTER' });
-    yield put({ type: 'LOAD_USER_INFO' });
+const SagaManager = {
+  startSagas(sagaMiddleware: SagaMiddleware<{}>) {
+    sagas.map(createAbortableSaga).forEach(saga => sagaMiddleware.run(saga));
+  },
+  cancelSagas(store: Store<RootState>) {
+    store.dispatch({
+      type: CANCEL_SAGAS_HMR,
+    });
+  },
+};
 
-    yield take('LOGOUT_CLICKED');
-  }
-}
-
-export function* registerSMSSaga() {
-  while (true) {
-    const { payload: token } = yield take('REGISTER_FORM_SMS_SUBMIT');
-    yield put({ type: 'REGISTER_SMS_SUBMIT_START' });
-    const { register } = yield select();
-    const { successful, message } = yield call(sendSMSRegister, register.phone.value, token);
-    yield put({ type: 'REGISTER_SMS_SUBMIT_END' });
-    if (!successful) {
-      yield put({ type: 'REGISTER_SMS_FAILED', payload: message });
-    }
-  }
-}
-
-export function* resetPwdSMSSaga() {
-  while (true) {
-    const { payload: token } = yield take('RESET_PWD_FORM_SMS_SUBMIT');
-    yield put({ type: 'RESET_PWD_SMS_SUBMIT_START' });
-    const { resetPwd } = yield select();
-    const { successful, message } = yield call(sendSMSResetPwd, resetPwd.phone.value, token);
-    yield put({ type: 'RESET_PWD_SMS_SUBMIT_END' });
-    if (!successful) {
-      yield put({ type: 'RESET_PWD_SMS_FAILED', payload: message });
-    }
-  }
-}
-
-export function* resetPwdSaga() {
-  while (true) {
-    const { payload: token } = yield take('RESET_PWD_FORM_SUBMIT');
-    yield put({ type: 'RESET_PWD_SUBMIT_START' });
-    const { resetPwd: { phone, code, newPassword } } = yield select();
-    const { successful, message } = yield call(
-      resetPwdRequest,
-      phone.value,
-      code.value,
-      newPassword.value,
-      token,
-    );
-    yield put({ type: 'RESET_PWD_SUBMIT_END' });
-    if (!successful) {
-      yield put({ type: 'RESET_PWD_FAILED', payload: message });
-    }
-  }
-}
-
-export function* detailSaga() {
-  while (true) {
-    yield take('DETAIL_FORM_SUBMIT');
-    yield put({ type: 'DETAIL_FORM_SUBMIT_START' });
-    const { detail } = yield select();
-    const { successful, message } = yield call(detailRequest, Object.keys(detail).reduce(
-      (p, key) => ({
-        ...p,
-        [key]: detail[key].value,
-      }),
-      {},
-    ) as any);
-    yield put({ type: 'DETAIL_FORM_SUBMIT_END' });
-
-    if (!successful) {
-      yield put({ type: 'DETAIL_FORM_SUBMIT_FAILED', payload: message });
-      continue;
-    }
-
-    yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
-    yield put(replace('/apply/team_up'));
-  }
-}
-
-export function* userInfoSaga() {
-  while (true) {
-    yield take('LOAD_USER_INFO');
-    yield put({ type: 'USER_INFO_LOAD_START' });
-    const [res, code] = yield call(userInfoRequest);
-    if (!res) {
-      yield put({ type: 'SET_NOT_LOGGED_IN' });
-      const { route } = yield select();
-      if (route && route.location && route.location.pathname !== '/user_entry/reset_pwd') {
-        // avoid redirect when user just want to reset pwd
-        yield put(replace('/user_entry'));
-        if (authorizationToken()) {
-          if (code === 403) {
-            Message.error('需要重新登录！');
-          } else if (code === 600) {
-            Message.error('网络错误，暂时无法登录！');
-          } else if (code === 500) {
-            Message.error('服务端发生了异常，暂时无法登录！');
-          }
-        }
-      }
-    } else {
-      yield put({ type: 'SET_LOGGED_IN' });
-      yield put({ type: 'SET_USER_INFO', payload: res });
-    }
-    // put this at the end to
-    yield put({ type: 'USER_INFO_LOAD_END' });
-  }
-}
-
-export function* userInfoLoopSaga() {
-  while (true) {
-    yield delay(60 * 1000);
-    const { auth } = yield select();
-    if (!auth.loggedIn) {
-      continue;
-    }
-    yield put({ type: 'LOAD_USER_INFO' });
-    // yield put({ type: 'USER_INFO_LOAD_START' });
-    // const [res, code] = yield call(userInfoRequest);
-    // yield put({ type: 'USER_INFO_LOAD_END' });
-    // if (!res) {
-    //   yield put({ type: 'SET_NOT_LOGGED_IN' });
-    //   yield put(replace('/user_entry'));
-    //   if (code === 401) {
-    //     Message.error('需要重新登录！');
-    //   }
-    // } else {
-    //   yield put({ type: 'SET_LOGGED_IN' });
-    //   yield put({ type: 'SET_USER_INFO', payload: res });
-    // }
-  }
-}
-
-export function* userInfoSetSaga() {
-  while (true) {
-    const { payload: res }: { payload: UserData } = yield take('SET_USER_INFO');
-    if (res) {
-      if (!res.isDetailFormSubmitted) {
-        yield put(replace('/apply/detail'));
-      }
-    }
-  }
-}
+export default SagaManager;
