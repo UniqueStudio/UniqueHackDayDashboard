@@ -11,11 +11,15 @@ import { replace } from 'react-router-redux';
 
 export interface DashboardProps {
   loggedIn: boolean;
+  isD: boolean;
   selfReplace: (loc: string) => void;
   menuItemDisabled: boolean;
 }
 
+const RedirectToDetail = () => <Redirect to="/apply/detail" />;
+
 const Dashboard = (props: DashboardProps) => {
+  const { isD } = props;
   if (!props.loggedIn) {
     return <Redirect to="/user_entry" />;
   }
@@ -26,9 +30,9 @@ const Dashboard = (props: DashboardProps) => {
       menuItemDisabledMsg={'必须完成报名表单才能进行该操作!'}
     >
       <Switch>
-        <Route path="/team" component={TeamConsole} />
         <Route path="/apply" component={ApplyView} />
-        <Route path="/" component={ConsoleView} />
+        <Route path="/team" component={isD ? TeamConsole : RedirectToDetail} />
+        <Route path="/" component={isD ? ConsoleView : RedirectToDetail} />
       </Switch>
     </DashboardLayout>
   );
@@ -40,6 +44,7 @@ export default connect(
     return {
       loggedIn: state.auth.loggedIn,
       menuItemDisabled: pathname.indexOf('/apply') === 0 && pathname !== '/apply/done',
+      isD: state.user.isDetailFormSubmitted,
     };
   },
   dispatch => ({
