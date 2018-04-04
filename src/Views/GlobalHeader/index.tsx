@@ -22,6 +22,9 @@ class GlobalHeader extends React.Component<{
   user: UserData;
   unreadMsgs: MsgDataSingle[];
   msgs: MsgDataSingle[];
+
+  setReadAll: () => void;
+  deleteAll: () => void;
 }> {
   render() {
     // const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
@@ -49,6 +52,14 @@ class GlobalHeader extends React.Component<{
     return <div className={cls['header-left-icon']} />;
   }
 
+  handleClear = (tableTitle: string) => {
+    if (tableTitle === '未读消息') {
+      this.props.setReadAll();
+    } else {
+      this.props.deleteAll();
+    }
+  };
+
   renderUserMenu() {
     const subMenu = (
       <Menu>
@@ -68,7 +79,7 @@ class GlobalHeader extends React.Component<{
 
     const menuItems = [
       <Menu.Item className={cls['header-menu-item']} key="msg" style={{ marginRight: '10px' }}>
-        <NoticeIcon count={this.props.unreadMsgs.length}>
+        <NoticeIcon count={this.props.unreadMsgs.length} onClear={this.handleClear}>
           <NoticeIcon.Tab
             emptyText="没有未读消息"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
@@ -108,6 +119,12 @@ export default connect(
   dispatch => ({
     handleLogout() {
       dispatch({ type: 'LOGOUT_CLICKED' });
+    },
+    setReadAll() {
+      dispatch({ type: 'MSG_SET_READ_ALL' });
+    },
+    deleteAll() {
+      dispatch({ type: 'MSG_DELETE_ALL' });
     },
   }),
 )(GlobalHeader);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import request from '../../lib/API';
-import { take, select } from 'redux-saga/effects';
+import { take, select, put, call, all } from 'redux-saga/effects';
 import Message from 'antd/es/message';
 import Notify from 'antd/es/notification';
 import Icon from 'antd/es/icon';
@@ -13,6 +13,7 @@ import {
   TakeEffect,
   CallEffect,
 } from 'redux-saga/effects';
+import { RootState } from '../reducers';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
 export async function msgPoll() {
@@ -90,4 +91,80 @@ export async function allMessage() {
   return [false, null];
 }
 
-(window as any).allMessage = allMessage;
+export async function setRead(id: number) {
+  const res = await request({
+    endpoint: '/v1/message/read_status',
+    method: 'PUT',
+    body: {
+      id,
+      status: 'read',
+    },
+  });
+  return res.httpStatusCode === 200;
+}
+
+export async function msgDelete(id: number) {
+  const res = await request({
+    endpoint: '/v1/message/messages',
+    method: 'DELETE',
+    body: {
+      id,
+    },
+  });
+  return res.httpStatusCode === 200;
+}
+
+export function* setReadAllSaga() {
+  yield take('SET_LOGGED_IN');
+  while (true) {
+    yield take('MSG_SET_READ_ALL');
+    const { msg }: RootState = yield select();
+    let count = 0;
+    const unreadMsgs = msg.filter(m => m.unread);
+    yield all(
+      unreadMsgs.map(function*(m) {
+        yield put({ type: 'MSG_SET_READ', payload: m.id });
+        if (!(yield call(setRead, m.id))) {
+          yield put({ type: 'MSG_SET_UNREAD', payload: m.id });
+        } else {
+          count++;
+        }
+      }),
+    );
+    if (count === unreadMsgs.length) {
+      Message.success(`成功将 ${count} 条消息设为已读`);
+    } else if (count > 0) {
+      Message.success(`成功将 ${count} 条消息设为已读`);
+      Message.error(`${unreadMsgs.length - count} 条消息设为已读失败`);
+    } else {
+      Message.error(`${unreadMsgs.length - count} 条消息设为已读失败`);
+    }
+  }
+}
+
+export function* deleteAllSaga() {
+  yield take('SET_LOGGED_IN');
+  while (true) {
+    yield take('MSG_DELETE_ALL');
+
+    const { msg }: RootState = yield select();
+    yield all(
+      msg.map(function*(m) {
+        yield put({ type: 'MSG_DELETE', payload: m.id });
+        yield call(msgDelete, m.id);
+      }),
+    );
+
+    // fetch msg
+    const [, msgs] = yield call(allMessage);
+    const [, unreadMsgs] = yield call(allUnreadMessage);
+    yield put({ type: 'ADD_MSG_FROM_ALL', payload: msgs });
+    yield put({ type: 'ADD_MSG_FROM_UNREAD', payload: unreadMsgs });
+
+    if (msgs.length === 0) {
+      Message.success(`共删除 ${msg.length} 条消息！`);
+    } else {
+      Message.error(`删除 ${msgs.length} 条消息时出错`);
+    }
+  }
+}

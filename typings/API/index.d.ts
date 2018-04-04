@@ -516,8 +516,13 @@ declare namespace API {
 
       // 将一条消息设为已读
       (
-        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: string; status: 'read' }>,
+        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: number; status: 'read' }>,
       ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 将一条消息删除
+      (req: RequestWithAuth<'/v1/message/messages', 'DELETE', { id: number }>): Response<
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }

@@ -16,7 +16,7 @@ import { RootState } from '../reducers';
 import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga, logoutSaga } from './user';
 import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
 import { joinTeamSaga, newTeamSaga, detailSaga } from './apply';
-import { msgPollSaga, showMsg } from './msg';
+import { msgPollSaga, showMsg, setReadAllSaga, deleteAllSaga } from './msg';
 
 export function* mainSaga() {
   yield all([
@@ -39,6 +39,8 @@ export function* mainSaga() {
     // msg
     msgPollSaga(),
     showMsg(),
+    setReadAllSaga(),
+    deleteAllSaga(),
   ]);
 }
 
