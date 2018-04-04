@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('./scripts/paths');
 
 module.exports = {
+  cache: true,
+  devtool: 'cheap-module-eval-source-map',
   mode: 'development',
   entry: './src/index.ts',
   output: {
@@ -21,7 +23,16 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: 'babel-loader',
+        use: [
+          // all my code is written in ts, js files need no hot-reload
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: true,
+              cacheDirectory: true,
+            },
+          },
+        ],
       },
       {
         test: /\.tsx?$/,
@@ -30,6 +41,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               plugins: ['react-hot-loader/babel'],
+              cacheDirectory: true,
             },
           },
           'ts-loader',
