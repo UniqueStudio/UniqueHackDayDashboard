@@ -139,12 +139,6 @@ export function* loginSaga() {
     }
     yield put({ type: 'CLEAR_LOGIN' });
     yield put({ type: 'LOAD_USER_INFO' });
-
-    yield take('LOGOUT_CLICKED');
-    sessionStorage.removeItem('token');
-    localStorage.removeItem('token');
-    yield put({ type: 'SET_NOT_LOGGED_IN' });
-    yield put(replace('/user_entry'));
   }
 }
 
@@ -168,7 +162,11 @@ export function* registerSaga() {
     }
     yield put({ type: 'CLEAR_REGISTER' });
     yield put({ type: 'LOAD_USER_INFO' });
+  }
+}
 
+export function* logoutSaga() {
+  while (true) {
     yield take('LOGOUT_CLICKED');
     sessionStorage.removeItem('token');
     localStorage.removeItem('token');

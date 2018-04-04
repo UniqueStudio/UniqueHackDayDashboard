@@ -13,7 +13,7 @@ import {
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { RootState } from '../reducers';
 
-import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga } from './user';
+import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga, logoutSaga } from './user';
 import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
 import { joinTeamSaga, newTeamSaga, detailSaga } from './apply';
 
@@ -24,6 +24,7 @@ export function* mainSaga() {
     registerSaga(),
     userInfoSaga(),
     resetPwdSaga(),
+    logoutSaga(),
 
     // something about sms
     registerSMSSaga(),
