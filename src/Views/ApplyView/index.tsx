@@ -16,6 +16,9 @@ export interface ApplyViewProps {
 
 class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _: string }>> {
   render() {
+    if (this.isD) {
+      return <Redirect to="/" />;
+    }
     const endpoints = ['detail', 'team_up', 'done'];
     const current = endpoints.findIndex(
       endpoint => this.props.location.pathname.indexOf(endpoint) >= 0,
@@ -43,6 +46,14 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
         </Switch>
       </Card>
     );
+  }
+
+  isD = false;
+
+  componentWillMount() {
+    // this is a component self state which avoids user enter
+    // this user interface again
+    this.isD = this.props.isDetailFormSubmitted;
   }
 }
 
