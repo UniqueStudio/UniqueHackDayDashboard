@@ -95,12 +95,10 @@ const TeamInfo = (props: TeamInfoProps) => {
   return (
     <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
-        {hasEditButton && (
-          <Button children="编辑成员" className={cls['team-info-edit-btn']} type="primary" />
-        )}
+        {hasEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
-        <Description term="队长" children="梁志博" />
+        <Description term="队长姓名" children="梁志博" />
         <Description term="队伍人数" children="4" />
         <Description term="获奖情况" children="—---------" />
         <Description term="组队时间" children={new Date(Date.now()).toLocaleDateString()} />
@@ -108,10 +106,7 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
-      {/*tslint:disable-next-line:jsx-no-multiline-js */}
-      {hasDissolutionButton && (
-        <Button style={{ float: 'right' }} children="解散队伍" type="danger" />
-      )}
+      {hasDissolutionButton && <Button children="解散队伍" type="danger" />}
     </Card>
   );
 };

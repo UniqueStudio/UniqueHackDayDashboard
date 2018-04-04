@@ -69,8 +69,18 @@ class GlobalHeader extends React.Component<{
     const menuItems = [
       <Menu.Item className={cls['header-menu-item']} key="msg" style={{ marginRight: '10px' }}>
         <NoticeIcon count={this.props.unreadMsgs.length}>
-          <NoticeIcon.Tab list={this.props.unreadMsgs.map(msgMap)} title="未读消息" />
-          <NoticeIcon.Tab list={this.props.msgs.map(msgMap)} title="所有消息" />
+          <NoticeIcon.Tab
+            emptyText="没有未读消息"
+            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+            list={this.props.unreadMsgs.map(msgMap)}
+            title="未读消息"
+          />
+          <NoticeIcon.Tab
+            emptyText="没有消息"
+            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+            list={this.props.msgs.map(msgMap)}
+            title="所有消息"
+          />
         </NoticeIcon>
       </Menu.Item>,
       <Menu.Item className={cls['header-menu-item']} key="mine">
