@@ -1,17 +1,22 @@
 import * as React from 'react';
 import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
-
+import { replace } from 'react-router-redux';
+import { connect } from 'react-redux';
 import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
+
 import DetailForm from '../../Views/DetailView';
 import TeamUpView from '../../Views/TeamUpView/index';
-import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 
-const GenRedirect = (to: string) => () => <Redirect to={to} />;
+import Alert from 'antd/es/alert';
+import Button from 'antd/es/button';
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
 
 export interface ApplyViewProps {
   isDetailFormSubmitted: boolean;
+  gotoHome: () => void;
 }
 
 class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _: string }>> {
@@ -26,6 +31,9 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
 
     const baseURL = this.props.match.url;
     const { isDetailFormSubmitted: isD } = this.props;
+
+    const RedirectToDetail = () => <Redirect to={`${baseURL}/detail`} />;
+
     return (
       <Card bordered={false} title="完善报名信息">
         <Steps current={current + 1 ? current : 0} size="small">
@@ -34,19 +42,41 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
           <Steps.Step title="完成报名" />
         </Steps>
         <Switch>
-          <Route
-            path={`${baseURL}/done`}
-            component={isD ? () => <div>完成</div> : GenRedirect('/detail')}
-          />
-          <Route
-            path={`${baseURL}/team_up`}
-            component={isD ? TeamUpView : GenRedirect('/detail')}
-          />
+          <Route path={`${baseURL}/done`} component={isD ? this.renderDone : RedirectToDetail} />
+          <Route path={`${baseURL}/team_up`} component={isD ? TeamUpView : RedirectToDetail} />
           <Route path={`${baseURL}/detail`} component={DetailForm} />
         </Switch>
       </Card>
     );
   }
+
+  renderDone = () => {
+    return (
+      <div style={{ marginBottom: '24px' }}>
+        <Row>
+          <Col
+            {...{
+              xl: { push: 8, span: 8 },
+              lg: { push: 6, span: 10 },
+              md: { push: 7, span: 12 },
+              xs: 24,
+              sm: 24,
+            }}
+          >
+            <Alert
+              showIcon={true}
+              type="success"
+              description="你已成功报名 Unique Hackday，请您静候入选佳音。"
+              message="恭喜"
+            />
+            <Button type="primary" style={{ marginTop: '10px' }} onClick={this.props.gotoHome}>
+              好的
+            </Button>
+          </Col>
+        </Row>
+      </div>
+    );
+  };
 
   isD = false;
 
@@ -57,6 +87,13 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
   }
 }
 
-export default connect((state: RootState) => ({
-  isDetailFormSubmitted: state.user.isDetailFormSubmitted,
-}))(ApplyView);
+export default connect(
+  (state: RootState) => ({
+    isDetailFormSubmitted: state.user.isDetailFormSubmitted,
+  }),
+  dispatch => ({
+    gotoHome() {
+      dispatch(replace('/'));
+    },
+  }),
+)(ApplyView);

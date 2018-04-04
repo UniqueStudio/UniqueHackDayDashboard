@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
+import { replace } from 'react-router-redux';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Radio, { RadioChangeEvent } from 'antd/es/radio';
@@ -9,12 +10,13 @@ import Radio, { RadioChangeEvent } from 'antd/es/radio';
 import MyForm from '../../Components/MyForm/MyForm';
 import Text from '../../Components/MyForm/Text';
 import Submit from '../../Components/MyForm/Submit';
+
 import { patterns } from '../../lib/patterns';
+
 import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
-import { replace } from 'react-router-redux';
 
 export interface TeamUpFormsProps {
   onSubmit: () => void;
