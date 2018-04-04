@@ -9,6 +9,7 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { take, select, call, put } from 'redux-saga/effects';
+import { replace } from 'react-router-redux';
 
 export async function newTeamRequest(teamName: string) {
   const res = await request({
@@ -31,7 +32,10 @@ export function* newTeamSaga() {
     yield put({ type: 'NEW_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'NEW_TEAM_SUBMIT_FAILED', payload: message });
+      continue;
     }
+
+    yield put(replace('/apply/done'));
   }
 }
 
@@ -76,6 +80,46 @@ export function* joinTeamSaga() {
     yield put({ type: 'JOIN_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'JOIN_TEAM_SUBMIT_FAILED', payload: message });
+      continue;
     }
+
+    yield put(replace('/apply/done'));
+  }
+}
+
+export async function detailRequest(detail: API.User.UserDetailRequest) {
+  const res = await request({
+    endpoint: '/v1/user/detail',
+    method: 'POST',
+    body: detail,
+  });
+  const message = `提交详情失败：${res.message}`;
+  if (res.httpStatusCode === 200) {
+    return { successful: true, message };
+  }
+  return { successful: false, message };
+}
+
+export function* detailSaga() {
+  while (true) {
+    yield take('DETAIL_FORM_SUBMIT');
+    yield put({ type: 'DETAIL_FORM_SUBMIT_START' });
+    const { detail } = yield select();
+    const { successful, message } = yield call(detailRequest, Object.keys(detail).reduce(
+      (p, key) => ({
+        ...p,
+        [key]: detail[key].value,
+      }),
+      {},
+    ) as any);
+    yield put({ type: 'DETAIL_FORM_SUBMIT_END' });
+
+    if (!successful) {
+      yield put({ type: 'DETAIL_FORM_SUBMIT_FAILED', payload: message });
+      continue;
+    }
+
+    yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
+    yield put(replace('/apply/team_up'));
   }
 }

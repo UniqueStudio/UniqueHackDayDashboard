@@ -18,7 +18,7 @@ import Submit from '../../Components/MyForm/Submit';
 
 import moment from 'moment';
 
-export interface DetailFormProps {
+export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
 
@@ -32,7 +32,7 @@ export interface DetailFormProps {
     city: any;
     alipay: any;
     school: any;
-    marjor: any;
+    major: any;
     grade: any;
     graduateTime: any; // 年月日
     urgentConcatName: any;
@@ -52,10 +52,10 @@ export interface DetailFormProps {
   };
 
   detailFormSubmitting: boolean;
-  detailFormError: string;
+  detailFormError: { value: string; time: number };
 }
 
-class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
+class DetailView extends React.Component<DetailViewProps & FormComponentProps> {
   render() {
     const {
       detailFormError,
@@ -70,7 +70,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
         onFormChange={onFormChange}
         onSubmit={onSubmit}
         isSubmitting={detailFormSubmitting}
-        message={detailFormError ? { value: detailFormError, type: 'error' } : undefined}
+        message={detailFormError ? { ...detailFormError, type: 'error' } : undefined}
       >
         <Divider>基本信息</Divider>
         <Text required={true} id="name" fieldName="姓名" label="姓名" />
@@ -83,7 +83,14 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
 
-        <Text required={true} id="email" fieldName="邮箱" label="邮箱" iconType="mail" />
+        <Text
+          required={true}
+          id="email"
+          fieldName="邮箱"
+          label="邮箱"
+          iconType="mail"
+          pattern={patterns.email}
+        />
 
         <Divider>报销和赠礼</Divider>
 
@@ -111,7 +118,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
 
         <Text required={true} id="school" fieldName="学校" label="学校" iconType="book" />
 
-        <Text required={true} id="marjor" fieldName="专业" label="专业" iconType="book" />
+        <Text required={true} id="major" fieldName="专业" label="专业" iconType="book" />
 
         <Select required={true} id="grade" fieldName="年级" label="年级">
           <AntdSelect.Option value="大一">大一</AntdSelect.Option>
@@ -185,7 +192,7 @@ class DetailForm extends React.Component<DetailFormProps & FormComponentProps> {
           rows={4}
         />
 
-        <Select required={true} id="roles" fieldName="角色" label="角色" mode="tags">
+        <Select required={true} id="role" fieldName="角色" label="角色" mode="tags">
           <AntdSelect.Option value="前端">前端</AntdSelect.Option>
           <AntdSelect.Option value="产品">产品</AntdSelect.Option>
           <AntdSelect.Option value="设计">设计</AntdSelect.Option>
@@ -266,7 +273,7 @@ export default connect(
       dispatch({ type: 'DETAIL_FORM_SUBMIT' });
     },
   }),
-)(DetailForm);
+)(DetailView);
 
 function isDateValue(props: string) {
   return props === 'birthday' || props === 'graduateTime';

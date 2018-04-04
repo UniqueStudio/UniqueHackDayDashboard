@@ -35,6 +35,7 @@
     "optimize-css-assets-webpack-plugin": "^4.0.0",
     "prettier": "^1.11.1",
     "react-dev-utils": "^5.0.0",
+    "react-hot-loader": "^4.0.1",
     "style-loader": "^0.20.3",
     "ts-loader": "^4.1.0",
     "tslint": "^5.9.1",
@@ -43,7 +44,8 @@
     "typescript": "^2.7.2",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.4.1",
-    "webpack-cli": "^2.0.13"
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1"
   },
   "dependencies": {
     "ant-design-pro": "^1.1.0",
@@ -64,6 +66,7 @@
     "redux-saga": "^0.16.0"
   },
   "scripts": {
+    "start": "webpack-dev-server --config=./webpack.config.dev.js --hot",
     "build": "node ./scripts/build.js",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}"

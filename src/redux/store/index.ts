@@ -6,14 +6,10 @@ import createHistory from 'history/createHashHistory';
 import { History } from 'history';
 
 import reducer, { RootState } from '../reducers';
-import * as sagas from '../sagas';
-import * as applySagas from '../sagas/apply';
-// import errorTipSaga from '../sagas/error-tip';
+import SagaManager from '../sagas';
 
 const history: History = createHistory();
-
 const sagaMiddleware = createSagaMiddleware();
-
 const composeEnhancers =
   (process.env.NODE_ENV === 'development' &&
     (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
@@ -24,21 +20,19 @@ const store: Store<RootState> = createStore(
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
 );
 
-sagaMiddleware.run(sagas.loginSaga);
-sagaMiddleware.run(sagas.registerSaga);
-
-sagaMiddleware.run(sagas.registerSMSSaga);
-sagaMiddleware.run(sagas.resetPwdSMSSaga);
-
-sagaMiddleware.run(sagas.detailSaga);
-
-sagaMiddleware.run(sagas.loginStatusSaga);
-sagaMiddleware.run(sagas.loginStatusLoopSaga);
-
-sagaMiddleware.run(applySagas.newTeamSaga);
-sagaMiddleware.run(applySagas.joinTeamSaga);
-
-// sagaMiddleware.run(errorTipSaga);
+SagaManager.startSagas(sagaMiddleware);
 
 export { history, store };
 export default store;
+
+if ((module as any).hot) {
+  (module as any).hot.accept('../reducers', () => {
+    const nextRootReducer = require('../reducers').default;
+    store.replaceReducer(nextRootReducer);
+  });
+
+  (module as any).hot.accept('../sagas', () => {
+    SagaManager.cancelSagas(store);
+    require('../sagas').default.startSagas(sagaMiddleware);
+  });
+}

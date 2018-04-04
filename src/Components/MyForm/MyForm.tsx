@@ -14,6 +14,7 @@ const AnyAlert = Alert as any;
 export interface FormMessage {
   value: string;
   type: 'success' | 'info' | 'warning' | 'error';
+  time: number;
 }
 
 export interface MyFormProps {
@@ -100,8 +101,14 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
   };
 
   componentWillReceiveProps(nextProps: MyFormProps) {
+    const { message = { time: 0 } } = this.props;
     const { message: nextMessage, isSubmitting: nextIsSubmitting } = nextProps;
-    if (nextMessage && !nextIsSubmitting) {
+    if (
+      nextMessage &&
+      nextMessage.value &&
+      nextMessage.time !== message.time &&
+      !nextIsSubmitting
+    ) {
       setTimeout(() => {
         if (this.scrollDiv) {
           this.scrollDiv.scrollIntoView();

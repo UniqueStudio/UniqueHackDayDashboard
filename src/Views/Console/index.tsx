@@ -1,11 +1,14 @@
 import * as React from 'react';
 import Button from 'antd/es/button';
+// import { Redirect } from 'react-router';
 
 import Status from '../../Components/Status';
 import TeamInfo from '../../Components/TeamInfo';
 import HackdayProgress from '../../Components/HackdayProgress';
+// import { RootState } from '../../redux/reducers';
+// import { connect } from 'react-redux';
 
-export default class Console extends React.Component {
+class Console extends React.Component {
   renderDivider() {
     return <div style={{ height: '20px' }} />;
   }
@@ -33,3 +36,5 @@ export default class Console extends React.Component {
     ];
   }
 }
+
+export default Console;

@@ -5,24 +5,18 @@ export interface ErrorStatus {
   // registerError: string;
 
   // newTeamError: string;
-  [k: string]: string;
+  [k: string]: { value: string; time: number };
 }
 
-export default function loadingStatus(
-  state: ErrorStatus = {
-    // loginError: '',
-    // registerError: '',
-    // newTeamError: '',
-  },
-  action: AnyAction,
-) {
+export default function loadingStatus(state: ErrorStatus = {}, action: AnyAction) {
   const [, type] = action.type.match(/^([A-Z_]+?)_(SUBMIT_)?FAILED$/) || new Array(3);
   if (type) {
     return {
       ...state,
-      [`${type
-        .toLowerCase()
-        .replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}Error`]: action.payload,
+      [`${type.toLowerCase().replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}Error`]: {
+        value: action.payload,
+        time: Date.now(),
+      },
     };
   }
 

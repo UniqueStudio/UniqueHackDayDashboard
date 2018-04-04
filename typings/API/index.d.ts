@@ -251,7 +251,7 @@ declare namespace API {
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
 
-      (req: RequestWithAuth<'/v1/user/user_info', 'GET', never>): Response<
+      (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<
             200,
@@ -260,10 +260,15 @@ declare namespace API {
               username: string;
               phone: string;
               name: string | null;
+              // 详情是否提交
+              isDetailFormSubmitted: boolean;
+              // 组队信息是否提交
+              isTeamFormSubmitted: boolean;
+              // 详情以及组队信息都提交算成功报名
+              // applied: boolean;
               isAdmin: boolean;
               // 一定已注册了
               registrered: true;
-              applied: boolean;
               teamId: string | null;
               // (applied && isAccepted === null) 意味着是 pending 状态
               isAccepted: boolean | null;

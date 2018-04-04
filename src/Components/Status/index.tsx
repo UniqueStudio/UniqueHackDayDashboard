@@ -11,7 +11,6 @@ import cls from './style.less';
 export interface StatusProps {
   type: 'success' | 'warning' | 'error';
   statusText: string;
-  // buttons: Array<{ type: ButtonType, title: string, key: string | number }>;
   buttons: React.ReactNode[];
 }
 

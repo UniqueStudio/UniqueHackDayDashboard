@@ -17,7 +17,9 @@ import AutoLogin from '../../Components/MyForm/AutoLogin';
 import Phone from '../../Components/MyForm/Phone';
 import MobileCode from '../../Components/MyForm/MobileCode';
 import Submit from '../../Components/MyForm/Submit';
+import Text from '../../Components/MyForm/Text';
 import { usernameValidator, phoneValidator } from '../../Components/MyForm/validators';
+import { patterns } from '../../lib/patterns';
 
 export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
@@ -39,15 +41,13 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
 
   registerSubmitting: boolean;
   loginSubmitting: boolean;
+  resetPwdSubmitting: boolean;
   resetPwdSMSSubmitting: boolean;
   registerSMSSubmitting: boolean;
 
-  SMSLoading: boolean;
-  resetPwdLoading: boolean;
-
-  registerError: string;
-  loginError: string;
-  resetPwdError: string;
+  registerError: { value: string; time: number };
+  loginError: { value: string; time: number };
+  resetPwdError: { value: string; time: number };
 
   loggedIn: boolean;
 }
@@ -58,7 +58,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
 
   onLoginSubmit = this.props.withVerify(this.props.onLoginSubmit);
   onRegisterSubmit = this.props.withVerify(this.props.onRegisterSubmit);
-  onResetPwdSubmit = this.props.withVerify(this.props.onRegisterSubmit);
+  onResetPwdSubmit = this.props.withVerify(this.props.onResetPwdSubmit);
 
   renderTab = () => {
     const {
@@ -82,7 +82,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onSubmit={this.onLoginSubmit}
             isSubmitting={loginSubmitting || !recaptchaReady}
             noLayout={true}
-            message={loginError ? { value: loginError, type: 'error' } : undefined}
+            message={loginError ? { ...loginError, type: 'error' } : undefined}
           >
             <Username noLayout={true} />
             <Password noLayout={true} />
@@ -98,7 +98,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             onSubmit={this.onRegisterSubmit}
             isSubmitting={registerSubmitting || !recaptchaReady}
             noLayout={true}
-            message={registerError ? { value: registerError, type: 'error' } : undefined}
+            message={registerError ? { ...registerError, type: 'error' } : undefined}
           >
             <Username validator={usernameValidator} noLayout={true} />
             <Password noLayout={true} />
@@ -114,7 +114,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   renderResetPwdForm = () => {
     const {
       resetPwdData,
-      resetPwdLoading,
+      resetPwdSubmitting,
       resetPwdError,
       resetPwdSMSSubmitting,
       recaptchaReady,
@@ -131,13 +131,19 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
           data={resetPwdData}
           onFormChange={this.props.onResetPwdFormChange}
           onSubmit={this.onResetPwdSubmit}
-          isSubmitting={resetPwdLoading || !recaptchaReady}
+          isSubmitting={resetPwdSubmitting || !recaptchaReady}
           noLayout={true}
-          message={resetPwdError ? { value: resetPwdError, type: 'error' } : undefined}
+          message={resetPwdError ? { ...resetPwdError, type: 'error' } : undefined}
         >
           <Phone noLayout={true} />
           <MobileCode onSend={this.onResetPwdSMSSend} isSending={resetPwdSMSSubmitting} />
-          <Password inputType="text" noLayout={true} />
+          <Text
+            pattern={patterns.password}
+            fieldName="新密码"
+            required={true}
+            id="newPassword"
+            noLayout={true}
+          />
           <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
         </MyForm>
       </Card>
@@ -175,12 +181,14 @@ export default connect(
       },
       registerSubmitting: state.loadingStatus.registerSubmitting,
       loginSubmitting: state.loadingStatus.loginSubmitting,
+      resetPwdSubmitting: state.loadingStatus.resetPwdSubmitting,
 
       resetPwdSMSSubmitting: state.loadingStatus.resetPwdSMSSubmitting,
       registerSMSSubmitting: state.loadingStatus.registerSMSSubmitting,
 
       registerError: state.errorStatus.registerError,
       loginError: state.errorStatus.loginError,
+      resetPwdError: state.errorStatus.resetPwdError,
 
       loggedIn: state.auth.loggedIn,
     };

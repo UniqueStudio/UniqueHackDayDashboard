@@ -44,6 +44,7 @@
 
 .header {
   padding: 0 !important;
+  padding-right: 10px !important;
   background-color: #fff !important;
   border-bottom: 1px solid #eeeeee !important;
   display: flex;
@@ -71,6 +72,12 @@
 
   &-menu-link {
     border: none !important;
+  }
+
+  :global .ant-badge {
+    .anticon {
+      margin-right: 0;
+    }
   }
 }
 
@@ -120,7 +127,7 @@
 }
 
 .login-card-wrapper {
-  display: flex;
+  display: flex !important;
   width: 100%;
 }
 

@@ -2,28 +2,30 @@ import * as React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
+import { hot } from 'react-hot-loader';
 
-import 'antd/lib/form/style';
-import 'antd/lib/card/style';
-import 'antd/lib/input/style';
-import 'antd/lib/tabs/style';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/button/style';
-import 'antd/lib/checkbox/style';
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
-import 'antd/lib/layout/style';
-import 'antd/lib/menu/style';
-import 'antd/lib/tooltip/style';
-import 'antd/lib/table/style';
-import 'antd/lib/steps/style';
-import 'antd/lib/select/style';
-import 'antd/lib/date-picker/style';
-import 'antd/lib/upload/style';
-import 'antd/lib/progress/style';
-import 'antd/lib/alert/style';
-import 'antd/lib/radio/style';
-import 'antd/lib/divider/style';
+import 'antd/es/form/style';
+import 'antd/es/card/style';
+import 'antd/es/input/style';
+import 'antd/es/tabs/style';
+import 'antd/es/icon/style/css';
+import 'antd/es/button/style';
+import 'antd/es/checkbox/style';
+import 'antd/es/row/style/css';
+import 'antd/es/col/style/css';
+import 'antd/es/layout/style';
+import 'antd/es/menu/style';
+import 'antd/es/tooltip/style';
+import 'antd/es/table/style';
+import 'antd/es/steps/style';
+import 'antd/es/select/style';
+import 'antd/es/date-picker/style';
+import 'antd/es/upload/style';
+import 'antd/es/progress/style';
+import 'antd/es/alert/style';
+import 'antd/es/radio/style';
+import 'antd/es/divider/style';
+import 'antd/es/message/style';
 
 // import 'ant-design-pro/dist/ant-design-pro.min.css';
 
@@ -33,14 +35,14 @@ import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
 import { store, history } from './redux/store';
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
-    isLoadingLoginStatus: false,
+    isLoadingUserInfo: false,
   };
 
   unsubcribe = () => void 0;
   render() {
-    if (this.state.isLoadingLoginStatus) {
+    if (this.state.isLoadingUserInfo) {
       return null;
     }
     return (
@@ -56,18 +58,15 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    let preIsLoadingLoginStatus = false;
+    let preIsLoadingUserInfo = false;
     this.unsubcribe = store.subscribe(() => {
-      const isLoadingLoginStatus = store.getState().loadingStatus.loginStatusLoading;
-      if (isLoadingLoginStatus === !preIsLoadingLoginStatus) {
-        this.setState({ isLoadingLoginStatus });
-        if (!isLoadingLoginStatus) {
-          this.unsubcribe();
-        }
+      const isLoadingUserInfo = store.getState().loadingStatus.userInfoLoading;
+      if (isLoadingUserInfo === !preIsLoadingUserInfo) {
+        this.setState({ isLoadingUserInfo });
       }
-      preIsLoadingLoginStatus = isLoadingLoginStatus;
+      preIsLoadingUserInfo = isLoadingUserInfo;
     }) as any;
-    store.dispatch({ type: 'LOAD_LOGIN_STATUS' });
+    store.dispatch({ type: 'LOAD_USER_INFO' });
   }
 
   componentWillUnmount() {
@@ -76,3 +75,5 @@ export default class App extends React.Component {
     }
   }
 }
+
+export default hot(module)(App);

@@ -20,18 +20,17 @@ module.exports = {
       filename: '[name].[hash].css',
       publicPath: paths.appPublic,
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.template.html'),
+    }),
   ],
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: true, // set to true if you want JS source maps
       }),
       new OptimizeCSSAssetsPlugin({}),
-      new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, 'index.template.html'),
-      }),
     ],
   },
   module: {

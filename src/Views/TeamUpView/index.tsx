@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
+import { replace } from 'react-router-redux';
 
 import Form, { FormComponentProps } from 'antd/es/form';
 import Radio, { RadioChangeEvent } from 'antd/es/radio';
@@ -9,7 +10,9 @@ import Radio, { RadioChangeEvent } from 'antd/es/radio';
 import MyForm from '../../Components/MyForm/MyForm';
 import Text from '../../Components/MyForm/Text';
 import Submit from '../../Components/MyForm/Submit';
+
 import { patterns } from '../../lib/patterns';
+
 import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
 import Row from 'antd/es/row';
@@ -26,12 +29,13 @@ export interface TeamUpFormsProps {
 
   onNewTeamSubmit: () => void;
   onJoinTeamSubmit: () => void;
+  onNoTeamUpClick: () => void;
 
   newTeamSubmitting: boolean;
-  newTeamError: string;
+  newTeamError: { value: string; time: number };
 
   joinTeamSubmitting: boolean;
-  joinTeamError: string;
+  joinTeamError: { value: string; time: number };
 }
 
 class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
@@ -97,7 +101,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
           onFormChange={onNewTeamFormChange}
           onSubmit={onNewTeamSubmit}
           isSubmitting={this.props.newTeamSubmitting}
-          message={newTeamError ? { value: newTeamError, type: 'error' } : undefined}
+          message={newTeamError ? { ...newTeamError, type: 'error' } : undefined}
         >
           <Text required={true} id="teamName" fieldName="队伍名" label="队伍名" />
           <Submit title="创建队伍" />
@@ -120,7 +124,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
         onFormChange={onJoinTeamFormChange}
         onSubmit={onJoinTeamSubmit}
         isSubmitting={joinTeamSubmitting}
-        message={joinTeamError ? { value: joinTeamError, type: 'error' } : undefined}
+        message={joinTeamError ? { ...joinTeamError, type: 'error' } : undefined}
       >
         <Text
           required={true}
@@ -160,7 +164,11 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
               description="我们推荐尽早组队，但是只要作品提交未结束你可以随时进行组队"
               message="注意"
             />
-            <Button type="primary" style={{ marginTop: '10px' }}>
+            <Button
+              type="primary"
+              style={{ marginTop: '10px' }}
+              onClick={this.props.onNoTeamUpClick}
+            >
               好的，下一步
             </Button>
           </Col>
@@ -205,6 +213,10 @@ export default connect(
     },
     onJoinTeamSubmit() {
       dispatch({ type: 'JOIN_TEAM_FORM_SUBMIT' });
+    },
+
+    onNoTeamUpClick() {
+      dispatch(replace('/apply/done'));
     },
   }),
 )(TeamUpForms);
