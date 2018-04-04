@@ -151,7 +151,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   };
 
   render() {
-    if (this.props.loggedIn) {
+    if (this.props.loggedIn && this.props.location.pathname !== '/user_entry/reset_pwd') {
       return <Redirect to="/" />;
     }
     return (

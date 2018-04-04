@@ -10,6 +10,7 @@ import teamForm, { TeamFormData } from './team';
 import resetPwd, { ResetPwdData } from './reset-pwd';
 import auth, { AuthData } from './auth';
 import user, { UserData } from './user';
+import msg, { MsgData } from './msg';
 
 export interface RootState {
   route?: {
@@ -24,6 +25,7 @@ export interface RootState {
   resetPwd: ResetPwdData;
   auth: AuthData;
   user: UserData;
+  msg: MsgData;
 }
 
 export { AnyAction };
@@ -38,6 +40,7 @@ export default combineReducers<RootState>({
   resetPwd,
   auth,
   user,
+  msg,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

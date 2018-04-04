@@ -457,26 +457,26 @@ declare namespace API {
 
     type SingleMessage =
       | {
-          id: string;
+          id: number;
           type: MessageType.LoginElseWhere;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.Rejected;
           rejectedReason: MessageValue;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.Accepted;
           rejectedExtraMsg?: MessageValue;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.OtherMessage;
           value: MessageValue;
@@ -484,7 +484,7 @@ declare namespace API {
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.NewTeammate;
           newTeammateInfo: API.Team.UserInTeam;
