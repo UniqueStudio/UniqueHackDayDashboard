@@ -36,7 +36,7 @@ export function* msgPollSaga() {
       yield take('SET_LOGGED_IN');
     }
 
-    const [successful, msgs]: [boolean, API.Message.SingleMessage[]] = yield msgPoll();
+    const [successful]: [boolean, API.Message.SingleMessage[]] = yield msgPoll();
 
     if (!successful) {
       errorCount += 1;
