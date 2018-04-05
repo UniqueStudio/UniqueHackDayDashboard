@@ -9,7 +9,9 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { take, select, call, put } from 'redux-saga/effects';
-import { replace } from 'react-router-redux';
+import { goBack } from 'react-router-redux';
+
+import Message from 'antd/es/message';
 
 export async function newTeamRequest(teamName: string) {
   const res = await request({
@@ -107,11 +109,22 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
   return { successful: false, message };
 }
 
+export async function getDetailRequest() {
+  const res = await request({
+    endpoint: '/v1/user/detail',
+    method: 'GET',
+  });
+
+  console.log(res);
+}
+
+(window as any).getDetailRequest = getDetailRequest;
+
 export function* detailSaga() {
   while (true) {
     yield take('DETAIL_FORM_SUBMIT');
     yield put({ type: 'DETAIL_FORM_SUBMIT_START' });
-    const { detail } = yield select();
+    const { detail, user: { isDetailFormSubmitted } } = yield select();
     const { successful, message } = yield call(detailRequest, Object.keys(detail).reduce(
       (p, key) => ({
         ...p,
@@ -127,6 +140,10 @@ export function* detailSaga() {
     }
 
     yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
-    yield put(replace('/apply/team_up'));
+    if (isDetailFormSubmitted) {
+      // 这里是保存的逻辑
+      Message.success('个人资料保存成功！');
+      yield put(goBack());
+    }
   }
 }

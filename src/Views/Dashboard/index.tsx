@@ -8,6 +8,8 @@ import ConsoleView from '../Console';
 import TeamConsole from '../TeamConsole';
 import ApplyView from '../ApplyView';
 import { replace } from 'react-router-redux';
+import OriginDetailView from '../DetailView/index';
+import Card from 'antd/es/card';
 
 export interface DashboardProps {
   loggedIn: boolean;
@@ -31,12 +33,21 @@ const Dashboard = (props: DashboardProps) => {
     >
       <Switch>
         <Route path="/apply" component={ApplyView} />
+        <Route path="/detail_edit" component={DetailView} />
         {/* <Route path="/admin" component={} /> */}
         {/* <Route path="/project" component={} /> */}
         <Route path="/team" component={isD ? TeamConsole : RedirectToDetail} />
         <Route path="/" component={isD ? ConsoleView : RedirectToDetail} />
       </Switch>
     </DashboardLayout>
+  );
+};
+
+const DetailView = () => {
+  return (
+    <Card title="编辑你的详情资料">
+      <OriginDetailView />
+    </Card>
   );
 };
 

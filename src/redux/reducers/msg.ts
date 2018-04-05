@@ -9,6 +9,9 @@ export type MsgAction =
   | { type: 'ADD_MSG_FROM_ALL'; payload?: API.Message.SingleMessage[] };
 
 export default function auth(state: MsgData = [], action: MsgAction): MsgData {
+  if (!action.payload) {
+    return state;
+  }
   if (
     action.type !== 'MSG_SET_READ' &&
     action.type !== 'MSG_SET_UNREAD' &&

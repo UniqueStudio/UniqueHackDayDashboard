@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 
-import Form, { FormComponentProps } from 'antd/es/form';
+import Form from 'antd/es/form';
 import AntdSelect from 'antd/es/select';
 import Divider from 'antd/es/divider';
 
@@ -55,7 +55,7 @@ export interface DetailViewProps {
   detailFormError: { value: string; time: number };
 }
 
-class DetailView extends React.Component<DetailViewProps & FormComponentProps> {
+class DetailView extends React.Component<DetailViewProps> {
   render() {
     const {
       detailFormError,

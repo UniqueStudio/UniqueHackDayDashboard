@@ -228,7 +228,6 @@ export function* userInfoSaga() {
       yield put({ type: 'ADD_MSG_FROM_ALL', payload: msgs });
       yield put({ type: 'ADD_MSG_FROM_UNREAD', payload: unreadMsgs });
     }
-    // put this at the end to
   }
 }
 
