@@ -11,6 +11,7 @@ import resetPwd, { ResetPwdData } from './reset-pwd';
 import auth, { AuthData } from './auth';
 import user, { UserData } from './user';
 import msg, { MsgData } from './msg';
+import applyProcess, { ApplyProcessData } from './apply';
 
 export interface RootState {
   route?: {
@@ -26,6 +27,7 @@ export interface RootState {
   auth: AuthData;
   user: UserData;
   msg: MsgData;
+  applyProcess: ApplyProcessData;
 }
 
 export { AnyAction };
@@ -41,6 +43,7 @@ export default combineReducers<RootState>({
   auth,
   user,
   msg,
+  applyProcess,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

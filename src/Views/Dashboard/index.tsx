@@ -13,15 +13,15 @@ import Card from 'antd/es/card';
 
 export interface DashboardProps {
   loggedIn: boolean;
-  isD: boolean;
+  isC: boolean;
   selfReplace: (loc: string) => void;
   menuItemDisabled: boolean;
 }
 
-const RedirectToDetail = () => <Redirect to="/apply/detail" />;
+const RedirectToApply = () => <Redirect to="/apply" />;
 
 const Dashboard = (props: DashboardProps) => {
-  const { isD } = props;
+  const { isC } = props;
   if (!props.loggedIn) {
     return <Redirect to="/user_entry" />;
   }
@@ -36,8 +36,8 @@ const Dashboard = (props: DashboardProps) => {
         <Route path="/detail_edit" component={DetailView} />
         {/* <Route path="/admin" component={} /> */}
         {/* <Route path="/project" component={} /> */}
-        <Route path="/team" component={isD ? TeamConsole : RedirectToDetail} />
-        <Route path="/" component={isD ? ConsoleView : RedirectToDetail} />
+        <Route path="/team" component={isC ? TeamConsole : RedirectToApply} />
+        <Route path="/" component={isC ? ConsoleView : RedirectToApply} />
       </Switch>
     </DashboardLayout>
   );
@@ -56,8 +56,8 @@ export default connect(
     const pathname = (state.route && state.route.location && state.route.location.pathname) || '';
     return {
       loggedIn: state.auth.loggedIn,
-      menuItemDisabled: pathname.indexOf('/apply') === 0 && pathname !== '/apply/done',
-      isD: state.user.isDetailFormSubmitted,
+      menuItemDisabled: pathname.indexOf('/apply') === 0,
+      isC: state.user.isApplyConfirmed,
     };
   },
   dispatch => ({

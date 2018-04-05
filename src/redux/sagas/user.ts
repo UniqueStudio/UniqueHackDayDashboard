@@ -199,7 +199,7 @@ export function* userInfoSaga() {
   while (true) {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
-    const [res, code] = yield call(userInfoRequest);
+    const [res, code]: [API.User.UserData, number] = yield call(userInfoRequest);
     if (!res) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       const { route } = yield select();
@@ -220,6 +220,17 @@ export function* userInfoSaga() {
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
+      yield put({ type: 'APPLY_PROCESS_START' });
+      if (res.isDetailFormSubmitted) {
+        yield put({ type: 'APPLY_PROCESS_IS_D', payload: true });
+      }
+      if (res.isTeamFormSubmitted) {
+        yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
+      }
+      if (res.isApplyConfirmed) {
+        yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+      }
+
       yield put({ type: 'USER_INFO_LOAD_END' });
 
       // fetch msg
@@ -248,7 +259,7 @@ export function* userInfoSetSaga() {
     const { payload: res }: { payload: UserData } = yield take('SET_USER_INFO');
     if (res) {
       if (!res.isDetailFormSubmitted) {
-        yield put(replace('/apply/detail'));
+        yield put(replace('/apply'));
       }
     }
   }

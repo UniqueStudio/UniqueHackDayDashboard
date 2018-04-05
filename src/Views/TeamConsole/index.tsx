@@ -7,7 +7,7 @@ import DeviceRent from '../../Components/DeviceRent/index';
 import TeamUpView from '../TeamUpView';
 import { RootState } from '../../redux/reducers/index';
 
-class TeamConsole extends React.Component<{ teamId: string }> {
+class TeamConsole extends React.Component<{ teamId: number }> {
   render() {
     if (!this.props.teamId) {
       return (

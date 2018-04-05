@@ -13,6 +13,16 @@ import { goBack } from 'react-router-redux';
 
 import Message from 'antd/es/message';
 
+export async function changeTeamFormStatus(submitted: boolean) {
+  await request({
+    endpoint: '/v1/user/team_form_submit_status',
+    method: 'POST',
+    body: {
+      submitted,
+    },
+  });
+}
+
 export async function newTeamRequest(teamName: string) {
   const res = await request({
     endpoint: '/v1/team/teams',
@@ -26,6 +36,7 @@ export async function newTeamRequest(teamName: string) {
 }
 
 export function* newTeamSaga() {
+  yield take('APPLY_PROCESS_IS_D');
   while (true) {
     yield take('NEW_TEAM_FORM_SUBMIT');
     yield put({ type: 'NEW_TEAM_SUBMIT_START' });
@@ -37,7 +48,9 @@ export function* newTeamSaga() {
       continue;
     }
 
+    yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
+    yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
   }
 }
 
@@ -74,6 +87,7 @@ export async function joinTeamRequest(
 }
 
 export function* joinTeamSaga() {
+  yield take('APPLY_PROCESS_IS_D');
   while (true) {
     yield take('JOIN_TEAM_FORM_SUBMIT');
     yield put({ type: 'JOIN_TEAM_SUBMIT_START' });
@@ -86,13 +100,16 @@ export function* joinTeamSaga() {
       teamLeaderPhone.value,
       username,
     );
+
     yield put({ type: 'JOIN_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'JOIN_TEAM_SUBMIT_FAILED', payload: message });
       continue;
     }
 
+    yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
+    yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
   }
 }
 
@@ -108,17 +125,6 @@ export async function detailRequest(detail: API.User.UserDetailRequest) {
   }
   return { successful: false, message };
 }
-
-export async function getDetailRequest() {
-  const res = await request({
-    endpoint: '/v1/user/detail',
-    method: 'GET',
-  });
-
-  console.log(res);
-}
-
-(window as any).getDetailRequest = getDetailRequest;
 
 export function* detailSaga() {
   while (true) {
@@ -140,10 +146,60 @@ export function* detailSaga() {
     }
 
     yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
+    yield put({ type: 'APPLY_PROCESS_IS_D', payload: true });
     if (isDetailFormSubmitted) {
       // 这里是保存的逻辑
       Message.success('个人资料保存成功！');
       yield put(goBack());
     }
+  }
+}
+
+export function* applyProcessSaga() {
+  yield take('SET_LOGGED_IN');
+  const type = 'APPLY_PROCESS_SET_MAX_STEP';
+  while (true) {
+    yield take('APPLY_PROCESS_START');
+    yield put({ type, payload: 0 });
+    yield take('APPLY_PROCESS_IS_D');
+    yield put({ type, payload: 1 });
+    yield take('APPLY_PROCESS_IS_T');
+    yield put({ type, payload: 2 });
+    yield take('APPLY_PROCESS_IS_C');
+    yield put({ type, payload: 3 });
+  }
+}
+
+export function* applyConfirmSaga() {
+  yield take('SET_LOGGED_IN');
+  yield take('APPLY_PROCESS_IS_T');
+  while (true) {
+    yield take('USER_APPLY_CONFIRM');
+    yield put({ type: 'USER_APPLY_CONFIRM_SUBMIT_START' });
+    const { httpStatusCode, message } = yield request({
+      endpoint: '/v1/user/apply/confirmation',
+      method: 'PUT',
+      body: {
+        confirmation: true,
+      },
+    });
+    yield put({ type: 'USER_APPLY_CONFIRM_SUBMIT_END' });
+
+    if (httpStatusCode !== 200) {
+      yield put({ type: 'USER_APPLY_CONFIRM_FAILED', payload: message });
+      continue;
+    }
+    yield put({ type: 'APPLY_PROCESS_IS_C' });
+  }
+}
+
+export function* teamStatusSaga() {
+  yield take('SET_LOGGED_IN');
+  while (true) {
+    yield take('CHANGE_TEAM_FORM_STATUS');
+
+    yield call(changeTeamFormStatus, true);
+
+    yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
   }
 }

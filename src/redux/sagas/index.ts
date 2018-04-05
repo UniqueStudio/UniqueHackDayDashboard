@@ -15,7 +15,14 @@ import { RootState } from '../reducers';
 
 import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga, logoutSaga } from './user';
 import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
-import { joinTeamSaga, newTeamSaga, detailSaga } from './apply';
+import {
+  joinTeamSaga,
+  newTeamSaga,
+  detailSaga,
+  applyConfirmSaga,
+  applyProcessSaga,
+  teamStatusSaga,
+} from './apply';
 import { msgPollSaga, showMsg, setReadAllSaga, deleteAllSaga } from './msg';
 
 export function* mainSaga() {
@@ -41,6 +48,9 @@ export function* mainSaga() {
     showMsg(),
     setReadAllSaga(),
     deleteAllSaga(),
+    applyProcessSaga(),
+    applyConfirmSaga(),
+    teamStatusSaga(),
   ]);
 }
 
