@@ -64,7 +64,7 @@ export default class File extends React.Component<FileProps> {
             name={this.props.id}
             action="https://backend.fredliang.cn/v1/file/files"
             listType="picture"
-            headers={{ Authorization: `Bearer ${authorizationToken()}`, }}
+            headers={{ Authorization: `Bearer ${authorizationToken()}` }}
           >
             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
               <Icon type="upload" /> 点击上传{this.props.fieldName}

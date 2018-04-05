@@ -51,8 +51,8 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
               sm={24}
               md={24}
               lg={{ push: 2, span: 20 }}
-              xl={{ push: 4, span: 16 }}
-              xxl={{ push: 5, span: 14 }}
+              xl={{ push: 3, span: 18 }}
+              xxl={{ push: 4, span: 16 }}
               style={{ padding: '10px' }}
             >
               {this.props.children}

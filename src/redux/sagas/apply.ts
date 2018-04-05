@@ -18,7 +18,7 @@ export async function newTeamRequest(teamName: string) {
     body: { name: teamName },
   });
   if (res.httpStatusCode === 200) {
-    return { successful: true };
+    return { successful: true, message: null, teamId: res.data.teamId };
   }
   return { successful: false, message: `新建队伍失败：${res.message}` };
 }
@@ -28,18 +28,22 @@ export function* newTeamSaga() {
     yield take('NEW_TEAM_FORM_SUBMIT');
     yield put({ type: 'NEW_TEAM_SUBMIT_START' });
     const { teamForm: { teamName } } = yield select();
-    const { successful, message } = yield call(newTeamRequest, teamName.value);
+    const { successful, message, teamId } = yield call(newTeamRequest, teamName.value);
     yield put({ type: 'NEW_TEAM_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'NEW_TEAM_SUBMIT_FAILED', payload: message });
       continue;
     }
 
-    yield put(replace('/apply/done'));
+    yield put({ type: 'SET_USER_INFO', payload: { teamId } });
   }
 }
 
-export async function joinTeamRequest(teamLeaderName: string, teamLeaderPhone: string) {
+export async function joinTeamRequest(
+  teamLeaderName: string,
+  teamLeaderPhone: string,
+  username: string,
+) {
   const getTeamIdRes = await request({
     endpoint: '/v1/team/id',
     method: 'GET',
@@ -54,13 +58,13 @@ export async function joinTeamRequest(teamLeaderName: string, teamLeaderPhone: s
       endpoint: '/v1/team/members',
       method: 'POST',
       body: {
-        username: '',
-        teamId: '',
+        username,
+        teamId: getTeamIdRes.data.teamId,
       },
     });
 
     if (joinTeamRes.httpStatusCode === 200) {
-      return { successful: true };
+      return { successful: true, message: null, teamId: getTeamIdRes.data.teamId };
     }
     return { successful: false, message: `加入队伍失败：${joinTeamRes.message}` };
   }
@@ -71,11 +75,14 @@ export function* joinTeamSaga() {
   while (true) {
     yield take('JOIN_TEAM_FORM_SUBMIT');
     yield put({ type: 'JOIN_TEAM_SUBMIT_START' });
-    const { teamForm: { teamLeaderName, teamLeaderPhone } } = yield select();
-    const { successful, message } = yield call(
+
+    const { teamForm: { teamLeaderName, teamLeaderPhone }, user: { username } } = yield select();
+
+    const { successful, message, teamId } = yield call(
       newTeamRequest,
       teamLeaderName.value,
       teamLeaderPhone.value,
+      username,
     );
     yield put({ type: 'JOIN_TEAM_SUBMIT_END' });
     if (!successful) {
@@ -83,7 +90,7 @@ export function* joinTeamSaga() {
       continue;
     }
 
-    yield put(replace('/apply/done'));
+    yield put({ type: 'SET_USER_INFO', payload: { teamId } });
   }
 }
 

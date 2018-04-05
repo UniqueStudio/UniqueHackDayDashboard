@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 import { replace } from 'react-router-redux';
 
-import Form, { FormComponentProps } from 'antd/es/form';
+import Form from 'antd/es/form';
 import Radio, { RadioChangeEvent } from 'antd/es/radio';
 
 import MyForm from '../../Components/MyForm/MyForm';
@@ -18,8 +18,8 @@ import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
-export interface TeamUpFormsProps {
-  onSubmit: () => void;
+export interface TeamUpViewProps {
+  teamUpSkippable?: boolean;
 
   newTeamData: any;
   joinTeamData: any;
@@ -38,7 +38,7 @@ export interface TeamUpFormsProps {
   joinTeamError: { value: string; time: number };
 }
 
-class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps> {
+class TeamUpView extends React.Component<TeamUpViewProps> {
   state = {
     formIndex: 0,
   };
@@ -62,7 +62,7 @@ class TeamUpForms extends React.Component<TeamUpFormsProps & FormComponentProps>
           <Radio.Group defaultValue="0" onChange={this.handleRadioChange}>
             <Radio.Button value="0">队长</Radio.Button>
             <Radio.Button value="1">队员</Radio.Button>
-            <Radio.Button value="2">暂不组队</Radio.Button>
+            {!this.props.teamUpSkippable && <Radio.Button value="2">暂不组队</Radio.Button>}
           </Radio.Group>
         </Form.Item>
         {
@@ -219,4 +219,4 @@ export default connect(
       dispatch(replace('/apply/done'));
     },
   }),
-)(TeamUpForms);
+)(TeamUpView);
