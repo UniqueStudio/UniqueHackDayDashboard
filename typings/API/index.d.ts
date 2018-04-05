@@ -271,7 +271,7 @@ declare namespace API {
               // 详情是否提交
               isDetailFormSubmitted: boolean;
               // 组队信息是否提交
-              isTeamFormSubmitted: boolean;
+              // isTeamFormSubmitted: boolean;
               // 详情以及组队信息都提交算成功报名
               // applied: boolean;
               isAdmin: boolean;
