@@ -66,6 +66,7 @@ declare namespace API {
 
     Forbidden = 'Forbidden',
     LoginNeeded = 'LoginNeeded',
+    ApplyNeeded = 'ApplyNeeded',
     PasswordWrong = 'PasswordWrong',
 
     // 这个是 200 的 message
@@ -215,6 +216,7 @@ declare namespace API {
 
       // 获取 detail 的接口
       (req: RequestWithAuth<'/v1/user/detail', 'GET', never>): Response<
+        | ResponseWithoutData<400, Message.ApplyNeeded>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, UserDetailRequest>
       >;
@@ -278,6 +280,7 @@ declare namespace API {
               teamId: string | null;
               // (applied && isAccepted === null) 意味着是 pending 状态
               isAccepted: boolean | null;
+              // 为 true 表示已确认参赛、false 表示确认不参赛、null 表示未作出选择
               confirmed: boolean | null;
               checkedIn: boolean | null;
               projectId: string | null;
@@ -303,6 +306,19 @@ declare namespace API {
       ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { username: string }>
+      >;
+
+      // 这个接口导致 user/info 种的 confirmed 变为 true 或 false
+      (
+        req: RequestWithAuth<
+          '/v1/user/apply/confirmation',
+          'PUT',
+          {
+            confirmation: boolean;
+          }
+        >,
+      ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }
   }
