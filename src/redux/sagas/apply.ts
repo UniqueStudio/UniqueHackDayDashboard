@@ -81,7 +81,7 @@ export function* joinTeamSaga() {
     const { teamForm: { teamLeaderName, teamLeaderPhone }, user: { username } } = yield select();
 
     const { successful, message, teamId } = yield call(
-      newTeamRequest,
+      joinTeamRequest,
       teamLeaderName.value,
       teamLeaderPhone.value,
       username,
