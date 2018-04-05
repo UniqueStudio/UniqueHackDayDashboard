@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const paths = require('./scripts/paths');
@@ -17,6 +18,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.template.html'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.TRAVIS_BRANCH': JSON.stringify(process.env.TRAVIS_BRANCH || ''),
     }),
   ],
   module: {

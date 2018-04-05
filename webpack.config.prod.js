@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -22,6 +23,9 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.template.html'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.TRAVIS_BRANCH': JSON.stringify(process.env.TRAVIS_BRANCH || ''),
     }),
   ],
   optimization: {
