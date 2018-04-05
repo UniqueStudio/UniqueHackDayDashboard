@@ -26,6 +26,7 @@ import 'antd/es/alert/style';
 import 'antd/es/radio/style';
 import 'antd/es/divider/style';
 import 'antd/es/message/style';
+import 'antd/es/notification/style';
 
 // import 'ant-design-pro/dist/ant-design-pro.min.css';
 

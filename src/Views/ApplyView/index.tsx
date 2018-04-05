@@ -16,6 +16,7 @@ import Col from 'antd/es/col';
 
 export interface ApplyViewProps {
   isDetailFormSubmitted: boolean;
+  teamId: string;
   gotoHome: () => void;
 }
 
@@ -30,9 +31,11 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
     );
 
     const baseURL = this.props.match.url;
-    const { isDetailFormSubmitted: isD } = this.props;
+    const { isDetailFormSubmitted: isD, teamId } = this.props;
 
     const RedirectToDetail = () => <Redirect to={`${baseURL}/detail`} />;
+    const RedirectToTeamUp = () => <Redirect to={`${baseURL}/team_up`} />;
+    const RedirectToDone = () => <Redirect to={`${baseURL}/done`} />;
 
     return (
       <Card bordered={false} title="完善报名信息">
@@ -43,8 +46,11 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
         </Steps>
         <Switch>
           <Route path={`${baseURL}/done`} component={isD ? this.renderDone : RedirectToDetail} />
-          <Route path={`${baseURL}/team_up`} component={isD ? TeamUpView : RedirectToDetail} />
-          <Route path={`${baseURL}/detail`} component={DetailForm} />
+          <Route
+            path={`${baseURL}/team_up`}
+            component={isD ? (teamId ? RedirectToDone : TeamUpView) : RedirectToDetail}
+          />
+          <Route path={`${baseURL}/detail`} component={isD ? RedirectToTeamUp : DetailForm} />
         </Switch>
       </Card>
     );
@@ -90,6 +96,7 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
 export default connect(
   (state: RootState) => ({
     isDetailFormSubmitted: state.user.isDetailFormSubmitted,
+    teamId: state.user.teamId,
   }),
   dispatch => ({
     gotoHome() {

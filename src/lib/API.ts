@@ -2,6 +2,7 @@ import * as url from 'url';
 import * as qs from 'querystring';
 
 import messageMap from './message';
+import { hostname } from './const';
 
 export const authorizationToken = () =>
   sessionStorage.getItem('token') || localStorage.getItem('token');
@@ -18,7 +19,7 @@ const request = (async (req: any) => {
       endpoint = `${pathname}?${composedQuery}`;
     }
   }
-  endpoint = `https://backend.fredliang.cn${endpoint}`;
+  endpoint = `https://${hostname}${endpoint}`;
   try {
     const res = await fetch(endpoint, {
       method,

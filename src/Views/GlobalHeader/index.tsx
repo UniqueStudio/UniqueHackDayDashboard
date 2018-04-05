@@ -3,20 +3,28 @@ import { connect } from 'react-redux';
 
 import Layout from 'antd/es/layout';
 import Menu from 'antd/es/menu';
-// import Tooltip from 'antd/es/tooltip';
 import Dropdown from 'antd/es/dropdown';
 import Icon from 'antd/es/icon';
 
 import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
 
 import { RootState } from '../../redux/reducers';
+import { UserData } from '../../redux/reducers/user';
+import { MsgDataSingle } from '../../redux/reducers/msg';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
+import msgMap from './msgMap';
 
 class GlobalHeader extends React.Component<{
   inUserEntry: boolean;
   loggedIn: boolean;
   handleLogout: () => void;
+  user: UserData;
+  unreadMsgs: MsgDataSingle[];
+  msgs: MsgDataSingle[];
+
+  setReadAll: () => void;
+  deleteAll: () => void;
 }> {
   render() {
     // const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
@@ -44,33 +52,19 @@ class GlobalHeader extends React.Component<{
     return <div className={cls['header-left-icon']} />;
   }
 
-  renderUserMenu() {
-    const data = [
-      // {
-      //   id: '000000001',
-      //   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-      //   title: '你收到了 14 份新周报',
-      //   datetime: '2017-08-09',
-      // },
-      {
-        id: '000000011',
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-        title: '已完成报名',
-        description: '亲爱的于有为同学，你已经完成报名，请等待审核。',
-      },
-      {
-        id: '000000012',
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-        title: '被拒绝参赛',
-        description:
-          '亲爱的于有为同学，十分抱歉的通知你：你已经被 UniqueHack 委员会拒绝参赛，欢迎明年继续报名。',
-      },
-    ];
+  handleClear = (tableTitle: string) => {
+    if (tableTitle === '未读消息') {
+      this.props.setReadAll();
+    } else {
+      this.props.deleteAll();
+    }
+  };
 
+  renderUserMenu() {
     const subMenu = (
       <Menu>
         <Menu.Item key="0" style={{ width: '150px' }}>
-          <a href="#/apply/detail">
+          <a href="#/detail_edit">
             <Icon type="edit" style={{ marginRight: '4px' }} /> 编辑报名信息
           </a>
         </Menu.Item>
@@ -85,14 +79,25 @@ class GlobalHeader extends React.Component<{
 
     const menuItems = [
       <Menu.Item className={cls['header-menu-item']} key="msg" style={{ marginRight: '10px' }}>
-        <NoticeIcon count={5}>
-          <NoticeIcon.Tab list={data} title="未读消息" />
+        <NoticeIcon count={this.props.unreadMsgs.length} onClear={this.handleClear}>
+          <NoticeIcon.Tab
+            emptyText="没有未读消息"
+            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+            list={this.props.unreadMsgs.map(msgMap)}
+            title="未读消息"
+          />
+          <NoticeIcon.Tab
+            emptyText="没有消息"
+            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+            list={this.props.msgs.map(msgMap)}
+            title="所有消息"
+          />
         </NoticeIcon>
       </Menu.Item>,
       <Menu.Item className={cls['header-menu-item']} key="mine">
         <Dropdown overlay={subMenu} trigger={['click']}>
           <span style={{ lineHeight: '50px', display: 'inline-block' }}>
-            <Icon type="user" /> 用户名
+            <Icon type="user" /> {this.props.user.name || this.props.user.username}
           </span>
         </Dropdown>
       </Menu.Item>,
@@ -106,11 +111,20 @@ export default connect(
     return {
       inUserEntry: state.route!.location.pathname.indexOf('/user_entry') === 0,
       loggedIn: state.auth.loggedIn,
+      user: state.user,
+      unreadMsgs: state.msg.filter(msg => msg.unread),
+      msgs: state.msg,
     };
   },
   dispatch => ({
     handleLogout() {
       dispatch({ type: 'LOGOUT_CLICKED' });
+    },
+    setReadAll() {
+      dispatch({ type: 'MSG_SET_READ_ALL' });
+    },
+    deleteAll() {
+      dispatch({ type: 'MSG_DELETE_ALL' });
     },
   }),
 )(GlobalHeader);

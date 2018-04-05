@@ -213,6 +213,13 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
+      // 添加 detail 的接口
+      (req: RequestWithAuth<'/v1/user/detail', 'GET', never>): Response<
+        | ResponseWithoutData<400, Message.TShirtSizeInvalid>
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithData<200, Message.Success, UserDetailRequest>
+      >;
+
       // 修改 detail 的接口
       (
         req: RequestWithAuth<
@@ -457,26 +464,26 @@ declare namespace API {
 
     type SingleMessage =
       | {
-          id: string;
+          id: number;
           type: MessageType.LoginElseWhere;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.Rejected;
           rejectedReason: MessageValue;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.Accepted;
           rejectedExtraMsg?: MessageValue;
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.OtherMessage;
           value: MessageValue;
@@ -484,7 +491,7 @@ declare namespace API {
           time: number; // Timestamp
         }
       | {
-          id: string;
+          id: number;
 
           type: MessageType.NewTeammate;
           newTeammateInfo: API.Team.UserInTeam;
@@ -516,8 +523,13 @@ declare namespace API {
 
       // 将一条消息设为已读
       (
-        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: string; status: 'read' }>,
+        req: RequestWithAuth<'/v1/message/read_status', 'PUT', { id: number; status: 'read' }>,
       ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 将一条消息删除
+      (req: RequestWithAuth<'/v1/message/messages', 'DELETE', { id: number }>): Response<
         ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }

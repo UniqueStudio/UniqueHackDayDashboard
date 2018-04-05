@@ -1,12 +1,21 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import Card from 'antd/es/card';
 
-// import Status from '../../Components/Status';
 import TeamInfo from '../../Components/TeamInfo';
-// import HackdayProgress from '../../Components/HackdayProgress';
 import DeviceRent from '../../Components/DeviceRent/index';
+import TeamUpView from '../TeamUpView';
+import { RootState } from '../../redux/reducers/index';
 
-export default class TeamConsole extends React.Component {
+class TeamConsole extends React.Component<{ teamId: string }> {
   render() {
+    if (!this.props.teamId) {
+      return (
+        <Card title="填写组队信息">
+          <TeamUpView teamUpSkippable={true} />
+        </Card>
+      );
+    }
     return (
       <div style={{ paddingBottom: '40px' }}>
         <TeamInfo hasEditButton={false} hasDissolutionButton={true} />
@@ -16,3 +25,7 @@ export default class TeamConsole extends React.Component {
     );
   }
 }
+
+export default connect((state: RootState) => ({
+  teamId: state.user.teamId,
+}))(TeamConsole);

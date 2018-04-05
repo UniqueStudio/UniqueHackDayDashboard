@@ -6,6 +6,7 @@ import Form from 'antd/es/form';
 import Upload, { UploadChangeParam } from 'antd/es/upload';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
+import { hostname } from '../../lib/const';
 
 const authorizationToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
 
@@ -62,9 +63,9 @@ export default class File extends React.Component<FileProps> {
           <Upload
             multiple={false}
             name={this.props.id}
-            action="https://backend.fredliang.cn/v1/file/files"
+            action={`https://${hostname}/v1/file/files`}
             listType="picture"
-            headers={{ Authorization: `Bearer ${authorizationToken()}`, }}
+            headers={{ Authorization: `Bearer ${authorizationToken()}` }}
           >
             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
               <Icon type="upload" /> 点击上传{this.props.fieldName}

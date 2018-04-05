@@ -17,6 +17,7 @@ import { authorizationToken } from '../../lib/API';
 import delay from '../../lib/delay';
 
 import { UserData } from '../reducers/user';
+import { allUnreadMessage, allMessage } from './msg';
 
 export async function loginRequest(
   usernameOrPhone: string,
@@ -215,36 +216,30 @@ export function* userInfoSaga() {
           }
         }
       }
+      yield put({ type: 'USER_INFO_LOAD_END' });
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: res });
+      yield put({ type: 'USER_INFO_LOAD_END' });
+
+      // fetch msg
+      const [, msgs] = yield call(allMessage);
+      const [, unreadMsgs] = yield call(allUnreadMessage);
+      yield put({ type: 'ADD_MSG_FROM_ALL', payload: msgs });
+      yield put({ type: 'ADD_MSG_FROM_UNREAD', payload: unreadMsgs });
     }
-    // put this at the end to
-    yield put({ type: 'USER_INFO_LOAD_END' });
   }
 }
 
 export function* userInfoLoopSaga() {
+  yield take('SET_LOGGED_IN');
   while (true) {
     yield delay(60 * 1000);
     const { auth } = yield select();
     if (!auth.loggedIn) {
-      continue;
+      yield take('SET_LOGGED_IN');
     }
     yield put({ type: 'LOAD_USER_INFO' });
-    // yield put({ type: 'USER_INFO_LOAD_START' });
-    // const [res, code] = yield call(userInfoRequest);
-    // yield put({ type: 'USER_INFO_LOAD_END' });
-    // if (!res) {
-    //   yield put({ type: 'SET_NOT_LOGGED_IN' });
-    //   yield put(replace('/user_entry'));
-    //   if (code === 401) {
-    //     Message.error('需要重新登录！');
-    //   }
-    // } else {
-    //   yield put({ type: 'SET_LOGGED_IN' });
-    //   yield put({ type: 'SET_USER_INFO', payload: res });
-    // }
   }
 }
 
