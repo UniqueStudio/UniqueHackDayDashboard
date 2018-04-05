@@ -213,9 +213,8 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 添加 detail 的接口
+      // 获取 detail 的接口
       (req: RequestWithAuth<'/v1/user/detail', 'GET', never>): Response<
-        | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, UserDetailRequest>
       >;
