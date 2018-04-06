@@ -86,9 +86,9 @@
   border-color: red !important;
 }
 
-:global .has-warning .ant-upload button {
-  border-color: #faad14 !important;
-}
+// :global .has-warning .ant-upload button {
+//   border-color: #faad14 !important;
+// }
 
 :global .ant-card-head {
   border: none;
@@ -128,4 +128,15 @@
 :global .ant-avatar {
   border-radius: 0 !important;
   background-color: transparent !important;
+}
+
+:global .ant-upload.ant-upload-disabled {
+  .ant-btn {
+    cursor: not-allowed !important;
+    background-color: #f5f5f5;
+    &:hover,
+    &:focus {
+      border-color: rgb(217, 217, 217);
+    }
+  }
 }

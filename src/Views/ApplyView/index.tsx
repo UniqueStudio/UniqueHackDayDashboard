@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
-import Message from 'antd/es/message';
 
 import { connect } from 'react-redux';
 
@@ -17,8 +16,10 @@ import ApplyConfirmView from '../ApplyConfirmView';
 import { RootState } from '../../redux/reducers/index';
 export interface ApplyViewProps {
   maxStep: number;
+  currentStep: number;
   applyProcessStart: () => void;
   skipTeamUp: () => void;
+  setCurrent: (i: number) => void;
 }
 
 class ApplyView extends React.Component<ApplyViewProps> {
@@ -26,12 +27,8 @@ class ApplyView extends React.Component<ApplyViewProps> {
     stepIndex: 0,
   };
 
-  setIndexMaker = (stepIndex: number) => () => {
-    const isForbiddenClick = stepIndex >= this.props.maxStep;
-    this.setState({ stepIndex: isForbiddenClick ? this.props.maxStep : stepIndex });
-    if (isForbiddenClick) {
-      Message.error('请先完成当前步骤！');
-    }
+  setCurrentMaker = (stepIndex: number) => () => {
+    this.props.setCurrent(stepIndex);
   };
 
   render() {
@@ -41,15 +38,16 @@ class ApplyView extends React.Component<ApplyViewProps> {
       this.renderConfirm,
       this.renderDone,
     ];
+    const Step = Steps.Step;
     return (
       <Card bordered={false} title="完善报名信息">
-        <Steps current={this.state.stepIndex} size="small">
-          <Steps.Step onClick={this.setIndexMaker(0)} title="填写信息" />
-          <Steps.Step onClick={this.setIndexMaker(1)} title="组队" />
-          <Steps.Step onClick={this.setIndexMaker(2)} title="确认报名" />
-          <Steps.Step onClick={this.setIndexMaker(3)} title="完成报名" />
+        <Steps current={this.props.currentStep} size="small">
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(0)} title="填写信息" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(1)} title="组队" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(2)} title="确认报名" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(3)} title="完成报名" />
         </Steps>
-        {renderMethods[this.state.stepIndex]()}
+        {renderMethods[this.props.currentStep]()}
       </Card>
     );
   }
@@ -105,8 +103,9 @@ class ApplyView extends React.Component<ApplyViewProps> {
 }
 
 export default connect(
-  ({ applyProcess: { maxStep } }: RootState) => ({
+  ({ applyProcess: { maxStep, currentStep } }: RootState) => ({
     maxStep,
+    currentStep,
   }),
   dispatch => ({
     applyProcessStart() {
@@ -114,6 +113,9 @@ export default connect(
     },
     skipTeamUp() {
       dispatch({ type: 'CHANGE_TEAM_FORM_STATUS' });
+    },
+    setCurrent(i: number) {
+      dispatch({ type: 'APPLY_PROCESS_SET_CURRENT', payload: i });
     },
   }),
 )(ApplyView);

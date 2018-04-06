@@ -7,6 +7,7 @@ import Upload, { UploadChangeParam } from 'antd/es/upload';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 import { hostname } from '../../lib/const';
+import Message from 'antd/es/message';
 
 const authorizationToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
 
@@ -35,8 +36,17 @@ export default class File extends React.Component<FileProps> {
     return null;
   };
 
+  beforeUpload = (file: any) => {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      Message.error('文件大小不能超过 50MB！');
+      return false;
+    }
+    return true;
+  };
+
   render() {
-    const { form: { getFieldDecorator } } = this.context;
+    const { form: { getFieldDecorator, getFieldValue } } = this.context;
     const { noLayout } = this.props;
     const formItemLayout = {
       labelCol: { xl: 8, lg: 6, md: 7, xs: 24, sm: 24 },
@@ -61,11 +71,13 @@ export default class File extends React.Component<FileProps> {
           getValueFromEvent: this.eventToFileId,
         })(
           <Upload
+            disabled={(getFieldValue(this.props.id) || []).length >= 1 || this.state.isUploading}
             multiple={false}
             name={this.props.id}
             action={`https://${hostname}/v1/file/files`}
             listType="picture"
             headers={{ Authorization: `Bearer ${authorizationToken()}` }}
+            beforeUpload={this.beforeUpload}
           >
             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
               <Icon type="upload" /> 点击上传{this.props.fieldName}

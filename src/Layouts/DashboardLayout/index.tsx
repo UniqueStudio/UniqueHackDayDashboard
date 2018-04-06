@@ -6,8 +6,6 @@ import Layout from 'antd/es/layout';
 import Icon from 'antd/es/icon';
 import Menu from 'antd/es/menu';
 import message from 'antd/es/message';
-import Row from 'antd/es/row';
-import Col from 'antd/es/col';
 
 import cls from './layout.less';
 
@@ -45,19 +43,7 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
         <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
           <GlobalHeader />
 
-          <Row className={cls['content-wrapper']}>
-            <Col
-              xs={24}
-              sm={24}
-              md={24}
-              lg={{ push: 2, span: 20 }}
-              xl={{ push: 3, span: 18 }}
-              xxl={{ push: 4, span: 16 }}
-              style={{ padding: '10px' }}
-            >
-              {this.props.children}
-            </Col>
-          </Row>
+          <div className={cls['content-wrapper']}>{this.props.children}</div>
         </Layout.Content>
       </Layout>
     );
