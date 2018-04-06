@@ -67,6 +67,7 @@ class App extends React.Component {
       }
       preIsLoadingUserInfo = isLoadingUserInfo;
     }) as any;
+    // LOAD_USER_INFO below is dispatched to check if user is logged in
     store.dispatch({ type: 'LOAD_USER_INFO' });
   }
 

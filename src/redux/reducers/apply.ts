@@ -29,6 +29,12 @@ export default function applyProcess(
   }
 
   if (action.type === 'APPLY_PROCESS_SET_CURRENT') {
+    if (action.payload > state.maxStep) {
+      return {
+        ...state,
+        currentStep: state.maxStep,
+      };
+    }
     return {
       ...state,
       currentStep: action.payload,

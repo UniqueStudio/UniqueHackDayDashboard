@@ -14,6 +14,7 @@ import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 import ApplyConfirmView from '../ApplyConfirmView';
 import { RootState } from '../../redux/reducers/index';
+import Message from 'antd/es/message';
 export interface ApplyViewProps {
   maxStep: number;
   currentStep: number;
@@ -28,6 +29,9 @@ class ApplyView extends React.Component<ApplyViewProps> {
   };
 
   setCurrentMaker = (stepIndex: number) => () => {
+    if (stepIndex > this.props.maxStep) {
+      Message.error('请先完成之前的步骤！');
+    }
     this.props.setCurrent(stepIndex);
   };
 
@@ -67,12 +71,12 @@ class ApplyView extends React.Component<ApplyViewProps> {
           >
             <Alert
               showIcon={true}
-              type="warning"
-              description="我们已经收集到了所有需要的信息，请确认是否报名参加"
-              message="注意"
+              type="success"
+              description="我们很高兴你确认报名 Unique Hackday，我们将立刻审阅你提交的信息并在第一时间将你是否入选通知于你，静候佳音吧！"
+              message="恭喜"
             />
             <Button type="primary" style={{ marginTop: '10px' }}>
-              确认参赛
+              好的
             </Button>
           </Col>
         </Row>

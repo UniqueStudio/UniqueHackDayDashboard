@@ -31,13 +31,17 @@ export default class File extends React.Component<FileProps> {
       this.setState({ isUploading: false });
     }
     if (uploaded.length > 0) {
-      return uploaded.map(file => file.response.data.fileId);
+      return uploaded.map(file => ({
+        ...file,
+        thumbUrl: undefined,
+        id: file.response.data.fileId,
+      }));
     }
     return null;
   };
 
   beforeUpload = (file: any) => {
-    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isLt2M = file.size / 1024 / 1024 < 50;
     if (!isLt2M) {
       Message.error('文件大小不能超过 50MB！');
       return false;
@@ -78,6 +82,7 @@ export default class File extends React.Component<FileProps> {
             listType="picture"
             headers={{ Authorization: `Bearer ${authorizationToken()}` }}
             beforeUpload={this.beforeUpload}
+            defaultFileList={getFieldValue(this.props.id)}
           >
             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
               <Icon type="upload" /> 点击上传{this.props.fieldName}

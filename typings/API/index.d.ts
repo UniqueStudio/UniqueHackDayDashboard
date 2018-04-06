@@ -72,7 +72,10 @@ declare namespace API {
     Success = 'Success',
   }
 
-  type FileID = string;
+  interface FileID {
+    id: string;
+    fileName: string;
+  }
   type Time = string;
 
   namespace User {
@@ -97,7 +100,7 @@ declare namespace API {
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
-      codeingDotNet?: string;
+      codingDotNet?: string;
       blog?: string;
 
       role: string[]; // 产品，设计，前端，后端，机器学习，硬件开发，其他

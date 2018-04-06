@@ -22,14 +22,13 @@ export async function msgPoll() {
     method: 'GET',
   });
   if (res.httpStatusCode === 200) {
-    return [true, res.message];
+    return [true, res.data.messages];
   }
   return [false, null];
 }
 
 export function* msgPollSaga() {
   let errorCount = 0;
-  yield take('SET_LOGGED_IN');
   while (true) {
     // ensure that when user is no logged in, no poll will run
     const { auth: { loggedIn } } = yield select();
@@ -37,7 +36,7 @@ export function* msgPollSaga() {
       yield take('SET_LOGGED_IN');
     }
 
-    const [successful]: [boolean, API.Message.SingleMessage[]] = yield msgPoll();
+    const [successful, msg]: [boolean, API.Message.SingleMessage[]] = yield call(msgPoll);
 
     if (!successful) {
       errorCount += 1;
@@ -46,6 +45,10 @@ export function* msgPollSaga() {
       }
       continue;
     }
+
+    if (msg.length > 0) {
+      yield put({ type: 'ADD_MSG_FROM_UNREAD', payload: msg });
+    }
     // here we get the message
   }
 
@@ -53,7 +56,6 @@ export function* msgPollSaga() {
 }
 
 export function* showMsg() {
-  yield take('SET_LOGGED_IN');
   while (true) {
     // const msg = yield take('SHOW_MSG');
     yield take('SHOW_MSG');
@@ -115,7 +117,6 @@ export async function msgDelete(id: number) {
 }
 
 export function* setReadAllSaga() {
-  yield take('SET_LOGGED_IN');
   while (true) {
     yield take('MSG_SET_READ_ALL');
     const { msg }: RootState = yield select();
@@ -131,6 +132,7 @@ export function* setReadAllSaga() {
         }
       }),
     );
+
     if (count === unreadMsgs.length) {
       Message.success(`成功将 ${count} 条消息设为已读`);
     } else if (count > 0) {
@@ -143,7 +145,6 @@ export function* setReadAllSaga() {
 }
 
 export function* deleteAllSaga() {
-  yield take('SET_LOGGED_IN');
   while (true) {
     yield take('MSG_DELETE_ALL');
 

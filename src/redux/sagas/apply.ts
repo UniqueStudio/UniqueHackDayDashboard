@@ -9,7 +9,6 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { take, select, call, put } from 'redux-saga/effects';
-import { goBack } from 'react-router-redux';
 
 import Message from 'antd/es/message';
 
@@ -50,7 +49,9 @@ export function* newTeamSaga() {
 
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
-    yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+    if (yield isAtApplyProcess()) {
+      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+    }
   }
 }
 
@@ -109,7 +110,9 @@ export function* joinTeamSaga() {
 
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
-    yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+    if (yield isAtApplyProcess()) {
+      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+    }
   }
 }
 
@@ -146,17 +149,17 @@ export function* detailSaga() {
     }
 
     yield put({ type: 'SET_USER_INFO', payload: { isDetailFormSubmitted: true } });
-    yield put({ type: 'APPLY_PROCESS_IS_D', payload: true });
+    if (yield isAtApplyProcess()) {
+      yield put({ type: 'APPLY_PROCESS_IS_D', payload: true });
+    }
     if (isDetailFormSubmitted) {
       // 这里是保存的逻辑
       Message.success('个人资料保存成功！');
-      yield put(goBack());
     }
   }
 }
 
 export function* applyProcessSaga() {
-  yield take('SET_LOGGED_IN');
   const type = 'APPLY_PROCESS_SET_MAX_STEP';
   while (true) {
     yield take('APPLY_PROCESS_START');
@@ -171,7 +174,6 @@ export function* applyProcessSaga() {
 }
 
 export function* applyConfirmSaga() {
-  yield take('SET_LOGGED_IN');
   yield take('APPLY_PROCESS_IS_T');
   while (true) {
     yield take('USER_APPLY_CONFIRM');
@@ -194,12 +196,18 @@ export function* applyConfirmSaga() {
 }
 
 export function* teamStatusSaga() {
-  yield take('SET_LOGGED_IN');
   while (true) {
     yield take('CHANGE_TEAM_FORM_STATUS');
 
     yield call(changeTeamFormStatus, true);
 
-    yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
+    if (yield isAtApplyProcess()) {
+      yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
+    }
   }
+}
+
+function* isAtApplyProcess() {
+  const { route: { location } } = yield select();
+  return location && location.pathname === '/apply';
 }

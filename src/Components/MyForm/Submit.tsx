@@ -36,7 +36,7 @@ export default function Submit(props: any, context: any) {
         style={{ marginTop: '0px', ...(props.fullWidth ? { width: '100%' } : {}) }}
         htmlType="submit"
         onClick={handleSubmit}
-        disabled={context.isSubmitting}
+        disabled={context.isSubmitting || context.hasError}
       >
         {context.isSubmitting ? <Icon type="loading" /> : props.title}
       </Button>
@@ -49,4 +49,5 @@ export default function Submit(props: any, context: any) {
   onSubmit: PropTypes.func,
   isSubmitting: PropTypes.bool,
   size: PropTypes.string,
+  hasError: PropTypes.bool,
 };

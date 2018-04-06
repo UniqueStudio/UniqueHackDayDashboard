@@ -1,7 +1,6 @@
 import request from '../../lib/API';
 import { take, select, call, put } from 'redux-saga/effects';
 import { replace } from 'react-router-redux';
-import Message from 'antd/es/message';
 
 import {
   ForkEffect,
@@ -13,7 +12,6 @@ import {
 } from 'redux-saga/effects';
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
-import { authorizationToken } from '../../lib/API';
 import delay from '../../lib/delay';
 
 import { UserData } from '../reducers/user';
@@ -121,6 +119,17 @@ export async function resetPwdRequest(
   return { successful: false, message };
 }
 
+export async function getUserDetail() {
+  const res = await request({
+    endpoint: '/v1/user/detail',
+    method: 'GET',
+  });
+  if (res.httpStatusCode === 200) {
+    return [res.data, res.httpStatusCode];
+  }
+  return [null, res.httpStatusCode];
+}
+
 export function* loginSaga() {
   while (true) {
     const { payload: token } = yield take('LOGIN_FORM_SUBMIT');
@@ -199,35 +208,54 @@ export function* userInfoSaga() {
   while (true) {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
-    const [res, code]: [API.User.UserData, number] = yield call(userInfoRequest);
-    if (!res) {
+    const [infoRes]: [API.User.UserData, number] = yield call(userInfoRequest);
+    const [detailRes]: [API.User.UserDetailRequest, number] = yield call(getUserDetail);
+
+    if (!infoRes || !detailRes) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       const { route } = yield select();
       if (route && route.location && route.location.pathname !== '/user_entry/reset_pwd') {
         // avoid redirect when user just want to reset pwd
         yield put(replace('/user_entry'));
-        if (authorizationToken()) {
-          if (code === 403) {
-            Message.error('需要重新登录！');
-          } else if (code === 600) {
-            Message.error('网络错误，暂时无法登录！');
-          } else if (code === 500) {
-            Message.error('服务端发生了异常，暂时无法登录！');
-          }
-        }
+        // if (authorizationToken()) {
+        //   if (code === 403) {
+        //     Message.error('需要重新登录！');
+        //   } else if (code === 600) {
+        //     Message.error('网络错误，暂时无法登录！');
+        //   } else if (code === 500) {
+        //     Message.error('服务端发生了异常，暂时无法登录！');
+        //   }
+        // }
       }
       yield put({ type: 'USER_INFO_LOAD_END' });
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
-      yield put({ type: 'SET_USER_INFO', payload: res });
+      yield put({ type: 'SET_USER_INFO', payload: infoRes });
+      yield put({
+        type: 'DETAIL_FORM_CHANGE',
+        payload: Object.keys(detailRes).reduce((p, k) => {
+          return {
+            ...p,
+            [k]: {
+              dirty: false,
+              // errors: undefined,
+              name: k,
+              touched: false,
+              validating: false,
+              value: (detailRes as any)[k],
+            },
+          };
+        }, {}),
+      });
+
       yield put({ type: 'APPLY_PROCESS_START' });
-      if (res.isDetailFormSubmitted) {
+      if (infoRes.isDetailFormSubmitted) {
         yield put({ type: 'APPLY_PROCESS_IS_D', payload: true });
       }
-      if (res.isTeamFormSubmitted) {
+      if (infoRes.isTeamFormSubmitted) {
         yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
       }
-      if (res.isApplyConfirmed) {
+      if (infoRes.isApplyConfirmed) {
         yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
       }
 
@@ -243,7 +271,6 @@ export function* userInfoSaga() {
 }
 
 export function* userInfoLoopSaga() {
-  yield take('SET_LOGGED_IN');
   while (true) {
     yield delay(60 * 1000);
     const { auth } = yield select();
