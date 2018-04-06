@@ -3,7 +3,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 
-import Form from 'antd/es/form';
 import AntdSelect from 'antd/es/select';
 import Divider from 'antd/es/divider';
 
@@ -15,8 +14,6 @@ import DatePicker from '../../Components/MyForm/DatePicker';
 import Select from '../../Components/MyForm/Select';
 import File from '../../Components/MyForm/File';
 import Submit from '../../Components/MyForm/Submit';
-
-import moment from 'moment';
 
 export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
@@ -43,7 +40,7 @@ export interface DetailViewProps {
     specialNeeds?: any;
     github?: any;
     linkedIn?: any;
-    codeingDotNet?: any;
+    codingDotNet?: any;
     blog?: any;
 
     role: any; // 产品，设计，前端，后端，机器学习，硬件开发，其他
@@ -245,19 +242,9 @@ export default connect(
   (state: RootState) => {
     const props = state.detail;
     return {
-      detailData: Object.keys(props).reduce(
-        (p, key) => ({
-          ...p,
-          [key]: isDateValue(key)
-            ? Form.createFormField({
-                ...(props as any)[key],
-                value: (props as any)[key].value ? moment((props as any)[key].value) : undefined,
-              })
-            : Form.createFormField((props as any)[key]),
-        }),
-        {},
-      ),
+      // detailData:
 
+      detailData: props,
       detailFormSubmitting: state.loadingStatus.detailFormSubmitting,
       detailFormError: state.errorStatus.detailFormError,
     };
@@ -274,7 +261,3 @@ export default connect(
     },
   }),
 )(DetailView);
-
-function isDateValue(props: string) {
-  return props === 'birthday' || props === 'graduateTime';
-}

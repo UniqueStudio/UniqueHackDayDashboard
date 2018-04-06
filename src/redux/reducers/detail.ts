@@ -25,7 +25,7 @@ const initialState = {
   specialNeeds: {},
   github: {},
   linkedIn: {},
-  codeingDotNet: {},
+  codingDotNet: {},
   blog: {},
 
   role: {}, // 产品，设计，前端，后端，机器学习，硬件开发，其他
@@ -33,12 +33,9 @@ const initialState = {
   hackdayTimes: {},
 };
 
-const cachedDetail = JSON.parse(localStorage.getItem('detailForm') || 'null') as any;
+// const cachedDetail = JSON.parse(localStorage.getItem('detailForm') || 'null') as any;
 
-export default function detail(
-  state: DetailData = cachedDetail || initialState,
-  action: AnyAction,
-) {
+export default function detail(state: DetailData = initialState, action: AnyAction) {
   switch (action.type) {
     case 'DETAIL_FORM_CHANGE':
       const ret = {
@@ -46,10 +43,7 @@ export default function detail(
         ...action.payload,
       };
 
-      const retBackedup = JSON.parse(JSON.stringify(ret));
-      delete retBackedup.resume;
-      delete retBackedup.collection;
-      localStorage.setItem('detailForm', JSON.stringify(retBackedup));
+      localStorage.setItem('detailForm', JSON.stringify(ret));
       return ret;
     default:
       return state;

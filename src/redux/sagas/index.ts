@@ -13,23 +13,45 @@ import {
 export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { RootState } from '../reducers';
 
-import { loginSaga, registerSaga, userInfoSaga, resetPwdSaga, logoutSaga } from './user';
+import {
+  loginSaga,
+  registerSaga,
+  userInfoSaga,
+  // userInfoLoopSaga,
+  resetPwdSaga,
+  logoutSaga,
+} from './user';
 import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
-import { joinTeamSaga, newTeamSaga, detailSaga } from './apply';
+import {
+  joinTeamSaga,
+  newTeamSaga,
+  detailSaga,
+  applyConfirmSaga,
+  applyProcessSaga,
+  teamStatusSaga,
+} from './apply';
 import { msgPollSaga, showMsg, setReadAllSaga, deleteAllSaga } from './msg';
 
-export function* mainSaga() {
+export function* entrySaga() {
   yield all([
     // about user
     loginSaga(),
     registerSaga(),
     userInfoSaga(),
-    resetPwdSaga(),
-    logoutSaga(),
 
     // something about sms
     registerSMSSaga(),
     resetPwdSMSSaga(),
+  ]);
+}
+
+export function* appSaga() {
+  yield take('SET_LOGGED_IN');
+  // below are sagas only run after logged in
+  yield all([
+    // userInfoLoopSaga(),
+    resetPwdSaga(),
+    logoutSaga(),
 
     // about apply
     detailSaga(),
@@ -41,15 +63,18 @@ export function* mainSaga() {
     showMsg(),
     setReadAllSaga(),
     deleteAllSaga(),
+    applyProcessSaga(),
+    applyConfirmSaga(),
+    teamStatusSaga(),
   ]);
 }
 
 // for scaleable
-const sagas = [mainSaga];
+const sagas = [entrySaga, appSaga];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
-function createAbortableSaga(saga: typeof mainSaga) {
+function createAbortableSaga(saga: typeof appSaga) {
   if (process.env.NODE_ENV === 'development') {
     return function*() {
       const sagaTask = yield fork(saga);
@@ -73,3 +98,6 @@ const SagaManager = {
 };
 
 export default SagaManager;
+
+const iter = entrySaga();
+(window as any).iter = iter;

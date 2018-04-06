@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
-import { replace } from 'react-router-redux';
 
 import Form from 'antd/es/form';
 import Radio, { RadioChangeEvent } from 'antd/es/radio';
@@ -20,6 +19,7 @@ import Col from 'antd/es/col';
 
 export interface TeamUpViewProps {
   teamUpSkippable?: boolean;
+  onSkipTeamUpClick?: () => void;
 
   newTeamData: any;
   joinTeamData: any;
@@ -29,7 +29,6 @@ export interface TeamUpViewProps {
 
   onNewTeamSubmit: () => void;
   onJoinTeamSubmit: () => void;
-  onNoTeamUpClick: () => void;
 
   newTeamSubmitting: boolean;
   newTeamError: { value: string; time: number };
@@ -167,7 +166,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
             <Button
               type="primary"
               style={{ marginTop: '10px' }}
-              onClick={this.props.onNoTeamUpClick}
+              onClick={this.props.onSkipTeamUpClick}
             >
               好的，下一步
             </Button>
@@ -213,10 +212,6 @@ export default connect(
     },
     onJoinTeamSubmit() {
       dispatch({ type: 'JOIN_TEAM_FORM_SUBMIT' });
-    },
-
-    onNoTeamUpClick() {
-      dispatch(replace('/apply/done'));
     },
   }),
 )(TeamUpView);

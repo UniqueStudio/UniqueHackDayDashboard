@@ -6,6 +6,7 @@ import Form, { FormComponentProps } from 'antd/es/form';
 import Alert from 'antd/es/alert';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
+import moment from 'moment';
 
 import delay from '../../lib/delay';
 
@@ -90,6 +91,7 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
       onSubmit: this.props.onSubmit,
       isSubmitting: this.props.isSubmitting,
       size: this.props.size,
+      hasError: Object.values(this.props.form.getFieldsError()).filter(err => !!err).length > 0,
     };
   }
 
@@ -98,6 +100,7 @@ class MyForm extends React.Component<MyFormProps & FormComponentProps> {
     onSubmit: PropTypes.func,
     isSubmitting: PropTypes.bool,
     size: PropTypes.string,
+    hasError: PropTypes.bool,
   };
 
   componentWillReceiveProps(nextProps: MyFormProps) {
@@ -126,13 +129,22 @@ export default Form.create<MyFormProps>({
   onFieldsChange(props, value) {
     props.onFormChange(value as any);
   },
-  mapPropsToFields(props) {
-    return Object.keys(props.data).reduce(
+  mapPropsToFields({ data: props }) {
+    return Object.keys(props).reduce(
       (p, key) => ({
         ...p,
-        [key]: Form.createFormField((props.data as any)[key]),
+        [key]: isDateValue(key)
+          ? Form.createFormField({
+              ...(props as any)[key],
+              value: (props as any)[key].value ? moment((props as any)[key].value) : undefined,
+            })
+          : Form.createFormField((props as any)[key]),
       }),
       {},
     );
   },
 })(MyForm);
+
+function isDateValue(props: string) {
+  return props === 'birthday' || props === 'graduateTime';
+}

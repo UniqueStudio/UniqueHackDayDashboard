@@ -11,6 +11,7 @@ const messageMap = {
   CodeNotMatch: '验证码不匹配',
   LoginNeeded: '请刷新并重新登录',
   TeamNameExists: '队伍名已存在',
-  AlreadyTeamedUp: '你已经加入了某个队伍',
+  AlreadyTeamedUp: '你已加入其他队伍',
+  alreadyTeamedUp: '你已加入其他队伍',
 };
 export default messageMap;

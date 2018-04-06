@@ -17,6 +17,9 @@ const request = (async (req: any) => {
     if (query) {
       const composedQuery = qs.stringify({ ...qs.parse(query), ...body });
       endpoint = `${pathname}?${composedQuery}`;
+    } else {
+      const composedQuery = qs.stringify(body);
+      endpoint = `${pathname}?${composedQuery}`;
     }
   }
   endpoint = `https://${hostname}${endpoint}`;

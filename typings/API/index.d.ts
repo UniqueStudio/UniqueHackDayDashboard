@@ -52,7 +52,6 @@ declare namespace API {
     TeamNameExists = 'TeamNameExists',
     PhoneNotExists = 'PhoneNotExists',
     TeamNotExists = 'TeamNotExists',
-    InvitationNotExists = 'InvitationNotExists',
 
     CodeNotMatch = 'CodeNotMatch',
     HumanCheckFailed = 'HumanCheckFailed',
@@ -66,13 +65,17 @@ declare namespace API {
 
     Forbidden = 'Forbidden',
     LoginNeeded = 'LoginNeeded',
+    ApplyNeeded = 'ApplyNeeded',
     PasswordWrong = 'PasswordWrong',
 
     // 这个是 200 的 message
     Success = 'Success',
   }
 
-  type FileID = string;
+  interface FileID {
+    id: string;
+    fileName: string;
+  }
   type Time = string;
 
   namespace User {
@@ -97,12 +100,42 @@ declare namespace API {
       specialNeeds?: string;
       github?: string;
       linkedIn?: string;
-      codeingDotNet?: string;
+      codingDotNet?: string;
       blog?: string;
 
       role: string[]; // 产品，设计，前端，后端，机器学习，硬件开发，其他
       skills: string[];
       hackdayTimes: number;
+    }
+
+    interface UserData {
+      username: string;
+      phone: string;
+      name: string | null;
+      // 详情是否提交
+      isDetailFormSubmitted: boolean;
+      // 是否已经走完组队的流程
+      isTeamFormSubmitted: boolean;
+      // 是否确认报名
+      isApplyConfirmed: boolean;
+      // 上面三个都为 true 算成功报名
+
+      isAdmin: boolean;
+      // 一定已注册了
+      registrered: true;
+      teamId: number | null;
+      // (applied && isAccepted === null) 意味着是 pending 状态
+      isAccepted: boolean | null;
+      // 为 true 表示已确认参赛、false 表示确认不参赛、null 表示未作出选择
+      confirmed: boolean | null;
+      checkedIn: boolean | null;
+      projectId: string | null;
+      awardId: string | null;
+      // 报销: 0: 不需要报销但是已经确认报销数据  null: 未进行到报销流程, 其他数字: 报销金额
+      reimbursement: number | null;
+      awardMoneyGiven: boolean | null;
+      awardItemGiven: boolean | null;
+      invoiceRevived: boolean | null;
     }
 
     interface RequestFunc {
@@ -213,9 +246,9 @@ declare namespace API {
         | ResponseWithoutData<200, Message.Success>
       >;
 
-      // 添加 detail 的接口
+      // 获取 detail 的接口
       (req: RequestWithAuth<'/v1/user/detail', 'GET', never>): Response<
-        | ResponseWithoutData<400, Message.TShirtSizeInvalid>
+        | ResponseWithoutData<400, Message.ApplyNeeded>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, UserDetailRequest>
       >;
@@ -260,36 +293,7 @@ declare namespace API {
 
       (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithData<
-            200,
-            Message.Success,
-            {
-              username: string;
-              phone: string;
-              name: string | null;
-              // 详情是否提交
-              isDetailFormSubmitted: boolean;
-              // 组队信息是否提交
-              isTeamFormSubmitted: boolean;
-              // 详情以及组队信息都提交算成功报名
-              // applied: boolean;
-              isAdmin: boolean;
-              // 一定已注册了
-              registrered: true;
-              teamId: string | null;
-              // (applied && isAccepted === null) 意味着是 pending 状态
-              isAccepted: boolean | null;
-              confirmed: boolean | null;
-              checkedIn: boolean | null;
-              projectId: string | null;
-              awardId: string | null;
-              // 报销: 0: 不需要报销但是已经确认报销数据  null: 未进行到报销流程, 其他数字: 报销金额
-              reimbursement: number | null;
-              awardMoneyGiven: boolean | null;
-              awardItemGiven: boolean | null;
-              invoiceRevived: boolean | null;
-            }
-          >
+        | ResponseWithData<200, Message.Success, UserData>
       >;
 
       (
@@ -304,6 +308,50 @@ declare namespace API {
       ): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { username: string }>
+      >;
+
+      // 这个接口导致 user/info 种的 isApplyConfirmed 变为 true 或 false
+      (
+        req: RequestWithAuth<
+          '/v1/user/apply/confirmation',
+          'PUT',
+          {
+            confirmation: boolean;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      // 这个接口导致 user/info 种的 confirmed 变为 true 或 false
+      (
+        req: RequestWithAuth<
+          '/v1/user/hackday/confirmation',
+          'PUT',
+          {
+            confirmation: boolean;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+
+      //
+
+      (
+        req: RequestWithAuth<
+          '/v1/user/team_form_submit_status',
+          'POST',
+          {
+            submitted: boolean;
+          }
+        >,
+      ): Response<
+        ResponseWithoutData<401, Message.LoginNeeded> | ResponseWithoutData<200, Message.Success>
       >;
     }
   }
@@ -334,7 +382,7 @@ declare namespace API {
         | ResponseWithoutData<400, Message.AlreadyTeamedUp>
         | ResponseWithoutData<400, Message.TeamNameExists>
         | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithData<200, Message.Success, { teamId: string }>
+        | ResponseWithData<200, Message.Success, { teamId: number }>
       >;
 
       // 删除队员的接口，只有队长身份 / 管理员可以调用
@@ -344,7 +392,7 @@ declare namespace API {
           'DELETE',
           {
             username: string;
-            teamId: string;
+            teamId: number;
           }
         >,
       ): Response<
@@ -365,7 +413,7 @@ declare namespace API {
           'POST',
           {
             username: string;
-            teamId: string;
+            teamId: number;
           }
         >,
       ): Response<
@@ -384,7 +432,7 @@ declare namespace API {
           'PUT',
           {
             username: string;
-            teamId: string;
+            teamId: number;
           }
         >,
       ): Response<
@@ -410,16 +458,16 @@ declare namespace API {
         | ResponseWithoutData<400, Message.TeamNotExists>
         | ResponseWithoutData<400, Message.TeamLeaderNotFound>
         | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithData<200, Message.Success, { teamId: string }>
+        | ResponseWithData<200, Message.Success, { teamId: number }>
       >;
 
       // 获取队伍信息
       (
         req: RequestWithAuth<
-          '/v1/team/team_info',
+          '/v1/team/info',
           'GET',
           {
-            teamId: string;
+            teamId: number;
           }
         >,
       ): Response<
@@ -465,6 +513,7 @@ declare namespace API {
     type SingleMessage =
       | {
           id: number;
+
           type: MessageType.LoginElseWhere;
           time: number; // Timestamp
         }

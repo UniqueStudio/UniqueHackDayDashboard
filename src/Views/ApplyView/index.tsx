@@ -1,57 +1,57 @@
 import * as React from 'react';
+
 import Card from 'antd/es/card';
 import Steps from 'antd/es/steps';
-import { replace } from 'react-router-redux';
-import { connect } from 'react-redux';
-import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 
-import DetailForm from '../../Views/DetailView';
+import { connect } from 'react-redux';
+
+import DetailView from '../../Views/DetailView';
 import TeamUpView from '../../Views/TeamUpView/index';
-import { RootState } from '../../redux/reducers';
 
 import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
-
+import ApplyConfirmView from '../ApplyConfirmView';
+import { RootState } from '../../redux/reducers/index';
+import Message from 'antd/es/message';
 export interface ApplyViewProps {
-  isDetailFormSubmitted: boolean;
-  teamId: string;
-  gotoHome: () => void;
+  maxStep: number;
+  currentStep: number;
+  applyProcessStart: () => void;
+  skipTeamUp: () => void;
+  setCurrent: (i: number) => void;
 }
 
-class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _: string }>> {
-  render() {
-    if (this.isD) {
-      return <Redirect to="/" />;
+class ApplyView extends React.Component<ApplyViewProps> {
+  state = {
+    stepIndex: 0,
+  };
+
+  setCurrentMaker = (stepIndex: number) => () => {
+    if (stepIndex > this.props.maxStep) {
+      Message.error('请先完成之前的步骤！');
     }
-    const endpoints = ['detail', 'team_up', 'done'];
-    const current = endpoints.findIndex(
-      endpoint => this.props.location.pathname.indexOf(endpoint) >= 0,
-    );
+    this.props.setCurrent(stepIndex);
+  };
 
-    const baseURL = this.props.match.url;
-    const { isDetailFormSubmitted: isD, teamId } = this.props;
-
-    const RedirectToDetail = () => <Redirect to={`${baseURL}/detail`} />;
-    const RedirectToTeamUp = () => <Redirect to={`${baseURL}/team_up`} />;
-    const RedirectToDone = () => <Redirect to={`${baseURL}/done`} />;
-
+  render() {
+    const renderMethods = [
+      this.renderDetailView,
+      this.renderTeamUpView,
+      this.renderConfirm,
+      this.renderDone,
+    ];
+    const Step = Steps.Step;
     return (
       <Card bordered={false} title="完善报名信息">
-        <Steps current={current + 1 ? current : 0} size="small">
-          <Steps.Step title="填写信息" />
-          <Steps.Step title="组队" />
-          <Steps.Step title="完成报名" />
+        <Steps current={this.props.currentStep} size="small">
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(0)} title="填写信息" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(1)} title="组队" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(2)} title="确认报名" />
+          <Step style={{ cursor: 'pointer' }} onClick={this.setCurrentMaker(3)} title="完成报名" />
         </Steps>
-        <Switch>
-          <Route path={`${baseURL}/done`} component={isD ? this.renderDone : RedirectToDetail} />
-          <Route
-            path={`${baseURL}/team_up`}
-            component={isD ? (teamId ? RedirectToDone : TeamUpView) : RedirectToDetail}
-          />
-          <Route path={`${baseURL}/detail`} component={isD ? RedirectToTeamUp : DetailForm} />
-        </Switch>
+        {renderMethods[this.props.currentStep]()}
       </Card>
     );
   }
@@ -62,9 +62,9 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
         <Row>
           <Col
             {...{
-              xl: { push: 8, span: 8 },
-              lg: { push: 6, span: 10 },
-              md: { push: 7, span: 12 },
+              xl: { push: 7, span: 10 },
+              lg: { push: 6, span: 12 },
+              md: { push: 5, span: 14 },
               xs: 24,
               sm: 24,
             }}
@@ -72,10 +72,10 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
             <Alert
               showIcon={true}
               type="success"
-              description="你已成功报名 Unique Hackday，请您静候入选佳音。"
+              description="我们很高兴你确认报名 Unique Hackday，我们将立刻审阅你提交的信息并在第一时间将你是否入选通知于你，静候佳音吧！"
               message="恭喜"
             />
-            <Button type="primary" style={{ marginTop: '10px' }} onClick={this.props.gotoHome}>
+            <Button type="primary" style={{ marginTop: '10px' }}>
               好的
             </Button>
           </Col>
@@ -84,23 +84,42 @@ class ApplyView extends React.Component<ApplyViewProps & RouteComponentProps<{ _
     );
   };
 
-  isD = false;
+  renderConfirm = () => {
+    return <ApplyConfirmView />;
+  };
 
-  componentWillMount() {
-    // this is a component self state which avoids user enter
-    // this user interface again
-    this.isD = this.props.isDetailFormSubmitted;
+  renderTeamUpView = () => {
+    return <TeamUpView onSkipTeamUpClick={this.props.skipTeamUp} />;
+  };
+
+  renderDetailView = () => {
+    return <DetailView />;
+  };
+
+  componentWillReceiveProps({ maxStep }: ApplyViewProps) {
+    this.setState({ stepIndex: maxStep });
+  }
+
+  componentDidMount() {
+    this.props.applyProcessStart();
+    this.setState({ stepIndex: this.props.maxStep });
   }
 }
 
 export default connect(
-  (state: RootState) => ({
-    isDetailFormSubmitted: state.user.isDetailFormSubmitted,
-    teamId: state.user.teamId,
+  ({ applyProcess: { maxStep, currentStep } }: RootState) => ({
+    maxStep,
+    currentStep,
   }),
   dispatch => ({
-    gotoHome() {
-      dispatch(replace('/'));
+    applyProcessStart() {
+      dispatch({ type: 'APPLY_PROCESS_START' });
+    },
+    skipTeamUp() {
+      dispatch({ type: 'CHANGE_TEAM_FORM_STATUS' });
+    },
+    setCurrent(i: number) {
+      dispatch({ type: 'APPLY_PROCESS_SET_CURRENT', payload: i });
     },
   }),
 )(ApplyView);
