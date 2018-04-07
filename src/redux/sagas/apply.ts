@@ -211,3 +211,16 @@ function* isAtApplyProcess() {
   const { route: { location } } = yield select();
   return location && location.pathname === '/apply';
 }
+
+// export async function getTeamInfo(teamId: number) {
+//   const res = await request({
+//     endpoint: '/v1/team/info',
+//     method: 'GET',
+//     body: {
+//       teamId,
+//     },
+//   });
+
+// }
+
+// (window as any).getTeamInfo = getTeamInfo;
