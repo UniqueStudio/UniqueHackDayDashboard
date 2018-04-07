@@ -209,44 +209,37 @@ export function* userInfoSaga() {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
     const [infoRes]: [API.User.UserData, number] = yield call(userInfoRequest);
-    const [detailRes]: [API.User.UserDetailRequest, number] = yield call(getUserDetail);
 
-    if (!infoRes || !detailRes) {
+    if (!infoRes) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
       const { route } = yield select();
       if (route && route.location && route.location.pathname !== '/user_entry/reset_pwd') {
         // avoid redirect when user just want to reset pwd
         yield put(replace('/user_entry'));
-        // if (authorizationToken()) {
-        //   if (code === 403) {
-        //     Message.error('需要重新登录！');
-        //   } else if (code === 600) {
-        //     Message.error('网络错误，暂时无法登录！');
-        //   } else if (code === 500) {
-        //     Message.error('服务端发生了异常，暂时无法登录！');
-        //   }
-        // }
       }
       yield put({ type: 'USER_INFO_LOAD_END' });
     } else {
       yield put({ type: 'SET_LOGGED_IN' });
       yield put({ type: 'SET_USER_INFO', payload: infoRes });
-      yield put({
-        type: 'DETAIL_FORM_CHANGE',
-        payload: Object.keys(detailRes).reduce((p, k) => {
-          return {
-            ...p,
-            [k]: {
-              dirty: false,
-              // errors: undefined,
-              name: k,
-              touched: false,
-              validating: false,
-              value: (detailRes as any)[k],
-            },
-          };
-        }, {}),
-      });
+      const [detailRes]: [API.User.UserDetailRequest, number] = yield call(getUserDetail);
+      if (detailRes) {
+        yield put({
+          type: 'DETAIL_FORM_CHANGE',
+          payload: Object.keys(detailRes).reduce((p, k) => {
+            return {
+              ...p,
+              [k]: {
+                dirty: false,
+                // errors: undefined,
+                name: k,
+                touched: false,
+                validating: false,
+                value: (detailRes as any)[k],
+              },
+            };
+          }, {}),
+        });
+      }
 
       yield put({ type: 'APPLY_PROCESS_START' });
       if (infoRes.isDetailFormSubmitted) {
