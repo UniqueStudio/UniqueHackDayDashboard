@@ -1,15 +1,15 @@
 // tslint:disable:jsx-no-multiline-js
 import * as React from 'react';
+import { connect } from 'react-redux';
 
-// import Row from 'antd/es/row';
-// import Col from 'antd/es/col';
 import DescriptionList from 'ant-design-pro/es/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';
-// import Icon from 'antd/es/icon';
 
 import cls from './style.less';
+import { RootState } from '../../redux/reducers/index';
+import { TeamInfo } from '../../redux/reducers/teamInfo';
 
 const Description = DescriptionList.Description;
 
@@ -18,25 +18,38 @@ export interface TeamInfoProps {
   hasOperatingButton?: boolean;
   hasDissolutionButton?: boolean;
   onOperating?: (userInfo: any, operate: 'setTeamLeader' | 'remove') => void;
+
+  teamInfo: TeamInfo;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
-  const data = [
-    {
-      key: '2142jk5h34jbj3b5njuhtbn5egukhjb',
-      name: '洪志远',
-      isTeamLeader: true,
-      isAccepted: true,
-      school: '华中科技大学',
-    },
-    {
-      key: '124话永泰花苑4号图👬uyghu',
-      name: '梁志博',
-      isTeamLeader: false,
-      isAccepted: true,
-      school: '华中科技大学',
-    },
-  ];
+  // const data = [
+  // {
+  // key: '2142jk5h34jbj3b5njuhtbn5egukhjb',
+  // name: '洪志远',
+  // isTeamLeader: true,
+  // isAccepted: true,
+  // school: '华中科技大学',
+  //   },
+  //   {
+  //     key: '124话永泰花苑4号图👬uyghu',
+  //     name: '梁志博',
+  //     isTeamLeader: false,
+  //     isAccepted: true,
+  //     school: '华中科技大学',
+  //   },
+  // ];
+
+  const members = [props.teamInfo.teamLeader, ...props.teamInfo.members];
+  const data = members.map((member, i) => ({
+    key: member.email || member.username || i,
+    name: member.name,
+    isTeamLeader: props.teamInfo.teamLeader
+      ? props.teamInfo.teamLeader.username === member.username
+      : false,
+    isAccepted: member.isAccepted,
+    school: member.school,
+  }));
 
   const {
     hasEditButton = true,
@@ -92,16 +105,21 @@ const TeamInfo = (props: TeamInfoProps) => {
     return <div style={{ height: '16px' }} />;
   };
 
+  const membersCount = members ? props.teamInfo.members.length : '-';
+  const teamUpTime = props.teamInfo.createdTime
+    ? new Date(props.teamInfo.createdTime * 1000).toLocaleString()
+    : '-';
+
   return (
     <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
         {hasEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
-        <Description term="队长姓名" children="梁志博" />
-        <Description term="队伍人数" children="4" />
-        <Description term="获奖情况" children="—---------" />
-        <Description term="组队时间" children={new Date(Date.now()).toLocaleDateString()} />
+        <Description term="队伍名称" children={props.teamInfo.teamName || '-'} />
+        <Description term="队伍人数" children={<span>{membersCount}</span>} />
+        <Description term="获奖情况" children={props.teamInfo.prizeInfo || '-'} />
+        <Description term="组队时间" children={teamUpTime} />
       </DescriptionList>
       {renderDivider()}
       {renderTable()}
@@ -111,4 +129,4 @@ const TeamInfo = (props: TeamInfoProps) => {
   );
 };
 
-export default TeamInfo;
+export default connect(({ teamInfo }: RootState) => ({ teamInfo }))(TeamInfo);

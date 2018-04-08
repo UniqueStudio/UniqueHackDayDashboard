@@ -11,6 +11,7 @@ export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect 
 import { take, select, call, put } from 'redux-saga/effects';
 
 import Message from 'antd/es/message';
+import { replace } from 'react-router-redux';
 
 export async function changeTeamFormStatus(submitted: boolean) {
   await request({
@@ -50,9 +51,26 @@ export function* newTeamSaga() {
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
     if (yield isAtApplyProcess()) {
-      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+      yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
     }
+    const [teamInfo] = yield getTeamInfo(teamId);
+    yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
   }
+}
+
+export async function getTeamInfo(teamId: number) {
+  const res = await request({
+    endpoint: '/v1/team/info',
+    method: 'GET',
+    body: {
+      teamId,
+    },
+  });
+
+  if (res.httpStatusCode === 200) {
+    return [res.data, res.message];
+  }
+  return [null, res.message];
 }
 
 export async function joinTeamRequest(
@@ -111,8 +129,10 @@ export function* joinTeamSaga() {
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
     if (yield isAtApplyProcess()) {
-      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+      yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
     }
+    const [teamInfo] = yield getTeamInfo(teamId);
+    yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
   }
 }
 
@@ -170,6 +190,8 @@ export function* applyProcessSaga() {
     yield put({ type, payload: 2 });
     yield take('APPLY_PROCESS_IS_C');
     yield put({ type, payload: 3 });
+    yield take('APPLY_PROCESS_END');
+    yield put(replace('/'));
   }
 }
 
@@ -192,6 +214,7 @@ export function* applyConfirmSaga() {
       continue;
     }
     yield put({ type: 'APPLY_PROCESS_IS_C' });
+    yield put({ type: 'SET_USER_INFO', payload: { isApplyConfirmed: true } });
   }
 }
 
@@ -211,16 +234,3 @@ function* isAtApplyProcess() {
   const { route: { location } } = yield select();
   return location && location.pathname === '/apply';
 }
-
-// export async function getTeamInfo(teamId: number) {
-//   const res = await request({
-//     endpoint: '/v1/team/info',
-//     method: 'GET',
-//     body: {
-//       teamId,
-//     },
-//   });
-
-// }
-
-// (window as any).getTeamInfo = getTeamInfo;

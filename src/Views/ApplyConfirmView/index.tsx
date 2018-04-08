@@ -42,7 +42,7 @@ class ApplyConfirmView extends React.Component<
 
   render() {
     return (
-      <div style={{ marginBottom: '24px' }}>
+      <div style={{ margin: '40px 0 24px' }}>
         <Row>
           <Col
             {...{

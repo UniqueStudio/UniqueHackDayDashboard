@@ -365,6 +365,14 @@ declare namespace API {
       email?: string;
     }
 
+    interface TeamInfo {
+      teamName: string;
+      teamLeader: UserInTeam;
+      members: UserInTeam[];
+      createdTime: number;
+      prizeInfo: string;
+    }
+
     interface RequestFunc {
       // 创建队伍的接口，任意用户可调用，管理员调用时，必须提供teamLeader
       (
@@ -474,17 +482,23 @@ declare namespace API {
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamNotExists>
         | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithData<
-            200,
-            Message.Success,
-            {
-              name: string;
-              teamLeader: UserInTeam;
-              members: UserInTeam[];
-              createdTime: string;
-              prizeInfo: string;
-            }
-          >
+        | ResponseWithData<200, Message.Success, TeamInfo>
+      >;
+
+      // 转移队长身份的接口，只有队长身份 / 管理员可以调用
+      (
+        req: RequestWithAuth<
+          '/v1/team/teams',
+          'DELETE',
+          {
+            teamId: number;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, TeamInfo>
       >;
     }
   }

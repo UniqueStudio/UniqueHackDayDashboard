@@ -20,7 +20,11 @@ const Status = (props: StatusProps) => {
       <Row>
         <Col xs={24} sm={15} md={15}>
           <div className={cls['icon-title-wrapper']}>
-            <Icon className={cls['icon-success']} type="check-circle" />
+            <Icon
+              className={cls['icon-success']}
+              type="question-circle"
+              style={{ color: '#ffaf40' }}
+            />
             <h1 className={cls['status-title']}>当前状态: {props.statusText}</h1>
           </div>
         </Col>

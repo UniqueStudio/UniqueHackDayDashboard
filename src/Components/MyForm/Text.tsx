@@ -17,6 +17,8 @@ export interface TextProps {
   iconType?: string;
   validator?: (_: any, value: string, callback: (error?: Error) => any) => void;
   noLayout?: boolean;
+
+  tip?: string;
 }
 
 export default function Text(props: TextProps, context: any) {
@@ -32,7 +34,10 @@ export default function Text(props: TextProps, context: any) {
       {getFieldDecorator(props.id, {
         rules: [
           { required: props.required, message: `请输入${props.fieldName}` },
-          { pattern: props.pattern, message: `${props.fieldName}不合法` },
+          {
+            pattern: props.pattern,
+            message: `${props.fieldName}不合法${props.tip ? `，${props.tip}` : ''}`,
+          },
           ...(validator ? [{ validator }] : []),
         ],
         validateFirst: true,

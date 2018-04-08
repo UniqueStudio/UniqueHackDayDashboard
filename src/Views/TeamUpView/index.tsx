@@ -16,6 +16,7 @@ import Alert from 'antd/es/alert';
 import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
+import TeamInfo from '../../Components/TeamInfo';
 
 export interface TeamUpViewProps {
   teamUpSkippable?: boolean;
@@ -35,6 +36,8 @@ export interface TeamUpViewProps {
 
   joinTeamSubmitting: boolean;
   joinTeamError: { value: string; time: number };
+
+  teamId: number;
 }
 
 class TeamUpView extends React.Component<TeamUpViewProps> {
@@ -55,6 +58,9 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
   };
 
   render() {
+    if (this.props.teamId !== null) {
+      return <TeamInfo hasOperatingButton={false} />;
+    }
     return (
       <div style={{ marginTop: '20px' }}>
         <Form.Item {...this.formItemLayout} label="我的角色:">
@@ -178,7 +184,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
 }
 
 export default connect(
-  ({ teamForm, loadingStatus, errorStatus }: RootState) => {
+  ({ teamForm, loadingStatus, errorStatus, user }: RootState) => {
     return {
       newTeamData: {
         teamName: teamForm.teamName,
@@ -192,6 +198,8 @@ export default connect(
       newTeamError: errorStatus.newTeamError,
       joinTeamSubmitting: loadingStatus.joinTeamSubmitting,
       joinTeamError: errorStatus.joinTeamError,
+
+      teamId: user.teamId,
     };
   },
   dispatch => ({
