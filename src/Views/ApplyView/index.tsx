@@ -19,8 +19,10 @@ export interface ApplyViewProps {
   maxStep: number;
   currentStep: number;
   applyProcessStart: () => void;
+  applyProcessEnd: () => void;
   skipTeamUp: () => void;
   setCurrent: (i: number) => void;
+  isApplyConfirmed: boolean;
 }
 
 class ApplyView extends React.Component<ApplyViewProps> {
@@ -75,8 +77,12 @@ class ApplyView extends React.Component<ApplyViewProps> {
               description="我们很高兴你确认报名 Unique Hackday，我们将立刻审阅你提交的信息并在第一时间将你是否入选通知于你，静候佳音吧！"
               message="恭喜"
             />
-            <Button type="primary" style={{ marginTop: '10px' }}>
-              好的
+            <Button
+              type="primary"
+              style={{ marginTop: '10px' }}
+              onClick={this.props.applyProcessEnd}
+            >
+              完成
             </Button>
           </Col>
         </Row>
@@ -107,13 +113,17 @@ class ApplyView extends React.Component<ApplyViewProps> {
 }
 
 export default connect(
-  ({ applyProcess: { maxStep, currentStep } }: RootState) => ({
+  ({ applyProcess: { maxStep, currentStep }, user: { isApplyConfirmed } }: RootState) => ({
     maxStep,
     currentStep,
+    isApplyConfirmed,
   }),
   dispatch => ({
     applyProcessStart() {
       dispatch({ type: 'APPLY_PROCESS_START' });
+    },
+    applyProcessEnd() {
+      dispatch({ type: 'APPLY_PROCESS_END' });
     },
     skipTeamUp() {
       dispatch({ type: 'CHANGE_TEAM_FORM_STATUS' });

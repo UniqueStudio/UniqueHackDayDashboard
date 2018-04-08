@@ -11,6 +11,7 @@ export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect 
 import { take, select, call, put } from 'redux-saga/effects';
 
 import Message from 'antd/es/message';
+import { replace } from 'react-router-redux';
 
 export async function changeTeamFormStatus(submitted: boolean) {
   await request({
@@ -111,7 +112,7 @@ export function* joinTeamSaga() {
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
     if (yield isAtApplyProcess()) {
-      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+      yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
     }
   }
 }
@@ -170,6 +171,8 @@ export function* applyProcessSaga() {
     yield put({ type, payload: 2 });
     yield take('APPLY_PROCESS_IS_C');
     yield put({ type, payload: 3 });
+    yield take('APPLY_PROCESS_END');
+    yield put(replace('/'));
   }
 }
 
@@ -192,6 +195,7 @@ export function* applyConfirmSaga() {
       continue;
     }
     yield put({ type: 'APPLY_PROCESS_IS_C' });
+    yield put({ type: 'SET_USER_INFO', payload: { isApplyConfirmed: true } });
   }
 }
 

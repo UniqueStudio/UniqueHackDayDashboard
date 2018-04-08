@@ -144,7 +144,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             id="newPassword"
             noLayout={true}
           />
-          <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
+          <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密" />
         </MyForm>
       </Card>
     );

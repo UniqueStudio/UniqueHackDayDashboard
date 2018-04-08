@@ -21,10 +21,11 @@ export interface DashboardProps {
 const RedirectToApply = () => <Redirect to="/apply" />;
 
 const Dashboard = (props: DashboardProps) => {
-  const { isC } = props;
   if (!props.loggedIn) {
     return <Redirect to="/user_entry" />;
   }
+
+  const { isC } = props;
   return (
     <DashboardLayout
       replace={props.selfReplace}
