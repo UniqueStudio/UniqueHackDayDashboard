@@ -117,7 +117,7 @@ const TeamInfo = (props: TeamInfoProps) => {
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
         <Description term="队伍名称" children={props.teamInfo.teamName || '-'} />
-        <Description term="队伍人数" children={membersCount} />
+        <Description term="队伍人数" children={<span>{membersCount}</span>} />
         <Description term="获奖情况" children={props.teamInfo.prizeInfo || '-'} />
         <Description term="组队时间" children={teamUpTime} />
       </DescriptionList>

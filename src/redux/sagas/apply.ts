@@ -51,7 +51,7 @@ export function* newTeamSaga() {
     yield call(changeTeamFormStatus, true);
     yield put({ type: 'SET_USER_INFO', payload: { teamId } });
     if (yield isAtApplyProcess()) {
-      yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+      yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
     }
     const [teamInfo] = yield getTeamInfo(teamId);
     yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
