@@ -14,6 +14,7 @@ export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect 
 
 import delay from '../../lib/delay';
 
+import { getTeamInfo } from '../sagas/apply';
 import { UserData } from '../reducers/user';
 import { allUnreadMessage, allMessage } from './msg';
 
@@ -181,7 +182,10 @@ export function* logoutSaga() {
     sessionStorage.removeItem('token');
     localStorage.removeItem('token');
     yield put({ type: 'SET_NOT_LOGGED_IN' });
-    yield put(replace('/user_entry'));
+
+    // yield put(replace('/user_entry'));
+    // refresh
+    window.location.reload();
   }
 }
 
@@ -250,6 +254,7 @@ export function* userInfoSaga() {
       }
       if (infoRes.isApplyConfirmed) {
         yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
+        yield put({ type: 'APPLY_PROCESS_END', payload: true });
       }
 
       yield put({ type: 'USER_INFO_LOAD_END' });
@@ -259,6 +264,11 @@ export function* userInfoSaga() {
       const [, unreadMsgs] = yield call(allUnreadMessage);
       yield put({ type: 'ADD_MSG_FROM_ALL', payload: msgs });
       yield put({ type: 'ADD_MSG_FROM_UNREAD', payload: unreadMsgs });
+
+      if (infoRes.teamId !== null) {
+        const [teamInfo] = yield getTeamInfo(infoRes.teamId);
+        yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
+      }
     }
   }
 }

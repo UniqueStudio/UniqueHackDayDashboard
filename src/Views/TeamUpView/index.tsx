@@ -59,7 +59,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
 
   render() {
     if (this.props.teamId !== null) {
-      return <TeamInfo />;
+      return <TeamInfo hasOperatingButton={false} />;
     }
     return (
       <div style={{ marginTop: '20px' }}>

@@ -98,6 +98,3 @@ const SagaManager = {
 };
 
 export default SagaManager;
-
-const iter = entrySaga();
-(window as any).iter = iter;

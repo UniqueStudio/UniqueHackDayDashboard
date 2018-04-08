@@ -12,6 +12,7 @@ import auth, { AuthData } from './auth';
 import user, { UserData } from './user';
 import msg, { MsgData } from './msg';
 import applyProcess, { ApplyProcessData } from './apply';
+import teamInfo, { TeamInfo } from './teamInfo';
 
 export interface RootState {
   route?: {
@@ -28,6 +29,7 @@ export interface RootState {
   user: UserData;
   msg: MsgData;
   applyProcess: ApplyProcessData;
+  teamInfo: TeamInfo;
 }
 
 export { AnyAction };
@@ -44,6 +46,7 @@ export default combineReducers<RootState>({
   user,
   msg,
   applyProcess,
+  teamInfo,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

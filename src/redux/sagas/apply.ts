@@ -53,7 +53,24 @@ export function* newTeamSaga() {
     if (yield isAtApplyProcess()) {
       yield put({ type: 'APPLY_PROCESS_IS_C', payload: true });
     }
+    const [teamInfo] = yield getTeamInfo(teamId);
+    yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
   }
+}
+
+export async function getTeamInfo(teamId: number) {
+  const res = await request({
+    endpoint: '/v1/team/info',
+    method: 'GET',
+    body: {
+      teamId,
+    },
+  });
+
+  if (res.httpStatusCode === 200) {
+    return [res.data, res.message];
+  }
+  return [null, res.message];
 }
 
 export async function joinTeamRequest(
@@ -114,6 +131,8 @@ export function* joinTeamSaga() {
     if (yield isAtApplyProcess()) {
       yield put({ type: 'APPLY_PROCESS_IS_T', payload: true });
     }
+    const [teamInfo] = yield getTeamInfo(teamId);
+    yield put({ type: 'SET_TEAM_INFO', payload: teamInfo });
   }
 }
 
@@ -215,16 +234,3 @@ function* isAtApplyProcess() {
   const { route: { location } } = yield select();
   return location && location.pathname === '/apply';
 }
-
-// export async function getTeamInfo(teamId: number) {
-//   const res = await request({
-//     endpoint: '/v1/team/info',
-//     method: 'GET',
-//     body: {
-//       teamId,
-//     },
-//   });
-
-// }
-
-// (window as any).getTeamInfo = getTeamInfo;
