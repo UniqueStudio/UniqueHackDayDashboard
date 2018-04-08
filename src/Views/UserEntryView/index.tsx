@@ -100,8 +100,12 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             noLayout={true}
             message={registerError ? { ...registerError, type: 'error' } : undefined}
           >
-            <Username validator={usernameValidator} noLayout={true} />
-            <Password noLayout={true} />
+            <Username
+              validator={usernameValidator}
+              noLayout={true}
+              tip="允许4～16位字母、数字和下划线组合"
+            />
+            <Password noLayout={true} tip="允许6～16位字母、数字和符号组合" />
             <Phone validator={phoneValidator} noLayout={true} />
             <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSSubmitting} />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
@@ -144,7 +148,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             id="newPassword"
             noLayout={true}
           />
-          <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密" />
+          <Submit style={{ marginTop: 0 }} fullWidth={true} title="重置密码" />
         </MyForm>
       </Card>
     );

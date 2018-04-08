@@ -105,7 +105,7 @@ const TeamInfo = (props: TeamInfoProps) => {
     return <div style={{ height: '16px' }} />;
   };
 
-  const membersCount = props.teamInfo.members ? props.teamInfo.members.length : '-';
+  const membersCount = members ? props.teamInfo.members.length : '-';
   const teamUpTime = props.teamInfo.createdTime
     ? new Date(props.teamInfo.createdTime * 1000).toLocaleString()
     : '-';

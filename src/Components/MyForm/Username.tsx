@@ -1,9 +1,4 @@
 import * as React from 'react';
-// import * as PropTypes from 'prop-types';
-
-// import Form from 'antd/es/form';
-// import Input from 'antd/es/input';
-// import Icon from 'antd/es/icon';
 
 import { patterns } from '../../lib/patterns';
 
@@ -19,6 +14,7 @@ export default function Username(props: { label?: boolean; [k: string]: any }) {
       label={label ? '用户名' : undefined}
       iconType="user"
       pattern={patterns.username}
+      tip="允许4～16位字母、数字和下划线组合"
       {...rest}
     />
   );
