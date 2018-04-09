@@ -2,15 +2,6 @@ import { take, fork, cancel, all } from 'redux-saga/effects';
 
 import { SagaMiddleware } from 'redux-saga';
 import { Store } from 'redux';
-import {
-  ForkEffect,
-  PutEffect,
-  SelectEffect,
-  AllEffect,
-  TakeEffect,
-  CallEffect,
-} from 'redux-saga/effects';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { RootState } from '../reducers';
 
 import {
@@ -38,6 +29,7 @@ export function* entrySaga() {
     loginSaga(),
     registerSaga(),
     userInfoSaga(),
+    resetPwdSaga(),
 
     // something about sms
     registerSMSSaga(),
@@ -50,7 +42,6 @@ export function* appSaga() {
   // below are sagas only run after logged in
   yield all([
     // userInfoLoopSaga(),
-    resetPwdSaga(),
     logoutSaga(),
 
     // about apply

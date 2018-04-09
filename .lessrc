@@ -3,8 +3,6 @@
   "modifyVars": {
     "primary-color": "#CD07CB",
     "success-color": "#44B800",
-    "error-color": "#F00050",
-    "border-radius-base": "0px",
-    "border-radius-sm": "0px"
+    "error-color": "#F00050"
   }
 }

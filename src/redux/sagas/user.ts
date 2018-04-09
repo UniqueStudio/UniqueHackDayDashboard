@@ -204,6 +204,12 @@ export function* resetPwdSaga() {
     yield put({ type: 'RESET_PWD_SUBMIT_END' });
     if (!successful) {
       yield put({ type: 'RESET_PWD_FAILED', payload: message });
+      continue;
+    }
+
+    const { route: { location } } = yield select();
+    if (location && location.pathname === '/user_entry/reset_pwd') {
+      yield put(replace('/user_entry'));
     }
   }
 }
