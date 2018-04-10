@@ -1,13 +1,4 @@
 import request from '../../lib/API';
-import {
-  ForkEffect,
-  PutEffect,
-  SelectEffect,
-  AllEffect,
-  TakeEffect,
-  CallEffect,
-} from 'redux-saga/effects';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { take, select, call, put } from 'redux-saga/effects';
 
 import Message from 'antd/es/message';

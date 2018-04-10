@@ -5,16 +5,7 @@ import Message from 'antd/es/message';
 import Notify from 'antd/es/notification';
 import Icon from 'antd/es/icon';
 
-import {
-  ForkEffect,
-  PutEffect,
-  SelectEffect,
-  AllEffect,
-  TakeEffect,
-  CallEffect,
-} from 'redux-saga/effects';
 import { RootState } from '../reducers';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 
 export async function msgPoll() {
   const res = await request({
