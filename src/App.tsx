@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import { hot } from 'react-hot-loader';
 
 import 'antd/es/form/style';
 import 'antd/es/card/style';
@@ -34,7 +33,7 @@ import './styles/main.less';
 
 import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
-import { store, history } from './redux/store';
+import store, { history } from './redux/store';
 
 class App extends React.Component {
   state = {
@@ -78,4 +77,4 @@ class App extends React.Component {
   }
 }
 
-export default hot(module)(App);
+export default App;

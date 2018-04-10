@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Card from 'antd/es/card';
 
 import TeamInfo from '../../Components/TeamInfo';
-import DeviceRent from '../../Components/DeviceRent/index';
+// import DeviceRent from '../../Components/DeviceRent/index';
 import TeamUpView from '../TeamUpView';
 import { RootState } from '../../redux/reducers/index';
 
@@ -18,9 +18,9 @@ class TeamConsole extends React.Component<{ teamId: number }> {
     }
     return (
       <div style={{ paddingBottom: '40px' }}>
-        <TeamInfo hasEditButton={false} hasDissolutionButton={true} />
+        <TeamInfo />
         <div style={{ height: '20px' }} />
-        <DeviceRent />
+        {/* <DeviceRent /> */}
       </div>
     );
   }

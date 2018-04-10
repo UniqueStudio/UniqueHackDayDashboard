@@ -8,8 +8,8 @@ import { History } from 'history';
 import reducer, { RootState } from '../reducers';
 import SagaManager from '../sagas';
 
-const history: History = createHistory();
-const sagaMiddleware = createSagaMiddleware();
+export const history: History = createHistory();
+export const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
   (process.env.NODE_ENV === 'development' &&
     (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
@@ -22,7 +22,6 @@ const store: Store<RootState> = createStore(
 
 SagaManager.startSagas(sagaMiddleware);
 
-export { history, store };
 export default store;
 
 if ((module as any).hot) {
