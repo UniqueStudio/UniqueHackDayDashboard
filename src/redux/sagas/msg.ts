@@ -54,7 +54,7 @@ export function* showMsg() {
       duration: 0,
       message: '亲爱的梁志博同学',
       description:
-        '很抱歉的通知你你已经被我们 Unique Hackday 委员会拒绝参加比赛。欢迎下次再来报名！',
+        '很抱歉的通知你: 你已经被我们 Unique Hackday 委员会拒绝参加比赛。欢迎下次再来报名！',
       icon: React.createElement(Icon, { type: 'close-circle-o', style: { color: 'red' } }),
     });
   }

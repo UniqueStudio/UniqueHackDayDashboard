@@ -2,20 +2,10 @@ import request from '../../lib/API';
 import { take, select, call, put } from 'redux-saga/effects';
 import { replace } from 'react-router-redux';
 
-import {
-  ForkEffect,
-  PutEffect,
-  SelectEffect,
-  AllEffect,
-  TakeEffect,
-  CallEffect,
-} from 'redux-saga/effects';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
-
 import delay from '../../lib/delay';
 
 import { getTeamInfo } from '../sagas/apply';
-import { UserData } from '../reducers/user';
+import { PartialUserInfo } from '../reducers/user';
 import { allUnreadMessage, allMessage } from './msg';
 
 export async function loginRequest(
@@ -85,7 +75,7 @@ export async function checkLoginStatus() {
   return { successful: false, message };
 }
 
-export async function userInfoRequest(): Promise<[UserData | null, number]> {
+export async function userInfoRequest(): Promise<[PartialUserInfo | null, number]> {
   const res = await request({
     endpoint: '/v1/user/info',
     method: 'GET',
@@ -218,7 +208,7 @@ export function* userInfoSaga() {
   while (true) {
     yield take('LOAD_USER_INFO');
     yield put({ type: 'USER_INFO_LOAD_START' });
-    const [infoRes]: [API.User.UserData, number] = yield call(userInfoRequest);
+    const [infoRes]: [API.User.UserInfo, number] = yield call(userInfoRequest);
 
     if (!infoRes) {
       yield put({ type: 'SET_NOT_LOGGED_IN' });
@@ -292,7 +282,7 @@ export function* userInfoLoopSaga() {
 
 export function* userInfoSetSaga() {
   while (true) {
-    const { payload: res }: { payload: UserData } = yield take('SET_USER_INFO');
+    const { payload: res }: { payload: PartialUserInfo } = yield take('SET_USER_INFO');
     if (res) {
       if (!res.isDetailFormSubmitted) {
         yield put(replace('/apply'));

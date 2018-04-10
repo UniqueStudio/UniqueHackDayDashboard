@@ -1,0 +1,47 @@
+// prettier-ignore
+export const LOAD_USER_INFO = {
+  _:     'LOAD_USER_INFO',
+  START: 'LOAD_USER_INFO_START',
+  FAIL:  'LOAD_USER_INFO_FAIL',
+  OK:    'LOAD_USER_INFO_OK',
+};
+
+// prettier-ignore
+export const LOGIN_FORM_SUBMIT = {
+  _:     'LOGIN_FORM_SUBMIT',
+  START: 'LOGIN_FORM_SUBMIT_START',
+  OK:    'LOGIN_FORM_SUBMIT_OK',
+  FAIL:  'LLOGIN_FORM_SUBMIT_FAIL',
+};
+
+// prettier-ignore
+export const REGISTER_FORM_SUBMIT = {
+  _:     'REGISTER_FORM_SUBMIT',
+  START: 'REGISTER_FORM_SUBMIT_START',
+  OK:    'REGISTER_FORM_SUBMIT_OK',
+  FAIL:  'REGISTER_FORM_SUBMIT_FAIL',
+};
+
+// prettier-ignore
+export const RESET_PWD_SUBMIT = {
+  _:     'RESET_PWD_SUBMIT',
+  START: 'RESET_PWD_SUBMIT_START',
+  OK:    'RESET_PWD_SUBMIT_OK',
+  FAIL:  'RESET_PWD_SUBMIT_FAIL',
+};
+
+// prettier-ignore
+export const RESET_PWD_SEND_SMS_SUBMIT = {
+  _:     'RESET_PWD_SEND_SMS_SUBMIT',
+  START: 'RESET_PWD_SEND_SMS_START',
+  OK:    'RESET_PWD_SEND_SMS_OK',
+  FAIL:  'RESET_PWD_SEND_SMS_FAIL',
+};
+
+// prettier-ignore
+export const REGISITER_SEND_SMS_SUBMIT = {
+  _:     'REGISITER_SEND_SMS_SUBMIT',
+  START: 'REGISITER_SEND_SMS_START',
+  OK:    'REGISITER_SEND_SMS_OK',
+  FAIL:  'REGISITER_SEND_SMS_FAIL',
+};
