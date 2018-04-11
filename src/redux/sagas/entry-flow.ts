@@ -1,6 +1,6 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, fork } from 'redux-saga/effects';
 import * as TYPE from '../actions';
-
+import { delay } from 'redux-saga';
 /**
  * This is a generator function / saga for user entry flow.
  */
@@ -50,7 +50,7 @@ export default function* entryFlow() {
             TYPE.REGISTER_FORM_SUBMIT.OK,
             TYPE.REGISTER_FORM_SUBMIT.FAIL,
           ]);
-          if (registerSubmitType === TYPE.LOGIN_FORM_SUBMIT.OK) {
+          if (registerSubmitType === TYPE.REGISTER_FORM_SUBMIT.OK) {
             break;
           }
         }
@@ -59,6 +59,15 @@ export default function* entryFlow() {
        * Only successfully pass login/register process
        * can user jump out the loop.
        */
+      yield fork(function*() {
+        yield delay(0);
+        /**
+         * Put this action in next event loop to be taken
+         * by this `while(true) {...}`
+         */
+        yield put({ type: TYPE.LOAD_USER_INFO._ });
+      });
+      continue;
     }
     yield put({ type: 'SET_LOGGED_IN' });
     yield put({ type: TYPE.SHOW_APP_VIEW });

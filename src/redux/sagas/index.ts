@@ -6,6 +6,7 @@ import { RootState } from '../reducers';
 
 import requestsSaga from '../sagas/requests';
 import entryFlow from '../sagas/entry-flow';
+import applyFlow from '../sagas/apply-flow';
 
 import {
   loginSaga,
@@ -64,7 +65,7 @@ export function* appSaga() {
 }
 
 // for scaleable
-const sagas = [/* entrySaga, appSaga,*/ entryFlow, requestsSaga];
+const sagas = [/* entrySaga, appSaga,*/ entryFlow, applyFlow, requestsSaga];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 

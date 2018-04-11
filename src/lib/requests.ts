@@ -249,3 +249,17 @@ export async function deleteMsg(id: number) {
   }
   return [false, `${locales.DELETE_MSG}: ${locales[res.message]}`];
 }
+
+export async function confirmApply() {
+  const res = await request({
+    endpoint: '/v1/user/apply/confirmation',
+    method: 'PUT',
+    body: {
+      confirmation: true,
+    },
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `${locales.CONFIRM_APPLY}: ${locales[res.message]}`];
+}

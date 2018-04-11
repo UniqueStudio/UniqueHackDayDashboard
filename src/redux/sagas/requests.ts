@@ -109,7 +109,13 @@ export default function*() {
   yield takeLatest(TYPE.DETAIL_FORM_SUBMIT._, function*() {
     yield put({ type: TYPE.DETAIL_FORM_SUBMIT.START });
     const { data } = yield select((state: RootState) => state.detailForm);
-    const [ok, message] = yield call(req.submitDetail, data);
+    const [ok, message] = yield call(req.submitDetail, Object.keys(data).reduce(
+      (p, key) => ({
+        ...p,
+        [key]: data[key].value,
+      }),
+      {},
+    ) as any);
     if (ok) {
       yield put({ type: TYPE.DETAIL_FORM_SUBMIT.OK });
       return;
@@ -117,21 +123,21 @@ export default function*() {
     yield put({ type: TYPE.DETAIL_FORM_SUBMIT.FAIL, payload: message });
   });
 
-  yield takeLatest(TYPE.JOIN_TEAM_FORM_SUBMIT._, function*() {
-    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START });
-    const { data } = yield select((state: RootState) => state.teamForm);
-    const [ok, message] = yield call(req.createTeam, data.teamName.value);
-    if (ok) {
-      yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK });
-      return;
-    }
-    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL, payload: message });
-  });
-
   yield takeLatest(TYPE.NEW_TEAM_FORM_SUBMIT._, function*() {
     yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.newTeamForm);
+    const [ok, message] = yield call(req.createTeam, data.teamName.value);
+    if (ok) {
+      yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.JOIN_TEAM_FORM_SUBMIT._, function*() {
+    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START });
     const [{ data }, username] = yield select((state: RootState) => [
-      state.teamForm,
+      state.joinTeamForm,
       state.user.username,
     ]);
     const [ok, message] = yield call(
@@ -141,9 +147,29 @@ export default function*() {
       username,
     );
     if (ok) {
-      yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK });
+      yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK });
       return;
     }
-    yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
+    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.CHANGE_IS_T_SUBMIT._, function*() {
+    yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.START });
+    const [ok, message] = yield call(req.changeIsT, true);
+    if (ok) {
+      yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.APPLY_CONFIRM_SUBMIT._, function*() {
+    yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.START });
+    const [ok, message] = yield call(req.confirmApply, true);
+    if (ok) {
+      yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.FAIL, payload: message });
   });
 }

@@ -1,14 +1,30 @@
 import { combineReducers, AnyAction } from 'redux';
 import { routerReducer as route } from 'react-router-redux';
 
-import errorStatus, { ErrorStatus } from './error';
 import auth, { AuthData } from './auth';
 import user, { PartialUserInfo } from './user';
 import msg, { MsgData } from './msg';
 import applyProcess, { ApplyProcessData } from './apply';
 import teamInfo, { TeamInfo } from './teamInfo';
-import { LoginForm, DetailForm, RegisterForm, ResetPwdForm, TeamForm } from './forms';
-import { loginForm, registerForm, detailForm, resetPwdForm, teamForm, smsLoading } from './forms';
+import {
+  LoginForm,
+  DetailForm,
+  RegisterForm,
+  ResetPwdForm,
+  NewTeamForm,
+  JoinTeamForm,
+  ConfirmApplyStatus,
+} from './forms';
+import {
+  loginForm,
+  registerForm,
+  detailForm,
+  resetPwdForm,
+  newTeamForm,
+  joinTeamForm,
+  smsLoading,
+  confirmApplyStatus,
+} from './forms';
 
 export interface RootState {
   route?: {
@@ -17,12 +33,13 @@ export interface RootState {
   registerForm: RegisterForm;
   detailForm: DetailForm;
   loginForm: LoginForm;
-  teamForm: TeamForm;
+  newTeamForm: NewTeamForm;
+  joinTeamForm: JoinTeamForm;
   resetPwdForm: ResetPwdForm;
   smsLoading: boolean;
+  confirmApplyStatus: ConfirmApplyStatus;
 
   // loadingStatus: LoadingStatus;
-  errorStatus: ErrorStatus;
   auth: AuthData;
   user: PartialUserInfo;
   msg: MsgData;
@@ -37,12 +54,13 @@ export default combineReducers<RootState>({
   registerForm,
   loginForm,
   detailForm,
-  teamForm,
+  newTeamForm,
+  joinTeamForm,
   resetPwdForm,
   smsLoading,
+  confirmApplyStatus,
 
   // loadingStatus,
-  errorStatus,
   auth,
   user,
   msg,

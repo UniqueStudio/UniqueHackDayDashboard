@@ -65,9 +65,13 @@ export function detailForm(
           ...action.payload,
         },
       };
-
-      localStorage.setItem('detailForm', JSON.stringify(ret));
       return ret;
+    case TYPE.DETAIL_FORM_SUBMIT.START:
+      return { ...state, isSubmitting: true };
+    case TYPE.DETAIL_FORM_SUBMIT.OK:
+      return { ...state, isSubmitting: false };
+    case TYPE.DETAIL_FORM_SUBMIT.FAIL:
+      return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
     default:
       return state;
   }
@@ -242,22 +246,18 @@ export function resetPwdForm(
   }
 }
 
-export type TeamForm = ToForm<
+export type NewTeamForm = ToForm<
   ToFormData<{
     teamName: string;
-    teamLeaderName: string;
-    teamLeaderPhone: string;
   }>
 >;
 /**
  * teamForm form data reducer
  */
-export function teamForm(
-  state: TeamForm = {
+export function newTeamForm(
+  state: NewTeamForm = {
     data: {
       teamName: {},
-      teamLeaderName: {},
-      teamLeaderPhone: {},
     },
     isLoading: false,
     isSubmitting: false,
@@ -274,13 +274,47 @@ export function teamForm(
           ...action.payload,
         },
       };
-    // case TYPE..START:
-    //   return { ...state, isSubmitting: true };
-    // case TYPE.RESET_PWD_FORM_SUBMIT.OK:
-    //   return { ...state, isSubmitting: false };
-    // case TYPE.RESET_PWD_FORM_SUBMIT.FAIL:
-    //   return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
+    case TYPE.NEW_TEAM_FORM_SUBMIT.START:
+      return { ...state, isSubmitting: true };
+    case TYPE.NEW_TEAM_FORM_SUBMIT.OK:
+      return { ...state, isSubmitting: false };
+    case TYPE.NEW_TEAM_FORM_SUBMIT.FAIL:
+      return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
 
+    case 'CLEAR_NEW_TEAM_FORM':
+      return {
+        ...state,
+        data: {
+          teamName: {},
+        },
+      };
+    default:
+      return state;
+  }
+}
+
+export type JoinTeamForm = ToForm<
+  ToFormData<{
+    teamLeaderName: string;
+    teamLeaderPhone: string;
+  }>
+>;
+/**
+ * teamForm form data reducer
+ */
+export function joinTeamForm(
+  state: JoinTeamForm = {
+    data: {
+      teamLeaderName: {},
+      teamLeaderPhone: {},
+    },
+    isLoading: false,
+    isSubmitting: false,
+    error: {},
+  },
+  action: AnyAction,
+) {
+  switch (action.type) {
     case 'JOIN_TEAM_FORM_CHANGE':
       return {
         ...state,
@@ -289,26 +323,18 @@ export function teamForm(
           ...action.payload,
         },
       };
-    // case TYPE.RESET_PWD_FORM_SUBMIT.START:
-    //   return { ...state, isSubmitting: true };
-    // case TYPE.RESET_PWD_FORM_SUBMIT.OK:
-    //   return { ...state, isSubmitting: false };
-    // case TYPE.RESET_PWD_FORM_SUBMIT.FAIL:
-    //   return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
+    case TYPE.JOIN_TEAM_FORM_SUBMIT.START:
+      return { ...state, isSubmitting: true };
+    case TYPE.JOIN_TEAM_FORM_SUBMIT.OK:
+      return { ...state, isSubmitting: false };
+    case TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL:
+      return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
 
-    case 'CLEAR_NEW_TEAM':
+    case 'CLEAR_JOIN_TEAM_FORM':
       return {
         ...state,
         data: {
           teamName: {},
-        },
-      };
-    case 'CLEAR_JOIN_TEAM':
-      return {
-        ...state,
-        data: {
-          teamLeaderName: {},
-          teamLeaderPhone: {},
         },
       };
     default:
@@ -331,6 +357,32 @@ export function smsLoading(state = false, action: AnyAction) {
       return false;
     case TYPE.RESET_PWD_SEND_SMS_SUBMIT.FAIL:
       return false;
+    default:
+      return state;
+  }
+}
+
+export interface ConfirmApplyStatus {
+  isLoading: boolean;
+  isSubmitting: boolean;
+  error: { value?: string; time?: number };
+}
+export function confirmApplyStatus(
+  state: ConfirmApplyStatus = {
+    isLoading: false,
+    isSubmitting: false,
+    error: {},
+  },
+  action: AnyAction,
+) {
+  switch (action.type) {
+    case TYPE.APPLY_CONFIRM_SUBMIT.START:
+      return { ...state, isSubmitting: true };
+    case TYPE.APPLY_CONFIRM_SUBMIT.OK:
+      return { ...state, isSubmitting: false };
+    case TYPE.APPLY_CONFIRM_SUBMIT.FAIL:
+      return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
+
     default:
       return state;
   }
