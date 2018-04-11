@@ -138,9 +138,9 @@ export default function*() {
   yield takeLatest(TYPE.NEW_TEAM_FORM_SUBMIT._, function*() {
     yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START });
     const { data } = yield select((state: RootState) => state.newTeamForm);
-    const [ok, message] = yield call(req.createTeam, data.teamName.value);
-    if (ok) {
-      yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK });
+    const [teamId, message] = yield call(req.createTeam, data.teamName.value);
+    if (teamId) {
+      yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK, payload: teamId });
       return;
     }
     yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
@@ -152,14 +152,14 @@ export default function*() {
       state.joinTeamForm,
       state.user.username,
     ]);
-    const [ok, message] = yield call(
+    const [teamId, message] = yield call(
       req.joinTeam,
       data.teamLeaderName.value,
       data.teamLeaderPhone.value,
       username,
     );
-    if (ok) {
-      yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK });
+    if (teamId) {
+      yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK, payload: teamId });
       return;
     }
     yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL, payload: message });

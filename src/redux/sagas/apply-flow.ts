@@ -2,6 +2,7 @@ import { take, put, fork, select, takeEvery } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { RootState } from '../reducers/index';
 import { replace } from 'react-router-redux';
+import { AnyAction } from 'redux';
 /**
  * This is a generator function / saga for user entry flow.
  */
@@ -48,7 +49,10 @@ export default function* applyFlow() {
      * Everytime teamForm submitted, try
      * to load team info.
      */
-    yield takeEvery([TYPE.NEW_TEAM_FORM_SUBMIT.OK, TYPE.JOIN_TEAM_FORM_SUBMIT.OK], function*() {
+    yield takeEvery([TYPE.NEW_TEAM_FORM_SUBMIT.OK, TYPE.JOIN_TEAM_FORM_SUBMIT.OK], function*({
+      payload,
+    }: AnyAction) {
+      yield put({ type: TYPE.SET_USER_INFO, payload: { teamId: payload } });
       yield put({ type: TYPE.LOAD_TEAM_INFO._ });
     });
 
@@ -117,6 +121,6 @@ export default function* applyFlow() {
      * Waiting for fork effect to put APPLY_PROCESS_END.
      */
     yield take(TYPE.APPLY_PROCESS_END);
-    yield replace('/');
+    yield put(replace('/'));
   }
 }

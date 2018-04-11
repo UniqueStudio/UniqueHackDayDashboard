@@ -2,6 +2,7 @@ import { take, put, fork, takeEvery, select } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
 import { RootState } from '../reducers/index';
+import { replace } from 'react-router-redux';
 
 /**
  * This is a generator function / saga for user entry flow.
@@ -85,7 +86,11 @@ export default function* entryFlow() {
      * User now fully get into Console view.
      * We wait user to click logout to do clear job.
      */
-    yield take('LOGOUT_CLICK');
-    // TODO: do clear job
+    yield take('LOGOUT_CLICKED');
+
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    yield put(replace('/user_entry'));
+    window.location.reload();
   }
 }

@@ -15,6 +15,7 @@ import Col from 'antd/es/col';
 import ApplyConfirmView from '../ApplyConfirmView';
 import { RootState } from '../../redux/reducers/index';
 import Message from 'antd/es/message';
+import { Redirect } from 'react-router';
 export interface ApplyViewProps {
   maxStep: number;
   currentStep: number;
@@ -38,6 +39,10 @@ class ApplyView extends React.Component<ApplyViewProps> {
   };
 
   render() {
+    if (this.props.isApplyConfirmed) {
+      return <Redirect to="/" />;
+    }
+
     const renderMethods = [
       this.renderDetailView,
       this.renderTeamUpView,

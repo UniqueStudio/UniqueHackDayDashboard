@@ -49,6 +49,7 @@ declare namespace API {
 
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
+    EmailExists = 'EmailExists',
     TeamNameExists = 'TeamNameExists',
     PhoneNotExists = 'PhoneNotExists',
     TeamNotExists = 'TeamNotExists',

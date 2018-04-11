@@ -17,6 +17,7 @@ import Submit from '../../Components/MyForm/Submit';
 
 import { DetailForm } from '../../redux/reducers/forms';
 import * as TYPE from '../../redux/actions/index';
+import { emailValidator } from '../../Components/MyForm/validators';
 
 export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
@@ -64,6 +65,7 @@ class DetailView extends React.Component<DetailViewProps> {
             label="邮箱"
             iconType="mail"
             pattern={patterns.email}
+            validator={emailValidator}
           />
 
           <Divider>报销和赠礼</Divider>
