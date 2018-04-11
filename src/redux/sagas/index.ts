@@ -1,4 +1,4 @@
-import { take, fork, cancel, all } from 'redux-saga/effects';
+import { take, fork, cancel } from 'redux-saga/effects';
 
 import { SagaMiddleware } from 'redux-saga';
 import { Store } from 'redux';
@@ -8,64 +8,8 @@ import requestsSaga from '../sagas/requests';
 import entryFlow from '../sagas/entry-flow';
 import applyFlow from '../sagas/apply-flow';
 
-import {
-  loginSaga,
-  registerSaga,
-  userInfoSaga,
-  // userInfoLoopSaga,
-  resetPwdSaga,
-  logoutSaga,
-} from './user';
-import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
-import {
-  joinTeamSaga,
-  newTeamSaga,
-  detailSaga,
-  applyConfirmSaga,
-  applyProcessSaga,
-  teamStatusSaga,
-} from './apply';
-import { msgPollSaga, showMsg, setReadAllSaga, deleteAllSaga } from './msg';
-
-export function* entrySaga() {
-  yield all([
-    // about user
-    loginSaga(),
-    registerSaga(),
-    userInfoSaga(),
-    resetPwdSaga(),
-
-    // something about sms
-    registerSMSSaga(),
-    resetPwdSMSSaga(),
-  ]);
-}
-
-export function* appSaga() {
-  yield take('SET_LOGGED_IN');
-  // below are sagas only run after logged in
-  yield all([
-    // userInfoLoopSaga(),
-    logoutSaga(),
-
-    // about apply
-    detailSaga(),
-    joinTeamSaga(),
-    newTeamSaga(),
-
-    // msg
-    msgPollSaga(),
-    showMsg(),
-    setReadAllSaga(),
-    deleteAllSaga(),
-    applyProcessSaga(),
-    applyConfirmSaga(),
-    teamStatusSaga(),
-  ]);
-}
-
 // for scaleable
-const sagas = [/* entrySaga, appSaga,*/ entryFlow, applyFlow, requestsSaga];
+const sagas = [entryFlow, applyFlow, requestsSaga];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 

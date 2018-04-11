@@ -1,4 +1,4 @@
-import { take, put, fork, takeEvery, select } from 'redux-saga/effects';
+import { take, put, fork, select } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
 import { RootState } from '../reducers/index';
