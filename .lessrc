@@ -1,7 +1,7 @@
 {
   "noIeCompat": true,
   "modifyVars": {
-    "primary-color": "#CD07CB",
+    "primary-color": "#3D4FB1",
     "success-color": "#44B800",
     "error-color": "#F00050"
   }

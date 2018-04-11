@@ -22,7 +22,7 @@ export default function* entryFlow() {
        * After load user info successfully, try to load team
        * info.
        */
-      if (yield select((state: RootState) => state.user.teamId)) {
+      if ('number' === typeof (yield select((state: RootState) => state.user.teamId))) {
         yield put({ type: TYPE.LOAD_TEAM_INFO._ });
       }
     } else {
