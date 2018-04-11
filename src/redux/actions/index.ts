@@ -86,6 +86,14 @@ export const APPLY_CONFIRM_SUBMIT = {
   FAIL:  'APPLY_CONFIRM_SUBMIT_FAIL',
 }
 
+// prettier-ignore
+export const LOAD_TEAM_INFO = {
+  _:     'LOAD_TEAM_INFO',
+  START: 'LOAD_TEAM_INFO_START',
+  OK:    'LOAD_TEAM_INFO_OK',
+  FAIL:  'LOAD_TEAM_INFO_FAIL',
+}
+
 export const SHOW_APP_VIEW = 'SHOW_APP_VIEW';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';

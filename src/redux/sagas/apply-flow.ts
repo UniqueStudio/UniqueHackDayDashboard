@@ -45,6 +45,14 @@ export default function* applyFlow() {
     });
 
     /**
+     * Everytime teamForm submitted, try
+     * to load team info.
+     */
+    yield takeEvery([TYPE.NEW_TEAM_FORM_SUBMIT.OK, TYPE.JOIN_TEAM_FORM_SUBMIT.OK], function*() {
+      yield put({ type: TYPE.LOAD_TEAM_INFO._ });
+    });
+
+    /**
      * This is a fork effect that run async with
      * main `while(true) {...}` . But it will put
      * APPLY_PROCESS_END action once apply ends.

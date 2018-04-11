@@ -18,6 +18,18 @@ export default function*() {
     yield put({ type: TYPE.LOAD_USER_INFO.FAIL });
   });
 
+  // load user infomation
+  yield takeLatest(TYPE.LOAD_TEAM_INFO._, function*() {
+    yield put({ type: TYPE.LOAD_TEAM_INFO.START });
+    const { teamId } = yield select((state: RootState) => state.user);
+    const [teamInfo] = yield call(req.getTeamInfo, teamId);
+    if (teamInfo) {
+      yield put({ type: TYPE.LOAD_TEAM_INFO.OK, payload: teamInfo });
+      return;
+    }
+    yield put({ type: TYPE.LOAD_TEAM_INFO.FAIL });
+  });
+
   // submit login form
   type LoginReturnType = [string, undefined] | [null, string];
   yield takeLatest(TYPE.LOGIN_FORM_SUBMIT._, function*(action: AnyAction) {

@@ -223,7 +223,7 @@ declare namespace API {
       // reset: 重置密码
       (
         req: RequestWithoutAuth<
-          '/v1/user/password?reset',
+          '/v1/user/password/reset',
           'POST',
           {
             phone: string;

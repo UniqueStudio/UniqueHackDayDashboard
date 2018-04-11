@@ -16,7 +16,7 @@ export default function teamInfo(
   action: { type: string; payload?: TeamInfo },
 ) {
   switch (action.type) {
-    case 'SET_TEAM_INFO':
+    case 'LOAD_TEAM_INFO_OK':
       return {
         ...state,
         ...(action.payload || {}),

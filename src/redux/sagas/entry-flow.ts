@@ -1,6 +1,8 @@
-import { take, put, fork } from 'redux-saga/effects';
+import { take, put, fork, takeEvery, select } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
+import { RootState } from '../reducers/index';
+
 /**
  * This is a generator function / saga for user entry flow.
  */
@@ -15,6 +17,13 @@ export default function* entryFlow() {
 
     if (loadUserInfoType === TYPE.LOAD_USER_INFO.OK) {
       yield put({ type: TYPE.SET_USER_INFO, payload: loadUserInfoPayload });
+      /**
+       * After load user info successfully, try to load team
+       * info.
+       */
+      if (yield select((state: RootState) => state.user.teamId)) {
+        yield put({ type: TYPE.LOAD_TEAM_INFO._ });
+      }
     } else {
       /**
        * Failed to load user info, assuming it is because of

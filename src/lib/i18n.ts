@@ -54,7 +54,7 @@ const reqTips = {
   GET_UNREAD_MSG_ALL:    ['拉取未读消息失败','Failed to fetch unread message'][language],
   SET_MSG_READ:          ['设为已读失败','Failed to set as read'][language],
   DELETE_MSG:            ['删除消息失败','Failed to delete message'][language],
-  APPLY_CONFIRM:         ['确认报名失败','Failed to confirm apply'][language],
+  CONFIRM_APPLY:         ['确认报名失败','Failed to confirm apply'][language],
 };
 
 const locales = {
