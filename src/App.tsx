@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
+import { take } from 'redux-saga/effects';
+import { Task } from 'redux-saga';
 import { Switch, Route } from 'react-router-dom';
 
 import 'antd/es/form/style';
@@ -33,16 +35,16 @@ import './styles/main.less';
 
 import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
-import store, { history } from './redux/store';
+import store, { history, sagaMiddleware } from './redux/store';
+import * as TYPE from './redux/actions';
 
 class App extends React.Component {
   state = {
-    isLoadingUserInfo: false,
+    showAppView: false,
   };
 
-  unsubcribe = () => void 0;
   render() {
-    if (this.state.isLoadingUserInfo) {
+    if (!this.state.showAppView) {
       return null;
     }
     return (
@@ -57,22 +59,24 @@ class App extends React.Component {
     );
   }
 
+  *showAppViewWatcher() {
+    yield take(TYPE.SHOW_APP_VIEW);
+    this.setState({ showAppView: true });
+  }
+
+  watcherTask: Task | null = null;
   componentWillMount() {
-    let preIsLoadingUserInfo = false;
-    this.unsubcribe = store.subscribe(() => {
-      const isLoadingUserInfo = store.getState().loadingStatus.userInfoLoading;
-      if (isLoadingUserInfo === !preIsLoadingUserInfo) {
-        this.setState({ isLoadingUserInfo });
-      }
-      preIsLoadingUserInfo = isLoadingUserInfo;
-    }) as any;
-    // LOAD_USER_INFO below is dispatched to check if user is logged in
+    const self = this;
+    sagaMiddleware.run(function*() {
+      yield take(TYPE.SHOW_APP_VIEW);
+      self.setState({ showAppView: true });
+    });
     store.dispatch({ type: 'LOAD_USER_INFO' });
   }
 
   componentWillUnmount() {
-    if (this.unsubcribe) {
-      this.unsubcribe();
+    if (this.watcherTask) {
+      this.watcherTask.cancel();
     }
   }
 }

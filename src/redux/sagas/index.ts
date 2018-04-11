@@ -4,6 +4,9 @@ import { SagaMiddleware } from 'redux-saga';
 import { Store } from 'redux';
 import { RootState } from '../reducers';
 
+import requestsSaga from '../sagas/requests';
+import entryFlow from '../sagas/entry-flow';
+
 import {
   loginSaga,
   registerSaga,
@@ -61,11 +64,11 @@ export function* appSaga() {
 }
 
 // for scaleable
-const sagas = [entrySaga, appSaga];
+const sagas = [/* entrySaga, appSaga,*/ entryFlow, requestsSaga];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
-function createAbortableSaga(saga: typeof appSaga) {
+function createAbortableSaga(saga: any) {
   if (process.env.NODE_ENV === 'development') {
     return function*() {
       const sagaTask = yield fork(saga);

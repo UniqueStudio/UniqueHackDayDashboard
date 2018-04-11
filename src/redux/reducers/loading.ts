@@ -23,7 +23,7 @@ export default function loadingStatus(
   },
   action: AnyAction,
 ) {
-  const regexp = /^([A-Z_]+?)_(SMS_)?(LOAD|SUBMIT)_(START|END)$/;
+  const regexp = /^([A-Z_]+?)_(SMS_)?(LOAD|SUBMIT)_(START|OK|FAIL)$/;
   const [, type, isSMS, tag, op] = action.type.match(regexp) || new Array(5);
 
   if (op && type) {
