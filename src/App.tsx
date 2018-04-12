@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
-import { take } from 'redux-saga/effects';
-import { Task } from 'redux-saga';
 import { Switch, Route } from 'react-router-dom';
 
 import 'antd/es/form/style';
@@ -29,55 +27,32 @@ import 'antd/es/divider/style';
 import 'antd/es/message/style';
 import 'antd/es/notification/style';
 
-// import 'ant-design-pro/dist/ant-design-pro.min.css';
-
 import './styles/main.less';
 
 import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
-import store, { history, sagaMiddleware } from './redux/store';
-import * as TYPE from './redux/actions';
+import store, { history } from './redux/store';
+import GlobalLoading from './Views/GlobalLoading';
 
 class App extends React.Component {
-  state = {
-    showAppView: false,
-  };
-
   render() {
-    if (!this.state.showAppView) {
-      return null;
-    }
     return (
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route path="/user_entry" component={UserEntryView} />
-            <Route path="/" component={Dashboard} />
-          </Switch>
-        </ConnectedRouter>
+        <React.Fragment>
+          <ConnectedRouter history={history}>
+            <Switch>
+              <Route path="/user_entry" component={UserEntryView} />
+              <Route path="/" component={Dashboard} />
+            </Switch>
+          </ConnectedRouter>
+          <GlobalLoading />
+        </React.Fragment>
       </Provider>
     );
   }
 
-  *showAppViewWatcher() {
-    yield take(TYPE.SHOW_APP_VIEW);
-    this.setState({ showAppView: true });
-  }
-
-  watcherTask: Task | null = null;
   componentWillMount() {
-    const self = this;
-    sagaMiddleware.run(function*() {
-      yield take(TYPE.SHOW_APP_VIEW);
-      self.setState({ showAppView: true });
-    });
     store.dispatch({ type: 'LOAD_USER_INFO' });
-  }
-
-  componentWillUnmount() {
-    if (this.watcherTask) {
-      this.watcherTask.cancel();
-    }
   }
 }
 

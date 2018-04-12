@@ -17,11 +17,12 @@ import Submit from '../../Components/MyForm/Submit';
 
 import { DetailForm } from '../../redux/reducers/forms';
 import * as TYPE from '../../redux/actions/index';
-import { emailValidator } from '../../Components/MyForm/validators';
+// import { emailValidator } from '../../Components/MyForm/validators';
 
 export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
+  onEnter: () => void;
 
   detailData: DetailForm['data'];
 
@@ -65,7 +66,7 @@ class DetailView extends React.Component<DetailViewProps> {
             label="邮箱"
             iconType="mail"
             pattern={patterns.email}
-            validator={emailValidator}
+            // validator={emailValidator}
           />
 
           <Divider>报销和赠礼</Divider>
@@ -216,6 +217,10 @@ class DetailView extends React.Component<DetailViewProps> {
       </div>
     );
   }
+
+  componentDidMount() {
+    this.props.onEnter();
+  }
 }
 
 export default connect(
@@ -231,6 +236,11 @@ export default connect(
       dispatch({
         type: 'DETAIL_FORM_CHANGE',
         payload: value,
+      });
+    },
+    onEnter() {
+      dispatch({
+        type: TYPE.GET_USER_DETAIL._,
       });
     },
     onSubmit() {

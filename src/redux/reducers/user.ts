@@ -1,5 +1,4 @@
 export type PartialUserInfo = Partial<API.User.UserInfo>;
-
 export default function auth(
   state: PartialUserInfo = {},
   action: { type: string; payload?: PartialUserInfo },

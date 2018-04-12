@@ -184,4 +184,28 @@ export default function*() {
     }
     yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.FAIL, payload: message });
   });
+
+  yield takeLatest(TYPE.GET_USER_DETAIL._, function*() {
+    yield put({ type: TYPE.GET_USER_DETAIL.START });
+    const [data, message] = yield call(req.getUserDetail);
+    if (data) {
+      yield put({
+        type: TYPE.GET_USER_DETAIL.OK,
+        payload: Object.keys(data).reduce((p, k) => {
+          return {
+            ...p,
+            [k]: {
+              value: data[k],
+              name: k,
+              touched: false,
+              validating: false,
+              dirty: false,
+            },
+          };
+        }, {}),
+      });
+      return;
+    }
+    yield put({ type: TYPE.GET_USER_DETAIL.FAIL, payload: message });
+  });
 }

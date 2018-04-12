@@ -58,14 +58,21 @@ export function detailForm(
 ) {
   switch (action.type) {
     case 'DETAIL_FORM_CHANGE':
-      const ret = {
+      return {
         ...state,
         data: {
           ...state.data,
           ...action.payload,
         },
       };
-      return ret;
+    case TYPE.GET_USER_DETAIL.OK:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          ...action.payload,
+        },
+      };
     case TYPE.DETAIL_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.DETAIL_FORM_SUBMIT.OK:

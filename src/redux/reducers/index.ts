@@ -26,6 +26,8 @@ import {
   confirmApplyStatus,
 } from './forms';
 
+import loadingCount from './loading';
+
 export interface RootState {
   route?: {
     location: Location;
@@ -45,6 +47,7 @@ export interface RootState {
   msg: MsgData;
   applyProcess: ApplyProcessData;
   teamInfo: TeamInfo;
+  loadingCount: number;
 }
 
 export { AnyAction };
@@ -66,6 +69,7 @@ export default combineReducers<RootState>({
   msg,
   applyProcess,
   teamInfo,
+  loadingCount,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

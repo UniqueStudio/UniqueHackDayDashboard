@@ -56,13 +56,13 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "regenerator-runtime": "^0.11.1"
   },
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --out-dir=./build --public-url=./",
-    "build:master":
-      "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
+    "build:master": "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}",
     "postinstall": "node ./scripts/post-install.js"

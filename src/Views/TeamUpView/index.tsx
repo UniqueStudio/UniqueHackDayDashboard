@@ -69,9 +69,9 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
             onChange={this.handleRadioChange}
             disabled={this.props.joinTeamSubmitting || this.props.newTeamSubmitting}
           >
+            {!this.props.teamUpSkippable && <Radio.Button value="2">暂不组队</Radio.Button>}
             <Radio.Button value="0">队长</Radio.Button>
             <Radio.Button value="1">队员</Radio.Button>
-            {!this.props.teamUpSkippable && <Radio.Button value="2">暂不组队</Radio.Button>}
           </Radio.Group>
         </Form.Item>
         {
