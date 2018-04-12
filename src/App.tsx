@@ -51,7 +51,7 @@ class App extends React.Component {
     );
   }
 
-  componentWillMount() {
+  componentDidMount() {
     store.dispatch({ type: 'LOAD_USER_INFO' });
   }
 }

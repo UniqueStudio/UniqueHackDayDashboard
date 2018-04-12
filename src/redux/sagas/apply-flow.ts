@@ -95,12 +95,19 @@ export default function* applyFlow() {
             }
           }
         }
+        /**
+         * Here I put a action rather than put a more specific
+         * action then write reducer for it.
+         * This is because doing this can make the apply flow's
+         * code more easy-to-read.
+         */
         yield put({ type: TYPE.SET_USER_INFO, payload: { isTeamFormSubmitted: true } });
         yield put({ type: TYPE.APPLY_PROCESS_IS_T });
       }
 
       action = yield take([TYPE.APPLY_CONFIRM_SUBMIT.OK, TYPE.APPLY_PROCESS_IS_C]);
       if (action.type === TYPE.APPLY_CONFIRM_SUBMIT.OK) {
+        yield put({ type: TYPE.SET_USER_INFO, payload: { isApplyConfirmed: true } });
         yield put({ type: TYPE.APPLY_PROCESS_IS_C });
       }
     });
@@ -118,7 +125,7 @@ export default function* applyFlow() {
     }
 
     /**
-     * Waiting for fork effect to put APPLY_PROCESS_END.
+     * Waiting for UI to put APPLY_PROCESS_END.
      */
     yield take(TYPE.APPLY_PROCESS_END);
     yield put(replace('/'));

@@ -20,10 +20,13 @@ export default function* entryFlow() {
       yield put({ type: TYPE.SET_USER_INFO, payload: loadUserInfoPayload });
       /**
        * After load user info successfully, try to load team
-       * info.
+       * info and load detail form
        */
       if ('number' === typeof (yield select((state: RootState) => state.user.teamId))) {
         yield put({ type: TYPE.LOAD_TEAM_INFO._ });
+      }
+      if (true === (yield select((state: RootState) => state.user.isDetailFormSubmitted))) {
+        yield put({ type: TYPE.GET_USER_DETAIL._ });
       }
     } else {
       /**

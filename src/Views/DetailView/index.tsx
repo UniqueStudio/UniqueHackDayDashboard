@@ -217,10 +217,6 @@ class DetailView extends React.Component<DetailViewProps> {
       </div>
     );
   }
-
-  componentDidMount() {
-    this.props.onEnter();
-  }
 }
 
 export default connect(

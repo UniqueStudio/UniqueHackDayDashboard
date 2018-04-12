@@ -57,9 +57,6 @@ export default class File extends React.Component<FileProps> {
       wrapperCol: { xl: 8, lg: 10, md: 12, xs: 24, sm: 24 },
       hasFeedback: true,
     };
-    if (getFieldValue(this.props.id) === undefined) {
-      return null;
-    }
     return (
       <Form.Item
         {...(!noLayout ? formItemLayout : {})}
@@ -77,20 +74,36 @@ export default class File extends React.Component<FileProps> {
           ],
           getValueFromEvent: this.eventToFileId,
         })(
-          <Upload
-            disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
-            multiple={false}
-            name={this.props.id}
-            action={`https://${hostname}/v1/file/files`}
-            listType="picture"
-            headers={{ Authorization: `Bearer ${authorizationToken()}` }}
-            beforeUpload={this.beforeUpload}
-            defaultFileList={getFieldValue(this.props.id)}
-          >
-            <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
-              <Icon type="upload" /> 点击上传{this.props.fieldName}
-            </Button>
-          </Upload>,
+          getFieldValue(this.props.id) === undefined ? (
+            <Upload
+              disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
+              multiple={false}
+              name={this.props.id}
+              action={`https://${hostname}/v1/file/files`}
+              listType="picture"
+              headers={{ Authorization: `Bearer ${authorizationToken()}` }}
+              beforeUpload={this.beforeUpload}
+            >
+              <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
+                <Icon type="upload" /> 点击上传{this.props.fieldName}
+              </Button>
+            </Upload>
+          ) : (
+            <Upload
+              disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
+              multiple={false}
+              name={this.props.id}
+              action={`https://${hostname}/v1/file/files`}
+              listType="picture"
+              headers={{ Authorization: `Bearer ${authorizationToken()}` }}
+              beforeUpload={this.beforeUpload}
+              defaultFileList={getFieldValue(this.props.id)}
+            >
+              <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
+                <Icon type="upload" /> 点击上传{this.props.fieldName}
+              </Button>
+            </Upload>
+          ),
         )}
       </Form.Item>
     );

@@ -39,7 +39,7 @@ class ApplyView extends React.Component<ApplyViewProps> {
   };
 
   render() {
-    if (this.props.isApplyConfirmed) {
+    if (this.initialIsC) {
       return <Redirect to="/" />;
     }
 
@@ -107,12 +107,19 @@ class ApplyView extends React.Component<ApplyViewProps> {
     return <DetailView />;
   };
 
+  initialIsC: boolean = false;
+  componentWillMount() {
+    this.initialIsC = this.props.isApplyConfirmed;
+  }
+
   componentWillReceiveProps({ maxStep }: ApplyViewProps) {
     this.setState({ stepIndex: maxStep });
   }
 
   componentDidMount() {
-    this.props.applyProcessStart();
+    if (!this.props.isApplyConfirmed) {
+      this.props.applyProcessStart();
+    }
     this.setState({ stepIndex: this.props.maxStep });
   }
 }
@@ -131,7 +138,7 @@ export default connect(
       dispatch({ type: 'APPLY_PROCESS_END' });
     },
     skipTeamUp() {
-      dispatch({ type: 'CHANGE_TEAM_FORM_STATUS' });
+      dispatch({ type: 'CHANGE_IS_T_SUBMIT' });
     },
     setCurrent(i: number) {
       dispatch({ type: 'APPLY_PROCESS_SET_CURRENT', payload: i });

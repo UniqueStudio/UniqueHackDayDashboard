@@ -21,6 +21,7 @@ class GlobalLoading extends React.Component<{ isLoading: boolean }> {
       this.container,
     );
   }
+
   componentWillMount() {
     this.container = document.createElement('div');
     document.body.appendChild(this.container);
