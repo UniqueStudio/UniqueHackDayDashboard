@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeLatest, put, call, select, takeEvery } from 'redux-saga/effects';
 import { AnyAction } from 'redux';
 
 import * as TYPE from '../actions';
@@ -207,5 +207,45 @@ export default function*() {
       return;
     }
     yield put({ type: TYPE.GET_USER_DETAIL.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.GET_MSG_ALL._, function*() {
+    yield put({ type: TYPE.GET_MSG_ALL.START });
+    const [msg, message] = yield call(req.getReadMsgAll, true);
+    if (msg) {
+      yield put({ type: TYPE.GET_MSG_ALL.OK, payload: msg });
+      return;
+    }
+    yield put({ type: TYPE.GET_MSG_ALL.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.GET_UNREAD_MSG_ALL._, function*() {
+    yield put({ type: TYPE.GET_UNREAD_MSG_ALL.START });
+    const [msg, message] = yield call(req.getUnreadMsgAll, true);
+    if (msg) {
+      yield put({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: msg });
+      return;
+    }
+    yield put({ type: TYPE.GET_UNREAD_MSG_ALL.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.SET_MSG_READ._, function*(a: AnyAction) {
+    yield put({ type: TYPE.SET_MSG_READ.START });
+    const [ok, message] = yield call(req.setMsgRead, a.payload);
+    if (ok) {
+      yield put({ type: TYPE.SET_MSG_READ.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.SET_MSG_READ.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.DELETE_MSG._, function*(a: AnyAction) {
+    yield put({ type: TYPE.DELETE_MSG.START });
+    const [ok, message] = yield call(req.deleteMsg, a.payload);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_MSG.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_MSG.FAIL, payload: message });
   });
 }

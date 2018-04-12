@@ -117,3 +117,38 @@ export const APPLY_PROCESS_SET_CURRENT = 'APPLY_PROCESS_SET_CURRENT';
 
 export const ADD_LOADING_COUNT = 'ADD_LOADING_COUNT';
 export const SUB_LOADING_COUNT = 'SUB_LOADING_COUNT';
+
+// prettier-ignore
+export const GET_UNREAD_MSG_ALL = {
+  _:     'GET_UNREAD_MSG_ALL',
+  START: 'GET_UNREAD_MSG_ALL_START',
+  OK:    'GET_UNREAD_MSG_ALL_OK',
+  FAIL:  'GET_UNREAD_MSG_ALL_FAIL',
+}
+
+// prettier-ignore
+export const GET_MSG_ALL = {
+  _:     'GET_MSG_ALL',
+  START: 'GET_MSG_ALL_START',
+  OK:    'GET_MSG_ALL_OK',
+  FAIL:  'GET_MSG_ALL_FAIL',
+}
+
+// prettier-ignore
+export const SET_MSG_READ = {
+  _:     'SET_MSG_READ',
+  START: 'SET_MSG_READ_START',
+  OK:    'SET_MSG_READ_OK',
+  FAIL:  'SET_MSG_READ_FAIL',
+}
+
+// prettier-ignore
+export const DELETE_MSG = {
+  _:     'DELETE_MSG',
+  START: 'DELETE_MSG_START',
+  OK:    'DELETE_MSG_OK',
+  FAIL:  'DELETE_MSG_FAIL',
+}
+
+export const SET_MSG_READ_ALL = 'SET_MSG_READ_ALL';
+export const DELETE_MSG_ALL = 'DELETE_MSG_ALL';

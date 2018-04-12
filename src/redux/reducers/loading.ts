@@ -24,6 +24,20 @@ export default function loadingCount(state: number = 0, action: AnyAction) {
     case TYPE.GET_USER_DETAIL.FAIL:
       return --state;
 
+    case TYPE.GET_MSG_ALL.START:
+      return ++state;
+    case TYPE.GET_MSG_ALL.OK:
+      return --state;
+    case TYPE.GET_MSG_ALL.FAIL:
+      return --state;
+
+    case TYPE.GET_UNREAD_MSG_ALL.START:
+      return ++state;
+    case TYPE.GET_UNREAD_MSG_ALL.OK:
+      return --state;
+    case TYPE.GET_UNREAD_MSG_ALL.FAIL:
+      return --state;
+
     default:
       return state;
   }

@@ -3,7 +3,7 @@ import { routerReducer as route } from 'react-router-redux';
 
 import auth, { AuthData } from './auth';
 import user, { PartialUserInfo } from './user';
-import msg, { MsgData } from './msg';
+import msgData from './msg';
 import applyProcess, { ApplyProcessData } from './apply';
 import teamInfo, { TeamInfo } from './teamInfo';
 import {
@@ -44,7 +44,7 @@ export interface RootState {
   // loadingStatus: LoadingStatus;
   auth: AuthData;
   user: PartialUserInfo;
-  msg: MsgData;
+  msgData: ReturnType<typeof msgData>;
   applyProcess: ApplyProcessData;
   teamInfo: TeamInfo;
   loadingCount: number;
@@ -66,7 +66,7 @@ export default combineReducers<RootState>({
   // loadingStatus,
   auth,
   user,
-  msg,
+  msgData,
   applyProcess,
   teamInfo,
   loadingCount,

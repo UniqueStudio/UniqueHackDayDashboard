@@ -1,4 +1,4 @@
-import { take, put, fork, select } from 'redux-saga/effects';
+import { take, put, fork, select, takeEvery, all } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
 import { RootState } from '../reducers/index';
@@ -20,14 +20,20 @@ export default function* entryFlow() {
       yield put({ type: TYPE.SET_USER_INFO, payload: loadUserInfoPayload });
       /**
        * After load user info successfully, try to load team
-       * info and load detail form
+       * info and load detail form and load message
        */
-      if ('number' === typeof (yield select((state: RootState) => state.user.teamId))) {
-        yield put({ type: TYPE.LOAD_TEAM_INFO._ });
-      }
-      if (true === (yield select((state: RootState) => state.user.isDetailFormSubmitted))) {
-        yield put({ type: TYPE.GET_USER_DETAIL._ });
-      }
+      yield fork(function*() {
+        if ('number' === typeof (yield select((state: RootState) => state.user.teamId))) {
+          yield put({ type: TYPE.LOAD_TEAM_INFO._ });
+        }
+        if (true === (yield select((state: RootState) => state.user.isDetailFormSubmitted))) {
+          yield put({ type: TYPE.GET_USER_DETAIL._ });
+        }
+        yield put({ type: TYPE.GET_UNREAD_MSG_ALL._ });
+        yield take(TYPE.GET_UNREAD_MSG_ALL.START);
+        yield take([TYPE.GET_UNREAD_MSG_ALL.OK, TYPE.GET_UNREAD_MSG_ALL.FAIL]);
+        yield put({ type: TYPE.GET_MSG_ALL._ });
+      });
     } else {
       /**
        * Failed to load user info, assuming it is because of
@@ -84,6 +90,24 @@ export default function* entryFlow() {
     }
     yield put({ type: 'SET_LOGGED_IN' });
     yield put({ type: TYPE.SHOW_APP_VIEW });
+
+    yield takeEvery(TYPE.SET_MSG_READ_ALL, function*() {
+      const { msgData: { unreadMessages } } = yield select();
+      yield all(
+        unreadMessages.map((msg: API.Message.SingleMessage) =>
+          put({ type: TYPE.SET_MSG_READ._, payload: msg.id }),
+        ),
+      );
+    });
+
+    yield takeEvery(TYPE.DELETE_MSG_ALL, function*() {
+      const { msgData: { unreadMessages, readMessages } } = yield select();
+      yield all(
+        [...unreadMessages, ...readMessages].map((msg: API.Message.SingleMessage) =>
+          put({ type: TYPE.DELETE_MSG._, payload: msg.id }),
+        ),
+      );
+    });
 
     /**
      * User now fully get into Console view.
