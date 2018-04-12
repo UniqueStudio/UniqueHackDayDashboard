@@ -91,6 +91,9 @@ export default function* entryFlow() {
     yield put({ type: 'SET_LOGGED_IN' });
     yield put({ type: TYPE.SHOW_APP_VIEW });
 
+    /**
+     * Watch user operations like clear msg
+     */
     yield takeEvery(TYPE.SET_MSG_READ_ALL, function*() {
       const { msgData: { unreadMessages } } = yield select();
       yield all(
@@ -99,7 +102,6 @@ export default function* entryFlow() {
         ),
       );
     });
-
     yield takeEvery(TYPE.DELETE_MSG_ALL, function*() {
       const { msgData: { unreadMessages, readMessages } } = yield select();
       yield all(
@@ -108,6 +110,9 @@ export default function* entryFlow() {
         ),
       );
     });
+    /**
+     * TODO: more operations handler
+     */
 
     /**
      * User now fully get into Console view.
