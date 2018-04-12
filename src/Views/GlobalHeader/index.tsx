@@ -9,7 +9,7 @@ import Icon from 'antd/es/icon';
 import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
 
 import { RootState } from '../../redux/reducers';
-import { UserData } from '../../redux/reducers/user';
+import { PartialUserInfo } from '../../redux/reducers/user';
 import { MsgDataSingle } from '../../redux/reducers/msg';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
@@ -19,7 +19,7 @@ class GlobalHeader extends React.Component<{
   inUserEntry: boolean;
   loggedIn: boolean;
   handleLogout: () => void;
-  user: UserData;
+  user: PartialUserInfo;
   unreadMsgs: MsgDataSingle[];
   msgs: MsgDataSingle[];
 
