@@ -10,20 +10,6 @@ import Loadable from 'react-loadable';
 const App = Loadable({
   loader: () => import('./App'),
   loading: () => null,
-  // React.createElement(
-  //   // class extends React.Component {
-  //   //   render() {
-  //   //     return null;
-  //   //   }
-  //   //   componentDidMount() {
-  //   //     store.dispatch({ type: TYPE.ADD_LOADING_COUNT });
-  //   //   }
-  //   //   componentWillUnmount() {
-  //   //     store.dispatch({ type: TYPE.SUB_LOADING_COUNT });
-  //   //   }
-  //   // },
-  //   'div',
-  // ),
 });
 
 const root = document.getElementById('root') as HTMLElement;

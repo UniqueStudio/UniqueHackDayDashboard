@@ -1,9 +1,9 @@
 // prettier-ignore
 export const LOAD_USER_INFO = {
-  _:     'LOAD_USER_INFO',
+  _: 'LOAD_USER_INFO',
   START: 'LOAD_USER_INFO_START',
-  FAIL:  'LOAD_USER_INFO_FAIL',
-  OK:    'LOAD_USER_INFO_OK',
+  FAIL: 'LOAD_USER_INFO_FAIL',
+  OK: 'LOAD_USER_INFO_OK',
 };
 
 // prettier-ignore
@@ -152,3 +152,7 @@ export const DELETE_MSG = {
 
 export const SET_MSG_READ_ALL = 'SET_MSG_READ_ALL';
 export const DELETE_MSG_ALL = 'DELETE_MSG_ALL';
+
+export const START_MSG_LOOP = 'START_MSG_LOOP';
+export const STOP_MSG_LOOP = 'STOP_MSG_LOOP';
+export const MSG_LOOP_RECEIVE_MSG = 'MSG_LOOP_RECEIVE_MSG';

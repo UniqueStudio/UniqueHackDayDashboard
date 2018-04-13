@@ -22,4 +22,8 @@ const store: Store<RootState> = createStore(
 
 SagaManager.startSagas(sagaMiddleware);
 
+document.addEventListener('unload', () => {
+  SagaManager.cancelSagas(store);
+});
+
 export default store;

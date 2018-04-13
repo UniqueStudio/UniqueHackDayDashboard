@@ -114,6 +114,8 @@ export default function* entryFlow() {
      * TODO: more operations handler
      */
 
+    yield put({ type: TYPE.START_MSG_LOOP });
+
     /**
      * User now fully get into Console view.
      * We wait user to click logout to do clear job.
@@ -122,6 +124,7 @@ export default function* entryFlow() {
 
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
+    yield put({ type: TYPE.SET_NOT_LOGGED_IN });
     yield put(replace('/user_entry'));
     window.location.reload();
   }
