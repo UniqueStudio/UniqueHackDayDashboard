@@ -1,6 +1,7 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as TYPE from '../../redux/actions/index';
 import { RootState } from '../../redux/reducers';
 
 import Card from 'antd/es/card';
@@ -174,25 +175,20 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
 export default connect(
   (state: RootState) => {
     return {
-      loginData: {
-        ...state.login,
-      },
-      registerData: {
-        ...state.register,
-      },
-      resetPwdData: {
-        ...state.resetPwd,
-      },
-      registerSubmitting: state.loadingStatus.registerSubmitting,
-      loginSubmitting: state.loadingStatus.loginSubmitting,
-      resetPwdSubmitting: state.loadingStatus.resetPwdSubmitting,
+      loginData: state.loginForm.data,
+      registerData: state.registerForm.data,
+      resetPwdData: state.resetPwdForm.data,
 
-      resetPwdSMSSubmitting: state.loadingStatus.resetPwdSMSSubmitting,
-      registerSMSSubmitting: state.loadingStatus.registerSMSSubmitting,
+      registerSubmitting: state.registerForm.isSubmitting,
+      loginSubmitting: state.loginForm.isSubmitting,
+      resetPwdSubmitting: state.resetPwdForm.isSubmitting,
 
-      registerError: state.errorStatus.registerError,
-      loginError: state.errorStatus.loginError,
-      resetPwdError: state.errorStatus.resetPwdError,
+      resetPwdSMSSubmitting: state.smsLoading,
+      registerSMSSubmitting: state.smsLoading,
+
+      registerError: state.registerForm.error,
+      loginError: state.loginForm.error,
+      resetPwdError: state.resetPwdForm.error,
 
       loggedIn: state.auth.loggedIn,
     };
@@ -206,10 +202,11 @@ export default connect(
     },
     onLoginSubmit(token: string) {
       dispatch({
-        type: 'LOGIN_FORM_SUBMIT',
+        type: TYPE.LOGIN_FORM_SUBMIT._,
         payload: token,
       });
     },
+
     onRegisterFormChange(value: any) {
       dispatch({
         type: 'REGISTER_FORM_CHANGE',
@@ -218,16 +215,24 @@ export default connect(
     },
     onRegisterSubmit(token: string) {
       dispatch({
-        type: 'REGISTER_FORM_SUBMIT',
+        type: TYPE.REGISTER_FORM_SUBMIT._,
         payload: token,
       });
     },
+
     onRegisterSMSSubmit(token: string) {
       dispatch({
-        type: 'REGISTER_FORM_SMS_SUBMIT',
+        type: TYPE.REGISITER_SEND_SMS_SUBMIT._,
         payload: token,
       });
     },
+    onResetPwdSMSSubmit(token: string) {
+      dispatch({
+        type: TYPE.RESET_PWD_SEND_SMS_SUBMIT._,
+        payload: token,
+      });
+    },
+
     onResetPwdFormChange(value: any) {
       dispatch({
         type: 'RESET_PWD_FORM_CHANGE',
@@ -236,13 +241,7 @@ export default connect(
     },
     onResetPwdSubmit(token: string) {
       dispatch({
-        type: 'RESET_PWD_FORM_SUBMIT',
-        payload: token,
-      });
-    },
-    onResetPwdSMSSubmit(token: string) {
-      dispatch({
-        type: 'RESET_PWD_FORM_SMS_SUBMIT',
+        type: TYPE.RESET_PWD_FORM_SUBMIT._,
         payload: token,
       });
     },

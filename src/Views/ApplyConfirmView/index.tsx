@@ -11,6 +11,7 @@ import Icon from 'antd/es/icon';
 
 import { RootState } from '../../redux/reducers/index';
 import delay from '../../lib/delay';
+import { APPLY_CONFIRM_SUBMIT } from '../../redux/actions/index';
 
 export interface ApplyConfirmViewProps {
   handleConfirm: () => void;
@@ -101,13 +102,10 @@ class ApplyConfirmView extends React.Component<
 }
 
 export default connect(
-  ({
-    loadingStatus: { userApplyConfirmSubmitting: ing },
-    errorStatus: { userApplyConfirmError: error },
-  }: RootState) => ({ ing, error }),
+  ({ confirmApplyStatus: { isSubmitting: ing, error } }: RootState) => ({ ing, error }),
   dispatch => ({
     handleConfirm() {
-      dispatch({ type: 'USER_APPLY_CONFIRM' });
+      dispatch({ type: APPLY_CONFIRM_SUBMIT._ });
     },
   }),
 )(ApplyConfirmView);

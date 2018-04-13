@@ -1,12 +1,15 @@
+import 'regenerator-runtime/runtime';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-
-// import App from './App';
 import Loadable from 'react-loadable';
+
+// import store from './redux/store/index';
+// import * as TYPE from './redux/actions';
 
 const App = Loadable({
   loader: () => import('./App'),
-  loading: () => React.createElement('div', { children: '加载中' }),
+  loading: () => null,
 });
 
 const root = document.getElementById('root') as HTMLElement;

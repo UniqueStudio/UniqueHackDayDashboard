@@ -49,6 +49,7 @@ declare namespace API {
 
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
+    EmailExists = 'EmailExists',
     TeamNameExists = 'TeamNameExists',
     PhoneNotExists = 'PhoneNotExists',
     TeamNotExists = 'TeamNotExists',
@@ -108,7 +109,7 @@ declare namespace API {
       hackdayTimes: number;
     }
 
-    interface UserData {
+    interface UserInfo {
       username: string;
       phone: string;
       name: string | null;
@@ -158,7 +159,7 @@ declare namespace API {
         | ResponseWithoutData<400, Message.PhoneExists>
         | ResponseWithoutData<400, Message.PhoneInvalid>
         | ResponseWithoutData<400, Message.CodeNotMatch>
-        | ResponseWithoutData<200, Message.Success>
+        | ResponseWithData<200, Message.Success, { token: string }>
       >;
 
       // 发短信
@@ -223,7 +224,7 @@ declare namespace API {
       // reset: 重置密码
       (
         req: RequestWithoutAuth<
-          '/v1/user/password?reset',
+          '/v1/user/password/reset',
           'POST',
           {
             phone: string;
@@ -293,7 +294,7 @@ declare namespace API {
 
       (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithData<200, Message.Success, UserData>
+        | ResponseWithData<200, Message.Success, UserInfo>
       >;
 
       (

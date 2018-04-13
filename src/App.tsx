@@ -27,53 +27,32 @@ import 'antd/es/divider/style';
 import 'antd/es/message/style';
 import 'antd/es/notification/style';
 
-// import 'ant-design-pro/dist/ant-design-pro.min.css';
-
 import './styles/main.less';
 
 import Dashboard from './Views/Dashboard';
 import UserEntryView from './Views/UserEntryView';
 import store, { history } from './redux/store';
+import GlobalLoading from './Views/GlobalLoading';
 
 class App extends React.Component {
-  state = {
-    isLoadingUserInfo: false,
-  };
-
-  unsubcribe = () => void 0;
   render() {
-    if (this.state.isLoadingUserInfo) {
-      return null;
-    }
     return (
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route path="/user_entry" component={UserEntryView} />
-            <Route path="/" component={Dashboard} />
-          </Switch>
-        </ConnectedRouter>
+        <React.Fragment>
+          <ConnectedRouter history={history}>
+            <Switch>
+              <Route path="/user_entry" component={UserEntryView} />
+              <Route path="/" component={Dashboard} />
+            </Switch>
+          </ConnectedRouter>
+          <GlobalLoading />
+        </React.Fragment>
       </Provider>
     );
   }
 
-  componentWillMount() {
-    let preIsLoadingUserInfo = false;
-    this.unsubcribe = store.subscribe(() => {
-      const isLoadingUserInfo = store.getState().loadingStatus.userInfoLoading;
-      if (isLoadingUserInfo === !preIsLoadingUserInfo) {
-        this.setState({ isLoadingUserInfo });
-      }
-      preIsLoadingUserInfo = isLoadingUserInfo;
-    }) as any;
-    // LOAD_USER_INFO below is dispatched to check if user is logged in
+  componentDidMount() {
     store.dispatch({ type: 'LOAD_USER_INFO' });
-  }
-
-  componentWillUnmount() {
-    if (this.unsubcribe) {
-      this.unsubcribe();
-    }
   }
 }
 

@@ -22,16 +22,8 @@ const store: Store<RootState> = createStore(
 
 SagaManager.startSagas(sagaMiddleware);
 
+document.addEventListener('unload', () => {
+  SagaManager.cancelSagas(store);
+});
+
 export default store;
-
-if ((module as any).hot) {
-  (module as any).hot.accept('../reducers', () => {
-    const nextRootReducer = require('../reducers').default;
-    store.replaceReducer(nextRootReducer);
-  });
-
-  (module as any).hot.accept('../sagas', () => {
-    SagaManager.cancelSagas(store);
-    require('../sagas').default.startSagas(sagaMiddleware);
-  });
-}

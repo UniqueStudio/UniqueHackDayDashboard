@@ -9,8 +9,9 @@ import Icon from 'antd/es/icon';
 import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
 
 import { RootState } from '../../redux/reducers';
-import { UserData } from '../../redux/reducers/user';
-import { MsgDataSingle } from '../../redux/reducers/msg';
+import { PartialUserInfo } from '../../redux/reducers/user';
+import { SingleMessage } from '../../redux/reducers/msg';
+import * as TYPE from '../../redux/actions';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
 import msgMap from './msgMap';
@@ -19,15 +20,14 @@ class GlobalHeader extends React.Component<{
   inUserEntry: boolean;
   loggedIn: boolean;
   handleLogout: () => void;
-  user: UserData;
-  unreadMsgs: MsgDataSingle[];
-  msgs: MsgDataSingle[];
+  user: PartialUserInfo;
+  unreadMsgs: SingleMessage[];
+  msgs: SingleMessage[];
 
   setReadAll: () => void;
   deleteAll: () => void;
 }> {
   render() {
-    // const minWidth = this.props.mediaQuery === 'phone' ? undefined : '440px';
     return (
       <Layout.Header className={cls.header}>
         {this.props.inUserEntry && this.renderLeftIcon()}
@@ -108,12 +108,14 @@ class GlobalHeader extends React.Component<{
 
 export default connect(
   (state: RootState) => {
+    const unreadMsgs = state.msgData.unreadMessages.map(m => ({ ...m, read: false }));
+    const readMsgs = state.msgData.readMessages.map(m => ({ ...m, read: true }));
     return {
       inUserEntry: state.route!.location.pathname.indexOf('/user_entry') === 0,
       loggedIn: state.auth.loggedIn,
       user: state.user,
-      unreadMsgs: state.msg.filter(msg => msg.unread),
-      msgs: state.msg,
+      unreadMsgs,
+      msgs: [...unreadMsgs, ...readMsgs].sort((m1, m2) => m1.time - m2.time),
     };
   },
   dispatch => ({
@@ -121,10 +123,10 @@ export default connect(
       dispatch({ type: 'LOGOUT_CLICKED' });
     },
     setReadAll() {
-      dispatch({ type: 'MSG_SET_READ_ALL' });
+      dispatch({ type: TYPE.SET_MSG_READ_ALL });
     },
     deleteAll() {
-      dispatch({ type: 'MSG_DELETE_ALL' });
+      dispatch({ type: TYPE.DELETE_MSG_ALL });
     },
   }),
 )(GlobalHeader);

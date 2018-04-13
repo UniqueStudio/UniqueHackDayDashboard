@@ -15,3 +15,5 @@ const messageMap = {
   alreadyTeamedUp: '你已加入其他队伍',
 };
 export default messageMap;
+
+export type a = Pick<{ [K: string]: string }, 'a'>;
