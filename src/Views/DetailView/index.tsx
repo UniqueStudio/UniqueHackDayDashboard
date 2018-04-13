@@ -15,38 +15,16 @@ import Select from '../../Components/MyForm/Select';
 import File from '../../Components/MyForm/File';
 import Submit from '../../Components/MyForm/Submit';
 
+import { DetailForm } from '../../redux/reducers/forms';
+import * as TYPE from '../../redux/actions/index';
+// import { emailValidator } from '../../Components/MyForm/validators';
+
 export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
   onSubmit: () => any;
+  onEnter: () => void;
 
-  detailData: {
-    name: any;
-    gender: any;
-    birthday: any;
-    email: any;
-    resume: any;
-    tShirtSize: any;
-    city: any;
-    alipay: any;
-    school: any;
-    major: any;
-    grade: any;
-    graduateTime: any; // 年月日
-    urgentConcatName: any;
-    urgentConcatPhone: any;
-    urgentConcatRelationship: any;
-
-    collection?: any;
-    specialNeeds?: any;
-    github?: any;
-    linkedIn?: any;
-    codingDotNet?: any;
-    blog?: any;
-
-    role: any; // 产品，设计，前端，后端，机器学习，硬件开发，其他
-    skills: any;
-    hackdayTimes: number;
-  };
+  detailData: DetailForm['data'];
 
   detailFormSubmitting: boolean;
   detailFormError: { value: string; time: number };
@@ -88,6 +66,7 @@ class DetailView extends React.Component<DetailViewProps> {
             label="邮箱"
             iconType="mail"
             pattern={patterns.email}
+            // validator={emailValidator}
           />
 
           <Divider>报销和赠礼</Divider>
@@ -201,22 +180,22 @@ class DetailView extends React.Component<DetailViewProps> {
           </Select>
 
           <Select required={true} id="skills" fieldName="技能" label="技能" mode="tags">
-            <AntdSelect.Option value="JavaScript">JavaScript</AntdSelect.Option>
-            <AntdSelect.Option value="CSS/HTML">CSS/HTML</AntdSelect.Option>
-            <AntdSelect.Option value="Swift">Swift</AntdSelect.Option>
-            <AntdSelect.Option value="Object-C">Object-C</AntdSelect.Option>
-            <AntdSelect.Option value="Kotlin">Kotlin</AntdSelect.Option>
-            <AntdSelect.Option value="Erlang">Erlang</AntdSelect.Option>
-            <AntdSelect.Option value="Python">Python</AntdSelect.Option>
-            <AntdSelect.Option value="Golang">Golang</AntdSelect.Option>
-            <AntdSelect.Option value="C/C++">C/C++</AntdSelect.Option>
-            <AntdSelect.Option value="C#">C#</AntdSelect.Option>
-            <AntdSelect.Option value="Java">Java</AntdSelect.Option>
-            <AntdSelect.Option value="PHP">PHP</AntdSelect.Option>
-            <AntdSelect.Option value="Ruby">Ruby</AntdSelect.Option>
-            <AntdSelect.Option value="Sketch">Sketch</AntdSelect.Option>
-            <AntdSelect.Option value="PhotoShop">PhotoShop</AntdSelect.Option>
-            <AntdSelect.Option value="Axure">Axure</AntdSelect.Option>
+            <AntdSelect.Option value="JavaScript"> JavaScript </AntdSelect.Option>
+            <AntdSelect.Option value="CSS/HTML"> CSS/HTML </AntdSelect.Option>
+            <AntdSelect.Option value="Swift"> Swift </AntdSelect.Option>
+            <AntdSelect.Option value="Object-C"> Object-C </AntdSelect.Option>
+            <AntdSelect.Option value="Kotlin"> Kotlin </AntdSelect.Option>
+            <AntdSelect.Option value="Erlang"> Erlang </AntdSelect.Option>
+            <AntdSelect.Option value="Python"> Python </AntdSelect.Option>
+            <AntdSelect.Option value="Golang"> Golang </AntdSelect.Option>
+            <AntdSelect.Option value="C/C++"> C/C++ </AntdSelect.Option>
+            <AntdSelect.Option value="C#"> C# </AntdSelect.Option>
+            <AntdSelect.Option value="Java"> Java </AntdSelect.Option>
+            <AntdSelect.Option value="PHP"> PHP </AntdSelect.Option>
+            <AntdSelect.Option value="Ruby"> Ruby </AntdSelect.Option>
+            <AntdSelect.Option value="Sketch"> Sketch </AntdSelect.Option>
+            <AntdSelect.Option value="PhotoShop"> PhotoShop </AntdSelect.Option>
+            <AntdSelect.Option value="Axure"> Axure </AntdSelect.Option>
           </Select>
 
           <TextArea
@@ -242,13 +221,10 @@ class DetailView extends React.Component<DetailViewProps> {
 
 export default connect(
   (state: RootState) => {
-    const props = state.detail;
     return {
-      // detailData:
-
-      detailData: props,
-      detailFormSubmitting: state.loadingStatus.detailFormSubmitting,
-      detailFormError: state.errorStatus.detailFormError,
+      detailData: state.detailForm.data,
+      detailFormSubmitting: state.detailForm.isSubmitting,
+      detailFormError: state.detailForm.error,
     };
   },
   dispatch => ({
@@ -258,8 +234,13 @@ export default connect(
         payload: value,
       });
     },
+    onEnter() {
+      dispatch({
+        type: TYPE.GET_USER_DETAIL._,
+      });
+    },
     onSubmit() {
-      dispatch({ type: 'DETAIL_FORM_SUBMIT' });
+      dispatch({ type: TYPE.DETAIL_FORM_SUBMIT._ });
     },
   }),
 )(DetailView);

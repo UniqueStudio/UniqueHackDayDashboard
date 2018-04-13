@@ -18,7 +18,7 @@ class Console extends React.Component {
       <div style={{ paddingBottom: '40px' }}>
         <Status type="success" statusText="等待审核" buttons={this.renderStatusButtons()} />
         {this.renderDivider()}
-        <TeamInfo hasOperatingButton={false} />
+        <TeamInfo />
         {this.renderDivider()}
         <HackdayProgress />
       </div>

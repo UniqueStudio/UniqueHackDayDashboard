@@ -10,36 +10,24 @@ import Button from 'antd/es/button';
 import cls from './style.less';
 import { RootState } from '../../redux/reducers/index';
 import { TeamInfo } from '../../redux/reducers/teamInfo';
+// import withLoading from '../../lib/withLoading';
+import noop from 'lodash-es/noop';
 
 const Description = DescriptionList.Description;
 
 export interface TeamInfoProps {
-  hasEditButton?: boolean;
-  hasOperatingButton?: boolean;
-  hasDissolutionButton?: boolean;
-  onOperating?: (userInfo: any, operate: 'setTeamLeader' | 'remove') => void;
+  showEditButton: boolean;
+  showTeamLeaderOperate: boolean;
+  showMemberOperate: boolean;
+  showDissolutionButton: boolean;
+  // onOperating?: (userInfo: any, operate: 'setTeamLeader' | 'remove' | 'exitTeam') => void;
 
+  // isLoadingTeamInfo: boolean;
   teamInfo: TeamInfo;
+  selfUsername: string;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
-  // const data = [
-  // {
-  // key: '2142jk5h34jbj3b5njuhtbn5egukhjb',
-  // name: '洪志远',
-  // isTeamLeader: true,
-  // isAccepted: true,
-  // school: '华中科技大学',
-  //   },
-  //   {
-  //     key: '124话永泰花苑4号图👬uyghu',
-  //     name: '梁志博',
-  //     isTeamLeader: false,
-  //     isAccepted: true,
-  //     school: '华中科技大学',
-  //   },
-  // ];
-
   const members = [props.teamInfo.teamLeader, ...props.teamInfo.members];
   const data = members.map((member, i) => ({
     key: member.email || member.username || i,
@@ -49,33 +37,43 @@ const TeamInfo = (props: TeamInfoProps) => {
       : false,
     isAccepted: member.isAccepted,
     school: member.school,
+    isSelf: member.username === props.selfUsername,
   }));
 
   const {
-    hasEditButton = true,
-    hasOperatingButton = true,
-    hasDissolutionButton = false,
+    showEditButton = true,
+    showDissolutionButton = false,
+    showTeamLeaderOperate = false,
+    showMemberOperate = false,
     // tslint:disable-next-line:no-empty
-    onOperating = () => {},
+    // onOperating = () => {},
   } = props;
 
   const renderTable = () => {
     const { Column } = Table;
-    const renderOperatingButtons = (user: any) =>
+    const renderTeamLeaderOperate = (user: any) =>
       user.isTeamLeader ? (
         false
       ) : (
         <span>
-          <a onClick={onOperating.bind({}, data, 'setTeamLeader')}>设为队长</a>
+          <a onClick={noop}>设为队长</a>
           <span style={{ display: 'inline-block', width: '20px' }} />
-          <a onClick={onOperating.bind({}, data, 'remove')}>移除</a>
+          <a onClick={noop}>移除</a>
         </span>
       );
+
+    const renderMemberOperate = (user: any) =>
+      user.isSelf && (
+        <span>
+          <a onClick={noop}>退出队伍</a>
+        </span>
+      );
+
     return (
       <Table
         dataSource={data}
         pagination={false}
-        scroll={{ x: hasOperatingButton ? '500px' : '400px' }}
+        scroll={{ x: showEditButton ? '500px' : '400px' }}
       >
         <Column
           title="角色"
@@ -94,9 +92,10 @@ const TeamInfo = (props: TeamInfoProps) => {
         />
         <Column title="学校" dataIndex="school" key="school" />
         {/*tslint:disable-next-line:jsx-no-multiline-js */}
-        {hasOperatingButton && (
-          <Column title="操作" key="operating" render={renderOperatingButtons} />
+        {showTeamLeaderOperate && (
+          <Column title="操作" key="operating" render={renderTeamLeaderOperate} />
         )}
+        {showMemberOperate && <Column title="操作" key="operating" render={renderMemberOperate} />}
       </Table>
     );
   };
@@ -105,7 +104,7 @@ const TeamInfo = (props: TeamInfoProps) => {
     return <div style={{ height: '16px' }} />;
   };
 
-  const membersCount = members ? props.teamInfo.members.length : '-';
+  const membersCount = members ? members.length : '-';
   const teamUpTime = props.teamInfo.createdTime
     ? new Date(props.teamInfo.createdTime * 1000).toLocaleString()
     : '-';
@@ -113,7 +112,7 @@ const TeamInfo = (props: TeamInfoProps) => {
   return (
     <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
-        {hasEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
+        {showEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
         <Description term="队伍名称" children={props.teamInfo.teamName || '-'} />
@@ -124,9 +123,24 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
-      {hasDissolutionButton && <Button children="解散队伍" type="danger" />}
+      {showDissolutionButton && <Button children="解散队伍" type="danger" />}
     </Card>
   );
 };
 
-export default connect(({ teamInfo }: RootState) => ({ teamInfo }))(TeamInfo);
+export { TeamInfo };
+
+// export default withLoading({ isLoadingTeamInfo: { start: '', end: '' } })(
+export default connect(({ teamInfo, user: { username }, route }: RootState) => {
+  const showEditButton = route && route.location && route.location.pathname !== '/team';
+  const isTeamLeader = teamInfo.teamLeader.username === username;
+  return {
+    selfUsername: username,
+    teamInfo,
+    showTeamLeaderOperate: isTeamLeader && !showEditButton,
+    showMemberOperate: !isTeamLeader && !showEditButton,
+    showDissolutionButton: isTeamLeader && !showEditButton,
+    showEditButton,
+  };
+})(TeamInfo);
+// );

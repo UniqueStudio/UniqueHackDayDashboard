@@ -1,52 +1,75 @@
 import { combineReducers, AnyAction } from 'redux';
 import { routerReducer as route } from 'react-router-redux';
 
-import register, { RegisterData } from './register';
-import login, { LoginData } from './login';
-import detail, { DetailData } from './detail';
-import loadingStatus, { LoadingStatus } from './loading';
-import errorStatus, { ErrorStatus } from './error';
-import teamForm, { TeamFormData } from './team';
-import resetPwd, { ResetPwdData } from './reset-pwd';
 import auth, { AuthData } from './auth';
-import user, { UserData } from './user';
-import msg, { MsgData } from './msg';
+import user, { PartialUserInfo } from './user';
+import msgData from './msg';
 import applyProcess, { ApplyProcessData } from './apply';
 import teamInfo, { TeamInfo } from './teamInfo';
+import {
+  LoginForm,
+  DetailForm,
+  RegisterForm,
+  ResetPwdForm,
+  NewTeamForm,
+  JoinTeamForm,
+  ConfirmApplyStatus,
+} from './forms';
+import {
+  loginForm,
+  registerForm,
+  detailForm,
+  resetPwdForm,
+  newTeamForm,
+  joinTeamForm,
+  smsLoading,
+  confirmApplyStatus,
+} from './forms';
+
+import loadingCount from './loading';
 
 export interface RootState {
   route?: {
     location: Location;
   };
-  register: RegisterData;
-  login: LoginData;
-  detail: DetailData;
-  loadingStatus: LoadingStatus;
-  errorStatus: ErrorStatus;
-  teamForm: TeamFormData;
-  resetPwd: ResetPwdData;
+  registerForm: RegisterForm;
+  detailForm: DetailForm;
+  loginForm: LoginForm;
+  newTeamForm: NewTeamForm;
+  joinTeamForm: JoinTeamForm;
+  resetPwdForm: ResetPwdForm;
+  smsLoading: boolean;
+  confirmApplyStatus: ConfirmApplyStatus;
+
+  // loadingStatus: LoadingStatus;
   auth: AuthData;
-  user: UserData;
-  msg: MsgData;
+  user: PartialUserInfo;
+  msgData: ReturnType<typeof msgData>;
   applyProcess: ApplyProcessData;
   teamInfo: TeamInfo;
+  loadingCount: number;
 }
 
 export { AnyAction };
 export default combineReducers<RootState>({
   route,
-  register,
-  login,
-  detail,
-  teamForm,
-  loadingStatus,
-  errorStatus,
-  resetPwd,
+
+  registerForm,
+  loginForm,
+  detailForm,
+  newTeamForm,
+  joinTeamForm,
+  resetPwdForm,
+  smsLoading,
+  confirmApplyStatus,
+
+  // loadingStatus,
   auth,
   user,
-  msg,
+  msgData,
   applyProcess,
   teamInfo,
+  loadingCount,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &

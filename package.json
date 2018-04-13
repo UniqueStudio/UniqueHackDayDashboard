@@ -21,18 +21,15 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-import": "^1.6.7",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "css-loader": "^0.28.11",
-    "file-loader": "^1.1.11",
-    "fs-extra": "^5.0.0",
-    "html-webpack-plugin": "^3.1.0",
+    "glob": "^7.1.2",
     "http-proxy-middleware": "^0.18.0",
     "less": "^2.7.3",
-    "less-loader": "^4.1.0",
-    "mini-css-extract-plugin": "^0.4.0",
-    "optimize-css-assets-webpack-plugin": "^4.0.0",
+    "parcel-bundler": "^1.7.0",
+    "postcss-modules": "^1.1.0",
     "prettier": "^1.11.1",
     "react-dev-utils": "^5.0.0",
     "react-hot-loader": "^4.0.1",
@@ -41,11 +38,7 @@
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
     "tslint-react": "^3.5.1",
-    "typescript": "^2.7.2",
-    "uglifyjs-webpack-plugin": "^1.2.4",
-    "webpack": "^4.4.1",
-    "webpack-cli": "^2.0.13",
-    "webpack-dev-server": "^3.1.1"
+    "typescript": "^2.7.2"
   },
   "dependencies": {
     "ant-design-pro": "^1.2.1",
@@ -67,9 +60,11 @@
     "regenerator-runtime": "^0.11.1"
   },
   "scripts": {
-    "start": "webpack-dev-server --config=./webpack.config.dev.js --hot",
-    "build": "node ./scripts/build.js",
+    "start": "parcel index.html",
+    "build": "parcel build index.html --out-dir=./build --public-url=./",
+    "build:master": "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
-    "lint": "tslint ./src/**/*.{ts,tsx}"
+    "lint": "tslint ./src/**/*.{ts,tsx}",
+    "postinstall": "node ./scripts/post-install.js"
   }
 }

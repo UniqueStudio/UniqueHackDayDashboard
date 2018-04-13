@@ -1,12 +1,17 @@
-export type UserData = Partial<API.User.UserData>;
+import * as TYPE from '../actions';
 
-export default function auth(state: UserData = {}, action: { type: string; payload?: UserData }) {
+export type PartialUserInfo = Partial<API.User.UserInfo>;
+export default function auth(
+  state: PartialUserInfo = {},
+  action: { type: string; payload?: PartialUserInfo },
+) {
   switch (action.type) {
-    case 'SET_USER_INFO':
+    case TYPE.SET_USER_INFO:
       return {
         ...state,
         ...(action.payload || {}),
       };
+    // case TYPE.LOAD:
     default:
       return state;
   }

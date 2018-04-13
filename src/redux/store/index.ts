@@ -8,8 +8,8 @@ import { History } from 'history';
 import reducer, { RootState } from '../reducers';
 import SagaManager from '../sagas';
 
-const history: History = createHistory();
-const sagaMiddleware = createSagaMiddleware();
+export const history: History = createHistory();
+export const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
   (process.env.NODE_ENV === 'development' &&
     (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
@@ -22,17 +22,8 @@ const store: Store<RootState> = createStore(
 
 SagaManager.startSagas(sagaMiddleware);
 
-export { history, store };
+document.addEventListener('unload', () => {
+  SagaManager.cancelSagas(store);
+});
+
 export default store;
-
-if ((module as any).hot) {
-  (module as any).hot.accept('../reducers', () => {
-    const nextRootReducer = require('../reducers').default;
-    store.replaceReducer(nextRootReducer);
-  });
-
-  (module as any).hot.accept('../sagas', () => {
-    SagaManager.cancelSagas(store);
-    require('../sagas').default.startSagas(sagaMiddleware);
-  });
-}
