@@ -29,7 +29,10 @@ export interface TeamInfoProps {
   user: API.User.UserInfo;
   selfUsername: string;
 
-  dissolutionTeam: (teamId: string) => void;
+  dissolutionTeam: () => void;
+  exitTeam: () => void;
+  changeTeamLeader: (targetUsername: string) => void;
+  deleteMembers: (username: string) => void;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
@@ -37,6 +40,7 @@ const TeamInfo = (props: TeamInfoProps) => {
   const data = members.map((member, i) => ({
     key: member.email || member.username || i,
     name: member.name,
+    username: member.username,
     isTeamLeader: props.teamInfo.teamLeader
       ? props.teamInfo.teamLeader.username === member.username
       : false,
@@ -61,16 +65,49 @@ const TeamInfo = (props: TeamInfoProps) => {
         false
       ) : (
         <span>
-          <a onClick={noop}>设为队长</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使你成为队员，该用户成为<br />队长，该用户会收到一个消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.changeTeamLeader.bind(null, user.username)}
+          >
+            <a onClick={noop}>设为队长</a>
+          </Popconfirm>
           <span style={{ display: 'inline-block', width: '20px' }} />
-          <a onClick={noop}>移除</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使从队伍中移出该队员，<br />他本人会收到消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.deleteMembers.bind(null, user.username)}
+          >
+            <a onClick={noop}>移除</a>
+          </Popconfirm>
         </span>
       );
 
     const renderMemberOperate = (user: any) =>
       user.isSelf && (
         <span>
-          <a onClick={noop}>退出队伍</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使你退出这个队伍，只<br />有队长会收到消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.exitTeam}
+          >
+            <a>退出队伍</a>
+          </Popconfirm>
         </span>
       );
 
@@ -130,9 +167,13 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {showDissolutionButton && (
         <Popconfirm
-          title="Are you sure？"
-          okText="Yes"
-          cancelText="No"
+          title={
+            <p>
+              解散队伍会使所有队员及<br />队长变为<b>暂未组队</b>状态
+            </p>
+          }
+          okText="确定"
+          cancelText="取消"
           onConfirm={props.dissolutionTeam.bind(null, props.user.teamId)}
         >
           <Button children="解散队伍" type="danger" />
@@ -160,9 +201,17 @@ export default connect(
     };
   },
   dispatch => ({
-    dissolutionTeam(teamId: string) {
-      dispatch({ type: TYPE.DELETE_TEAM._, payload: teamId });
+    dissolutionTeam() {
+      dispatch({ type: TYPE.DELETE_TEAM._ });
+    },
+    exitTeam() {
+      dispatch({ type: TYPE.EXIT_TEAM._ });
+    },
+    changeTeamLeader(targetUsername: string) {
+      dispatch({ type: TYPE.CHANGE_TEAM_LEADER._, payload: targetUsername });
+    },
+    deleteMembers(username: string) {
+      dispatch({ type: TYPE.DELETE_TEAM_MEMBER._, payload: username });
     },
   }),
 )(TeamInfo);
-// );

@@ -166,6 +166,14 @@ export const DELETE_TEAM_MEMBER = {
 }
 
 // prettier-ignore
+export const EXIT_TEAM = {
+  _:     'EXIT_TEAM',
+  START: 'EXIT_TEAM_START',
+  OK:    'EXIT_TEAM_OK',
+  FAIL:  'EXIT_TEAM_FAIL',
+}
+
+// prettier-ignore
 export const CHANGE_TEAM_LEADER = {
   _:     'CHANGE_TEAM_LEADER',
   START: 'CHANGE_TEAM_LEADER_START',

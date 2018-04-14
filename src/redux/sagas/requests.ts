@@ -260,6 +260,20 @@ export default function*() {
     yield put({ type: TYPE.DELETE_TEAM_MEMBER.FAIL, payload: message });
   });
 
+  yield takeEvery(TYPE.EXIT_TEAM._, function*() {
+    yield put({ type: TYPE.EXIT_TEAM.START });
+    const [teamId, username] = yield select((state: RootState) => [
+      state.user.teamId,
+      state.user.username,
+    ]);
+    const [ok, message] = yield call(req.deleteTeamMember, username, teamId);
+    if (ok) {
+      yield put({ type: TYPE.EXIT_TEAM.OK, payload: username });
+      return;
+    }
+    yield put({ type: TYPE.EXIT_TEAM.FAIL, payload: message });
+  });
+
   yield takeEvery(TYPE.DELETE_TEAM._, function*() {
     yield put({ type: TYPE.DELETE_TEAM.START });
     const teamId = yield select((state: RootState) => state.user.teamId);
