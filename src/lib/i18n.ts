@@ -57,6 +57,7 @@ const reqTips = {
   DELETE_MSG:            ['删除消息失败', 'Failed to delete message'][language],
   CONFIRM_APPLY:         ['确认报名失败', 'Failed to confirm apply'][language],
   DELETE_TEAM_MEMBER:    ['移除队员失败', 'Failed to remove team member'][language],
+  EXIT_TEAM:             ['退出队伍失败', 'Failed to exit team'][language],
   DELETE_TEAM:           ['解散队伍失败', 'Failed to dessolute team'][language],
   CHANGE_TEAM_LEADER:    ['更改队长失败', 'Failed to transfer teamleader'][language]
 };

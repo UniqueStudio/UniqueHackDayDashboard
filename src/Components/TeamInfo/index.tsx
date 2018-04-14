@@ -14,6 +14,7 @@ import { TeamInfo } from '../../redux/reducers/teamInfo';
 import * as TYPE from '../../redux/actions';
 // import withLoading from '../../lib/withLoading';
 import noop from 'lodash-es/noop';
+import { replace } from 'react-router-redux';
 
 const Description = DescriptionList.Description;
 
@@ -22,9 +23,7 @@ export interface TeamInfoProps {
   showTeamLeaderOperate: boolean;
   showMemberOperate: boolean;
   showDissolutionButton: boolean;
-  // onOperating?: (userInfo: any, operate: 'setTeamLeader' | 'remove' | 'exitTeam') => void;
 
-  // isLoadingTeamInfo: boolean;
   teamInfo: TeamInfo;
   user: API.User.UserInfo;
   selfUsername: string;
@@ -33,6 +32,7 @@ export interface TeamInfoProps {
   exitTeam: () => void;
   changeTeamLeader: (targetUsername: string) => void;
   deleteMembers: (username: string) => void;
+  toEditTeam: () => void;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
@@ -54,8 +54,6 @@ const TeamInfo = (props: TeamInfoProps) => {
     showDissolutionButton = false,
     showTeamLeaderOperate = false,
     showMemberOperate = false,
-    // tslint:disable-next-line:no-empty
-    // onOperating = () => {},
   } = props;
 
   const renderTable = () => {
@@ -154,7 +152,13 @@ const TeamInfo = (props: TeamInfoProps) => {
   return (
     <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
-        {showEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
+        {showEditButton && (
+          <Button
+            onClick={props.toEditTeam}
+            children="编辑成员"
+            className={cls['team-info-edit-btn']}
+          />
+        )}
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
         <Description term="队伍名称" children={props.teamInfo.teamName || '-'} />
@@ -201,6 +205,10 @@ export default connect(
     };
   },
   dispatch => ({
+    toEditTeam() {
+      dispatch(replace('/team'));
+    },
+
     dissolutionTeam() {
       dispatch({ type: TYPE.DELETE_TEAM._ });
     },
