@@ -49,13 +49,53 @@ const reqTips = {
   CHANGE_IS_T_FAILED:    ['确认组队情况失败','Failed to confirm team status'][language],
   CREATE_TEAM_FAILED:    ['新建队伍失败','Failed to create a new team'][language],
   GET_TEAM_INFO_FAILED:  ['获取队伍信息失败','Failed to get team info'][language],
-  JOIN_TEAM_FAILED:      ['加入队伍失败','Failed to join the team'][language],
-  SUBMIT_DETAIL:         ['提交详情失败','Failed to submit details'][language],
-  MSG_POLL_FAILED:       ['拉取新消息失败','Failed to pull new message'][language],
-  GET_UNREAD_MSG_ALL:    ['拉取未读消息失败','Failed to fetch unread message'][language],
-  SET_MSG_READ:          ['设为已读失败','Failed to set as read'][language],
-  DELETE_MSG:            ['删除消息失败','Failed to delete message'][language],
-  CONFIRM_APPLY:         ['确认报名失败','Failed to confirm apply'][language],
+  JOIN_TEAM_FAILED:      ['加入队伍失败', 'Failed to join the team'][language],
+  SUBMIT_DETAIL:         ['提交详情失败', 'Failed to submit details'][language],
+  MSG_POLL_FAILED:       ['拉取新消息失败', 'Failed to pull new message'][language],
+  GET_UNREAD_MSG_ALL:    ['拉取未读消息失败', 'Failed to fetch unread message'][language],
+  SET_MSG_READ:          ['设为已读失败', 'Failed to set as read'][language],
+  DELETE_MSG:            ['删除消息失败', 'Failed to delete message'][language],
+  CONFIRM_APPLY:         ['确认报名失败', 'Failed to confirm apply'][language],
+  DELETE_TEAM_MEMBER:    ['移除队员失败', 'Failed to remove team member'][language],
+  DELETE_TEAM:           ['解散队伍失败', 'Failed to dessolute team'][language],
+  CHANGE_TEAM_LEADER:    ['更改队长失败', 'Failed to transfer teamleader'][language]
+};
+
+// prettier-ignore
+const messageTitles: Pick<{ [k: string]: string }, API.Message.MessageType> = {
+  LoginElseWhere:      ['被迫下线', 'Logged Out Forcely'][language],
+  NewTeammate:         ['您有了新的队友', 'New Teammate'][language],
+  TeamCreated:         ['队伍已创建', 'Team Created'][language],
+  TeamJoined:          ['已加入队伍', 'Team Joined'][language],
+  ApplyComplete:       ['报名成功', 'Apply Succeed'][language],
+  ApplyNeedsConfirm:   ['需要确认参赛', 'Confirm Your Participation'][language],
+  ApplyConfirmed:      ['参赛已确认', 'Participation Confirmed'][language],
+  ApplyCanceled:       ['参赛已取消', 'Participation Canceled'][language],
+  HackExited:          ['已退出比赛', 'Hackday Exited'][language],
+  Accepted:            ['您的报名申请已通过审核', 'Accepted'][language],
+  Rejected:            ['您的报名申请未通过审核', 'Rejected'][language],
+  OtherMessage:        '%s',
+};
+
+const messageValues: Pick<{ [k: string]: string }, API.Message.MessageType> = {
+  LoginElseWhere: [
+    '您的账号在其他客户端登录，此客户端被迫下线。',
+    'Your account logged in on other client, you logged out on this client.',
+  ][language],
+  NewTeammate: [
+    '新的队友 %s，用户名：%s 已经加入你的队伍，前往“队伍信息”界面进行确认。',
+    `A new teammate '%s' whose username is '%s' has joined your team, go to 'Team Info' for confirmation.`,
+  ][language],
+  TeamCreated: ['队伍已创建', 'Team Created'][language],
+  TeamJoined: ['已加入队伍', 'Team Joined'][language],
+  ApplyComplete: ['报名成功', 'Apply Succeed'][language],
+  ApplyNeedsConfirm: ['需要确认参赛', 'Confirm Your Participation'][language],
+  ApplyConfirmed: ['参赛已确认', 'Participation Confirmed'][language],
+  ApplyCanceled: ['参赛已取消', 'Participation Canceled'][language],
+  HackExited: ['已退出比赛', 'Hackday Exited'][language],
+  Accepted: ['您的报名申请已通过审核', 'Accepted'][language],
+  Rejected: ['您的报名申请未通过审核', 'Rejected'][language],
+  OtherMessage: '%s',
 };
 
 const locales = {
@@ -63,6 +103,8 @@ const locales = {
   ...messages,
   // tips after request failed
   ...reqTips,
+  messageTitles,
+  messageValues,
 };
 
 export default locales;

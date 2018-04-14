@@ -42,7 +42,7 @@ export interface TeamUpViewProps {
 
 class TeamUpView extends React.Component<TeamUpViewProps> {
   state = {
-    formIndex: 0,
+    formIndex: !this.props.teamUpSkippable ? 0 : 1,
   };
 
   handleSubmit = () => void 0;
@@ -65,7 +65,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
       <div style={{ marginTop: '20px' }}>
         <Form.Item {...this.formItemLayout} label="我的角色:">
           <Radio.Group
-            defaultValue="0"
+            defaultValue={'' + this.state.formIndex}
             onChange={this.handleRadioChange}
             disabled={this.props.joinTeamSubmitting || this.props.newTeamSubmitting}
           >

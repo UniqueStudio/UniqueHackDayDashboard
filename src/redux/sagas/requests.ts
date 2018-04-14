@@ -248,4 +248,37 @@ export default function*() {
     }
     yield put({ type: TYPE.DELETE_MSG.FAIL, payload: message });
   });
+
+  yield takeEvery(TYPE.DELETE_TEAM_MEMBER._, function*(a: AnyAction) {
+    yield put({ type: TYPE.DELETE_TEAM_MEMBER.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.deleteTeamMember, a.payload, teamId);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_TEAM_MEMBER.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_TEAM_MEMBER.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.DELETE_TEAM._, function*() {
+    yield put({ type: TYPE.DELETE_TEAM.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.deleteTeam, teamId);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_TEAM.OK, payload: teamId });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_TEAM.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.CHANGE_TEAM_LEADER._, function*(a: AnyAction) {
+    yield put({ type: TYPE.CHANGE_TEAM_LEADER.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.changeTeamLeader, a.payload, teamId);
+    if (ok) {
+      yield put({ type: TYPE.CHANGE_TEAM_LEADER.OK });
+      return;
+    }
+    yield put({ type: TYPE.CHANGE_TEAM_LEADER.FAIL, payload: message });
+  });
 }

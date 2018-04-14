@@ -263,3 +263,47 @@ export async function confirmApply() {
   }
   return [false, `${locales.CONFIRM_APPLY}: ${locales[res.message]}`];
 }
+
+export async function deleteTeamMember(username: string, teamId: number) {
+  const res = await request({
+    endpoint: '/v1/team/members',
+    method: 'DELETE',
+    body: {
+      username,
+      teamId,
+    },
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `${locales.DELETE_TEAM_MEMBER}: ${locales[res.message]}`];
+}
+
+export async function deleteTeam(teamId: number) {
+  const res = await request({
+    endpoint: '/v1/team/teams',
+    method: 'DELETE',
+    body: {
+      teamId,
+    },
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `${locales.DELETE_TEAM}: ${locales[res.message]}`];
+}
+
+export async function changeTeamLeader(username: string, teamId: number) {
+  const res = await request({
+    endpoint: '/v1/team/team_leader',
+    method: 'PUT',
+    body: {
+      username,
+      teamId,
+    },
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `${locales.DELETE_TEAM}: ${locales[res.message]}`];
+}

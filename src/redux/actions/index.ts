@@ -156,3 +156,27 @@ export const DELETE_MSG_ALL = 'DELETE_MSG_ALL';
 export const START_MSG_LOOP = 'START_MSG_LOOP';
 export const STOP_MSG_LOOP = 'STOP_MSG_LOOP';
 export const MSG_LOOP_RECEIVE_MSG = 'MSG_LOOP_RECEIVE_MSG';
+
+// prettier-ignore
+export const DELETE_TEAM_MEMBER = {
+  _:     'DELETE_TEAM_MEMBER',
+  START: 'DELETE_TEAM_MEMBER_START',
+  OK:    'DELETE_TEAM_MEMBER_OK',
+  FAIL:  'DELETE_TEAM_MEMBER_FAIL',
+}
+
+// prettier-ignore
+export const CHANGE_TEAM_LEADER = {
+  _:     'CHANGE_TEAM_LEADER',
+  START: 'CHANGE_TEAM_LEADER_START',
+  OK:    'CHANGE_TEAM_LEADER_OK',
+  FAIL:  'CHANGE_TEAM_LEADER_FAIL',
+}
+
+// prettier-ignore
+export const DELETE_TEAM = {
+  _:     'DELETE_TEAM',
+  START: 'DELETE_TEAM_START',
+  OK:    'DELETE_TEAM_OK',
+  FAIL:  'DELETE_TEAM_FAIL',
+}

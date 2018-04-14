@@ -486,7 +486,7 @@ declare namespace API {
         | ResponseWithData<200, Message.Success, TeamInfo>
       >;
 
-      // 转移队长身份的接口，只有队长身份 / 管理员可以调用
+      // 解散队伍
       (
         req: RequestWithAuth<
           '/v1/team/teams',
@@ -518,8 +518,15 @@ declare namespace API {
     enum MessageType {
       LoginElseWhere = 'LoginElseWhere', // 别处登录，被迫下线
       NewTeammate = 'NewTeammate', // 新的队友加入
+      TeamCreated = 'TeamCreated', // 成功创建队伍
+      TeamJoined = 'TeamJoined', // 成功加入队伍
+      ApplyComplete = 'ApplyComplete', // 您已成功报名unique hackday
       Accepted = 'Accepted', // 通过审核
       Rejected = 'Rejected', // 被拒绝参赛
+      ApplyNeedsConfirm = 'ApplyNeedsConfirm', // 请确认参赛
+      ApplyConfirmed = 'ApplyConfirmed', // 已确认参赛
+      ApplyCanceled = 'ApplyCanceled', // 已取消参赛
+      HackExited = 'HackExited', // 已退出比赛
       OtherMessage = 'OtherMessage',
     }
 
@@ -543,7 +550,59 @@ declare namespace API {
           id: number;
 
           type: MessageType.Accepted;
-          rejectedExtraMsg?: MessageValue;
+          acceptExtraMsg?: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.TeamCreated;
+          newTeamInfo: API.Team.TeamInfo;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.TeamJoined;
+          newTeamInfo: API.Team.TeamInfo;
+          time: number; // Timestamp=
+        }
+      | {
+          id: number;
+
+          type: MessageType.NewTeammate;
+          newTeammateInfo: API.Team.UserInTeam;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyComplete;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyNeedsConfirm;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyConfirmed;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyCanceled;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.HackExited;
+          reason: MessageValue;
           time: number; // Timestamp
         }
       | {
@@ -552,13 +611,6 @@ declare namespace API {
           type: MessageType.OtherMessage;
           value: MessageValue;
           title: MessageValue;
-          time: number; // Timestamp
-        }
-      | {
-          id: number;
-
-          type: MessageType.NewTeammate;
-          newTeammateInfo: API.Team.UserInTeam;
           time: number; // Timestamp
         };
 

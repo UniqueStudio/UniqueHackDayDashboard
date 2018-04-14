@@ -6,10 +6,12 @@ import DescriptionList from 'ant-design-pro/es/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';
+import Popconfirm from 'antd/es/popconfirm';
 
 import cls from './style.less';
 import { RootState } from '../../redux/reducers/index';
 import { TeamInfo } from '../../redux/reducers/teamInfo';
+import * as TYPE from '../../redux/actions';
 // import withLoading from '../../lib/withLoading';
 import noop from 'lodash-es/noop';
 
@@ -24,7 +26,10 @@ export interface TeamInfoProps {
 
   // isLoadingTeamInfo: boolean;
   teamInfo: TeamInfo;
+  user: API.User.UserInfo;
   selfUsername: string;
+
+  dissolutionTeam: (teamId: string) => void;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
@@ -123,7 +128,16 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
-      {showDissolutionButton && <Button children="解散队伍" type="danger" />}
+      {showDissolutionButton && (
+        <Popconfirm
+          title="Are you sure？"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={props.dissolutionTeam.bind(null, props.user.teamId)}
+        >
+          <Button children="解散队伍" type="danger" />
+        </Popconfirm>
+      )}
     </Card>
   );
 };
@@ -131,16 +145,24 @@ const TeamInfo = (props: TeamInfoProps) => {
 export { TeamInfo };
 
 // export default withLoading({ isLoadingTeamInfo: { start: '', end: '' } })(
-export default connect(({ teamInfo, user: { username }, route }: RootState) => {
-  const showEditButton = route && route.location && route.location.pathname !== '/team';
-  const isTeamLeader = teamInfo.teamLeader.username === username;
-  return {
-    selfUsername: username,
-    teamInfo,
-    showTeamLeaderOperate: isTeamLeader && !showEditButton,
-    showMemberOperate: !isTeamLeader && !showEditButton,
-    showDissolutionButton: isTeamLeader && !showEditButton,
-    showEditButton,
-  };
-})(TeamInfo);
+export default connect(
+  ({ teamInfo, user: { username }, user, route }: RootState) => {
+    const showEditButton = route && route.location && route.location.pathname !== '/team';
+    const isTeamLeader = teamInfo.teamLeader.username === username;
+    return {
+      selfUsername: username,
+      teamInfo,
+      showTeamLeaderOperate: isTeamLeader && !showEditButton,
+      showMemberOperate: !isTeamLeader && !showEditButton,
+      showDissolutionButton: isTeamLeader && !showEditButton,
+      showEditButton,
+      user,
+    };
+  },
+  dispatch => ({
+    dissolutionTeam(teamId: string) {
+      dispatch({ type: TYPE.DELETE_TEAM._, payload: teamId });
+    },
+  }),
+)(TeamInfo);
 // );
