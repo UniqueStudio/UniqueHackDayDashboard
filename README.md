@@ -1,7 +1,7 @@
 # Unique Hackday Dashboard
 
 [![Build Status](https://travis-ci.org/farawaaay/UniqueHackDayDashboard.svg?branch=master)](https://travis-ci.org/farawaaay/UniqueHackDayDashboard)
- 
+
 > This dashboard is designed to be reuseable. we will use this dashboard for few years.
 
 ## Architecture
@@ -16,6 +16,12 @@ In `src` directory, there are `Components`, `Layouts` and `Views`.
 represent the layout.
 
 `Views` are components connected to the redux store.
+
+## Principles
+
+1.  All side-effects must be handled by redux-saga middleware.
+2.  Actions can be handled by reducers, must be handled by reducers.
+3.  Typecheck and lint must be passed without warning before commit.
 
 ## Build Tools
 
