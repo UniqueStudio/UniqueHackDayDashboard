@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as TYPE from '../../redux/actions/index';
 import { RootState } from '../../redux/reducers';
+import { LoginForm, RegisterForm, ResetPwdForm } from '../../redux/reducers/forms';
 
 import Card from 'antd/es/card';
 import Tabs from 'antd/es/tabs';
@@ -26,9 +27,9 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
   recaptchaReady: boolean;
 
-  loginData: any;
-  registerData: any;
-  resetPwdData: any;
+  loginData: LoginForm['data'];
+  registerData: RegisterForm['data'];
+  resetPwdData: ResetPwdForm['data'];
 
   onLoginFormChange: (keyValue: { [k: string]: any }) => any;
   onRegisterFormChange: (keyValue: { [k: string]: any }) => any;
