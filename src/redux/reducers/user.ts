@@ -12,6 +12,20 @@ export default function auth(
         ...(action.payload || {}),
       };
     // case TYPE.LOAD:
+
+    case TYPE.JOIN_TEAM_FORM_SUBMIT.OK:
+    case TYPE.NEW_TEAM_FORM_SUBMIT.OK:
+      return {
+        ...state,
+        teamId: action.payload,
+      };
+
+    case TYPE.EXIT_TEAM.OK:
+    case TYPE.DELETE_TEAM.OK:
+      return {
+        ...state,
+        teamId: null,
+      };
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import Layout from 'antd/es/layout';
 import Menu from 'antd/es/menu';
@@ -7,6 +8,7 @@ import Dropdown from 'antd/es/dropdown';
 import Icon from 'antd/es/icon';
 
 import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
+import { INoticeIconData } from 'ant-design-pro/es/NoticeIcon/NoticeIconTab';
 
 import { RootState } from '../../redux/reducers';
 import { PartialUserInfo } from '../../redux/reducers/user';
@@ -25,8 +27,15 @@ class GlobalHeader extends React.Component<{
   msgs: SingleMessage[];
 
   setReadAll: () => void;
+  setRead: (id: number) => void;
   deleteAll: () => void;
+  dispatch: Dispatch<any>;
 }> {
+  handleMessageClick = (item: INoticeIconData) => {
+    this.props.setRead((item as any).id);
+    (item as any).clickHandler(this.props.dispatch);
+  };
+
   render() {
     return (
       <Layout.Header className={cls.header}>
@@ -79,7 +88,11 @@ class GlobalHeader extends React.Component<{
 
     const menuItems = [
       <Menu.Item className={cls['header-menu-item']} key="msg" style={{ marginRight: '10px' }}>
-        <NoticeIcon count={this.props.unreadMsgs.length} onClear={this.handleClear}>
+        <NoticeIcon
+          count={this.props.unreadMsgs.length}
+          onItemClick={this.handleMessageClick}
+          onClear={this.handleClear}
+        >
           <NoticeIcon.Tab
             emptyText="没有未读消息"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
@@ -125,8 +138,12 @@ export default connect(
     setReadAll() {
       dispatch({ type: TYPE.SET_MSG_READ_ALL });
     },
+    setRead(id: number) {
+      dispatch({ type: TYPE.SET_MSG_READ._, payload: id });
+    },
     deleteAll() {
       dispatch({ type: TYPE.DELETE_MSG_ALL });
     },
+    dispatch,
   }),
 )(GlobalHeader);

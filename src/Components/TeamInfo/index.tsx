@@ -6,12 +6,15 @@ import DescriptionList from 'ant-design-pro/es/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';
+import Popconfirm from 'antd/es/popconfirm';
 
 import cls from './style.less';
 import { RootState } from '../../redux/reducers/index';
 import { TeamInfo } from '../../redux/reducers/teamInfo';
+import * as TYPE from '../../redux/actions';
 // import withLoading from '../../lib/withLoading';
 import noop from 'lodash-es/noop';
+import { replace } from 'react-router-redux';
 
 const Description = DescriptionList.Description;
 
@@ -20,11 +23,16 @@ export interface TeamInfoProps {
   showTeamLeaderOperate: boolean;
   showMemberOperate: boolean;
   showDissolutionButton: boolean;
-  // onOperating?: (userInfo: any, operate: 'setTeamLeader' | 'remove' | 'exitTeam') => void;
 
-  // isLoadingTeamInfo: boolean;
   teamInfo: TeamInfo;
+  user: API.User.UserInfo;
   selfUsername: string;
+
+  dissolutionTeam: () => void;
+  exitTeam: () => void;
+  changeTeamLeader: (targetUsername: string) => void;
+  deleteMembers: (username: string) => void;
+  toEditTeam: () => void;
 }
 
 const TeamInfo = (props: TeamInfoProps) => {
@@ -32,6 +40,7 @@ const TeamInfo = (props: TeamInfoProps) => {
   const data = members.map((member, i) => ({
     key: member.email || member.username || i,
     name: member.name,
+    username: member.username,
     isTeamLeader: props.teamInfo.teamLeader
       ? props.teamInfo.teamLeader.username === member.username
       : false,
@@ -45,8 +54,6 @@ const TeamInfo = (props: TeamInfoProps) => {
     showDissolutionButton = false,
     showTeamLeaderOperate = false,
     showMemberOperate = false,
-    // tslint:disable-next-line:no-empty
-    // onOperating = () => {},
   } = props;
 
   const renderTable = () => {
@@ -56,16 +63,49 @@ const TeamInfo = (props: TeamInfoProps) => {
         false
       ) : (
         <span>
-          <a onClick={noop}>设为队长</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使你成为队员，该用户成为<br />队长，该用户会收到一个消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.changeTeamLeader.bind(null, user.username)}
+          >
+            <a onClick={noop}>设为队长</a>
+          </Popconfirm>
           <span style={{ display: 'inline-block', width: '20px' }} />
-          <a onClick={noop}>移除</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使从队伍中移出该队员，<br />他本人会收到消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.deleteMembers.bind(null, user.username)}
+          >
+            <a onClick={noop}>移除</a>
+          </Popconfirm>
         </span>
       );
 
     const renderMemberOperate = (user: any) =>
       user.isSelf && (
         <span>
-          <a onClick={noop}>退出队伍</a>
+          <Popconfirm
+            title={
+              <p>
+                这会使你退出这个队伍，只<br />有队长会收到消息通知
+              </p>
+            }
+            okText="确定"
+            cancelText="取消"
+            onConfirm={props.exitTeam}
+          >
+            <a>退出队伍</a>
+          </Popconfirm>
         </span>
       );
 
@@ -112,7 +152,13 @@ const TeamInfo = (props: TeamInfoProps) => {
   return (
     <Card bordered={false} title="队伍信息">
       <div className={cls['team-info-title-wrapper']}>
-        {showEditButton && <Button children="编辑成员" className={cls['team-info-edit-btn']} />}
+        {showEditButton && (
+          <Button
+            onClick={props.toEditTeam}
+            children="编辑成员"
+            className={cls['team-info-edit-btn']}
+          />
+        )}
       </div>
       <DescriptionList layout={'horizontal'} title="" col={2}>
         <Description term="队伍名称" children={props.teamInfo.teamName || '-'} />
@@ -123,7 +169,20 @@ const TeamInfo = (props: TeamInfoProps) => {
       {renderDivider()}
       {renderTable()}
       {renderDivider()}
-      {showDissolutionButton && <Button children="解散队伍" type="danger" />}
+      {showDissolutionButton && (
+        <Popconfirm
+          title={
+            <p>
+              解散队伍会使所有队员及<br />队长变为<b>暂未组队</b>状态
+            </p>
+          }
+          okText="确定"
+          cancelText="取消"
+          onConfirm={props.dissolutionTeam.bind(null, props.user.teamId)}
+        >
+          <Button children="解散队伍" type="danger" />
+        </Popconfirm>
+      )}
     </Card>
   );
 };
@@ -131,16 +190,36 @@ const TeamInfo = (props: TeamInfoProps) => {
 export { TeamInfo };
 
 // export default withLoading({ isLoadingTeamInfo: { start: '', end: '' } })(
-export default connect(({ teamInfo, user: { username }, route }: RootState) => {
-  const showEditButton = route && route.location && route.location.pathname !== '/team';
-  const isTeamLeader = teamInfo.teamLeader.username === username;
-  return {
-    selfUsername: username,
-    teamInfo,
-    showTeamLeaderOperate: isTeamLeader && !showEditButton,
-    showMemberOperate: !isTeamLeader && !showEditButton,
-    showDissolutionButton: isTeamLeader && !showEditButton,
-    showEditButton,
-  };
-})(TeamInfo);
-// );
+export default connect(
+  ({ teamInfo, user: { username }, user, route }: RootState) => {
+    const showEditButton = route && route.location && route.location.pathname !== '/team';
+    const isTeamLeader = teamInfo.teamLeader.username === username;
+    return {
+      selfUsername: username,
+      teamInfo,
+      showTeamLeaderOperate: isTeamLeader && !showEditButton,
+      showMemberOperate: !isTeamLeader && !showEditButton,
+      showDissolutionButton: isTeamLeader && !showEditButton,
+      showEditButton,
+      user,
+    };
+  },
+  dispatch => ({
+    toEditTeam() {
+      dispatch(replace('/team'));
+    },
+
+    dissolutionTeam() {
+      dispatch({ type: TYPE.DELETE_TEAM._ });
+    },
+    exitTeam() {
+      dispatch({ type: TYPE.EXIT_TEAM._ });
+    },
+    changeTeamLeader(targetUsername: string) {
+      dispatch({ type: TYPE.CHANGE_TEAM_LEADER._, payload: targetUsername });
+    },
+    deleteMembers(username: string) {
+      dispatch({ type: TYPE.DELETE_TEAM_MEMBER._, payload: username });
+    },
+  }),
+)(TeamInfo);

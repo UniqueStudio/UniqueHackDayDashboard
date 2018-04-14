@@ -4,13 +4,16 @@ import { RootState } from '../reducers/index';
 import { msgPoll } from '../../lib/requests';
 
 function* loop() {
+  yield process.env.NODE_ENV === 'development' ? take('NEVER_ACTION') : null;
   while (true) {
     const loggedIn = yield select((state: RootState) => state.auth.loggedIn);
     if (!loggedIn) {
       yield take(TYPE.SET_LOGGED_IN);
     }
     const [messages] = yield call(msgPoll);
-    yield put({ type: TYPE.GET_UNREAD_MSG_ALL._, payload: messages });
+    if (messages && messages.length > 0) {
+      yield put({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: messages });
+    }
   }
 }
 /**

@@ -3,7 +3,6 @@ import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
 import { RootState } from '../reducers/index';
 import { replace } from 'react-router-redux';
-
 /**
  * This is a generator function / saga for user entry flow.
  */
@@ -110,6 +109,14 @@ export default function* entryFlow() {
         ),
       );
     });
+    yield takeEvery([TYPE.JOIN_TEAM_FORM_SUBMIT.OK, TYPE.NEW_TEAM_FORM_SUBMIT.OK], function*() {
+      /**
+       * This takeEvery can not be replaced by reducers.
+       * Keep it for better-readable code.
+       */
+      yield put({ type: TYPE.LOAD_TEAM_INFO._ });
+    });
+
     /**
      * TODO: more operations handler
      */
