@@ -67,7 +67,7 @@
       "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}",
-    "typecheck": "tsc -p ./",
+    "typecheck": "tsc -p ./ --outDir ./dist",
     "postinstall": "node ./scripts/post-install.js"
   },
   "pre-commit": ["lint", "typecheck"]

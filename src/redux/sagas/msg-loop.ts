@@ -2,15 +2,20 @@ import { take, select, race, call, put } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { RootState } from '../reducers/index';
 import { msgPoll } from '../../lib/requests';
+import throttle from 'lodash-es/throttle';
+import { delay } from 'redux-saga';
+
+const throttledMsgPoll = throttle(msgPoll, 9 * 1000);
 
 function* loop() {
-  yield process.env.NODE_ENV === 'development' ? take('NEVER_ACTION') : null;
   while (true) {
     const loggedIn = yield select((state: RootState) => state.auth.loggedIn);
     if (!loggedIn) {
       yield take(TYPE.SET_LOGGED_IN);
     }
-    const [messages] = yield call(msgPoll);
+    // force it runs in different call-stack
+    yield delay(0);
+    const [messages] = yield call(throttledMsgPoll);
     if (messages && messages.length > 0) {
       yield put({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: messages });
     }
