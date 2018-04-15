@@ -38,7 +38,8 @@
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
     "tslint-react": "^3.5.1",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.1",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
     "ant-design-pro": "^1.2.1",
@@ -46,7 +47,6 @@
     "classnames": "^2.2.5",
     "history": "^4.7.2",
     "lodash-es": "^4.17.5",
-    "pre-commit": "^1.2.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -63,14 +63,12 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --out-dir=./build --public-url=./",
-    "build:master": "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
+    "build:master":
+      "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}",
     "typecheck": "tsc -p ./",
     "postinstall": "node ./scripts/post-install.js"
   },
-  "pre-commit": [
-    "lint",
-    "typecheck"
-  ]
+  "pre-commit": ["lint", "typecheck"]
 }
