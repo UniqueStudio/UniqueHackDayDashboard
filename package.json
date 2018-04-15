@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The dashboard application for Unique Hackday, designed to be reuseable.",
   "main": "index.js",
-  "author": "Faraway <hzylovelyl@gmail.com>",
+  "author": "Faraway <hzylovelyl@gmail.com> LLGZONE<985395976@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/antd": "^1.0.0",
