@@ -36,8 +36,13 @@ export async function register(username: string, password: string, phone: string
 
   return [null, `${locales.REGISTER_FAILED}: ${locales[res.message]}`];
 }
-// prettier-ignore
-export async function resetPwdRequest(phone: string, code: string, newPassword: string, antiRobotToken: string) {
+
+export async function resetPwdRequest(
+  phone: string,
+  code: string,
+  newPassword: string,
+  antiRobotToken: string,
+) {
   const res = await request({
     endpoint: '/v1/user/password?reset',
     method: 'POST',
@@ -49,9 +54,9 @@ export async function resetPwdRequest(phone: string, code: string, newPassword: 
     },
   });
   if (res.httpStatusCode === 200) {
-    return [true]
+    return [true];
   }
-  return [false, `${locales.RESET_PWD_FAILED}: ${locales[res.message]}`];  
+  return [false, `${locales.RESET_PWD_FAILED}: ${locales[res.message]}`];
 }
 
 export async function registerSendSMS(phone: string, antiRobotToken: string) {

@@ -108,7 +108,7 @@ export default function*() {
       req.resetPwdRequest,
       data.phone.value,
       data.code.value,
-      data.password.value,
+      data.newPassword.value,
       action.payload, // antiRobotToken
     );
     if (ok) {
