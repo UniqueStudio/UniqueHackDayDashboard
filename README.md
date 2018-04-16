@@ -1,6 +1,6 @@
 # Unique Hackday Dashboard
 
-[![Build Status](https://travis-ci.org/farawaaay/UniqueHackDayDashboard.svg?branch=master)](https://travis-ci.org/farawaaay/UniqueHackDayDashboard)
+[![Build Status](https://travis-ci.org/UniqueStudio/UniqueHackDayDashboard.svg?branch=master)](https://travis-ci.org/UniqueStudio/UniqueHackDayDashboard)
 
 > This dashboard is designed to be reuseable. we will use this dashboard for few years.
 

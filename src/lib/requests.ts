@@ -39,7 +39,7 @@ export async function register(username: string, password: string, phone: string
 // prettier-ignore
 export async function resetPwdRequest(phone: string, code: string, newPassword: string, antiRobotToken: string) {
   const res = await request({
-    endpoint: '/v1/user/password/reset',
+    endpoint: '/v1/user/password?reset',
     method: 'POST',
     body: {
       phone,

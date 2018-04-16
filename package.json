@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The dashboard application for Unique Hackday, designed to be reuseable.",
   "main": "index.js",
-  "author": "Faraway <hzylovelyl@gmail.com>",
+  "author": "Faraway <hzylovelyl@gmail.com> LLGZONE<985395976@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/antd": "^1.0.0",
@@ -67,7 +67,7 @@
       "parcel build index.html --out-dir=./build --public-url=https://console.fredliang.cn/prod/",
     "format": "prettier ./src/**/*.{ts,tsx,less}",
     "lint": "tslint ./src/**/*.{ts,tsx}",
-    "typecheck": "tsc -p ./",
+    "typecheck": "tsc -p ./ --outDir ./dist",
     "postinstall": "node ./scripts/post-install.js"
   },
   "pre-commit": ["lint", "typecheck"]
