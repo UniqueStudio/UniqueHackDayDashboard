@@ -5,6 +5,7 @@ import { RootState } from '../../redux/reducers';
 
 import AntdSelect from 'antd/es/select';
 import Divider from 'antd/es/divider';
+import Radio from 'antd/es/radio';
 
 import { patterns } from '../../lib/patterns';
 import MyForm from '../../Components/MyForm/MyForm';
@@ -14,10 +15,13 @@ import DatePicker from '../../Components/MyForm/DatePicker';
 import Select from '../../Components/MyForm/Select';
 import File from '../../Components/MyForm/File';
 import Submit from '../../Components/MyForm/Submit';
+import RadioGroup from '../../Components/MyForm/RadioGroup';
 
 import { DetailForm } from '../../redux/reducers/forms';
 import * as TYPE from '../../redux/actions/index';
 // import { emailValidator } from '../../Components/MyForm/validators';
+
+const SelectOption = AntdSelect.Option;
 
 export interface DetailViewProps {
   onFormChange: (keyValue: { [k: string]: any }) => any;
@@ -52,9 +56,9 @@ class DetailView extends React.Component<DetailViewProps> {
           <Text required={true} id="name" fieldName="姓名" label="姓名" />
 
           <Select required={true} id="gender" fieldName="性别" label="性别">
-            <AntdSelect.Option value="男">男</AntdSelect.Option>
-            <AntdSelect.Option value="女">女</AntdSelect.Option>
-            <AntdSelect.Option value="其他">其他</AntdSelect.Option>
+            <SelectOption value="男">男</SelectOption>
+            <SelectOption value="女">女</SelectOption>
+            <SelectOption value="其他">其他</SelectOption>
           </Select>
 
           <DatePicker id="birthday" label="生日" required={true} fieldName="生日" />
@@ -82,13 +86,13 @@ class DetailView extends React.Component<DetailViewProps> {
           />
 
           <Select required={true} id="tShirtSize" fieldName="T-shirt尺寸" label="T-shirt尺寸">
-            <AntdSelect.Option value="XS">XS</AntdSelect.Option>
-            <AntdSelect.Option value="S">S</AntdSelect.Option>
-            <AntdSelect.Option value="M">M</AntdSelect.Option>
-            <AntdSelect.Option value="L">L</AntdSelect.Option>
-            <AntdSelect.Option value="XL">XL</AntdSelect.Option>
-            <AntdSelect.Option value="XXL">XXL</AntdSelect.Option>
-            <AntdSelect.Option value="XXXL">XXXL</AntdSelect.Option>
+            <SelectOption value="XS">XS</SelectOption>
+            <SelectOption value="S">S</SelectOption>
+            <SelectOption value="M">M</SelectOption>
+            <SelectOption value="L">L</SelectOption>
+            <SelectOption value="XL">XL</SelectOption>
+            <SelectOption value="XXL">XXL</SelectOption>
+            <SelectOption value="XXXL">XXXL</SelectOption>
           </Select>
 
           <Divider>教育信息</Divider>
@@ -98,14 +102,14 @@ class DetailView extends React.Component<DetailViewProps> {
           <Text required={true} id="major" fieldName="专业" label="专业" iconType="book" />
 
           <Select required={true} id="grade" fieldName="年级" label="年级">
-            <AntdSelect.Option value="大一">大一</AntdSelect.Option>
-            <AntdSelect.Option value="大二">大二</AntdSelect.Option>
-            <AntdSelect.Option value="大三">大三</AntdSelect.Option>
-            <AntdSelect.Option value="大四">大四</AntdSelect.Option>
-            <AntdSelect.Option value="研一">研一</AntdSelect.Option>
-            <AntdSelect.Option value="研二">研二</AntdSelect.Option>
-            <AntdSelect.Option value="研三">研三</AntdSelect.Option>
-            <AntdSelect.Option value="博士">博士</AntdSelect.Option>
+            <SelectOption value="大一">大一</SelectOption>
+            <SelectOption value="大二">大二</SelectOption>
+            <SelectOption value="大三">大三</SelectOption>
+            <SelectOption value="大四">大四</SelectOption>
+            <SelectOption value="研一">研一</SelectOption>
+            <SelectOption value="研二">研二</SelectOption>
+            <SelectOption value="研三">研三</SelectOption>
+            <SelectOption value="博士">博士</SelectOption>
           </Select>
 
           <DatePicker id="graduateTime" label="毕业时间" required={true} fieldName="毕业时间" />
@@ -170,32 +174,32 @@ class DetailView extends React.Component<DetailViewProps> {
           />
 
           <Select required={true} id="role" fieldName="角色" label="角色" mode="tags">
-            <AntdSelect.Option value="前端">前端</AntdSelect.Option>
-            <AntdSelect.Option value="产品">产品</AntdSelect.Option>
-            <AntdSelect.Option value="设计">设计</AntdSelect.Option>
-            <AntdSelect.Option value="后端">后端</AntdSelect.Option>
-            <AntdSelect.Option value="机器学习">机器学习</AntdSelect.Option>
-            <AntdSelect.Option value="硬件开发">硬件开发</AntdSelect.Option>
-            <AntdSelect.Option value="其他">其他</AntdSelect.Option>
+            <SelectOption value="前端">前端</SelectOption>
+            <SelectOption value="产品">产品</SelectOption>
+            <SelectOption value="设计">设计</SelectOption>
+            <SelectOption value="后端">后端</SelectOption>
+            <SelectOption value="机器学习">机器学习</SelectOption>
+            <SelectOption value="硬件开发">硬件开发</SelectOption>
+            <SelectOption value="其他">其他</SelectOption>
           </Select>
 
           <Select required={true} id="skills" fieldName="技能" label="技能" mode="tags">
-            <AntdSelect.Option value="JavaScript"> JavaScript </AntdSelect.Option>
-            <AntdSelect.Option value="CSS/HTML"> CSS/HTML </AntdSelect.Option>
-            <AntdSelect.Option value="Swift"> Swift </AntdSelect.Option>
-            <AntdSelect.Option value="Object-C"> Object-C </AntdSelect.Option>
-            <AntdSelect.Option value="Kotlin"> Kotlin </AntdSelect.Option>
-            <AntdSelect.Option value="Erlang"> Erlang </AntdSelect.Option>
-            <AntdSelect.Option value="Python"> Python </AntdSelect.Option>
-            <AntdSelect.Option value="Golang"> Golang </AntdSelect.Option>
-            <AntdSelect.Option value="C/C++"> C/C++ </AntdSelect.Option>
-            <AntdSelect.Option value="C#"> C# </AntdSelect.Option>
-            <AntdSelect.Option value="Java"> Java </AntdSelect.Option>
-            <AntdSelect.Option value="PHP"> PHP </AntdSelect.Option>
-            <AntdSelect.Option value="Ruby"> Ruby </AntdSelect.Option>
-            <AntdSelect.Option value="Sketch"> Sketch </AntdSelect.Option>
-            <AntdSelect.Option value="PhotoShop"> PhotoShop </AntdSelect.Option>
-            <AntdSelect.Option value="Axure"> Axure </AntdSelect.Option>
+            <SelectOption value="JavaScript"> JavaScript </SelectOption>
+            <SelectOption value="CSS/HTML"> CSS/HTML </SelectOption>
+            <SelectOption value="Swift"> Swift </SelectOption>
+            <SelectOption value="Object-C"> Object-C </SelectOption>
+            <SelectOption value="Kotlin"> Kotlin </SelectOption>
+            <SelectOption value="Erlang"> Erlang </SelectOption>
+            <SelectOption value="Python"> Python </SelectOption>
+            <SelectOption value="Golang"> Golang </SelectOption>
+            <SelectOption value="C/C++"> C/C++ </SelectOption>
+            <SelectOption value="C#"> C# </SelectOption>
+            <SelectOption value="Java"> Java </SelectOption>
+            <SelectOption value="PHP"> PHP </SelectOption>
+            <SelectOption value="Ruby"> Ruby </SelectOption>
+            <SelectOption value="Sketch"> Sketch </SelectOption>
+            <SelectOption value="PhotoShop"> PhotoShop </SelectOption>
+            <SelectOption value="Axure"> Axure </SelectOption>
           </Select>
 
           <TextArea
@@ -211,6 +215,26 @@ class DetailView extends React.Component<DetailViewProps> {
           <File id="resume" required={true} fieldName="你的简历" label="你的简历" />
 
           <File id="collection" required={false} fieldName="你的作品集" label="你的作品集" />
+
+          <RadioGroup
+            id="resumeToSponsor"
+            label="简历提供给赞助商"
+            required={true}
+            message="请选择合适的选项"
+          >
+            <Radio value={true}>同意</Radio>
+            <Radio value={false}>不同意</Radio>
+          </RadioGroup>
+
+          <RadioGroup
+            id="resumeForWork"
+            label="简历供赞助商实习筛选"
+            required={true}
+            message="请选择合适的选项"
+          >
+            <Radio value={true}>同意</Radio>
+            <Radio value={false}>不同意</Radio>
+          </RadioGroup>
 
           <Submit title="提交" />
         </MyForm>
