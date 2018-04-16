@@ -107,6 +107,8 @@ declare namespace API {
       role: string[]; // 产品，设计，前端，后端，机器学习，硬件开发，其他
       skills: string[];
       hackdayTimes: number;
+      resumeToSponsor: boolean;
+      resumeForWork: boolean;
     }
 
     interface UserInfo {

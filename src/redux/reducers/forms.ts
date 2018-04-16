@@ -49,6 +49,8 @@ export function detailForm(
       role: {},
       skills: {},
       hackdayTimes: {},
+      resumeToSponsor: {},
+      resumeForWork: {},
     },
     isLoading: false,
     isSubmitting: false,

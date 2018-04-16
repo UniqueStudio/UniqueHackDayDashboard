@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Form from 'antd/es/form';
@@ -22,9 +23,9 @@ export default function RadioGroup(props: RadioProps, context: any) {
 
   return (
     <Form.Item {...formItemLayout} label={label}>
-      {getFieldDecorator(id, {
-        rules: [{ message, required }],
-      })(<AntdRadioGroup>{children}</AntdRadioGroup>)}
+      {getFieldDecorator(id, { rules: [{ message, required }] })(
+        <AntdRadioGroup>{children}</AntdRadioGroup>,
+      )}
     </Form.Item>
   );
 }

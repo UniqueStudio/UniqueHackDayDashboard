@@ -219,21 +219,21 @@ class DetailView extends React.Component<DetailViewProps> {
           <RadioGroup
             id="resumeToSponsor"
             label="简历提供给赞助商"
-            required
+            required={true}
             message="请选择合适的选项"
           >
-            <Radio value="y">同意</Radio>
-            <Radio value="n">不同意</Radio>
+            <Radio value={true}>同意</Radio>
+            <Radio value={false}>不同意</Radio>
           </RadioGroup>
 
           <RadioGroup
             id="resumeForWork"
             label="简历供赞助商实习筛选"
-            required
+            required={true}
             message="请选择合适的选项"
           >
-            <Radio value="y">同意</Radio>
-            <Radio value="n">不同意</Radio>
+            <Radio value={true}>同意</Radio>
+            <Radio value={false}>不同意</Radio>
           </RadioGroup>
 
           <Submit title="提交" />
