@@ -80,7 +80,11 @@ export function detailForm(
     case TYPE.DETAIL_FORM_SUBMIT.OK:
       return { ...state, isSubmitting: false };
     case TYPE.DETAIL_FORM_SUBMIT.FAIL:
-      return { ...state, isSubmitting: false, error: { value: action.payload, time: Date.now() } };
+      return {
+        ...state,
+        isSubmitting: false,
+        error: { value: action.payload, time: Date.now() },
+      };
     default:
       return state;
   }
