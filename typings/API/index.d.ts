@@ -363,7 +363,7 @@ declare namespace API {
     interface UserInTeam {
       username: string;
       name: string;
-      isAccepted: boolean;
+      isAccepted: boolean | null;
       school: string;
       email?: string;
     }
