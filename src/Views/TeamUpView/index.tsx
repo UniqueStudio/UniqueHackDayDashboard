@@ -170,7 +170,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
             <Alert
               showIcon={true}
               type="warning"
-              description="我们推荐尽早组队，但是只要作品提交未结束你可以随时进行组队"
+              description="在比赛之前你可以随时进行组队"
               message="注意"
             />
             <Button
