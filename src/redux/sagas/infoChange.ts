@@ -1,5 +1,7 @@
+import { delay } from 'redux-saga';
 // edit the user's info
-import { take } from 'redux-saga/effects';
+import { take, fork, put } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
 import Message from 'antd/es/message';
 import * as TYPE from '../actions';
 
@@ -10,4 +12,16 @@ function* infoChange() {
   }
 }
 
-export default infoChange;
+function* resetSuccess() {
+  while (true) {
+    yield take(TYPE.RESET_PWD_FORM_SUBMIT.OK);
+    Message.success('重置密码成功');
+    delay(100);
+    yield put(push('/'));
+  }
+}
+
+export default function*() {
+  yield fork(infoChange);
+  yield fork(resetSuccess);
+}
