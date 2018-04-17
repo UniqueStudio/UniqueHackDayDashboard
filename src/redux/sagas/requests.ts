@@ -139,7 +139,7 @@ export default function*() {
     yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START });
     const { data } = yield select((state: RootState) => state.newTeamForm);
     const [teamId, message] = yield call(req.createTeam, data.teamName.value);
-    if (teamId) {
+    if (teamId !== null) {
       yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK, payload: teamId });
       return;
     }

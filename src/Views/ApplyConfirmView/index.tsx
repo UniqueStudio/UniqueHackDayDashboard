@@ -72,7 +72,10 @@ class ApplyConfirmView extends React.Component<
             )}
 
             <Checkbox style={{ marginBottom: '10px' }} onChange={this.handleCheckbox}>
-              <a href="https://console.hack.hustunique.com/files/2018%20Unique%20Hackday%20%E9%BB%91%E5%AE%A2%E9%A9%AC%E6%8B%89%E6%9D%BE%E9%80%89%E6%89%8B%E5%8F%82%E8%B5%9B%E5%8D%8F%E8%AE%AE.pdf">
+              <a
+                href="https://console.hack.hustunique.com/files/2018%20Unique%20Hackday%20%E9%BB%91%E5%AE%A2%E9%A9%AC%E6%8B%89%E6%9D%BE%E9%80%89%E6%89%8B%E5%8F%82%E8%B5%9B%E5%8D%8F%E8%AE%AE.pdf"
+                target="_blank"
+              >
                 我已经仔细阅读并同意这份协议
               </a>
             </Checkbox>
