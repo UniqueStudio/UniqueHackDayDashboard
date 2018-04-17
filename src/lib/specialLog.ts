@@ -1,3 +1,4 @@
+/* tslint:disable */
 if (String.raw) {
   console.log(String.raw`
 _   _ _   _ ___ ___  _   _ _____   ____ _____ _   _ ____ ___ ___  
