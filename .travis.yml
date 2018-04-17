@@ -15,6 +15,8 @@ script:
  - ./ossutil64 config -e $OSS_ENDPOINT -i $OSS_ID -k $OSS_KEY
  - if [ $TRAVIS_BRANCH  ] && [ $TRAVIS_BRANCH = "master" ]; then
       yarn build:master;
+      ls ./build > ./filelist;
+      ./ossutil64 cp ./filelist oss://$OSS_BUCKETNAME --update;
       ./ossutil64 cp -r ./build oss://$OSS_BUCKETNAME_DEV/prod --update;
       ./ossutil64 cp -r ./build oss://$OSS_BUCKETNAME --update;
    else
