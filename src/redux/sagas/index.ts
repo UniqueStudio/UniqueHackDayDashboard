@@ -9,9 +9,10 @@ import entryFlow from '../sagas/entry-flow';
 import applyFlow from '../sagas/apply-flow';
 import messageLoop from '../sagas/msg-loop';
 import errorTip from './error-tip';
+import infoChange from './infoChange';
 
 // for scaleable
-const sagas = [entryFlow, applyFlow, requestsSaga, messageLoop, errorTip];
+const sagas = [entryFlow, applyFlow, requestsSaga, messageLoop, errorTip, infoChange];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
