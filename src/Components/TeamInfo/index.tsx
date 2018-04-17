@@ -128,7 +128,7 @@ const TeamInfo = (props: TeamInfoProps) => {
           dataIndex="isAccepted"
           key="status"
           // tslint:disable-next-line:jsx-no-lambda
-          render={(is: boolean) => (is ? '已通过' : '未通过')}
+          render={(is: boolean | null) => (is === null ? '审核中' : is ? '已通过' : '未通过')}
         />
         <Column title="学校" dataIndex="school" key="school" />
         {/*tslint:disable-next-line:jsx-no-multiline-js */}

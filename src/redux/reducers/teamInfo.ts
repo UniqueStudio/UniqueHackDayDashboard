@@ -10,7 +10,7 @@ const initialState = {
   teamLeader: {
     username: '',
     name: '',
-    isAccepted: false,
+    isAccepted: null,
     school: '',
   },
   members: [],
