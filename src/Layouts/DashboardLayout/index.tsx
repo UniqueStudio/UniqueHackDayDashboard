@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import noop from 'lodash-es/noop';
 import classnames from 'classnames';
@@ -92,18 +93,20 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
               </a>
             </span>
           </Menu.Item>
-          <Menu.Item key="#/project">
-            <Icon type="book" />
-            <span>
-              <a
-                className={cls['sider-link']}
-                data-key="/project"
-                onClick={this.handleMenuItemClick}
-              >
-                比赛项目
-              </a>
-            </span>
-          </Menu.Item>
+          {false && (
+            <Menu.Item key="#/project">
+              <Icon type="book" />
+              <span>
+                <a
+                  className={cls['sider-link']}
+                  data-key="/project"
+                  onClick={this.handleMenuItemClick}
+                >
+                  比赛项目
+                </a>
+              </span>
+            </Menu.Item>
+          )}
           <Menu.Item key="#/admin" style={{ display: 'none' }}>
             <Icon type="eye-o" />
             <span>
