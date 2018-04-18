@@ -173,78 +173,76 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   }
 }
 
-export default connect(
-  (state: RootState) => {
-    return {
-      loginData: state.loginForm.data,
-      registerData: state.registerForm.data,
-      resetPwdData: state.resetPwdForm.data,
+const mapStateToProps = (state: RootState) => {
+  return {
+    loginData: state.loginForm.data,
+    registerData: state.registerForm.data,
+    resetPwdData: state.resetPwdForm.data,
 
-      registerSubmitting: state.registerForm.isSubmitting,
-      loginSubmitting: state.loginForm.isSubmitting,
-      resetPwdSubmitting: state.resetPwdForm.isSubmitting,
+    registerSubmitting: state.registerForm.isSubmitting,
+    loginSubmitting: state.loginForm.isSubmitting,
+    resetPwdSubmitting: state.resetPwdForm.isSubmitting,
 
-      resetPwdSMSSubmitting: state.smsLoading,
-      registerSMSSubmitting: state.smsLoading,
+    resetPwdSMSSubmitting: state.smsLoading,
+    registerSMSSubmitting: state.smsLoading,
 
-      registerError: state.registerForm.error,
-      loginError: state.loginForm.error,
-      resetPwdError: state.resetPwdForm.error,
+    registerError: state.registerForm.error,
+    loginError: state.loginForm.error,
+    resetPwdError: state.resetPwdForm.error,
 
-      loggedIn: state.auth.loggedIn,
-    };
+    loggedIn: state.auth.loggedIn,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => ({
+  onLoginFormChange(value: any) {
+    dispatch({
+      type: 'LOGIN_FORM_CHANGE',
+      payload: value,
+    });
   },
-  dispatch => ({
-    onLoginFormChange(value: any) {
-      dispatch({
-        type: 'LOGIN_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onLoginSubmit(token: string) {
-      dispatch({
-        type: TYPE.LOGIN_FORM_SUBMIT._,
-        payload: token,
-      });
-    },
+  onLoginSubmit(token: string) {
+    dispatch({
+      type: TYPE.LOGIN_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+  onRegisterFormChange(value: any) {
+    dispatch({
+      type: 'REGISTER_FORM_CHANGE',
+      payload: value,
+    });
+  },
+  onRegisterSubmit(token: string) {
+    dispatch({
+      type: TYPE.REGISTER_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+  onRegisterSMSSubmit(token: string) {
+    dispatch({
+      type: TYPE.REGISITER_SEND_SMS_SUBMIT._,
+      payload: token,
+    });
+  },
+  onResetPwdSMSSubmit(token: string) {
+    dispatch({
+      type: TYPE.RESET_PWD_SEND_SMS_SUBMIT._,
+      payload: token,
+    });
+  },
+  onResetPwdFormChange(value: any) {
+    dispatch({
+      type: 'RESET_PWD_FORM_CHANGE',
+      payload: value,
+    });
+  },
+  onResetPwdSubmit(token: string) {
+    dispatch({
+      type: TYPE.RESET_PWD_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+});
 
-    onRegisterFormChange(value: any) {
-      dispatch({
-        type: 'REGISTER_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onRegisterSubmit(token: string) {
-      dispatch({
-        type: TYPE.REGISTER_FORM_SUBMIT._,
-        payload: token,
-      });
-    },
-
-    onRegisterSMSSubmit(token: string) {
-      dispatch({
-        type: TYPE.REGISITER_SEND_SMS_SUBMIT._,
-        payload: token,
-      });
-    },
-    onResetPwdSMSSubmit(token: string) {
-      dispatch({
-        type: TYPE.RESET_PWD_SEND_SMS_SUBMIT._,
-        payload: token,
-      });
-    },
-
-    onResetPwdFormChange(value: any) {
-      dispatch({
-        type: 'RESET_PWD_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onResetPwdSubmit(token: string) {
-      dispatch({
-        type: TYPE.RESET_PWD_FORM_SUBMIT._,
-        payload: token,
-      });
-    },
-  }),
-)(WithRecaptcha(LoginView));
+export default connect(mapStateToProps, mapDispatchToProps)(WithRecaptcha(LoginView));

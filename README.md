@@ -25,5 +25,22 @@ represent the layout.
 
 ## Build Tools
 
-I use parcel-bundler as the packager in this project.
+Use parcel-bundler as the packager in this project.
 Parcel is easy to use and fast.
+
+## Author
+
+Frontend:
+
+* [fareaway](https://github.com/farawaaay)
+
+* [LLGZONE](https://github.com/LLGZONE)
+
+Backend:
+
+* [NekodRider](https://github.com/NekodRider)
+* [ver217](https://github.com/ver217)
+
+PM && Designer
+
+* [fredliang44](https://github.com/fredliang44)
