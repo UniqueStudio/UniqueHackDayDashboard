@@ -53,12 +53,23 @@ class GlobalHeader extends React.Component<{
           </Menu.Item>
           {this.props.loggedIn && this.renderUserMenu()}
         </Menu>
+        {!this.props.loggedIn && this.renderGithubAchor()}
       </Layout.Header>
     );
   }
 
   renderLeftIcon() {
     return <div className={cls['header-left-icon']} />;
+  }
+
+  renderGithubAchor() {
+    return (
+      <div className={cls['header-right-icon']}>
+        <a href="https://github.com/UniqueStudio/UniqueHackDayDashboard">
+          <Icon type="github" style={{ fontSize: '1rem' }} />
+        </a>
+      </div>
+    );
   }
 
   handleClear = (tableTitle: string) => {
