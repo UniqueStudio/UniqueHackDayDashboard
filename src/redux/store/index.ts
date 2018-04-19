@@ -11,7 +11,8 @@ import SagaManager from '../sagas';
 export const history: History = createHistory();
 export const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
-  (process.env.NODE_ENV === 'development' &&
+  ((process.env.NODE_ENV === 'development' ||
+    window.location.host.includes('console.fredliang.cn')) &&
     (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
   compose;
 
