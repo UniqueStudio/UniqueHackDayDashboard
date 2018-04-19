@@ -56,6 +56,7 @@ const reqTips = {
   SET_MSG_READ:          ['设为已读失败', 'Failed to set as read'][language],
   DELETE_MSG:            ['删除消息失败', 'Failed to delete message'][language],
   CONFIRM_APPLY:         ['确认报名失败', 'Failed to confirm apply'][language],
+  ABORT_CONFIRMATION:    ['退出比赛失败', 'Failed to quit the hackday'][language],
   DELETE_TEAM_MEMBER:    ['移除队员失败', 'Failed to remove team member'][language],
   EXIT_TEAM:             ['退出队伍失败', 'Failed to exit team'][language],
   DELETE_TEAM:           ['解散队伍失败', 'Failed to dessolute team'][language],

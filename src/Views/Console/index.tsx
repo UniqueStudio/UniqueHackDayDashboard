@@ -8,9 +8,14 @@ import Status from '../../Components/Status';
 import TeamInfo from '../../Components/TeamInfo';
 import HackdayProgress from '../../Components/HackdayProgress';
 import { RootState } from '../../redux/reducers';
+import * as TYPE from '../../redux/actions';
 // import { connect } from 'react-redux';
 
-class Console extends React.Component<{ userIsAccepted: boolean | null; push: typeof push }> {
+class Console extends React.Component<{
+  userIsAccepted: boolean | null;
+  push: typeof push;
+  abortCompetition: any;
+}> {
   renderDivider() {
     return <div style={{ height: '20px' }} />;
   }
@@ -44,7 +49,7 @@ class Console extends React.Component<{ userIsAccepted: boolean | null; push: ty
       <Button key={0} type="primary" onClick={this.redirectToTeam}>
         组队
       </Button>,
-      <Button key={1} type="danger">
+      <Button key={1} type="danger" onClick={this.props.abortCompetition}>
         退出比赛
       </Button>,
     ];
@@ -59,4 +64,9 @@ const mapStateToProps = ({ user }: RootState) => {
   };
 };
 
-export default connect(mapStateToProps, { push })(Console);
+export default connect(mapStateToProps, {
+  push,
+  abortCompetition() {
+    return { type: TYPE.ABORT_CONFIRM_SUBMIT._ };
+  },
+})(Console);

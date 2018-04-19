@@ -1,3 +1,4 @@
+import createActions from './createActions';
 // prettier-ignore
 export const LOAD_USER_INFO = {
   _: 'LOAD_USER_INFO',
@@ -81,10 +82,13 @@ export const CHANGE_IS_T_SUBMIT = {
 // prettier-ignore
 export const APPLY_CONFIRM_SUBMIT = {
   _:     'APPLY_CONFIRM_SUBMIT',
-  START: 'CAPPLY_CONFIRM_SUBMIT_START',
+  START: 'APPLY_CONFIRM_SUBMIT_START',
   OK:    'APPLY_CONFIRM_SUBMIT_OK',
   FAIL:  'APPLY_CONFIRM_SUBMIT_FAIL',
 }
+
+// 退出比赛
+export const ABORT_CONFIRM_SUBMIT = createActions('ABORT_CONFIRM_SUBMIT');
 
 // prettier-ignore
 export const LOAD_TEAM_INFO = {

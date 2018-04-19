@@ -332,7 +332,7 @@ declare namespace API {
       (
         req: RequestWithAuth<
           '/v1/user/hackday/confirmation',
-          'PUT',
+          'DELETE',
           {
             confirmation: boolean;
           }

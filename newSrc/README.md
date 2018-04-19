@@ -15,7 +15,7 @@ modules 下面为各个模块，每个 module 下面分为以下文件
 
 固有 module:
 
-* sevices(处理前后端交互的, 任何前后端交互的问题都从这里来找)
+* services(处理前后端交互的, 任何前后端交互的问题都从这里来找)
 * store
 
 对于整体结构有任何的疑问或者建议可以提 [issue](https://github.com/UniqueStudio/UniqueHackDayDashboard/issues)
