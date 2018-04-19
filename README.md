@@ -17,6 +17,8 @@ represent the layout.
 
 `Views` are components connected to the redux store.
 
+**We are doing refactoring now, you can see it in [newSrc](./newSrc) folder**
+
 ## Principles
 
 1.  All side-effects must be handled by redux-saga middleware.
@@ -27,6 +29,8 @@ represent the layout.
 
 Use parcel-bundler as the packager in this project.
 Parcel is easy to use and fast.
+
+## Attention
 
 ## Author
 
