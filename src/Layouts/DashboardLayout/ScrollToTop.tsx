@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 
-class ScrollToTop extends React.Component<{ location: any; scrollToTop: () => void }> {
-  componentDidUpdate(prevProps: any) {
+interface ScrollToTopProps extends RouteComponentProps<{}> {
+  scrollToTop: () => void;
+}
+
+class ScrollToTop extends React.Component<ScrollToTopProps> {
+  componentDidUpdate(prevProps: ScrollToTopProps) {
     const { scrollToTop } = this.props;
 
     if (this.props.location !== prevProps.location) {
