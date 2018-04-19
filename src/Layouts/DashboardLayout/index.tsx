@@ -11,6 +11,7 @@ import message from 'antd/es/message';
 import cls from './layout.less';
 
 import GlobalHeader from '../../Views/GlobalHeader/index';
+import ScrollToTop from './ScrollToTop';
 
 export interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -28,9 +29,13 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
     onUserAvatarClick: noop,
     onUserMsgClick: noop,
   };
+  contentWrapperRef: any;
 
   state = {
     collapsed: false,
+  };
+  scrollToTop = () => {
+    this.contentWrapperRef && this.contentWrapperRef.scrollTo(0, 0);
   };
 
   handleCollapse = (collapsed: boolean) => {
@@ -43,8 +48,11 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
         {this.renderSider()}
         <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
           <GlobalHeader />
-
-          <div className={cls['content-wrapper']}>{this.props.children}</div>
+          <ScrollToTop scrollToTop={this.scrollToTop}>
+            <div ref={ele => (this.contentWrapperRef = ele)} className={cls['content-wrapper']}>
+              {this.props.children}
+            </div>
+          </ScrollToTop>
         </Layout.Content>
       </Layout>
     );

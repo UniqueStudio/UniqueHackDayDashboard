@@ -4,11 +4,14 @@ import { take, fork, put } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import Message from 'antd/es/message';
 import * as TYPE from '../actions';
+import { joinTeam } from '../../lib/requests';
 
 function* infoChange() {
   while (true) {
     yield take(TYPE.DETAIL_FORM_SUBMIT.OK);
     Message.success('编辑成功');
+    yield delay(100);
+    yield put(push('/'));
   }
 }
 
@@ -21,7 +24,15 @@ function* resetSuccess() {
   }
 }
 
+function* joinTeamSuccess() {
+  while (true) {
+    yield take(TYPE.JOIN_TEAM_FORM_SUBMIT.OK);
+    window.location.reload();
+  }
+}
+
 export default function*() {
   yield fork(infoChange);
   yield fork(resetSuccess);
+  yield fork(joinTeamSuccess);
 }
