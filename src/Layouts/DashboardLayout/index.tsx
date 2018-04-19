@@ -35,7 +35,8 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
     collapsed: false,
   };
   scrollToTop = () => {
-    this.contentWrapperRef && this.contentWrapperRef.scrollTo(0, 0);
+    this.contentWrapperRef.scrollTo(0, 0);
+    return true;
   };
 
   handleCollapse = (collapsed: boolean) => {

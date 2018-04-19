@@ -4,7 +4,6 @@ import { take, fork, put } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import Message from 'antd/es/message';
 import * as TYPE from '../actions';
-import { joinTeam } from '../../lib/requests';
 
 function* infoChange() {
   while (true) {
