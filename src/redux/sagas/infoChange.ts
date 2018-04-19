@@ -23,15 +23,7 @@ function* resetSuccess() {
   }
 }
 
-function* joinTeamSuccess() {
-  while (true) {
-    yield take(TYPE.JOIN_TEAM_FORM_SUBMIT.OK);
-    window.location.reload();
-  }
-}
-
 export default function*() {
   yield fork(infoChange);
   yield fork(resetSuccess);
-  yield fork(joinTeamSuccess);
 }

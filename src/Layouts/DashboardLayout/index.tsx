@@ -29,14 +29,15 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
     onUserAvatarClick: noop,
     onUserMsgClick: noop,
   };
-  contentWrapperRef: any;
+  contentWrapperRef!: HTMLDivElement | null;
 
   state = {
     collapsed: false,
   };
   scrollToTop = () => {
-    this.contentWrapperRef.scrollTo(0, 0);
-    return true;
+    if (this.contentWrapperRef) {
+      this.contentWrapperRef.scrollTo(0, 0);
+    }
   };
 
   handleCollapse = (collapsed: boolean) => {
