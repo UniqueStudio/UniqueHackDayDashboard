@@ -158,7 +158,7 @@ export default function*() {
       data.teamLeaderPhone.value,
       username,
     );
-    if (teamId) {
+    if (teamId !== null) {
       yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK, payload: teamId });
       return;
     }
