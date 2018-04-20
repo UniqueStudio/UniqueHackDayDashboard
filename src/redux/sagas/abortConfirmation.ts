@@ -4,16 +4,14 @@ import Message from 'antd/es/message';
 import * as TYPE from '../actions';
 
 function* abortConfirmation() {
-  while (true) {
-    yield takeLatest(TYPE.ABORT_CONFIRM_SUBMIT._, function*() {
-      const [status, msg] = yield call(abortConfirm);
-      if (status === true) {
-        window.location.reload();
-      } else {
-        Message.error(msg);
-      }
-    });
-  }
+  yield takeLatest(TYPE.ABORT_CONFIRM_SUBMIT._, function*() {
+    const [status, msg] = yield call(abortConfirm);
+    if (status === true) {
+      window.location.reload();
+    } else {
+      Message.error(msg);
+    }
+  });
 }
 
 export default abortConfirmation;
