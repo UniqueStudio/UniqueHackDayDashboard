@@ -42,7 +42,7 @@ export interface TeamUpViewProps {
 
 class TeamUpView extends React.Component<TeamUpViewProps> {
   state = {
-    formIndex: 0,
+    formIndex: !this.props.teamUpSkippable ? 0 : 1,
   };
 
   handleSubmit = () => void 0;
@@ -64,14 +64,18 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
     return (
       <div style={{ marginTop: '20px' }}>
         <Form.Item {...this.formItemLayout} label="我的角色:">
-          <Radio.Group defaultValue="0" onChange={this.handleRadioChange}>
-            <Radio.Button value="0">队长</Radio.Button>
-            <Radio.Button value="1">队员</Radio.Button>
-            {!this.props.teamUpSkippable && <Radio.Button value="2">暂不组队</Radio.Button>}
+          <Radio.Group
+            defaultValue={'' + this.state.formIndex}
+            onChange={this.handleRadioChange}
+            disabled={this.props.joinTeamSubmitting || this.props.newTeamSubmitting}
+          >
+            {!this.props.teamUpSkippable && <Radio.Button value="0">暂不组队</Radio.Button>}
+            <Radio.Button value="1">队长</Radio.Button>
+            <Radio.Button value="2">队员</Radio.Button>
           </Radio.Group>
         </Form.Item>
         {
-          [this.renderNewTeamForm(), this.renderJoinTeamForm(), this.renderNoTeamUp()][
+          [this.renderNoTeamUp(), this.renderNewTeamForm(), this.renderJoinTeamForm()][
             this.state.formIndex
           ]
         }
@@ -166,7 +170,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
             <Alert
               showIcon={true}
               type="warning"
-              description="我们推荐尽早组队，但是只要作品提交未结束你可以随时进行组队"
+              description="在比赛之前你可以随时进行组队"
               message="注意"
             />
             <Button
@@ -184,20 +188,20 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
 }
 
 export default connect(
-  ({ teamForm, loadingStatus, errorStatus, user }: RootState) => {
+  ({ newTeamForm, joinTeamForm, user }: RootState) => {
     return {
       newTeamData: {
-        teamName: teamForm.teamName,
+        teamName: newTeamForm.data.teamName,
       },
       joinTeamData: {
-        teamLeaderName: teamForm.teamLeaderName,
-        teamLeaderPhone: teamForm.teamLeaderPhone,
+        teamLeaderName: joinTeamForm.data.teamLeaderName,
+        teamLeaderPhone: joinTeamForm.data.teamLeaderPhone,
       },
 
-      newTeamSubmitting: loadingStatus.newTeamSubmitting,
-      newTeamError: errorStatus.newTeamError,
-      joinTeamSubmitting: loadingStatus.joinTeamSubmitting,
-      joinTeamError: errorStatus.joinTeamError,
+      newTeamSubmitting: newTeamForm.isSubmitting,
+      newTeamError: newTeamForm.error,
+      joinTeamSubmitting: joinTeamForm.isSubmitting,
+      joinTeamError: joinTeamForm.error,
 
       teamId: user.teamId,
     };

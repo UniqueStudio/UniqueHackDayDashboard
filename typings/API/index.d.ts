@@ -49,6 +49,7 @@ declare namespace API {
 
     UsernameExists = 'UsernameExists',
     PhoneExists = 'PhoneExists',
+    EmailExists = 'EmailExists',
     TeamNameExists = 'TeamNameExists',
     PhoneNotExists = 'PhoneNotExists',
     TeamNotExists = 'TeamNotExists',
@@ -106,9 +107,11 @@ declare namespace API {
       role: string[]; // 产品，设计，前端，后端，机器学习，硬件开发，其他
       skills: string[];
       hackdayTimes: number;
+      resumeToSponsor: boolean;
+      resumeForWork: boolean;
     }
 
-    interface UserData {
+    interface UserInfo {
       username: string;
       phone: string;
       name: string | null;
@@ -158,7 +161,7 @@ declare namespace API {
         | ResponseWithoutData<400, Message.PhoneExists>
         | ResponseWithoutData<400, Message.PhoneInvalid>
         | ResponseWithoutData<400, Message.CodeNotMatch>
-        | ResponseWithoutData<200, Message.Success>
+        | ResponseWithData<200, Message.Success, { token: string }>
       >;
 
       // 发短信
@@ -293,7 +296,7 @@ declare namespace API {
 
       (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
-        | ResponseWithData<200, Message.Success, UserData>
+        | ResponseWithData<200, Message.Success, UserInfo>
       >;
 
       (
@@ -329,7 +332,7 @@ declare namespace API {
       (
         req: RequestWithAuth<
           '/v1/user/hackday/confirmation',
-          'PUT',
+          'DELETE',
           {
             confirmation: boolean;
           }
@@ -360,9 +363,17 @@ declare namespace API {
     interface UserInTeam {
       username: string;
       name: string;
-      isAccepted: boolean;
+      isAccepted: boolean | null;
       school: string;
       email?: string;
+    }
+
+    interface TeamInfo {
+      teamName: string;
+      teamLeader: UserInTeam;
+      members: UserInTeam[];
+      createdTime: number;
+      prizeInfo: string;
     }
 
     interface RequestFunc {
@@ -474,17 +485,23 @@ declare namespace API {
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<400, Message.TeamNotExists>
         | ResponseWithoutData<403, Message.Forbidden>
-        | ResponseWithData<
-            200,
-            Message.Success,
-            {
-              name: string;
-              teamLeader: UserInTeam;
-              members: UserInTeam[];
-              createdTime: string;
-              prizeInfo: string;
-            }
-          >
+        | ResponseWithData<200, Message.Success, TeamInfo>
+      >;
+
+      // 解散队伍
+      (
+        req: RequestWithAuth<
+          '/v1/team/teams',
+          'DELETE',
+          {
+            teamId: number;
+          }
+        >,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, TeamInfo>
       >;
     }
   }
@@ -503,8 +520,15 @@ declare namespace API {
     enum MessageType {
       LoginElseWhere = 'LoginElseWhere', // 别处登录，被迫下线
       NewTeammate = 'NewTeammate', // 新的队友加入
+      TeamCreated = 'TeamCreated', // 成功创建队伍
+      TeamJoined = 'TeamJoined', // 成功加入队伍
+      ApplyComplete = 'ApplyComplete', // 您已成功报名unique hackday
       Accepted = 'Accepted', // 通过审核
       Rejected = 'Rejected', // 被拒绝参赛
+      ApplyNeedsConfirm = 'ApplyNeedsConfirm', // 请确认参赛
+      ApplyConfirmed = 'ApplyConfirmed', // 已确认参赛
+      ApplyCanceled = 'ApplyCanceled', // 已取消参赛
+      HackExited = 'HackExited', // 已退出比赛
       OtherMessage = 'OtherMessage',
     }
 
@@ -528,7 +552,59 @@ declare namespace API {
           id: number;
 
           type: MessageType.Accepted;
-          rejectedExtraMsg?: MessageValue;
+          acceptExtraMsg?: MessageValue;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.TeamCreated;
+          newTeamInfo: API.Team.TeamInfo;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.TeamJoined;
+          newTeamInfo: API.Team.TeamInfo;
+          time: number; // Timestamp=
+        }
+      | {
+          id: number;
+
+          type: MessageType.NewTeammate;
+          newTeammateInfo: API.Team.UserInTeam;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyComplete;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyNeedsConfirm;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyConfirmed;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.ApplyCanceled;
+          time: number; // Timestamp
+        }
+      | {
+          id: number;
+
+          type: MessageType.HackExited;
+          reason: MessageValue;
           time: number; // Timestamp
         }
       | {
@@ -537,13 +613,6 @@ declare namespace API {
           type: MessageType.OtherMessage;
           value: MessageValue;
           title: MessageValue;
-          time: number; // Timestamp
-        }
-      | {
-          id: number;
-
-          type: MessageType.NewTeammate;
-          newTeammateInfo: API.Team.UserInTeam;
           time: number; // Timestamp
         };
 

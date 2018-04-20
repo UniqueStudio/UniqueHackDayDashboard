@@ -1,10 +1,9 @@
 {
   "noIeCompat": true,
   "modifyVars": {
-    "primary-color": "#CD07CB",
+    "primary-color": "#3D4FB1",
     "success-color": "#44B800",
     "error-color": "#F00050",
-    "border-radius-base": "0px",
-    "border-radius-sm": "0px"
+    "btn-border-radius-base": "20px"
   }
 }

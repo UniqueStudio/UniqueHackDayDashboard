@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import noop from 'lodash-es/noop';
 import classnames from 'classnames';
@@ -10,6 +11,7 @@ import message from 'antd/es/message';
 import cls from './layout.less';
 
 import GlobalHeader from '../../Views/GlobalHeader/index';
+import ScrollToTop from './ScrollToTop';
 
 export interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -27,9 +29,15 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
     onUserAvatarClick: noop,
     onUserMsgClick: noop,
   };
+  contentWrapperRef!: HTMLDivElement | null;
 
   state = {
     collapsed: false,
+  };
+  scrollToTop = () => {
+    if (this.contentWrapperRef) {
+      this.contentWrapperRef.scrollTo(0, 0);
+    }
   };
 
   handleCollapse = (collapsed: boolean) => {
@@ -42,8 +50,11 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
         {this.renderSider()}
         <Layout.Content style={{ overflowX: 'auto' }} className={cls['content-header-wrapper']}>
           <GlobalHeader />
-
-          <div className={cls['content-wrapper']}>{this.props.children}</div>
+          <ScrollToTop scrollToTop={this.scrollToTop}>
+            <div ref={ele => (this.contentWrapperRef = ele)} className={cls['content-wrapper']}>
+              {this.props.children}
+            </div>
+          </ScrollToTop>
         </Layout.Content>
       </Layout>
     );
@@ -92,19 +103,21 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
               </a>
             </span>
           </Menu.Item>
-          <Menu.Item key="#/project">
-            <Icon type="book" />
-            <span>
-              <a
-                className={cls['sider-link']}
-                data-key="/project"
-                onClick={this.handleMenuItemClick}
-              >
-                比赛项目
-              </a>
-            </span>
-          </Menu.Item>
-          <Menu.Item key="#/admin">
+          {false && (
+            <Menu.Item key="#/project">
+              <Icon type="book" />
+              <span>
+                <a
+                  className={cls['sider-link']}
+                  data-key="/project"
+                  onClick={this.handleMenuItemClick}
+                >
+                  比赛项目
+                </a>
+              </span>
+            </Menu.Item>
+          )}
+          <Menu.Item key="#/admin" style={{ display: 'none' }}>
             <Icon type="eye-o" />
             <span>
               <a className={cls['sider-link']} data-key="/admin" onClick={this.handleMenuItemClick}>

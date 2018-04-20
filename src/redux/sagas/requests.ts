@@ -1,0 +1,298 @@
+import { takeLatest, put, call, select, takeEvery } from 'redux-saga/effects';
+import { AnyAction } from 'redux';
+
+import * as TYPE from '../actions';
+import * as req from '../../lib/requests';
+
+import { RootState } from '../reducers/index';
+
+export default function*() {
+  // load user infomation
+  yield takeLatest(TYPE.LOAD_USER_INFO._, function*() {
+    yield put({ type: TYPE.LOAD_USER_INFO.START });
+    const [userInfo] = yield call(req.getUserInfo);
+    if (userInfo) {
+      yield put({ type: TYPE.LOAD_USER_INFO.OK, payload: userInfo });
+      return;
+    }
+    yield put({ type: TYPE.LOAD_USER_INFO.FAIL });
+  });
+
+  // load user infomation
+  yield takeLatest(TYPE.LOAD_TEAM_INFO._, function*() {
+    yield put({ type: TYPE.LOAD_TEAM_INFO.START });
+    const { teamId } = yield select((state: RootState) => state.user);
+    const [teamInfo] = yield call(req.getTeamInfo, teamId);
+    if (teamInfo) {
+      yield put({ type: TYPE.LOAD_TEAM_INFO.OK, payload: teamInfo });
+      return;
+    }
+    yield put({ type: TYPE.LOAD_TEAM_INFO.FAIL });
+  });
+
+  // submit login form
+  type LoginReturnType = [string, undefined] | [null, string];
+  yield takeLatest(TYPE.LOGIN_FORM_SUBMIT._, function*(action: AnyAction) {
+    yield put({ type: TYPE.LOGIN_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.loginForm);
+    const [token, message]: LoginReturnType = yield call(
+      req.login,
+      data.username.value,
+      data.password.value,
+      action.payload, // antiRobotToken
+    );
+    if (token) {
+      if (data.autoLogin.value) {
+        localStorage.setItem('token', token);
+      }
+      yield put({ type: TYPE.LOGIN_FORM_SUBMIT.OK, payload: token });
+      return;
+    }
+    yield put({ type: TYPE.LOGIN_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  // submit register form
+  type RegReturnType = [string, undefined] | [null, string];
+  yield takeLatest(TYPE.REGISTER_FORM_SUBMIT._, function*(action: AnyAction) {
+    yield put({ type: TYPE.REGISTER_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.registerForm);
+    const [token, message]: RegReturnType = yield call(
+      req.register,
+      data.username.value,
+      data.password.value,
+      data.phone.value,
+      data.code.value,
+      action.payload, // antiRobotToken
+    );
+    if (token) {
+      yield put({ type: TYPE.REGISTER_FORM_SUBMIT.OK, payload: token });
+      return;
+    }
+    yield put({ type: TYPE.REGISTER_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.RESET_PWD_SEND_SMS_SUBMIT._, function*(action: AnyAction) {
+    yield put({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.resetPwdForm);
+    const [ok, message] = yield call(
+      req.resetPwdSendSMS,
+      data.phone.value,
+      action.payload, // antiRobotToken
+    );
+    if (ok) {
+      yield put({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.REGISITER_SEND_SMS_SUBMIT._, function*(action: AnyAction) {
+    yield put({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.registerForm);
+    const [ok, message] = yield call(
+      req.registerSendSMS,
+      data.phone.value,
+      action.payload, // antiRobotToken
+    );
+    if (ok) {
+      yield put({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.RESET_PWD_FORM_SUBMIT._, function*(action: AnyAction) {
+    yield put({ type: TYPE.RESET_PWD_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.resetPwdForm);
+    const [ok, message] = yield call(
+      req.resetPwdRequest,
+      data.phone.value,
+      data.code.value,
+      data.newPassword.value,
+      action.payload, // antiRobotToken
+    );
+    if (ok) {
+      yield put({ type: TYPE.RESET_PWD_FORM_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.RESET_PWD_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.DETAIL_FORM_SUBMIT._, function*() {
+    yield put({ type: TYPE.DETAIL_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.detailForm);
+    const [ok, message] = yield call(req.submitDetail, Object.keys(data).reduce(
+      (p, key) => ({
+        ...p,
+        [key]: data[key].value,
+      }),
+      {},
+    ) as any);
+    if (ok) {
+      yield put({ type: TYPE.DETAIL_FORM_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.DETAIL_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.NEW_TEAM_FORM_SUBMIT._, function*() {
+    yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START });
+    const { data } = yield select((state: RootState) => state.newTeamForm);
+    const [teamId, message] = yield call(req.createTeam, data.teamName.value);
+    if (teamId !== null) {
+      yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK, payload: teamId });
+      return;
+    }
+    yield put({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.JOIN_TEAM_FORM_SUBMIT._, function*() {
+    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START });
+    const [{ data }, username] = yield select((state: RootState) => [
+      state.joinTeamForm,
+      state.user.username,
+    ]);
+    const [teamId, message] = yield call(
+      req.joinTeam,
+      data.teamLeaderName.value,
+      data.teamLeaderPhone.value,
+      username,
+    );
+    if (teamId !== null) {
+      yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.OK, payload: teamId });
+      return;
+    }
+    yield put({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.CHANGE_IS_T_SUBMIT._, function*() {
+    yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.START });
+    const [ok, message] = yield call(req.changeIsT, true);
+    if (ok) {
+      yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.CHANGE_IS_T_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.APPLY_CONFIRM_SUBMIT._, function*() {
+    yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.START });
+    const [ok, message] = yield call(req.confirmApply, true);
+    if (ok) {
+      yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.OK });
+      return;
+    }
+    yield put({ type: TYPE.APPLY_CONFIRM_SUBMIT.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.GET_USER_DETAIL._, function*() {
+    yield put({ type: TYPE.GET_USER_DETAIL.START });
+    const [data, message] = yield call(req.getUserDetail);
+    if (data) {
+      yield put({
+        type: TYPE.GET_USER_DETAIL.OK,
+        payload: Object.keys(data).reduce((p, k) => {
+          return {
+            ...p,
+            [k]: {
+              value: data[k],
+              name: k,
+              touched: false,
+              validating: false,
+              dirty: false,
+            },
+          };
+        }, {}),
+      });
+      return;
+    }
+    yield put({ type: TYPE.GET_USER_DETAIL.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.GET_MSG_ALL._, function*() {
+    yield put({ type: TYPE.GET_MSG_ALL.START });
+    const [msg, message] = yield call(req.getReadMsgAll, true);
+    if (msg) {
+      yield put({ type: TYPE.GET_MSG_ALL.OK, payload: msg });
+      return;
+    }
+    yield put({ type: TYPE.GET_MSG_ALL.FAIL, payload: message });
+  });
+
+  yield takeLatest(TYPE.GET_UNREAD_MSG_ALL._, function*() {
+    yield put({ type: TYPE.GET_UNREAD_MSG_ALL.START });
+    const [msg, message] = yield call(req.getUnreadMsgAll, true);
+    if (msg) {
+      yield put({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: msg });
+      return;
+    }
+    yield put({ type: TYPE.GET_UNREAD_MSG_ALL.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.SET_MSG_READ._, function*(a: AnyAction) {
+    yield put({ type: TYPE.SET_MSG_READ.START });
+    const [ok, message] = yield call(req.setMsgRead, a.payload);
+    if (ok) {
+      yield put({ type: TYPE.SET_MSG_READ.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.SET_MSG_READ.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.DELETE_MSG._, function*(a: AnyAction) {
+    yield put({ type: TYPE.DELETE_MSG.START });
+    const [ok, message] = yield call(req.deleteMsg, a.payload);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_MSG.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_MSG.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.DELETE_TEAM_MEMBER._, function*(a: AnyAction) {
+    yield put({ type: TYPE.DELETE_TEAM_MEMBER.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.deleteTeamMember, a.payload, teamId);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_TEAM_MEMBER.OK, payload: a.payload });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_TEAM_MEMBER.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.EXIT_TEAM._, function*() {
+    yield put({ type: TYPE.EXIT_TEAM.START });
+    const [teamId, username] = yield select((state: RootState) => [
+      state.user.teamId,
+      state.user.username,
+    ]);
+    const [ok, message] = yield call(req.deleteTeamMember, username, teamId);
+    if (ok) {
+      yield put({ type: TYPE.EXIT_TEAM.OK, payload: username });
+      return;
+    }
+    yield put({ type: TYPE.EXIT_TEAM.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.DELETE_TEAM._, function*() {
+    yield put({ type: TYPE.DELETE_TEAM.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.deleteTeam, teamId);
+    if (ok) {
+      yield put({ type: TYPE.DELETE_TEAM.OK, payload: teamId });
+      return;
+    }
+    yield put({ type: TYPE.DELETE_TEAM.FAIL, payload: message });
+  });
+
+  yield takeEvery(TYPE.CHANGE_TEAM_LEADER._, function*(a: AnyAction) {
+    yield put({ type: TYPE.CHANGE_TEAM_LEADER.START });
+    const teamId = yield select((state: RootState) => state.user.teamId);
+    const [ok, message] = yield call(req.changeTeamLeader, a.payload, teamId);
+    if (ok) {
+      yield put({ type: TYPE.CHANGE_TEAM_LEADER.OK });
+      return;
+    }
+    yield put({ type: TYPE.CHANGE_TEAM_LEADER.FAIL, payload: message });
+  });
+}

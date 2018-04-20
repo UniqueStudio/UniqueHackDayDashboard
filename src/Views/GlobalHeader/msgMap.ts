@@ -1,20 +1,50 @@
 import { INoticeIconData } from 'ant-design-pro/es/NoticeIcon/NoticeIconTab';
-import { MsgDataSingle } from '../../redux/reducers/msg';
-// import closeCircleO from '../../assets/icons/close-circle-o.svg';
-// import error from '../../assets/icons/error.svg';
-import exclamation from '../../assets/icons/exclamation-circle.svg';
+import originGenIconImage, { IconType } from '../../lib/genIconImage';
+import memoize from 'lodash-es/memoize';
+import { SingleMessage } from '../../redux/reducers/msg';
 
-export default function msgMap(msg: MsgDataSingle): INoticeIconData {
-  const datetime = new Date(msg.time * 1000).toLocaleString();
-  if (msg.type === 'LoginElseWhere') {
-    return {
-      avatar: exclamation,
-      title: '异地登陆提醒',
-      description: `你的账号已于 ${datetime} 发生异地登陆异常，请注意防范账号安全。`,
-      datetime,
-      read: !msg.unread,
-    } as any;
+import locales from '../../lib/i18n';
+import { replace } from 'react-router-redux';
+import { noop } from 'redux-saga/utils';
+
+function fmtString(str: string, ...params: string[]) {
+  if (params.length === 0) {
+    return str;
   }
+  let i = 0;
+  while (str.indexOf('%s') >= 0) {
+    str = str.replace('%s', params[i++]);
+  }
+  return str;
+}
 
-  return {};
+const genIconImage = memoize(originGenIconImage);
+
+export default function msgMap(msg: SingleMessage): INoticeIconData {
+  const datetime = new Date(msg.time * 1000).toLocaleString();
+  switch (msg.type) {
+    case 'LoginElseWhere':
+      return {
+        id: msg.id,
+        avatar: genIconImage(IconType.ExclamationCircle, 'red'),
+        title: locales.messageTitles.LoginElseWhere,
+        description: locales.messageValues.LoginElseWhere,
+        datetime,
+        read: msg.read,
+        clickHandler: noop,
+      } as any;
+    case 'NewTeammate':
+      const teammate = msg.newTeammateInfo;
+      return {
+        id: msg.id,
+        avatar: genIconImage(IconType.QuestionCircle, '#FFAF40'),
+        title: locales.messageTitles.NewTeammate,
+        description: fmtString(locales.messageValues.NewTeammate, teammate.name, teammate.username),
+        datetime,
+        read: msg.read,
+        clickHandler: (dispatch: any) => dispatch(replace('/team')),
+      } as any;
+    default:
+      return {};
+  }
 }

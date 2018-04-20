@@ -1,80 +1,31 @@
-import { take, fork, cancel, all } from 'redux-saga/effects';
+import { take, fork, cancel } from 'redux-saga/effects';
 
 import { SagaMiddleware } from 'redux-saga';
 import { Store } from 'redux';
-import {
-  ForkEffect,
-  PutEffect,
-  SelectEffect,
-  AllEffect,
-  TakeEffect,
-  CallEffect,
-} from 'redux-saga/effects';
-export { ForkEffect, PutEffect, SelectEffect, AllEffect, TakeEffect, CallEffect };
 import { RootState } from '../reducers';
 
-import {
-  loginSaga,
-  registerSaga,
-  userInfoSaga,
-  // userInfoLoopSaga,
-  resetPwdSaga,
-  logoutSaga,
-} from './user';
-import { registerSMSSaga, resetPwdSMSSaga } from './sms-send';
-import {
-  joinTeamSaga,
-  newTeamSaga,
-  detailSaga,
-  applyConfirmSaga,
-  applyProcessSaga,
-  teamStatusSaga,
-} from './apply';
-import { msgPollSaga, showMsg, setReadAllSaga, deleteAllSaga } from './msg';
-
-export function* entrySaga() {
-  yield all([
-    // about user
-    loginSaga(),
-    registerSaga(),
-    userInfoSaga(),
-
-    // something about sms
-    registerSMSSaga(),
-    resetPwdSMSSaga(),
-  ]);
-}
-
-export function* appSaga() {
-  yield take('SET_LOGGED_IN');
-  // below are sagas only run after logged in
-  yield all([
-    // userInfoLoopSaga(),
-    resetPwdSaga(),
-    logoutSaga(),
-
-    // about apply
-    detailSaga(),
-    joinTeamSaga(),
-    newTeamSaga(),
-
-    // msg
-    msgPollSaga(),
-    showMsg(),
-    setReadAllSaga(),
-    deleteAllSaga(),
-    applyProcessSaga(),
-    applyConfirmSaga(),
-    teamStatusSaga(),
-  ]);
-}
+import requestsSaga from '../sagas/requests';
+import entryFlow from '../sagas/entry-flow';
+import applyFlow from '../sagas/apply-flow';
+import messageLoop from '../sagas/msg-loop';
+import errorTip from './error-tip';
+import infoChange from './infoChange';
+import abortConfirmation from './abortConfirmation';
 
 // for scaleable
-const sagas = [entrySaga, appSaga];
+const sagas = [
+  entryFlow,
+  applyFlow,
+  requestsSaga,
+  messageLoop,
+  errorTip,
+  infoChange,
+  abortConfirmation,
+];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
-function createAbortableSaga(saga: typeof appSaga) {
+function createAbortableSaga(saga: any) {
   if (process.env.NODE_ENV === 'development') {
     return function*() {
       const sagaTask = yield fork(saga);
@@ -98,6 +49,3 @@ const SagaManager = {
 };
 
 export default SagaManager;
-
-const iter = entrySaga();
-(window as any).iter = iter;

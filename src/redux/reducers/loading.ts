@@ -1,39 +1,44 @@
 import { AnyAction } from 'redux';
+import * as TYPE from '../actions';
 
-export interface LoadingStatus {
-  // loginSubmitting: boolean;
-  // registerSubmitting: boolean;
-  // resetPwdSMSSubmitting: boolean;
-  // registerSMSSubmitting: boolean;
+export default function loadingCount(state: number = 0, action: AnyAction) {
+  switch (action.type) {
+    case TYPE.LOAD_USER_INFO.START:
+      return ++state;
+    case TYPE.LOAD_USER_INFO.OK:
+      return --state;
+    case TYPE.LOAD_USER_INFO.FAIL:
+      return --state;
 
-  // loginStatusLoading: boolean;
+    case TYPE.LOAD_TEAM_INFO.START:
+      return ++state;
+    case TYPE.LOAD_TEAM_INFO.OK:
+      return --state;
+    case TYPE.LOAD_TEAM_INFO.FAIL:
+      return --state;
 
-  // newTeamSubmitting: boolean;
-  [k: string]: boolean;
-}
+    case TYPE.GET_USER_DETAIL.START:
+      return ++state;
+    case TYPE.GET_USER_DETAIL.OK:
+      return --state;
+    case TYPE.GET_USER_DETAIL.FAIL:
+      return --state;
 
-export default function loadingStatus(
-  state: LoadingStatus = {
-    // loginSubmitting: false,
-    // registerSubmitting: false,
-    // resetPwdSMSSubmitting: false,
-    // registerSMSSubmitting: false,
-    // loginStatusLoading: false,
-    // newTeamSubmitting: false,
-  },
-  action: AnyAction,
-) {
-  const regexp = /^([A-Z_]+?)_(SMS_)?(LOAD|SUBMIT)_(START|END)$/;
-  const [, type, isSMS, tag, op] = action.type.match(regexp) || new Array(5);
+    case TYPE.GET_MSG_ALL.START:
+      return ++state;
+    case TYPE.GET_MSG_ALL.OK:
+      return --state;
+    case TYPE.GET_MSG_ALL.FAIL:
+      return --state;
 
-  if (op && type) {
-    return {
-      ...state,
-      [`${type.toLowerCase().replace(/_[a-z]/g, (e: string) => e[1].toUpperCase())}${
-        isSMS ? 'SMS' : ''
-      }${tag === 'LOAD' ? 'Loading' : 'Submitting'}`]:
-        op === 'START',
-    };
+    case TYPE.GET_UNREAD_MSG_ALL.START:
+      return ++state;
+    case TYPE.GET_UNREAD_MSG_ALL.OK:
+      return --state;
+    case TYPE.GET_UNREAD_MSG_ALL.FAIL:
+      return --state;
+
+    default:
+      return state;
   }
-  return state;
 }

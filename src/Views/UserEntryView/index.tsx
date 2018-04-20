@@ -1,7 +1,9 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as TYPE from '../../redux/actions/index';
 import { RootState } from '../../redux/reducers';
+import { LoginForm, RegisterForm, ResetPwdForm } from '../../redux/reducers/forms';
 
 import Card from 'antd/es/card';
 import Tabs from 'antd/es/tabs';
@@ -25,9 +27,9 @@ export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
   recaptchaReady: boolean;
 
-  loginData: any;
-  registerData: any;
-  resetPwdData: any;
+  loginData: LoginForm['data'];
+  registerData: RegisterForm['data'];
+  resetPwdData: ResetPwdForm['data'];
 
   onLoginFormChange: (keyValue: { [k: string]: any }) => any;
   onRegisterFormChange: (keyValue: { [k: string]: any }) => any;
@@ -100,8 +102,12 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             noLayout={true}
             message={registerError ? { ...registerError, type: 'error' } : undefined}
           >
-            <Username validator={usernameValidator} noLayout={true} />
-            <Password noLayout={true} />
+            <Username
+              validator={usernameValidator}
+              noLayout={true}
+              tip="允许4～16位字母、数字和下划线组合"
+            />
+            <Password noLayout={true} tip="允许6～16位字母、数字和符号组合" />
             <Phone validator={phoneValidator} noLayout={true} />
             <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSSubmitting} />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
@@ -167,80 +173,76 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   }
 }
 
-export default connect(
-  (state: RootState) => {
-    return {
-      loginData: {
-        ...state.login,
-      },
-      registerData: {
-        ...state.register,
-      },
-      resetPwdData: {
-        ...state.resetPwd,
-      },
-      registerSubmitting: state.loadingStatus.registerSubmitting,
-      loginSubmitting: state.loadingStatus.loginSubmitting,
-      resetPwdSubmitting: state.loadingStatus.resetPwdSubmitting,
+const mapStateToProps = (state: RootState) => {
+  return {
+    loginData: state.loginForm.data,
+    registerData: state.registerForm.data,
+    resetPwdData: state.resetPwdForm.data,
 
-      resetPwdSMSSubmitting: state.loadingStatus.resetPwdSMSSubmitting,
-      registerSMSSubmitting: state.loadingStatus.registerSMSSubmitting,
+    registerSubmitting: state.registerForm.isSubmitting,
+    loginSubmitting: state.loginForm.isSubmitting,
+    resetPwdSubmitting: state.resetPwdForm.isSubmitting,
 
-      registerError: state.errorStatus.registerError,
-      loginError: state.errorStatus.loginError,
-      resetPwdError: state.errorStatus.resetPwdError,
+    resetPwdSMSSubmitting: state.smsLoading,
+    registerSMSSubmitting: state.smsLoading,
 
-      loggedIn: state.auth.loggedIn,
-    };
+    registerError: state.registerForm.error,
+    loginError: state.loginForm.error,
+    resetPwdError: state.resetPwdForm.error,
+
+    loggedIn: state.auth.loggedIn,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => ({
+  onLoginFormChange(value: any) {
+    dispatch({
+      type: 'LOGIN_FORM_CHANGE',
+      payload: value,
+    });
   },
-  dispatch => ({
-    onLoginFormChange(value: any) {
-      dispatch({
-        type: 'LOGIN_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onLoginSubmit(token: string) {
-      dispatch({
-        type: 'LOGIN_FORM_SUBMIT',
-        payload: token,
-      });
-    },
-    onRegisterFormChange(value: any) {
-      dispatch({
-        type: 'REGISTER_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onRegisterSubmit(token: string) {
-      dispatch({
-        type: 'REGISTER_FORM_SUBMIT',
-        payload: token,
-      });
-    },
-    onRegisterSMSSubmit(token: string) {
-      dispatch({
-        type: 'REGISTER_FORM_SMS_SUBMIT',
-        payload: token,
-      });
-    },
-    onResetPwdFormChange(value: any) {
-      dispatch({
-        type: 'RESET_PWD_FORM_CHANGE',
-        payload: value,
-      });
-    },
-    onResetPwdSubmit(token: string) {
-      dispatch({
-        type: 'RESET_PWD_FORM_SUBMIT',
-        payload: token,
-      });
-    },
-    onResetPwdSMSSubmit(token: string) {
-      dispatch({
-        type: 'RESET_PWD_FORM_SMS_SUBMIT',
-        payload: token,
-      });
-    },
-  }),
-)(WithRecaptcha(LoginView));
+  onLoginSubmit(token: string) {
+    dispatch({
+      type: TYPE.LOGIN_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+  onRegisterFormChange(value: any) {
+    dispatch({
+      type: 'REGISTER_FORM_CHANGE',
+      payload: value,
+    });
+  },
+  onRegisterSubmit(token: string) {
+    dispatch({
+      type: TYPE.REGISTER_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+  onRegisterSMSSubmit(token: string) {
+    dispatch({
+      type: TYPE.REGISITER_SEND_SMS_SUBMIT._,
+      payload: token,
+    });
+  },
+  onResetPwdSMSSubmit(token: string) {
+    dispatch({
+      type: TYPE.RESET_PWD_SEND_SMS_SUBMIT._,
+      payload: token,
+    });
+  },
+  onResetPwdFormChange(value: any) {
+    dispatch({
+      type: 'RESET_PWD_FORM_CHANGE',
+      payload: value,
+    });
+  },
+  onResetPwdSubmit(token: string) {
+    dispatch({
+      type: TYPE.RESET_PWD_FORM_SUBMIT._,
+      payload: token,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WithRecaptcha(LoginView));
