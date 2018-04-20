@@ -36,7 +36,7 @@ Parcel is easy to use and fast.
 
 Frontend:
 
-* [fareaway](https://github.com/farawaaay)
+* [farawaaay](https://github.com/farawaaay)
 
 * [LLGZONE](https://github.com/LLGZONE)
 
