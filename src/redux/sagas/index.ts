@@ -10,9 +10,18 @@ import applyFlow from '../sagas/apply-flow';
 import messageLoop from '../sagas/msg-loop';
 import errorTip from './error-tip';
 import infoChange from './infoChange';
+import abortConfirmation from './abortConfirmation';
 
 // for scaleable
-const sagas = [entryFlow, applyFlow, requestsSaga, messageLoop, errorTip, infoChange];
+const sagas = [
+  entryFlow,
+  applyFlow,
+  requestsSaga,
+  messageLoop,
+  errorTip,
+  infoChange,
+  abortConfirmation,
+];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 

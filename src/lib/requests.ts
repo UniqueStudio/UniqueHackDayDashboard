@@ -269,6 +269,17 @@ export async function confirmApply() {
   return [false, `${locales.CONFIRM_APPLY}: ${locales[res.message]}`];
 }
 
+export async function abortConfirm() {
+  const res = await request({
+    endpoint: '/v1/user/hackday/confirmation',
+    method: 'DELETE',
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `${locales.ABORT_CONFIRMATION}: ${locales[res.message]}`];
+}
+
 export async function deleteTeamMember(username: string, teamId: number) {
   const res = await request({
     endpoint: '/v1/team/members',
