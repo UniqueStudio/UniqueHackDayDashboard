@@ -6,7 +6,8 @@ import createHistory from 'history/createHashHistory';
 import { History } from 'history';
 
 import reducer, { RootState } from '../reducers';
-import SagaManager from '../sagas';
+// import SagaManager from '../sagas';
+import sideEffect from '../middleware/io';
 
 export const history: History = createHistory();
 export const sagaMiddleware = createSagaMiddleware();
@@ -18,13 +19,13 @@ const composeEnhancers =
 
 const store: Store<RootState> = createStore(
   reducer,
-  composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
+  composeEnhancers(applyMiddleware(routerMiddleware(history), sideEffect)),
 );
 
-SagaManager.startSagas(sagaMiddleware);
+// SagaManager.startSagas(sagaMiddleware);
 
-document.addEventListener('unload', () => {
-  SagaManager.cancelSagas(store);
-});
+// document.addEventListener('unload', () => {
+//   SagaManager.cancelSagas(store);
+// });
 
 export default store;
