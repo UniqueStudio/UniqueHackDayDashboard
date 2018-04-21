@@ -118,7 +118,7 @@ import * as TYPE from '../actions';
 //   };
 // }
 
-import differenceBy from 'lodash-es/differenceBy';
+import differenceBy from 'lodash.differenceby';
 // import uniq from 'lodash-es/uniq';
 
 export interface MessageData {
