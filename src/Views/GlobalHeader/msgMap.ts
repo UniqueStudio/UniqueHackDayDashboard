@@ -1,6 +1,6 @@
 import { INoticeIconData } from 'ant-design-pro/es/NoticeIcon/NoticeIconTab';
 import originGenIconImage, { IconType } from '../../lib/genIconImage';
-import memoize from 'lodash-es/memoize';
+import memoize from 'lodash.memoize';
 import { SingleMessage } from '../../redux/reducers/msg';
 
 import locales from '../../lib/i18n';

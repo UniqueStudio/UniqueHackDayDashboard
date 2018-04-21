@@ -2,7 +2,7 @@ import { take, select, race, call, put } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { RootState } from '../reducers/index';
 import { msgPoll } from '../../lib/requests';
-import throttle from 'lodash-es/throttle';
+import throttle from 'lodash.throttle';
 import { delay } from 'redux-saga';
 
 const throttledMsgPoll = throttle(msgPoll, 9 * 1000);

@@ -1,6 +1,6 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
-import noop from 'lodash-es/noop';
+import noop from 'lodash.noop';
 import classnames from 'classnames';
 
 import Layout from 'antd/es/layout';

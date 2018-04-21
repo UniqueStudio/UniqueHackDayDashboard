@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Recaptcha from 'react-recaptcha';
-import noop from 'lodash-es/noop';
+import noop from 'lodash.noop';
 
 export interface RecaptchaProps {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;

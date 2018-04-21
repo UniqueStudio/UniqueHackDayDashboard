@@ -5,7 +5,7 @@ import cls from './style.less';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers/index';
 import Message from 'antd/es/message';
-import debounce from 'lodash-es/debounce';
+import debounce from 'lodash.debounce';
 class GlobalLoading extends React.Component<{ isLoading: boolean }> {
   container: HTMLDivElement | null = null;
   blankRendered: boolean = false;

@@ -13,7 +13,7 @@ import { RootState } from '../../redux/reducers/index';
 import { TeamInfo } from '../../redux/reducers/teamInfo';
 import * as TYPE from '../../redux/actions';
 // import withLoading from '../../lib/withLoading';
-import noop from 'lodash-es/noop';
+import noop from 'lodash.noop';
 import { replace } from 'react-router-redux';
 
 const Description = DescriptionList.Description;

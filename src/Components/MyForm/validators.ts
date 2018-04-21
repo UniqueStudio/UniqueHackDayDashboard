@@ -1,4 +1,4 @@
-import debounce from 'lodash-es/debounce';
+import debounce from 'lodash.debounce';
 import request from '../../lib/API';
 import msg from '../../lib/i18n';
 
