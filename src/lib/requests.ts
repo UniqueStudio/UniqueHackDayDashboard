@@ -311,7 +311,7 @@ export async function deleteTeam(teamId: number) {
 
 export async function changeTeamLeader(username: string, teamId: number) {
   const res = await request({
-    endpoint: '/v1/team/team_leader',
+    endpoint: '/v1/team/leader',
     method: 'PUT',
     body: {
       username,

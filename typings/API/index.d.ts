@@ -439,7 +439,7 @@ declare namespace API {
       // 转移队长身份的接口，只有队长身份 / 管理员可以调用
       (
         req: RequestWithAuth<
-          '/v1/team/team_leader',
+          '/v1/team/leader',
           'PUT',
           {
             username: string;
