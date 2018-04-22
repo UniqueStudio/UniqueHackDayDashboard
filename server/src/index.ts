@@ -23,6 +23,7 @@ server.on('upgrade', (request, socket, head) => {
         const oldClient = clients[params.clientId];
         if (oldClient.reuseable) {
           oldClient.replaceWebSocket(ws);
+          oldClient.restore();
           return;
         }
       }

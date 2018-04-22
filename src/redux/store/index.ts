@@ -17,15 +17,11 @@ const composeEnhancers =
     (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
   compose;
 
-const store: Store<RootState> = createStore(
-  reducer,
-  composeEnhancers(applyMiddleware(routerMiddleware(history), sideEffect)),
-);
-
-// SagaManager.startSagas(sagaMiddleware);
-
-// document.addEventListener('unload', () => {
-//   SagaManager.cancelSagas(store);
-// });
+const store: Store<RootState> = createStore((state, action) => {
+  if (action.type === 'RESTORE') {
+    return action.payload;
+  }
+  return reducer(state, action);
+}, composeEnhancers(applyMiddleware(routerMiddleware(history), sideEffect)));
 
 export default store;

@@ -76,6 +76,10 @@
   dependencies:
     antd "*"
 
+"@types/bcryptjs@^2.4.1":
+  version "2.4.1"
+  resolved "http://registry.npm.taobao.org/@types/bcryptjs/download/@types/bcryptjs-2.4.1.tgz#7fb63922b5b106edacdcfe084cd38850f78aacfc"
+
 "@types/body-parser@*":
   version "1.16.8"
   resolved "http://registry.npm.taobao.org/@types/body-parser/download/@types/body-parser-1.16.8.tgz#687ec34140624a3bec2b1a8ea9268478ae8f3be3"
@@ -193,6 +197,12 @@
   dependencies:
     "@types/events" "*"
     "@types/mongodb" "*"
+    "@types/node" "*"
+
+"@types/node-fetch@^1.6.8":
+  version "1.6.8"
+  resolved "http://registry.npm.taobao.org/@types/node-fetch/download/@types/node-fetch-1.6.8.tgz#a59d8c75b300ddc3ca3eef23d449d677f9486c3d"
+  dependencies:
     "@types/node" "*"
 
 "@types/node@*":
@@ -1317,6 +1327,10 @@ bcrypt-pbkdf@^1.0.0:
   resolved "http://registry.npm.taobao.org/bcrypt-pbkdf/download/bcrypt-pbkdf-1.0.1.tgz#63bc5dcb61331b92bc05fd528953c33462a06f8d"
   dependencies:
     tweetnacl "^0.14.3"
+
+bcryptjs@^2.4.3:
+  version "2.4.3"
+  resolved "http://registry.npm.taobao.org/bcryptjs/download/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
 
 big.js@^3.1.3:
   version "3.2.0"
@@ -4030,6 +4044,10 @@ node-fetch@^1.0.1:
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
+
+node-fetch@^2.1.2:
+  version "2.1.2"
+  resolved "http://registry.npm.taobao.org/node-fetch/download/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
 
 node-forge@^0.7.1:
   version "0.7.5"

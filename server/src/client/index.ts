@@ -1,7 +1,8 @@
 import events from 'events';
 import WebSocket from 'ws';
+import handleSideEffect from './handleSideEffects';
 
-import { Store } from 'redux';
+import { Store, AnyAction } from 'redux';
 import { MemoryHistory } from 'history';
 import { RootState } from '../../../src/redux/reducers/index';
 import { createServerRedux } from '../../../src/redux/store/server';
@@ -27,23 +28,23 @@ export default class Client extends events.EventEmitter {
     });
   }
 
-  private handleMessage = (data: WebSocket.Data) => {
+  private handleMessage = async (data: WebSocket.Data) => {
     const actions: Actions.Action[] = JSON.parse(data.toString());
 
-    // const sideEffectAction = actions.pop()!;
+    const sideEffectAction = actions.pop()!;
     actions.forEach(action => this.store.dispatch(action));
 
-    this.handleSideEffect();
-    // this.emit('actions', actions);
+    const resultAction = await handleSideEffect(sideEffectAction, this.store.getState());
+
+    if (resultAction) {
+      this.store.dispatch(resultAction);
+      this.dispatch(resultAction);
+    }
   };
 
-  private handleSideEffect = (/* sideEffectAction: Actions.Action */) => {
-    // hehe
-  };
-
-  dispatch(action: Actions.Action) {
+  dispatch(action: AnyAction) {
     if (this.ws) {
-      this.ws.send(JSON.stringify(action));
+      this.ws.send(JSON.stringify([action]));
     }
   }
 
@@ -76,5 +77,13 @@ export default class Client extends events.EventEmitter {
       // closed but no longer then 1 minute
       this.ws.readyState === this.ws.CLOSED && Date.now() - this.closedTime <= 1000 * 60
     );
+  }
+
+  restore() {
+    // restore client after refresh
+    this.dispatch({
+      type: 'RESTORE',
+      payload: this.store.getState(),
+    });
   }
 }

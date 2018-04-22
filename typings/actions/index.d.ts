@@ -24,7 +24,7 @@ declare namespace Actions {
   }
 
   interface LoginFailAction {
-    type: 'LOGIN_Fail';
+    type: 'LOGIN_FAIL';
     payload: ErrorMessage.Login;
   }
 

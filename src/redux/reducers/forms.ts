@@ -75,6 +75,7 @@ export function detailForm(
           ...action.payload,
         },
       };
+    case TYPE.DETAIL_FORM_SUBMIT._:
     case TYPE.DETAIL_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.DETAIL_FORM_SUBMIT.OK:
@@ -133,6 +134,7 @@ export function loginForm(
         },
       };
 
+    case TYPE.LOGIN_FORM_SUBMIT._:
     case TYPE.LOGIN_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.LOGIN_FORM_SUBMIT.OK:
@@ -191,6 +193,7 @@ export function registerForm(
         },
       };
 
+    case TYPE.REGISTER_FORM_SUBMIT._:
     case TYPE.REGISTER_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.REGISTER_FORM_SUBMIT.OK:
@@ -246,6 +249,7 @@ export function resetPwdForm(
           phone: {},
         },
       };
+    case TYPE.RESET_PWD_FORM_SUBMIT._:
     case TYPE.RESET_PWD_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.RESET_PWD_FORM_SUBMIT.OK:
@@ -287,6 +291,7 @@ export function newTeamForm(
           ...action.payload,
         },
       };
+    case TYPE.NEW_TEAM_FORM_SUBMIT._:
     case TYPE.NEW_TEAM_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.NEW_TEAM_FORM_SUBMIT.OK:
@@ -336,6 +341,7 @@ export function joinTeamForm(
           ...action.payload,
         },
       };
+    case TYPE.JOIN_TEAM_FORM_SUBMIT._:
     case TYPE.JOIN_TEAM_FORM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.JOIN_TEAM_FORM_SUBMIT.OK:
@@ -357,6 +363,7 @@ export function joinTeamForm(
 
 export function smsLoading(state = false, action: AnyAction) {
   switch (action.type) {
+    case TYPE.REGISITER_SEND_SMS_SUBMIT._:
     case TYPE.REGISITER_SEND_SMS_SUBMIT.START:
       return true;
     case TYPE.REGISITER_SEND_SMS_SUBMIT.OK:
@@ -364,6 +371,7 @@ export function smsLoading(state = false, action: AnyAction) {
     case TYPE.REGISITER_SEND_SMS_SUBMIT.FAIL:
       return false;
 
+    case TYPE.RESET_PWD_SEND_SMS_SUBMIT._:
     case TYPE.RESET_PWD_SEND_SMS_SUBMIT.START:
       return true;
     case TYPE.RESET_PWD_SEND_SMS_SUBMIT.OK:
@@ -389,6 +397,7 @@ export function confirmApplyStatus(
   action: AnyAction,
 ) {
   switch (action.type) {
+    case TYPE.APPLY_CONFIRM_SUBMIT._:
     case TYPE.APPLY_CONFIRM_SUBMIT.START:
       return { ...state, isSubmitting: true };
     case TYPE.APPLY_CONFIRM_SUBMIT.OK:
