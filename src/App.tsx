@@ -50,10 +50,6 @@ class App extends React.Component {
       </Provider>
     );
   }
-
-  componentDidMount() {
-    store.dispatch({ type: 'LOAD_USER_INFO' });
-  }
 }
 
 export default App;

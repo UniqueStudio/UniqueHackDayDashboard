@@ -12,14 +12,16 @@ export default class Client extends events.EventEmitter {
   private ws: WebSocket;
   private history: MemoryHistory;
   private store: Store<RootState>;
+  private actionsHistory: AnyAction[];
 
   constructor(ws: WebSocket) {
     super();
     this.ws = ws;
+    this.actionsHistory = [];
     ws.on('message', this.handleMessage);
     ws.on('close', () => (this.closedTime = Date.now()));
 
-    const serverRedux = createServerRedux();
+    const serverRedux = createServerRedux(this.actionsLogger);
     this.history = serverRedux.serverHistory;
     this.store = serverRedux.serverStore;
 
@@ -29,9 +31,12 @@ export default class Client extends events.EventEmitter {
   }
 
   private handleMessage = async (data: WebSocket.Data) => {
-    const actions: Actions.Action[] = JSON.parse(data.toString());
-
-    const sideEffectAction = actions.pop()!;
+    const jsonData = JSON.parse(data.toString());
+    if (jsonData.token) {
+      return;
+    }
+    const actions: Actions.Action[] = jsonData;
+    const sideEffectAction = actions[actions.length - 1];
     actions.forEach(action => this.store.dispatch(action));
 
     const resultAction = await handleSideEffect(sideEffectAction, this.store.getState());
@@ -86,4 +91,15 @@ export default class Client extends events.EventEmitter {
       payload: this.store.getState(),
     });
   }
+
+  toJSON() {
+    return JSON.stringify({
+      state: this.store.getState(),
+      actionsHistory: this.actionsHistory,
+    });
+  }
+
+  private actionsLogger = (action: AnyAction) => {
+    this.actionsHistory.push(action);
+  };
 }

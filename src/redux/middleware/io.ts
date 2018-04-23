@@ -1,11 +1,12 @@
 import { Middleware, AnyAction } from 'redux';
 import * as TYPE from '../actions/index';
+import Message from 'antd/es/message';
+import LongConnection from '../../lib/LongConnection';
 
-const clientId = localStorage.getItem('clientId');
-const ws = new WebSocket(`ws://localhost:8080/${clientId ? `?clientId=${clientId}` : ''}`);
+const ws = new LongConnection();
 
 const sideEffect: Middleware = store => next => {
-  ws.addEventListener('message', ({ data }) => {
+  ws.on('message', data => {
     const jsonData = JSON.parse(data);
     if (Array.isArray(jsonData)) {
       /**
@@ -22,7 +23,18 @@ const sideEffect: Middleware = store => next => {
     }
   });
 
+  ws.once('terminate', () => {
+    Message.error('与服务器的链接已经断开，请尝试刷新', 0);
+  });
+
   let actionQueue: AnyAction[] = [];
+
+  window.addEventListener('unload', () => {
+    ws.send(JSON.stringify(bundleActions(actionQueue)));
+
+    actionQueue = [];
+  });
+
   return action => {
     actionQueue.push(action);
     /**
@@ -30,14 +42,9 @@ const sideEffect: Middleware = store => next => {
      * 打包纯的、重复的action
      */
     switch (action.type) {
-      case TYPE.LOAD_USER_INFO._:
       case TYPE.LOGIN_FORM_SUBMIT._:
       case TYPE.REGISTER_FORM_SUBMIT._:
-        if (ws.readyState !== ws.OPEN) {
-          ws.onopen = (data => () => ws.send(data))(JSON.stringify(batchActions(actionQueue)));
-        } else {
-          ws.send(JSON.stringify(batchActions(actionQueue)));
-        }
+        ws.send(JSON.stringify(bundleActions(actionQueue)));
 
         actionQueue = [];
         break;
@@ -49,7 +56,7 @@ const sideEffect: Middleware = store => next => {
 
 export default sideEffect;
 
-function batchActions(actions: AnyAction[]) {
+function bundleActions(actions: AnyAction[]) {
   const copyActions = actions.slice(0);
   return copyActions.reduce(
     (p, action) => {
