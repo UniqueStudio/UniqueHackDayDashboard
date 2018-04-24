@@ -2,11 +2,19 @@ import { AdminUser } from './userVerify';
 import { AnyAction } from 'redux';
 import * as TYPE from '../../actions';
 type userInfo = API.Admin.AdminUserInfo;
+<<<<<<< HEAD
 export interface AdminUser {
   items: userInfo[];
   isLoading: boolean;
   error: { value?: string; time?: number };
 }
+=======
+export type AdminUser = {
+  items: userInfo[];
+  isLoading: boolean;
+  error: { value?: string; time?: number };
+};
+>>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
 
 export default (
   state: AdminUser = { items: [], isLoading: false, error: {} },

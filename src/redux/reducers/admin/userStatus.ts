@@ -1,17 +1,30 @@
 import { AnyAction } from 'redux';
 import * as TYPE from '../../actions';
+<<<<<<< HEAD
 interface Status {
   username: string;
   state: 1 | 2 | 3;
 }
 export interface UserStatus {
   value: Status[];
+=======
+type status = {
+  username: string;
+  state: 1 | 2 | 3;
+};
+export interface userStatus {
+  value: status[];
+>>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
   isSubmitting: boolean;
   error: { value?: string; time?: number };
 }
 
 export default (
+<<<<<<< HEAD
   state: UserStatus = { value: [], isSubmitting: false, error: {} },
+=======
+  state: userStatus = { value: [], isSubmitting: false, error: {} },
+>>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
   action: AnyAction,
 ) => {
   switch (action.type) {
