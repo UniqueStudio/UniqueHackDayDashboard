@@ -117,7 +117,7 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
               </span>
             </Menu.Item>
           )}
-          <Menu.Item key="#/admin" style={{ display: 'none' }}>
+          <Menu.Item key="#/admin">
             <Icon type="eye-o" />
             <span>
               <a className={cls['sider-link']} data-key="/admin" onClick={this.handleMenuItemClick}>

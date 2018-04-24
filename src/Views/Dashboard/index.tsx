@@ -7,6 +7,7 @@ import DashboardLayout from '../../Layouts/DashboardLayout';
 import ConsoleView from '../Console';
 import TeamConsole from '../TeamConsole';
 import ApplyView from '../ApplyView';
+import Admin from '../Admin';
 import { replace } from 'react-router-redux';
 import OriginDetailView from '../DetailView/index';
 import Card from 'antd/es/card';
@@ -35,7 +36,7 @@ const Dashboard = (props: DashboardProps) => {
       <Switch>
         <Route path="/apply" component={ApplyView} />
         <Route path="/detail_edit" component={DetailView} />
-        {/* <Route path="/admin" component={} /> */}
+        <Route path="/admin" component={Admin} />
         {/* <Route path="/project" component={} /> */}
         <Route path="/team" component={isC ? TeamConsole : RedirectToApply} />
         <Route path="/" component={isC ? ConsoleView : RedirectToApply} />

@@ -323,3 +323,26 @@ export async function changeTeamLeader(username: string, teamId: number) {
   }
   return [false, `${locales.DELETE_TEAM}: ${locales[res.message]}`];
 }
+
+export async function adminLoadUsersInfo() {
+  const res = await request({
+    endpoint: '/v1/admin/verify/teams',
+    method: 'GET',
+  });
+  if (res.httpStatusCode === 200) {
+    return [res.data.items];
+  }
+  return [null, 'admin: 加载用户消息失败'];
+}
+
+export async function adminUserStateChange(stateList: API.Admin.AdminUserState[]) {
+  const res = await request({
+    endpoint: '/v1/admin/verify/change',
+    method: 'POST',
+    body: { value: stateList },
+  });
+  if (res.httpStatusCode === 200) {
+    return [true];
+  }
+  return [false, `admin: ${res.message}`];
+}

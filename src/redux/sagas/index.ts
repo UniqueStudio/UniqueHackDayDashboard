@@ -11,6 +11,7 @@ import messageLoop from '../sagas/msg-loop';
 import errorTip from './error-tip';
 import infoChange from './infoChange';
 import abortConfirmation from './abortConfirmation';
+import admin from './admin';
 
 // for scaleable
 const sagas = [
@@ -21,6 +22,7 @@ const sagas = [
   errorTip,
   infoChange,
   abortConfirmation,
+  admin,
 ];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';

@@ -653,5 +653,45 @@ declare namespace API {
     }
   }
 
-  type RequestFunc = User.RequestFunc & Team.RequestFunc & File.RequestFunc & Message.RequestFunc;
+  namespace Admin {
+    interface AdminUserInfo {
+      isLeader: boolean;
+      teamId: null | string;
+      name: string;
+      school: string;
+      city: string;
+      grade: string;
+      resume: any;
+      username: string;
+      edited: number;
+      verifyState: 0 | 1 | 2 | 3;
+    }
+    interface AdminUserState {
+      username: string;
+      state: 2 | 3;
+    }
+    interface RequestFunc {
+      (req: RequestWithAuth<'/v1/admin/verify/teams', 'GET', {}>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, { items: AdminUserInfo[] }>
+      >;
+
+      (
+        req: RequestWithAuth<'/v1/admin/verify/change', 'POST', { value: AdminUserState[] }>,
+      ): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithoutData<200, Message.Success>
+      >;
+    }
+  }
+
+  type RequestFunc = User.RequestFunc &
+    Team.RequestFunc &
+    File.RequestFunc &
+    Message.RequestFunc &
+    Admin.RequestFunc;
 }

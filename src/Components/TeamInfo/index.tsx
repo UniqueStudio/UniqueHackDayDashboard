@@ -38,7 +38,7 @@ export interface TeamInfoProps {
 const TeamInfo = (props: TeamInfoProps) => {
   const members = [props.teamInfo.teamLeader, ...props.teamInfo.members];
   const data = members.map((member, i) => ({
-    key: member.email || member.username || i,
+    key: member.username || i,
     name: member.name,
     username: member.username,
     isTeamLeader: props.teamInfo.teamLeader
@@ -133,9 +133,11 @@ const TeamInfo = (props: TeamInfoProps) => {
         <Column title="学校" dataIndex="school" key="school" />
         {/*tslint:disable-next-line:jsx-no-multiline-js */}
         {showTeamLeaderOperate && (
-          <Column title="操作" key="operating" render={renderTeamLeaderOperate} />
+          <Column title="操作" key="teamLeaderOperating" render={renderTeamLeaderOperate} />
         )}
-        {showMemberOperate && <Column title="操作" key="operating" render={renderMemberOperate} />}
+        {showMemberOperate && (
+          <Column title="操作" key="MemberOperating" render={renderMemberOperate} />
+        )}
       </Table>
     );
   };
