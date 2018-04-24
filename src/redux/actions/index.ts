@@ -192,3 +192,5 @@ export const DELETE_TEAM = {
   OK:    'DELETE_TEAM_OK',
   FAIL:  'DELETE_TEAM_FAIL',
 }
+
+export const SYNC_TOKEN = 'SYNC_TOKEN';

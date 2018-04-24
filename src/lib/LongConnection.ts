@@ -1,7 +1,8 @@
-import { EventEmitter } from 'events';
+import events from 'events';
+// import querystring from 'querystring';
 import delay from './delay';
 
-class LongConnection extends EventEmitter {
+class LongConnection extends events.EventEmitter {
   ws: WebSocket;
 
   constructor() {
@@ -38,14 +39,31 @@ class LongConnection extends EventEmitter {
   };
 
   init() {
-    this.ws.addEventListener('open', () => {
-      this.send(
-        JSON.stringify({
-          token: localStorage.getItem('token'),
-        }),
-      );
+    // this.ws.addEventListener('open', () => {
+    //   this.send(
+    //     JSON.stringify({
+    //       token: localStorage.getItem('token'),
+    //     }),
+    //   );
+    // });
+
+    this.ws.addEventListener('message', ({ data }) => {
+      const jsonData = JSON.parse(data);
+      if (Array.isArray(jsonData)) {
+        this.emit('actions', jsonData);
+
+        return;
+      }
+      if (typeof jsonData === 'object') {
+        if (typeof jsonData.clientId === 'string') {
+          localStorage.setItem('clientId', jsonData.clientId);
+        }
+        if (typeof jsonData.token === 'string') {
+          localStorage.setItem('token', jsonData.token);
+        }
+        return;
+      }
     });
-    this.ws.addEventListener('message', ({ data }) => this.emit('message', data));
   }
 
   // get addEventListener() {
@@ -56,8 +74,13 @@ class LongConnection extends EventEmitter {
   //   return this.ws.removeEventListener;
   // }
   get url() {
-    const clientId = localStorage.getItem('clientId');
-    return `ws://localhost:8080/${clientId ? `?clientId=${clientId}` : ''}`;
+    // const clientId = localStorage.getItem('clientId');
+    // const token = localStorage.getItem('token');
+    // const qs = querystring.stringify({
+    //   clientId,
+    //   token,
+    // });
+    return `ws://localhost:8080/`;
   }
 
   get close() {

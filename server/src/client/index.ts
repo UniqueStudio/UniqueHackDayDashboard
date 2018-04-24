@@ -8,18 +8,23 @@ import { RootState } from '../../../src/redux/reducers/index';
 import { createServerRedux } from '../../../src/redux/store/server';
 
 export default class Client extends events.EventEmitter {
-  private closedTime: number = Date.now();
+  private activeTime: number = Date.now();
   private ws: WebSocket;
   private history: MemoryHistory;
   private store: Store<RootState>;
   private actionsHistory: AnyAction[];
 
+  get loggedIn() {
+    return this.store.getState().auth.loggedIn;
+  }
+
   constructor(ws: WebSocket) {
     super();
     this.ws = ws;
+
     this.actionsHistory = [];
     ws.on('message', this.handleMessage);
-    ws.on('close', () => (this.closedTime = Date.now()));
+    ws.on('close', () => (this.activeTime = Date.now()));
 
     const serverRedux = createServerRedux(this.actionsLogger);
     this.history = serverRedux.serverHistory;
@@ -32,10 +37,16 @@ export default class Client extends events.EventEmitter {
 
   private handleMessage = async (data: WebSocket.Data) => {
     const jsonData = JSON.parse(data.toString());
-    if (jsonData.token) {
-      return;
-    }
-    const actions: Actions.Action[] = jsonData;
+
+    return this.handleActions(jsonData);
+
+    // if (jsonData.token) {
+    //   return;
+    // }
+  };
+
+  private handleActions = async (jsonData: AnyAction[]) => {
+    const actions = jsonData;
     const sideEffectAction = actions[actions.length - 1];
     actions.forEach(action => this.store.dispatch(action));
 
@@ -50,6 +61,7 @@ export default class Client extends events.EventEmitter {
   dispatch(action: AnyAction) {
     if (this.ws) {
       this.ws.send(JSON.stringify([action]));
+      this.activeTime = Date.now();
     }
   }
 
@@ -74,13 +86,13 @@ export default class Client extends events.EventEmitter {
   replaceWebSocket(ws: WebSocket) {
     this.ws = ws;
     ws.on('message', this.handleMessage);
-    ws.on('close', () => (this.closedTime = Date.now()));
+    ws.on('close', () => (this.activeTime = Date.now()));
   }
 
   get reuseable() {
     return (
-      // closed but no longer then 1 minute
-      this.ws.readyState === this.ws.CLOSED && Date.now() - this.closedTime <= 1000 * 60
+      // closed but no longer than 1 minute
+      this.ws.readyState === this.ws.CLOSED && Date.now() - this.activeTime <= 1000 * 60
     );
   }
 

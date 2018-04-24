@@ -6,21 +6,8 @@ import LongConnection from '../../lib/LongConnection';
 const ws = new LongConnection();
 
 const sideEffect: Middleware = store => next => {
-  ws.on('message', data => {
-    const jsonData = JSON.parse(data);
-    if (Array.isArray(jsonData)) {
-      /**
-       * dispatch 所有的action，这些 action
-       * 对于前端已经是纯的了。
-       */
-      jsonData.forEach(action => store.dispatch(action));
-      return;
-    }
-
-    if (typeof jsonData === 'object' && typeof jsonData.clientId === 'string') {
-      localStorage.setItem('clientId', jsonData.clientId);
-      return;
-    }
+  ws.on('actions', actions => {
+    actions.forEach((action: AnyAction) => store.dispatch(action));
   });
 
   ws.once('terminate', () => {
@@ -42,6 +29,7 @@ const sideEffect: Middleware = store => next => {
      * 打包纯的、重复的action
      */
     switch (action.type) {
+      case TYPE.SYNC_TOKEN:
       case TYPE.LOGIN_FORM_SUBMIT._:
       case TYPE.REGISTER_FORM_SUBMIT._:
         ws.send(JSON.stringify(bundleActions(actionQueue)));
