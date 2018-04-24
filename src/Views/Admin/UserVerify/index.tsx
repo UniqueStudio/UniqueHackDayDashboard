@@ -18,10 +18,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
   renderOperation(record: any) {
     return (
       <span>
-<<<<<<< HEAD
         {/* tslint:disable-next-line:jsx-no-lambda */}
-=======
->>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
         <Radio.Group onChange={e => this.props.statusChange(record.name, e.target.value)}>
           <Radio.Button value={3}>通过</Radio.Button>
           <Radio.Button value={2}>不通过</Radio.Button>
@@ -43,10 +40,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="角色"
             dataIndex="isLeader"
             key="role"
-<<<<<<< HEAD
             // tslint:disable-next-line:jsx-no-lambda
-=======
->>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
             render={isLeader => (isLeader ? '队长' : '队员')}
           />
           <Column title="姓名" dataIndex="name" key="name" />
@@ -54,10 +48,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="审核状态"
             dataIndex="verifyState"
             key="status"
-<<<<<<< HEAD
             // tslint:disable-next-line:jsx-no-lambda
-=======
->>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
             render={status => (status === 3 ? '已通过' : status === 2 ? '未通过' : '审核中')}
           />
           <Column title="学校" dataIndex="school" key="school" />
@@ -67,10 +58,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="简历"
             dataIndex="resume"
             key="resume"
-<<<<<<< HEAD
             // tslint:disable-next-line:jsx-no-lambda tslint:disable-next-line: jsx-no-multiline-js
-=======
->>>>>>> 650e4e6cc98759f7ec25ec364b121508f31770df
             render={url => (
               <a href={url} target="_blank" rel="noopener">
                 链接
