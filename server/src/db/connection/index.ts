@@ -5,12 +5,12 @@ import { mongodbPath } from '../../../config';
 // Use connect method to connect to the server
 const clientPromise = MongoClient.connect(mongodbPath);
 
-export default clientPromise;
+clientPromise.then(client => {
+  const db = client.db();
 
-// clientPromise
-//   .then(client => {
-//     console.log(client.db());
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
+  const users = db.collection('users');
+  users.createIndex({ username: 1 }, { unique: true });
+  users.createIndex({ phone: 1 }, { unique: true });
+});
+
+export default clientPromise;

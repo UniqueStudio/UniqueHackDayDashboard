@@ -52,16 +52,26 @@ const handlers: { [k: string]: SideEffectHandler } = {
   [TYPE.REGISTER_FORM_SUBMIT._]: recaptchaWrapper(TYPE.REGISTER_FORM_SUBMIT.FAIL)(
     async (_, state, db) => {
       const users: Collection<DB.User> = db.collection('users');
+      const regFormData = state.registerForm.data;
 
-      users.insertOne({
-        username: state.registerForm.data.username.value,
-        password: bcryptjs.hashSync(state.registerForm.data.username.value!),
-        phone: state.registerForm.data.phone.value,
+      const usernameOrPhone = regFormData.username.value;
+      const password = bcryptjs.hashSync(regFormData.password.value!);
+
+      await users.insertOne({
+        username: usernameOrPhone,
+        password,
+        phone: regFormData.phone.value,
       });
 
-      return {
-        type: '',
-      };
+      return [
+        {
+          type: TYPE.REGISTER_FORM_SUBMIT.OK,
+        },
+        {
+          type: TYPE.SEND_TOKEN,
+          payload: jsonwebtoken.sign({ usernameOrPhone, password }, jwtSecret),
+        },
+      ];
     },
   ),
 };
