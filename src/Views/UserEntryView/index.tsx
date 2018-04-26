@@ -75,7 +75,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
       recaptchaReady,
     } = this.props;
     return (
-      <Tabs animated={false}>
+      <Tabs animated={false} tabBarStyle={{ textAlign: 'center' }}>
         <Tabs.TabPane tab="登录" key="login">
           <MyForm
             size="large"

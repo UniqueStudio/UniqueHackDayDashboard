@@ -17,14 +17,14 @@ export interface UserVerifyProps {
 class UserVerify extends React.Component<UserVerifyProps> {
   renderOperation = (record: any) => {
     return (
-      <span>
+      <React.Fragment>
         {/* tslint:disable-next-line:jsx-no-lambda */}
         <Radio.Group onChange={e => this.props.statusChange(record.name, e.target.value)}>
           <Radio value={3}>通过</Radio>
           <Radio value={2}>拒绝</Radio>
           <Radio value={1}>待定</Radio>
         </Radio.Group>
-      </span>
+      </React.Fragment>
     );
   };
 
@@ -46,8 +46,10 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="角色"
             dataIndex="isLeader"
             key="role"
-            // tslint:disable-next-line:jsx-no-lambda
-            render={isLeader => (isLeader ? '队长' : '队员')}
+            // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
+            render={(isLeader, record: any) =>
+              record.teamId === null ? '未组队' : isLeader ? '队长' : '队员'
+            }
           />
           <Column title="姓名" dataIndex="name" key="name" />
           <Column
@@ -65,7 +67,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="简历"
             dataIndex="resume"
             key="resume"
-            // tslint:disable-next-line:jsx-no-lambda tslint:disable-next-line: jsx-no-multiline-js
+            // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
             render={url => (
               <a href={url} target="_blank" rel="noopener">
                 链接

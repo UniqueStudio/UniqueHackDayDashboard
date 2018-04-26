@@ -21,6 +21,7 @@ export interface DashboardLayoutProps {
   menuItemDisabled?: boolean;
   menuItemDisabledMsg?: string;
   replace: (location: string) => void;
+  isAdmin: boolean;
 }
 
 export default class DashboardLayout extends React.Component<DashboardLayoutProps> {
@@ -117,14 +118,20 @@ export default class DashboardLayout extends React.Component<DashboardLayoutProp
               </span>
             </Menu.Item>
           )}
-          <Menu.Item key="#/admin">
-            <Icon type="eye-o" />
-            <span>
-              <a className={cls['sider-link']} data-key="/admin" onClick={this.handleMenuItemClick}>
-                管理员
-              </a>
-            </span>
-          </Menu.Item>
+          {this.props.isAdmin && (
+            <Menu.Item key="#/admin">
+              <Icon type="eye-o" />
+              <span>
+                <a
+                  className={cls['sider-link']}
+                  data-key="/admin"
+                  onClick={this.handleMenuItemClick}
+                >
+                  管理员
+                </a>
+              </span>
+            </Menu.Item>
+          )}
         </Menu>
       </Layout.Sider>
     );
