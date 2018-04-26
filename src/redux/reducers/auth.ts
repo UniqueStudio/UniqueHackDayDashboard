@@ -22,7 +22,7 @@ export default function auth(
         loggedIn: false,
       };
 
-    case 'SYNC_TOKEN':
+    case 'SET_TOKEN':
       return {
         ...state,
         token: action.payload,

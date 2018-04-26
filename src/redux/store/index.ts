@@ -8,7 +8,7 @@ import { History } from 'history';
 import reducer, { RootState } from '../reducers';
 // import SagaManager from '../sagas';
 import sideEffect from '../middleware/io';
-import { SYNC_TOKEN } from '../actions/index';
+import { SET_TOKEN, SEND_TOKEN } from '../actions/index';
 
 export const history: History = createHistory();
 export const sagaMiddleware = createSagaMiddleware();
@@ -26,7 +26,9 @@ const store: Store<RootState> = createStore((state, action) => {
 }, composeEnhancers(applyMiddleware(routerMiddleware(history), sideEffect)));
 
 if (localStorage.getItem('token')) {
-  store.dispatch({ type: SYNC_TOKEN, payload: localStorage.getItem('token') });
+  const token = localStorage.getItem('token');
+  store.dispatch({ type: SET_TOKEN, payload: token });
+  store.dispatch({ type: SEND_TOKEN, payload: token });
 }
 window.addEventListener('unload', () => {
   const token = store.getState().auth.token;
@@ -34,4 +36,5 @@ window.addEventListener('unload', () => {
     localStorage.setItem('token', token);
   }
 });
+
 export default store;

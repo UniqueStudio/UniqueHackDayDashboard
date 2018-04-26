@@ -53,6 +53,13 @@ export default class Client extends events.EventEmitter {
     const resultAction = await handleSideEffect(sideEffectAction, this.store.getState());
 
     if (resultAction) {
+      if (Array.isArray(resultAction)) {
+        resultAction.forEach(singleResultAction => {
+          this.store.dispatch(singleResultAction);
+          this.dispatch(singleResultAction);
+        });
+        return;
+      }
       this.store.dispatch(resultAction);
       this.dispatch(resultAction);
     }

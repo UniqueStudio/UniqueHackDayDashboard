@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { SideEffectHandler } from '../handlers';
 
 async function recaptcha(antiRobotToken: string) {
   return await fetch('https://recaptcha.net/recaptcha/api/siteverify', {
@@ -13,3 +14,17 @@ async function recaptcha(antiRobotToken: string) {
 }
 
 export default recaptcha;
+
+export const recaptchaWrapper = (type: string) => (
+  sideEffectHandler: SideEffectHandler,
+): SideEffectHandler => {
+  return async (sideEffect, state, db) => {
+    if (await recaptcha(sideEffect.payload)) {
+      return sideEffectHandler(sideEffect, state, db);
+    }
+    return {
+      type,
+      payload: 'HumanCheckFailed',
+    };
+  };
+};

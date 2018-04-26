@@ -29,7 +29,7 @@ const sideEffect: Middleware = store => next => {
      * 打包纯的、重复的action
      */
     switch (action.type) {
-      case TYPE.SYNC_TOKEN:
+      case TYPE.SEND_TOKEN:
       case TYPE.LOGIN_FORM_SUBMIT._:
       case TYPE.REGISTER_FORM_SUBMIT._:
         ws.send(JSON.stringify(bundleActions(actionQueue)));
