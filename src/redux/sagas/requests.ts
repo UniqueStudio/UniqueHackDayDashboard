@@ -39,6 +39,7 @@ export default function*() {
     }
     yield put({ type: TYPE.ADMIN_TEAMS_INFO.FAIL });
   });
+
   // submit login form
   type LoginReturnType = [string, undefined] | [null, string];
   yield takeLatest(TYPE.LOGIN_FORM_SUBMIT._, function*(action: AnyAction) {

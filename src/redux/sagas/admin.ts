@@ -7,7 +7,7 @@ import * as req from '../../lib/requests';
 export function* userStateChnage() {
   while (true) {
     const { username, state } = yield take(TYPE.ADMIN_USER_STATUS_CHANGE._);
-    const userStatusList = yield select((root: RootState) => root.admin.userState);
+    const userStatusList = yield select((root: RootState) => root.admin.userState.value);
     let flag = 1;
     const newList = userStatusList.map((user: { username: string; state: number }) => {
       if (user.username === username) {
@@ -30,10 +30,11 @@ export function* stateChangeSubmit() {
     const [ok, message] = yield call(req.adminUserStateChange, stateList);
     if (ok) {
       yield put({ type: TYPE.ADMIN_USER_SUBMIT.OK });
-      Message.success('更改成功');
+      Message.success('操作成功');
+    } else {
+      yield put({ type: TYPE.ADMIN_USER_SUBMIT.FAIL, payload: message });
+      Message.error(message);
     }
-    yield put({ type: TYPE.ADMIN_USER_SUBMIT.FAIL, payload: message });
-    Message.error(message);
   });
 }
 

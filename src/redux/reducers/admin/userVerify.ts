@@ -22,7 +22,7 @@ export default (
       return {
         ...state,
         isLoading: false,
-        ...action.payload,
+        items: action.payload,
       };
     case TYPE.ADMIN_TEAMS_INFO.FAIL:
       return {

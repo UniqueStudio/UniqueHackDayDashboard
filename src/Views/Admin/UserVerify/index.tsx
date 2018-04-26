@@ -15,23 +15,29 @@ export interface UserVerifyProps {
 }
 
 class UserVerify extends React.Component<UserVerifyProps> {
-  renderOperation(record: any) {
+  renderOperation = (record: any) => {
     return (
       <span>
         {/* tslint:disable-next-line:jsx-no-lambda */}
         <Radio.Group onChange={e => this.props.statusChange(record.name, e.target.value)}>
-          <Radio.Button value={3}>通过</Radio.Button>
-          <Radio.Button value={2}>不通过</Radio.Button>
+          <Radio value={3}>通过</Radio>
+          <Radio value={2}>拒绝</Radio>
+          <Radio value={1}>待定</Radio>
         </Radio.Group>
       </span>
     );
+  };
+
+  sortByPendingState(u1: any, u2: any) {
+    return u1.verifyState - u2.verifyState;
   }
+
   render() {
     const Column = Table.Column;
     return (
       <React.Fragment>
         <Table
-          scroll={{ x: 550 }}
+          scroll={{ x: 700 }}
           pagination={{ pageSize: 20 }}
           dataSource={this.props.data}
           rowKey="name"
@@ -48,6 +54,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="审核状态"
             dataIndex="verifyState"
             key="status"
+            sorter={this.sortByPendingState}
             // tslint:disable-next-line:jsx-no-lambda
             render={status => (status === 3 ? '已通过' : status === 2 ? '未通过' : '审核中')}
           />
