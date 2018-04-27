@@ -668,7 +668,7 @@ declare namespace API {
     }
     interface AdminUserState {
       username: string;
-      state: 2 | 3;
+      state: 0 | 1;
     }
     interface RequestFunc {
       (req: RequestWithAuth<'/v1/admin/verify/teams', 'GET', {}>): Response<

@@ -20,9 +20,8 @@ class UserVerify extends React.Component<UserVerifyProps> {
       <React.Fragment>
         {/* tslint:disable-next-line:jsx-no-lambda */}
         <Radio.Group onChange={e => this.props.statusChange(record.name, e.target.value)}>
-          <Radio value={3}>通过</Radio>
-          <Radio value={2}>拒绝</Radio>
-          <Radio value={1}>待定</Radio>
+          <Radio value={1}>通过</Radio>
+          <Radio value={0}>拒绝</Radio>
         </Radio.Group>
       </React.Fragment>
     );
