@@ -63,6 +63,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
   onResetPwdSubmit = this.props.withVerify(this.props.onResetPwdSubmit);
 
   renderTab = () => {
+    const TabPane = Tabs.TabPane;
+
     const {
       loginData,
       registerData,
@@ -76,7 +78,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
     } = this.props;
     return (
       <Tabs animated={false} tabBarStyle={{ textAlign: 'center' }}>
-        <Tabs.TabPane tab="登录" key="login">
+        <TabPane tab="登录" key="login">
           <MyForm
             size="large"
             data={loginData}
@@ -91,8 +93,8 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             <AutoLogin />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="登录" />
           </MyForm>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="注册" key="register">
+        </TabPane>
+        <TabPane tab="注册" key="register">
           <MyForm
             size="large"
             data={registerData}
@@ -112,7 +114,7 @@ class LoginView extends React.Component<LoginViewProps, { count: number }> {
             <MobileCode onSend={this.onRegisterSMSSend} isSending={registerSMSSubmitting} />
             <Submit style={{ marginTop: 0 }} fullWidth={true} title="注册" />
           </MyForm>
-        </Tabs.TabPane>
+        </TabPane>
       </Tabs>
     );
   };
