@@ -7,6 +7,7 @@ import DashboardLayout from '../../Layouts/DashboardLayout';
 import ConsoleView from '../Console';
 import TeamConsole from '../TeamConsole';
 import ApplyView from '../ApplyView';
+import Admin from '../Admin';
 import { replace } from 'react-router-redux';
 import OriginDetailView from '../DetailView/index';
 import Card from 'antd/es/card';
@@ -16,6 +17,7 @@ export interface DashboardProps {
   isC: boolean;
   selfReplace: (loc: string) => void;
   menuItemDisabled: boolean;
+  isAdmin: boolean;
 }
 
 const RedirectToApply = () => <Redirect to="/apply" />;
@@ -31,11 +33,12 @@ const Dashboard = (props: DashboardProps) => {
       replace={props.selfReplace}
       menuItemDisabled={props.menuItemDisabled}
       menuItemDisabledMsg={'必须完成报名表单才能进行该操作!'}
+      isAdmin={props.isAdmin}
     >
       <Switch>
         <Route path="/apply" component={ApplyView} />
         <Route path="/detail_edit" component={DetailView} />
-        {/* <Route path="/admin" component={} /> */}
+        <Route path="/admin" component={Admin} />
         {/* <Route path="/project" component={} /> */}
         <Route path="/team" component={isC ? TeamConsole : RedirectToApply} />
         <Route path="/" component={isC ? ConsoleView : RedirectToApply} />
@@ -59,6 +62,7 @@ export default connect(
       loggedIn: state.auth.loggedIn,
       menuItemDisabled: pathname.indexOf('/apply') === 0,
       isC: state.user.isApplyConfirmed,
+      isAdmin: state.user.isAdmin,
     };
   },
   dispatch => ({

@@ -28,6 +28,9 @@ export default function* entryFlow() {
         if (true === (yield select((state: RootState) => state.user.isDetailFormSubmitted))) {
           yield put({ type: TYPE.GET_USER_DETAIL._ });
         }
+        if (true === (yield select((state: RootState) => state.user.isAdmin))) {
+          yield put({ type: TYPE.ADMIN_TEAMS_INFO._ });
+        }
         yield put({ type: TYPE.GET_UNREAD_MSG_ALL._ });
         yield take(TYPE.GET_UNREAD_MSG_ALL.START);
         yield take([TYPE.GET_UNREAD_MSG_ALL.OK, TYPE.GET_UNREAD_MSG_ALL.FAIL]);

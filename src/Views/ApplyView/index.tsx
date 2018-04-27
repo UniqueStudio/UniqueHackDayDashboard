@@ -27,6 +27,7 @@ export interface ApplyViewProps {
 }
 
 class ApplyView extends React.Component<ApplyViewProps> {
+  initialIsC = this.props.isApplyConfirmed;
   state = {
     stepIndex: 0,
   };
@@ -106,11 +107,6 @@ class ApplyView extends React.Component<ApplyViewProps> {
   renderDetailView = () => {
     return <DetailView />;
   };
-
-  initialIsC: boolean = false;
-  componentWillMount() {
-    this.initialIsC = this.props.isApplyConfirmed;
-  }
 
   componentWillReceiveProps({ maxStep }: ApplyViewProps) {
     this.setState({ stepIndex: maxStep });

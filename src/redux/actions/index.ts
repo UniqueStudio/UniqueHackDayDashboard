@@ -192,3 +192,7 @@ export const DELETE_TEAM = {
   OK:    'DELETE_TEAM_OK',
   FAIL:  'DELETE_TEAM_FAIL',
 }
+
+export const ADMIN_TEAMS_INFO = createActions('ADMIN_TEAMS_INFO');
+export const ADMIN_USER_STATUS_CHANGE = createActions('ADMIN_USER_STATUS_CHANGE');
+export const ADMIN_USER_SUBMIT = createActions('ADMIN_USER_SUBMIT');

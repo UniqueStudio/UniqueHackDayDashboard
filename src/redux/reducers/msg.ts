@@ -188,6 +188,7 @@ export default function msg(
       return {
         ...state,
         readMessages: state.readMessages.filter(({ id }) => id !== action.payload),
+        unreadMessages: state.unreadMessages.filter(({ id }) => id !== action.payload),
       };
     default:
       return state;

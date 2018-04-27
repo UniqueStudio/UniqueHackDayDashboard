@@ -42,12 +42,12 @@ class GlobalHeader extends React.Component<{
         {this.props.inUserEntry && this.renderLeftIcon()}
         <Menu mode="horizontal" className={cls['header-menu']}>
           <Menu.Item className={cls['header-menu-link']} key="site_hackday">
-            <a href="http://hack.hustunique.com" target="_blank">
+            <a href="http://hack.hustunique.com" target="_blank" rel="noopener">
               Hackday 官网
             </a>
           </Menu.Item>
           <Menu.Item className={cls['header-menu-link']} key="site_unqiue">
-            <a href="http://www.hustunique.com" target="_blank">
+            <a href="http://www.hustunique.com" target="_blank" rel="noopener">
               联创团队官网
             </a>
           </Menu.Item>

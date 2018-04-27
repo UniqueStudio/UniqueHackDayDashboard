@@ -18,7 +18,7 @@ script:
       ls ./build > ./filelist;
       ./ossutil64 cp ./filelist oss://$OSS_BUCKETNAME --update;
       ./ossutil64 cp -r ./build oss://$OSS_BUCKETNAME --update;
-   else
+   elif [ $TRAVIS_BRANCH  ] && [ $TRAVIS_BRANCH = "dev" ]; then
       yarn build;
       ./ossutil64 cp -r ./build oss://$OSS_BUCKETNAME_DEV --update;
    fi

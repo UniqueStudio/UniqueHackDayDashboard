@@ -30,6 +30,16 @@ export default function*() {
     yield put({ type: TYPE.LOAD_TEAM_INFO.FAIL });
   });
 
+  // load admin verify users infomation
+  yield takeLatest(TYPE.ADMIN_TEAMS_INFO._, function*() {
+    yield put({ type: TYPE.ADMIN_TEAMS_INFO.START });
+    const [data] = yield call(req.adminLoadUsersInfo);
+    if (data) {
+      yield put({ type: TYPE.ADMIN_TEAMS_INFO.OK, payload: data });
+    }
+    yield put({ type: TYPE.ADMIN_TEAMS_INFO.FAIL });
+  });
+
   // submit login form
   type LoginReturnType = [string, undefined] | [null, string];
   yield takeLatest(TYPE.LOGIN_FORM_SUBMIT._, function*(action: AnyAction) {

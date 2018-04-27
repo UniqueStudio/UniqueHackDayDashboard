@@ -25,6 +25,7 @@ import {
   smsLoading,
   confirmApplyStatus,
 } from './forms';
+import admin, { Admin } from './admin';
 
 import loadingCount from './loading';
 
@@ -48,6 +49,7 @@ export interface RootState {
   applyProcess: ApplyProcessData;
   teamInfo: TeamInfo;
   loadingCount: number;
+  admin: Admin;
 }
 
 export { AnyAction };
@@ -70,6 +72,7 @@ export default combineReducers<RootState>({
   applyProcess,
   teamInfo,
   loadingCount,
+  admin,
 });
 
 export type Diff<T extends string, U extends string> = ({ [P in T]: P } &
