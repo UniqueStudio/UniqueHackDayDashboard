@@ -122,8 +122,8 @@ declare namespace API {
       // 是否确认报名
       isApplyConfirmed: boolean;
       // 上面三个都为 true 算成功报名
-
-      isAdmin: boolean;
+      // 0 普通 1 管理员 2 超级管理员
+      permission: 0 | 1 | 2;
       // 一定已注册了
       registrered: true;
       teamId: number | null;

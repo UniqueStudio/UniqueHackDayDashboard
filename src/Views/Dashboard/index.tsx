@@ -17,7 +17,7 @@ export interface DashboardProps {
   isC: boolean;
   selfReplace: (loc: string) => void;
   menuItemDisabled: boolean;
-  isAdmin: boolean;
+  promission: 0 | 1 | 2;
 }
 
 const RedirectToApply = () => <Redirect to="/apply" />;
@@ -33,7 +33,7 @@ const Dashboard = (props: DashboardProps) => {
       replace={props.selfReplace}
       menuItemDisabled={props.menuItemDisabled}
       menuItemDisabledMsg={'必须完成报名表单才能进行该操作!'}
-      isAdmin={props.isAdmin}
+      isAdmin={props.promission === 1 || props.promission === 2}
     >
       <Switch>
         <Route path="/apply" component={ApplyView} />
@@ -62,7 +62,7 @@ export default connect(
       loggedIn: state.auth.loggedIn,
       menuItemDisabled: pathname.indexOf('/apply') === 0,
       isC: state.user.isApplyConfirmed,
-      isAdmin: state.user.isAdmin,
+      promission: state.user.permission,
     };
   },
   dispatch => ({

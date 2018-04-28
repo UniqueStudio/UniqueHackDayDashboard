@@ -31,6 +31,9 @@ export function* stateChangeSubmit() {
     if (ok) {
       yield put({ type: TYPE.ADMIN_USER_SUBMIT.OK });
       Message.success('操作成功');
+      yield put({ type: TYPE.ADMIN_TEAMS_INFO._ });
+      // use fail to clear the arr
+      yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.FAIL });
     } else {
       yield put({ type: TYPE.ADMIN_USER_SUBMIT.FAIL, payload: message });
       Message.error(message);
