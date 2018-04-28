@@ -143,11 +143,14 @@ class UserVerify extends React.Component<UserVerifyProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const curPassList = state.admin.userState.value;
+  const currentPass = curPassList.filter(user => user.state === 1).length;
+
   return {
     isSubmitting: state.admin.userState.isSubmitting,
     data: state.admin.users.items,
     isSuperAdmin: state.user.permission === 2,
-    currentPass: state.admin.userState.value.length,
+    currentPass,
   };
 };
 
