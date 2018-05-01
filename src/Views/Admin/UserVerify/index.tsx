@@ -122,7 +122,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             key="resume"
             // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
             render={url => (
-              <a href={url} target="_blank" rel="noopener">
+              <a href={url[0]} target="_blank" rel="noopener">
                 链接
               </a>
             )}
