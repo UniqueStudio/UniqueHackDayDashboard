@@ -109,6 +109,8 @@ const TeamInfo = (props: TeamInfoProps) => {
         </span>
       );
 
+    const hasTeam = props.user.teamId !== null || undefined;
+
     return (
       <Table
         dataSource={data}
@@ -128,7 +130,9 @@ const TeamInfo = (props: TeamInfoProps) => {
           dataIndex="isAccepted"
           key="status"
           // tslint:disable-next-line:jsx-no-lambda
-          render={(is: boolean | null) => (is === null ? '审核中' : is ? '已通过' : '未通过')}
+          render={(is: boolean | null) =>
+            hasTeam ? (is === null ? '审核中' : is ? '已通过' : '未通过') : '尚未组队'
+          }
         />
         <Column title="学校" dataIndex="school" key="school" />
         {/*tslint:disable-next-line:jsx-no-multiline-js */}

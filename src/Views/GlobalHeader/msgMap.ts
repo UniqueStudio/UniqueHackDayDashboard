@@ -44,6 +44,26 @@ export default function msgMap(msg: SingleMessage): INoticeIconData {
         read: msg.read,
         clickHandler: (dispatch: any) => dispatch(replace('/team')),
       } as any;
+    case 'Accepted':
+      return {
+        id: msg.id,
+        avatar: genIconImage(IconType.CheckCircle, 'green'),
+        title: locales.messageTitles.Accepted,
+        description: locales.messageValues.Accepted,
+        datetime,
+        read: msg.read,
+        clickHandler: noop,
+      } as any;
+    case 'Rejected':
+      return {
+        id: msg.id,
+        avatar: genIconImage(IconType.CloseCircle, 'red'),
+        title: locales.messageTitles.Rejected,
+        description: locales.messageValues.Rejected,
+        datetime,
+        read: msg.read,
+        clickHandler: noop,
+      } as any;
     default:
       return {};
   }
