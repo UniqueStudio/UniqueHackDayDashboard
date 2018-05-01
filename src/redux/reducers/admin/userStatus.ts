@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import * as TYPE from '../../actions';
 interface Status {
   username: string;
-  state: 1 | 2 | 3;
+  state: 0 | 1;
 }
 export interface UserStatus {
   value: Status[];
@@ -19,6 +19,11 @@ export default (
       return {
         ...state,
         value: action.payload,
+      };
+    case TYPE.ADMIN_USER_STATUS_CHANGE.FAIL:
+      return {
+        ...state,
+        value: [],
       };
     case TYPE.ADMIN_USER_SUBMIT.START:
       return {
