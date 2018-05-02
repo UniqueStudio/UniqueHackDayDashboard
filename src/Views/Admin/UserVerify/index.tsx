@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import Table from 'antd/es/table';
 import { RootState } from '../../../redux/reducers';
@@ -19,15 +20,25 @@ export interface UserVerifyProps {
 }
 
 class UserVerify extends React.Component<UserVerifyProps> {
+  statusFilters = [
+    { text: '审核中', value: '0' || '1' },
+    { text: '未通过', value: '2' },
+    { text: '已通过', value: '3' },
+  ];
+
   renderOperation = (record: any) => {
+    const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
+
     return (
-      <React.Fragment>
-        {/* tslint:disable-next-line:jsx-no-lambda */}
-        <Radio.Group onChange={e => this.props.statusChange(record.username, e.target.value)}>
-          <Radio value={1}>通过</Radio>
-          <Radio value={0}>拒绝</Radio>
-        </Radio.Group>
-      </React.Fragment>
+      /* tslint:disable-next-line:jsx-no-lambda */
+      <Radio.Group onChange={e => this.props.statusChange(record.username, e.target.value)}>
+        {showRadio && (
+          <React.Fragment>
+            <Radio value={1}>通过</Radio>
+            <Radio value={0}>拒绝</Radio>
+          </React.Fragment>
+        )}
+      </Radio.Group>
     );
   };
 
@@ -67,22 +78,19 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
   render() {
     const Column = Table.Column;
-    const statusFilters = [
-      { text: '审核中', value: '0' || '1' },
-      { text: '未通过', value: '2' },
-      { text: '已通过', value: '3' },
-    ];
 
-    const dataSource = this.props.data.filter(user => {
-      return user.verifyState !== 3 && user.verifyState !== 2;
+    const dataSource = this.props.data.sort((user1, user2) => {
+      return user1.verifyState - user2.verifyState;
     });
+    // filter accepted and rejected for normal admin
+    const normalData = dataSource.filter(user => user.verifyState !== 2 && user.verifyState !== 3);
 
     return (
       <React.Fragment>
         <Table
           scroll={{ x: 700 }}
           pagination={{ pageSize: 10 }}
-          dataSource={this.props.isSuperAdmin ? this.props.data : dataSource}
+          dataSource={this.props.isSuperAdmin ? dataSource : normalData}
           rowKey="name"
           footer={this.renderFooter}
         >
@@ -110,7 +118,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
                 <Badge status="warning" text="审核中" />
               )
             }
-            filters={this.props.isSuperAdmin ? statusFilters : undefined}
+            filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
             onFilter={this.filterStatus}
           />
           <Column title="学校" dataIndex="school" key="school" />
