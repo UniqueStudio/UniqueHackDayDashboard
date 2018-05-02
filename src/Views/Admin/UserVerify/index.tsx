@@ -82,7 +82,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
         <Table
           scroll={{ x: 700 }}
           pagination={{ pageSize: 10 }}
-          dataSource={this.props.isSuperAdmin ? dataSource : this.props.data}
+          dataSource={this.props.isSuperAdmin ? this.props.data : dataSource}
           rowKey="name"
           footer={this.renderFooter}
         >
