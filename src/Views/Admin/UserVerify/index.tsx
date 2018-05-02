@@ -77,12 +77,16 @@ class UserVerify extends React.Component<UserVerifyProps> {
       { text: '已通过', value: '3' },
     ];
 
+    const dataSource = this.props.data.filter((user)=> {
+      return user.verifyState !== 3 && user.verifyState !== 2
+    })
+
     return (
       <React.Fragment>
         <Table
           scroll={{ x: 700 }}
           pagination={{ pageSize: 10 }}
-          dataSource={this.props.data}
+          dataSource={this.props.isSuperAdmin ? dataSource : this.props.data}
           rowKey="name"
           footer={this.renderFooter}
         >
