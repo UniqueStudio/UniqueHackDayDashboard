@@ -56,10 +56,6 @@ class UserVerify extends React.Component<UserVerifyProps> {
     return (
       <React.Fragment>
         <span>总数: {total}</span>
-        <Dvider type="vertical" />
-        <span>
-          当前通过: {this.props.currentPass}/{total}
-        </span>
         {this.props.isSuperAdmin && this.renderSuperAdminFooter(passNum, pengdingNum, rejectNum)}
       </React.Fragment>
     );
@@ -77,9 +73,9 @@ class UserVerify extends React.Component<UserVerifyProps> {
       { text: '已通过', value: '3' },
     ];
 
-    const dataSource = this.props.data.filter((user)=> {
-      return user.verifyState !== 3 && user.verifyState !== 2
-    })
+    const dataSource = this.props.data.filter(user => {
+      return user.verifyState !== 3 && user.verifyState !== 2;
+    });
 
     return (
       <React.Fragment>
