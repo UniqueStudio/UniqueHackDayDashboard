@@ -17,7 +17,6 @@ export interface UserVerifyProps {
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
-  currentPass: number;
 }
 
 class UserVerify extends React.Component<UserVerifyProps> {
@@ -191,29 +190,8 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
 const mapStateToProps = (state: RootState) => {
   const adminName = state.user.username as string;
-  const curPassList = state.admin.userState.value;
-  const currentPass = curPassList.filter(user => user.state === 1).length;
   const data = state.admin.users.items;
-  const isWait = (user: any) => {
-    return user.verifyState < 2 && user.inWaitList;
-  };
-  const superData = data.sort((user1, user2) => {
-    if (user1.verifyState >= 2) {
-      return 1;
-    }
-    if (isWait(user1)) {
-      if (isWait(user2)) {
-        return 0;
-      } else {
-        return 1;
-      }
-    } else {
-      if (isWait(user2)) {
-        return -1;
-      }
-      return 0;
-    }
-  });
+  const superData = data;
   const normalData = superData.filter(
     user =>
       user.verifyState !== 2 &&
@@ -229,7 +207,6 @@ const mapStateToProps = (state: RootState) => {
     isSubmitting: state.admin.userState.isSubmitting,
     dataSource,
     isSuperAdmin,
-    currentPass,
   };
 };
 
