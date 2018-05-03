@@ -9,6 +9,7 @@ import Radio from 'antd/es/radio';
 import Button from 'antd/es/button';
 import Badge from 'antd/es/badge';
 import Dvider from 'antd/es/divider';
+import uniq from 'lodash/uniq';
 
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
@@ -57,8 +58,10 @@ class UserVerify extends React.Component<UserVerifyProps> {
   }
 
   renderCurrentPass = (adminDict: any) => {
-    const rejectLen = adminDict[0].length;
-    const passLen = adminDict[1].length;
+    const rejectList = uniq(adminDict[0]);
+    const passList = uniq(adminDict[1]);
+    const rejectLen = rejectList.length;
+    const passLen = passList.length;
 
     return `${passLen}/${rejectLen + passLen}`;
   };
