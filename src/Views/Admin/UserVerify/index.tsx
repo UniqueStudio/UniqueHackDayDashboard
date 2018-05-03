@@ -111,12 +111,14 @@ class UserVerify extends React.Component<UserVerifyProps> {
             }
           />
           <Column title="姓名" dataIndex="name" key="name" />
-          <Column
-            title="当前通过"
-            dataIndex="adminDict"
-            key="currentPass"
-            render={this.renderCurrentPass}
-          />
+          {this.props.isSuperAdmin && (
+            <Column
+              title="当前通过"
+              dataIndex="adminDict"
+              key="currentPass"
+              render={this.renderCurrentPass}
+            />
+          )}
           <Column
             title="审核状态"
             dataIndex="verifyState"
