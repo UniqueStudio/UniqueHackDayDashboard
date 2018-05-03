@@ -13,7 +13,6 @@ import uniq from 'lodash/uniq';
 
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
-  normalData: AdminUser['items'];
   statusChange(username: string, state: 0 | 1): { type: string; username: string; state: 0 | 1 };
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
@@ -90,14 +89,14 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
   render() {
     const Column = Table.Column;
-    const { dataSource, normalData } = this.props;
+    const { dataSource } = this.props;
 
     return (
       <React.Fragment>
         <Table
           scroll={{ x: 700 }}
           pagination={{ pageSize: 10 }}
-          dataSource={this.props.isSuperAdmin ? dataSource : normalData}
+          dataSource={dataSource}
           rowKey="name"
           footer={this.renderFooter}
         >
@@ -147,7 +146,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             key="resume"
             // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
             render={url => (
-              <a href={url[0]} target="_blank" rel="noopener">
+              <a href={url} target="_blank" rel="noopener">
                 链接
               </a>
             )}
@@ -156,7 +155,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
         </Table>
         <Button
           type="primary"
-          disabled={this.props.isSubmitting || this.props.normalData.length === 0}
+          disabled={this.props.isSubmitting || this.props.dataSource.length === 0}
           onClick={this.props.stateChangeSubmit}
           style={{ float: 'right', marginTop: '5px' }}
         >
@@ -172,10 +171,10 @@ const mapStateToProps = (state: RootState) => {
   const curPassList = state.admin.userState.value;
   const currentPass = curPassList.filter(user => user.state === 1).length;
   const data = state.admin.users.items;
-  const dataSource = data.sort((user1, user2) => {
+  const superData = data.sort((user1, user2) => {
     return user1.verifyState - user2.verifyState;
   });
-  const normalData = dataSource.filter(
+  const normalData = superData.filter(
     user =>
       user.verifyState !== 2 &&
       user.verifyState !== 3 &&
@@ -183,11 +182,13 @@ const mapStateToProps = (state: RootState) => {
       !user.adminDict[1].includes(adminName),
   );
 
+  const isSuperAdmin = state.user.permission === 2;
+  const dataSource = isSuperAdmin ? superData : normalData;
+
   return {
     isSubmitting: state.admin.userState.isSubmitting,
-    normalData,
     dataSource,
-    isSuperAdmin: state.user.permission === 2,
+    isSuperAdmin,
     currentPass,
   };
 };

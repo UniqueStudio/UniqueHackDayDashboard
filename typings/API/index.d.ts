@@ -664,6 +664,7 @@ declare namespace API {
       resume: any;
       username: string;
       edited: number;
+      collection: string;
       verifyState: 0 | 1 | 2 | 3;
       adminDict: {
         0: string[];
