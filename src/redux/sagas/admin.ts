@@ -6,18 +6,22 @@ import * as req from '../../lib/requests';
 
 export function* userStateChnage() {
   while (true) {
-    const { username, state } = yield take(TYPE.ADMIN_USER_STATUS_CHANGE._);
+    const { username, state, inWaitList } = yield take(TYPE.ADMIN_USER_STATUS_CHANGE._);
     const userStatusList = yield select((root: RootState) => root.admin.userState.value);
     let flag = 1;
-    const newList = userStatusList.map((user: { username: string; state: number }) => {
-      if (user.username === username) {
-        user.state = state;
-        flag = 0;
-      }
-      return user;
-    });
+
+    const newList = userStatusList.map(
+      (user: { username: string; state?: number; inWaitList?: boolean }) => {
+        if (user.username === username) {
+          user.state = state;
+          flag = 0;
+          user.inWaitList = inWaitList;
+        }
+        return user;
+      },
+    );
     if (flag) {
-      newList.push({ username, state });
+      newList.push({ username, state, inWaitList });
     }
     yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.OK, payload: newList });
   }

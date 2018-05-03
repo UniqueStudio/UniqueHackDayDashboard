@@ -2,7 +2,8 @@ import { AnyAction } from 'redux';
 import * as TYPE from '../../actions';
 interface Status {
   username: string;
-  state: 0 | 1;
+  state?: 0 | 1;
+  inWaitList?: boolean;
 }
 export interface UserStatus {
   value: Status[];

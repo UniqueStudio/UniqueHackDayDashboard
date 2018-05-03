@@ -13,7 +13,7 @@ import uniq from 'lodash/uniq';
 
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
-  statusChange(username: string, state: 0 | 1): { type: string; username: string; state: 0 | 1 };
+  statusChange: any;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
@@ -28,13 +28,24 @@ class UserVerify extends React.Component<UserVerifyProps> {
   ];
 
   renderOperation = (record: any) => {
+    const handleChange = (e: any) => {
+      if (e.target.value !== 2) {
+        this.props.statusChange(record.username, e.target.value);
+      } else {
+        this.props.statusChange(record.username, undefined, true);
+      }
+    };
+    const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
     return (
       /* tslint:disable-next-line:jsx-no-lambda */
-      <Radio.Group onChange={e => this.props.statusChange(record.username, e.target.value)}>
-        <React.Fragment>
-          <Radio value={1}>通过</Radio>
-          <Radio value={0}>拒绝</Radio>
-        </React.Fragment>
+      <Radio.Group onChange={handleChange}>
+        {showRadio && (
+          <React.Fragment>
+            <Radio value={1}>通过</Radio>
+            <Radio value={0}>拒绝</Radio>
+            {this.props.isSuperAdmin && !record.inWaitList && <Radio value={2}>等待列表</Radio>}
+          </React.Fragment>
+        )}
       </Radio.Group>
     );
   };
@@ -79,6 +90,16 @@ class UserVerify extends React.Component<UserVerifyProps> {
     );
   };
 
+  collectionLink(url: string | undefined) {
+    return url ? (
+      <a href={url} target="_blank" rel="noopener">
+        链接
+      </a>
+    ) : (
+      '无'
+    );
+  }
+
   filterStatus(value: any, record: any) {
     return record.verifyState === +value;
   }
@@ -119,15 +140,15 @@ class UserVerify extends React.Component<UserVerifyProps> {
             dataIndex="verifyState"
             key="status"
             // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
-            render={status =>
+            render={(status, record) =>
               status === 3 ? (
                 <Badge status="success" text="已通过" />
               ) : status === 2 ? (
                 <Badge status="error" text="未通过" />
-              ) : status === 1 ? (
-                <Badge status="processing" text="审核中" />
+              ) : record.inWaitList ? (
+                <Badge status="default" text="等待中" />
               ) : (
-                <Badge status="warning" text="未审核" />
+                <Badge status="processing" text="审核中" />
               )
             }
             filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
@@ -146,6 +167,12 @@ class UserVerify extends React.Component<UserVerifyProps> {
                 链接
               </a>
             )}
+          />
+          <Column
+            title="作品集"
+            dataIndex="collection"
+            key="collection"
+            render={this.collectionLink}
           />
           <Column title="操作" key="operate" render={this.renderOperation} />
         </Table>
@@ -167,8 +194,25 @@ const mapStateToProps = (state: RootState) => {
   const curPassList = state.admin.userState.value;
   const currentPass = curPassList.filter(user => user.state === 1).length;
   const data = state.admin.users.items;
+  const isWait = (user: any) => {
+    return user.verifyState < 2 && user.inWaitList;
+  };
   const superData = data.sort((user1, user2) => {
-    return user1.verifyState - user2.verifyState;
+    if (user1.verifyState >= 2) {
+      return 1;
+    }
+    if (isWait(user1)) {
+      if (isWait(user2)) {
+        return 0;
+      } else {
+        return 1;
+      }
+    } else {
+      if (isWait(user2)) {
+        return -1;
+      }
+      return 0;
+    }
   });
   const normalData = superData.filter(
     user =>
@@ -190,11 +234,12 @@ const mapStateToProps = (state: RootState) => {
 };
 
 export default connect(mapStateToProps, {
-  statusChange(username: string, state: 0 | 1) {
+  statusChange(username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
     return {
       type: TYPE.ADMIN_USER_STATUS_CHANGE._,
       username,
       state,
+      inWaitList,
     };
   },
   stateChangeSubmit() {

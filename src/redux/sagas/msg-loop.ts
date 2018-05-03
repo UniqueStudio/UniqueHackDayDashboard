@@ -21,8 +21,11 @@ function* loop() {
       if (messages[0] && messages[0].type === 'Accepted') {
         yield put({ type: TYPE.MSG_USER_ACCEPTED });
       }
-      if (messages[1] && messages[1].type === 'Rejected') {
+      if (messages[0] && messages[0].type === 'Rejected') {
         yield put({ type: TYPE.MSG_USER_REJECTED });
+      }
+      if (messages[0] && messages[0].type === 'OtherMessage') {
+        window.location.reload();
       }
     }
   }
