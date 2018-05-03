@@ -28,17 +28,13 @@ class UserVerify extends React.Component<UserVerifyProps> {
   ];
 
   renderOperation = (record: any) => {
-    const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
-
     return (
       /* tslint:disable-next-line:jsx-no-lambda */
       <Radio.Group onChange={e => this.props.statusChange(record.username, e.target.value)}>
-        {showRadio && (
-          <React.Fragment>
-            <Radio value={1}>通过</Radio>
-            <Radio value={0}>拒绝</Radio>
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          <Radio value={1}>通过</Radio>
+          <Radio value={0}>拒绝</Radio>
+        </React.Fragment>
       </Radio.Group>
     );
   };
