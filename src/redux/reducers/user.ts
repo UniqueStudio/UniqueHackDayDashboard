@@ -26,6 +26,16 @@ export default function auth(
         ...state,
         teamId: null,
       };
+    case TYPE.MSG_USER_ACCEPTED:
+      return {
+        ...state,
+        isAccepted: true,
+      };
+    case TYPE.MSG_USER_REJECTED:
+      return {
+        ...state,
+        isAccepted: false,
+      };
     default:
       return state;
   }

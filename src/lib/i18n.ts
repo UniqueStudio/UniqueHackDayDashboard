@@ -76,7 +76,7 @@ const messageTitles: Pick<{ [k: string]: string }, API.Message.MessageType> = {
   HackExited:          ['已退出比赛', 'Hackday Exited'][language],
   Accepted:            ['您的报名申请已通过审核', 'Accepted'][language],
   Rejected:            ['您的报名申请未通过审核', 'Rejected'][language],
-  OtherMessage:        '%s',
+  OtherMessage:        ['你已进入等待列表', 'Wait'][language],
 };
 
 const messageValues: Pick<{ [k: string]: string }, API.Message.MessageType> = {
@@ -97,7 +97,7 @@ const messageValues: Pick<{ [k: string]: string }, API.Message.MessageType> = {
   HackExited: ['已退出比赛', 'Hackday Exited'][language],
   Accepted: ['您的报名申请已通过审核', 'Accepted'][language],
   Rejected: ['您的报名申请未通过审核', 'Rejected'][language],
-  OtherMessage: '%s',
+  OtherMessage: ['你已进入等待列表', 'Wait'][language],
 };
 
 const locales = {

@@ -1,3 +1,4 @@
+// tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import Table from 'antd/es/table';
 import { RootState } from '../../../redux/reducers';
@@ -8,10 +9,11 @@ import Radio from 'antd/es/radio';
 import Button from 'antd/es/button';
 import Badge from 'antd/es/badge';
 import Dvider from 'antd/es/divider';
+import uniq from 'lodash/uniq';
 
 export interface UserVerifyProps {
-  data: AdminUser['items'];
-  statusChange(username: string, state: 0 | 1): { type: string; username: string; state: 0 | 1 };
+  dataSource: AdminUser['items'];
+  statusChange: any;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
@@ -19,15 +21,32 @@ export interface UserVerifyProps {
 }
 
 class UserVerify extends React.Component<UserVerifyProps> {
+  statusFilters = [
+    { text: '审核中', value: '0' || '1' },
+    { text: '未通过', value: '2' },
+    { text: '已通过', value: '3' },
+  ];
+
   renderOperation = (record: any) => {
+    const handleChange = (e: any) => {
+      if (e.target.value !== 2) {
+        this.props.statusChange(record.username, e.target.value);
+      } else {
+        this.props.statusChange(record.username, undefined, true);
+      }
+    };
+    const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
     return (
-      <React.Fragment>
-        {/* tslint:disable-next-line:jsx-no-lambda */}
-        <Radio.Group onChange={e => this.props.statusChange(record.username, e.target.value)}>
-          <Radio value={1}>通过</Radio>
-          <Radio value={0}>拒绝</Radio>
-        </Radio.Group>
-      </React.Fragment>
+      /* tslint:disable-next-line:jsx-no-lambda */
+      <Radio.Group onChange={handleChange}>
+        {showRadio && (
+          <React.Fragment>
+            <Radio value={1}>通过</Radio>
+            <Radio value={0}>拒绝</Radio>
+            {this.props.isSuperAdmin && !record.inWaitList && <Radio value={2}>等待列表</Radio>}
+          </React.Fragment>
+        )}
+      </Radio.Group>
     );
   };
 
@@ -44,13 +63,23 @@ class UserVerify extends React.Component<UserVerifyProps> {
     );
   }
 
+  renderCurrentPass = (adminDict: any) => {
+    const rejectList = uniq(adminDict[0]);
+    const passList = uniq(adminDict[1]);
+    const rejectLen = rejectList.length;
+    const passLen = passList.length;
+
+    return `${passLen}/${rejectLen + passLen}`;
+  };
+
   renderFooter = () => {
-    const total = this.props.data.length;
+    const dataSource = this.props.dataSource;
+
+    const total = dataSource.length;
     // 审核中人数
-    const pengdingNum = this.props.data.filter(
-      user => user.verifyState === 0 || user.verifyState === 1,
-    ).length;
-    const rejectNum = this.props.data.filter(user => user.verifyState === 2).length;
+    const pengdingNum = dataSource.filter(user => user.verifyState === 0 || user.verifyState === 1)
+      .length;
+    const rejectNum = dataSource.filter(user => user.verifyState === 2).length;
     const passNum = total - pengdingNum - rejectNum;
 
     return (
@@ -61,28 +90,30 @@ class UserVerify extends React.Component<UserVerifyProps> {
     );
   };
 
+  collectionLink(url: string | undefined) {
+    return url ? (
+      <a href={url} target="_blank" rel="noopener">
+        链接
+      </a>
+    ) : (
+      '无'
+    );
+  }
+
   filterStatus(value: any, record: any) {
     return record.verifyState === +value;
   }
 
   render() {
     const Column = Table.Column;
-    const statusFilters = [
-      { text: '审核中', value: '0' || '1' },
-      { text: '未通过', value: '2' },
-      { text: '已通过', value: '3' },
-    ];
-
-    const dataSource = this.props.data.filter(user => {
-      return user.verifyState !== 3 && user.verifyState !== 2;
-    });
+    const { dataSource } = this.props;
 
     return (
       <React.Fragment>
         <Table
           scroll={{ x: 700 }}
           pagination={{ pageSize: 10 }}
-          dataSource={this.props.isSuperAdmin ? this.props.data : dataSource}
+          dataSource={dataSource}
           rowKey="name"
           footer={this.renderFooter}
         >
@@ -96,21 +127,31 @@ class UserVerify extends React.Component<UserVerifyProps> {
             }
           />
           <Column title="姓名" dataIndex="name" key="name" />
+          {this.props.isSuperAdmin && (
+            <Column
+              title="当前通过"
+              dataIndex="adminDict"
+              key="currentPass"
+              render={this.renderCurrentPass}
+            />
+          )}
           <Column
             title="审核状态"
             dataIndex="verifyState"
             key="status"
             // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
-            render={status =>
+            render={(status, record) =>
               status === 3 ? (
                 <Badge status="success" text="已通过" />
               ) : status === 2 ? (
                 <Badge status="error" text="未通过" />
+              ) : record.inWaitList ? (
+                <Badge status="default" text="等待中" />
               ) : (
-                <Badge status="warning" text="审核中" />
+                <Badge status="processing" text="审核中" />
               )
             }
-            filters={this.props.isSuperAdmin ? statusFilters : undefined}
+            filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
             onFilter={this.filterStatus}
           />
           <Column title="学校" dataIndex="school" key="school" />
@@ -122,16 +163,22 @@ class UserVerify extends React.Component<UserVerifyProps> {
             key="resume"
             // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
             render={url => (
-              <a href={url[0]} target="_blank" rel="noopener">
+              <a href={url} target="_blank" rel="noopener">
                 链接
               </a>
             )}
+          />
+          <Column
+            title="作品集"
+            dataIndex="collection"
+            key="collection"
+            render={this.collectionLink}
           />
           <Column title="操作" key="operate" render={this.renderOperation} />
         </Table>
         <Button
           type="primary"
-          disabled={this.props.isSubmitting}
+          disabled={this.props.isSubmitting || this.props.dataSource.length === 0}
           onClick={this.props.stateChangeSubmit}
           style={{ float: 'right', marginTop: '5px' }}
         >
@@ -143,23 +190,56 @@ class UserVerify extends React.Component<UserVerifyProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const adminName = state.user.username as string;
   const curPassList = state.admin.userState.value;
   const currentPass = curPassList.filter(user => user.state === 1).length;
+  const data = state.admin.users.items;
+  const isWait = (user: any) => {
+    return user.verifyState < 2 && user.inWaitList;
+  };
+  const superData = data.sort((user1, user2) => {
+    if (user1.verifyState >= 2) {
+      return 1;
+    }
+    if (isWait(user1)) {
+      if (isWait(user2)) {
+        return 0;
+      } else {
+        return 1;
+      }
+    } else {
+      if (isWait(user2)) {
+        return -1;
+      }
+      return 0;
+    }
+  });
+  const normalData = superData.filter(
+    user =>
+      user.verifyState !== 2 &&
+      user.verifyState !== 3 &&
+      !user.adminDict[0].includes(adminName) &&
+      !user.adminDict[1].includes(adminName),
+  );
+
+  const isSuperAdmin = state.user.permission === 2;
+  const dataSource = isSuperAdmin ? superData : normalData;
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
-    data: state.admin.users.items,
-    isSuperAdmin: state.user.permission === 2,
+    dataSource,
+    isSuperAdmin,
     currentPass,
   };
 };
 
 export default connect(mapStateToProps, {
-  statusChange(username: string, state: 0 | 1) {
+  statusChange(username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
     return {
       type: TYPE.ADMIN_USER_STATUS_CHANGE._,
       username,
       state,
+      inWaitList,
     };
   },
   stateChangeSubmit() {

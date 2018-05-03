@@ -134,6 +134,7 @@ declare namespace API {
       checkedIn: boolean | null;
       projectId: string | null;
       awardId: string | null;
+      inWaitList?: boolean;
       // 报销: 0: 不需要报销但是已经确认报销数据  null: 未进行到报销流程, 其他数字: 报销金额
       reimbursement: number | null;
       awardMoneyGiven: boolean | null;
@@ -664,11 +665,18 @@ declare namespace API {
       resume: any;
       username: string;
       edited: number;
+      collection: string;
       verifyState: 0 | 1 | 2 | 3;
+      adminDict: {
+        0: string[];
+        1: string[];
+      };
+      inWaitList: boolean;
     }
     interface AdminUserState {
       username: string;
-      state: 0 | 1;
+      state?: 0 | 1;
+      inWaitList?: boolean;
     }
     interface RequestFunc {
       (req: RequestWithAuth<'/v1/admin/verify/teams', 'GET', {}>): Response<

@@ -9,7 +9,7 @@ import Icon from 'antd/es/icon';
 import cls from './style.less';
 
 export interface StatusProps {
-  type: 'success' | 'warning' | 'error';
+  icon: { type: string; color: string };
   statusText: string;
   buttons: React.ReactNode[];
 }
@@ -22,8 +22,8 @@ const Status = (props: StatusProps) => {
           <div className={cls['icon-title-wrapper']}>
             <Icon
               className={cls['icon-success']}
-              type="question-circle"
-              style={{ color: '#ffaf40' }}
+              type={`${props.icon.type}-circle`}
+              style={{ color: props.icon.color }}
             />
             <h1 className={cls['status-title']}>当前状态: {props.statusText}</h1>
           </div>

@@ -64,6 +64,16 @@ export default function msgMap(msg: SingleMessage): INoticeIconData {
         read: msg.read,
         clickHandler: noop,
       } as any;
+    case 'OtherMessage':
+      return {
+        id: msg.id,
+        avatar: genIconImage(IconType.QuestionCircle, 'blue'),
+        title: locales.messageTitles.OtherMessage,
+        description: locales.messageValues.OtherMessage,
+        datetime,
+        read: msg.read,
+        clickHandler: noop,
+      } as any;
     default:
       return {};
   }

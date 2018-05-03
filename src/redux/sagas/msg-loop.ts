@@ -18,6 +18,15 @@ function* loop() {
     const [messages] = yield call(throttledMsgPoll);
     if (messages && messages.length > 0) {
       yield put({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: messages });
+      if (messages[0] && messages[0].type === 'Accepted') {
+        yield put({ type: TYPE.MSG_USER_ACCEPTED });
+      }
+      if (messages[0] && messages[0].type === 'Rejected') {
+        yield put({ type: TYPE.MSG_USER_REJECTED });
+      }
+      if (messages[0] && messages[0].type === 'OtherMessage') {
+        window.location.reload();
+      }
     }
   }
 }

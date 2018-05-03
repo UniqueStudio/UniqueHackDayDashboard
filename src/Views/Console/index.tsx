@@ -15,23 +15,30 @@ class Console extends React.Component<{
   userIsAccepted: boolean | null;
   push: typeof push;
   abortCompetition: any;
+  inWaitList: boolean;
 }> {
   renderDivider() {
     return <div style={{ height: '20px' }} />;
   }
 
   render() {
-    const { userIsAccepted } = this.props;
+    const { userIsAccepted, inWaitList } = this.props;
+    let icon = { type: 'question', color: '#ffaf40' };
     let statusText = '等待审核';
+
     if (userIsAccepted === true) {
       statusText = '已通过';
+      icon = { type: 'check', color: '#44B800' };
     } else if (userIsAccepted === false) {
       statusText = '未通过';
+      icon = { type: 'close', color: '#f5222d' };
+    } else if (inWaitList) {
+      statusText = '等待列表';
     }
 
     return (
       <div style={{ paddingBottom: '40px' }}>
-        <Status type="success" statusText={statusText} buttons={this.renderStatusButtons()} />
+        <Status icon={icon} statusText={statusText} buttons={this.renderStatusButtons()} />
         {this.renderDivider()}
         <TeamInfo />
         {this.renderDivider()}
@@ -57,10 +64,11 @@ class Console extends React.Component<{
 }
 
 const mapStateToProps = ({ user }: RootState) => {
-  const { isAccepted } = user;
+  const { isAccepted, inWaitList } = user;
 
   return {
     userIsAccepted: isAccepted,
+    inWaitList,
   };
 };
 
