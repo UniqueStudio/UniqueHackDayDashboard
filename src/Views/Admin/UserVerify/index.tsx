@@ -129,8 +129,10 @@ class UserVerify extends React.Component<UserVerifyProps> {
                 <Badge status="success" text="已通过" />
               ) : status === 2 ? (
                 <Badge status="error" text="未通过" />
+              ) : status === 1 ? (
+                <Badge status="processing" text="审核中" />
               ) : (
-                <Badge status="warning" text="审核中" />
+                <Badge status="warning" text="未审核" />
               )
             }
             filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
@@ -166,13 +168,20 @@ class UserVerify extends React.Component<UserVerifyProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const adminName = state.user.username as string;
   const curPassList = state.admin.userState.value;
   const currentPass = curPassList.filter(user => user.state === 1).length;
   const data = state.admin.users.items;
   const dataSource = data.sort((user1, user2) => {
     return user1.verifyState - user2.verifyState;
   });
-  const normalData = dataSource.filter(user => user.verifyState !== 2 && user.verifyState !== 3);
+  const normalData = dataSource.filter(
+    user =>
+      user.verifyState !== 2 &&
+      user.verifyState !== 3 &&
+      !user.adminDict[0].includes(adminName) &&
+      !user.adminDict[1].includes(adminName),
+  );
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
