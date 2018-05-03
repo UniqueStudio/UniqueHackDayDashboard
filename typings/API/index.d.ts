@@ -665,6 +665,10 @@ declare namespace API {
       username: string;
       edited: number;
       verifyState: 0 | 1 | 2 | 3;
+      adminDict: {
+        0: string[];
+        1: string[];
+      };
     }
     interface AdminUserState {
       username: string;

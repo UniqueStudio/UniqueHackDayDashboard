@@ -11,7 +11,8 @@ import Badge from 'antd/es/badge';
 import Dvider from 'antd/es/divider';
 
 export interface UserVerifyProps {
-  data: AdminUser['items'];
+  dataSource: AdminUser['items'];
+  normalData: AdminUser['items'];
   statusChange(username: string, state: 0 | 1): { type: string; username: string; state: 0 | 1 };
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
@@ -55,13 +56,21 @@ class UserVerify extends React.Component<UserVerifyProps> {
     );
   }
 
+  renderCurrentPass = (adminDict: any) => {
+    const rejectLen = adminDict[0].length;
+    const passLen = adminDict[1].length;
+
+    return `${passLen}/${rejectLen + passLen}`;
+  };
+
   renderFooter = () => {
-    const total = this.props.data.length;
+    const dataSource = this.props.dataSource;
+
+    const total = dataSource.length;
     // 审核中人数
-    const pengdingNum = this.props.data.filter(
-      user => user.verifyState === 0 || user.verifyState === 1,
-    ).length;
-    const rejectNum = this.props.data.filter(user => user.verifyState === 2).length;
+    const pengdingNum = dataSource.filter(user => user.verifyState === 0 || user.verifyState === 1)
+      .length;
+    const rejectNum = dataSource.filter(user => user.verifyState === 2).length;
     const passNum = total - pengdingNum - rejectNum;
 
     return (
@@ -78,12 +87,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
   render() {
     const Column = Table.Column;
-
-    const dataSource = this.props.data.sort((user1, user2) => {
-      return user1.verifyState - user2.verifyState;
-    });
-    // filter accepted and rejected for normal admin
-    const normalData = dataSource.filter(user => user.verifyState !== 2 && user.verifyState !== 3);
+    const { dataSource, normalData } = this.props;
 
     return (
       <React.Fragment>
@@ -104,6 +108,12 @@ class UserVerify extends React.Component<UserVerifyProps> {
             }
           />
           <Column title="姓名" dataIndex="name" key="name" />
+          <Column
+            title="当前通过"
+            dataIndex="adminDict"
+            key="currentPass"
+            render={this.renderCurrentPass}
+          />
           <Column
             title="审核状态"
             dataIndex="verifyState"
@@ -139,7 +149,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
         </Table>
         <Button
           type="primary"
-          disabled={this.props.isSubmitting}
+          disabled={this.props.isSubmitting || this.props.normalData.length === 0}
           onClick={this.props.stateChangeSubmit}
           style={{ float: 'right', marginTop: '5px' }}
         >
@@ -153,10 +163,16 @@ class UserVerify extends React.Component<UserVerifyProps> {
 const mapStateToProps = (state: RootState) => {
   const curPassList = state.admin.userState.value;
   const currentPass = curPassList.filter(user => user.state === 1).length;
+  const data = state.admin.users.items;
+  const dataSource = data.sort((user1, user2) => {
+    return user1.verifyState - user2.verifyState;
+  });
+  const normalData = dataSource.filter(user => user.verifyState !== 2 && user.verifyState !== 3);
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
-    data: state.admin.users.items,
+    normalData,
+    dataSource,
     isSuperAdmin: state.user.permission === 2,
     currentPass,
   };
