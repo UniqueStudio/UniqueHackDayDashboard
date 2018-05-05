@@ -36,7 +36,6 @@ class UserVerify extends React.Component<UserVerifyProps> {
     };
     const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
     return (
-      /* tslint:disable-next-line:jsx-no-lambda */
       <Radio.Group onChange={handleChange}>
         {showRadio && (
           <React.Fragment>
@@ -103,6 +102,17 @@ class UserVerify extends React.Component<UserVerifyProps> {
     return record.verifyState === +value;
   }
 
+  renderStatus = (status: any, record: any) =>
+    status === 3 ? (
+      <Badge status="success" text="已通过" />
+    ) : status === 2 ? (
+      <Badge status="error" text="未通过" />
+    ) : record.inWaitList ? (
+      <Badge status="default" text="等待中" />
+    ) : (
+      <Badge status="processing" text="审核中" />
+    );
+
   render() {
     const Column = Table.Column;
     const { dataSource } = this.props;
@@ -138,18 +148,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="审核状态"
             dataIndex="verifyState"
             key="status"
-            // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
-            render={(status, record) =>
-              status === 3 ? (
-                <Badge status="success" text="已通过" />
-              ) : status === 2 ? (
-                <Badge status="error" text="未通过" />
-              ) : record.inWaitList ? (
-                <Badge status="default" text="等待中" />
-              ) : (
-                <Badge status="processing" text="审核中" />
-              )
-            }
+            render={this.renderStatus}
             filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
             onFilter={this.filterStatus}
           />
