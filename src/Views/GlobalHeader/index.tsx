@@ -65,7 +65,7 @@ class GlobalHeader extends React.Component<{
   renderGithubAchor() {
     return (
       <div className={cls['header-right-icon']}>
-        <a href="https://github.com/UniqueStudio/UniqueHackDayDashboard">
+        <a href="https://github.com/UniqueStudio/UniqueHackDayDashboard" rel="noopener">
           <Icon type="github" style={{ fontSize: '1rem' }} />
         </a>
       </div>
