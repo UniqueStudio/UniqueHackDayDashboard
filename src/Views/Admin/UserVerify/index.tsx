@@ -14,7 +14,6 @@ import uniq from 'lodash/uniq';
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
   statusChange: any;
-  radioChange: (radio: number) => any;
   radioVal: number;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
