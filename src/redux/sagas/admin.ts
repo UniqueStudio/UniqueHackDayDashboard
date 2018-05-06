@@ -23,7 +23,7 @@ export function* userStateChnage() {
     if (flag) {
       newList.push({ username, state, inWaitList });
     }
-    yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.OK, payload: newList, radioVal });
+    yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.OK, payload: newList, radioVal, username });
   }
 }
 
