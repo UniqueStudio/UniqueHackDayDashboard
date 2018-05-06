@@ -38,6 +38,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
     };
 
     const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
+
     return (
       <Radio.Group onChange={handleChange} defaultValue={this.props.radioVal}>
         {showRadio && (
