@@ -7,13 +7,15 @@ interface Status {
 }
 export interface UserStatus {
   value: Status[];
-  radio?: number;
   isSubmitting: boolean;
   error: { value?: string; time?: number };
+  radios: {
+    name?: number;
+  };
 }
 
 export default (
-  state: UserStatus = { value: [], isSubmitting: false, error: {} },
+  state: UserStatus = { value: [], isSubmitting: false, error: {}, radios: {} },
   action: AnyAction,
 ) => {
   switch (action.type) {
@@ -21,12 +23,16 @@ export default (
       return {
         ...state,
         value: action.payload,
-        radio: action.radioVal,
+        radios: {
+          ...state.radios,
+          [action.username]: action.radioVal,
+        },
       };
     case TYPE.ADMIN_USER_STATUS_CHANGE.FAIL:
       return {
         ...state,
         value: [],
+        radios: {},
       };
     case TYPE.ADMIN_USER_SUBMIT.START:
       return {
@@ -36,11 +42,15 @@ export default (
     case TYPE.ADMIN_USER_SUBMIT.OK:
       return {
         ...state,
+        value: [],
+        radios: {},
         isSubmitting: false,
       };
     case TYPE.ADMIN_USER_SUBMIT.FAIL:
       return {
         ...state,
+        value: [],
+        radios: {},
         isSubmitting: false,
         error: { value: action.payload, time: Date.now() },
       };

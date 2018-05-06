@@ -14,7 +14,7 @@ import uniq from 'lodash/uniq';
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
   statusChange: any;
-  radioVal: number;
+  radios: any;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
@@ -40,7 +40,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
     const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
 
     return (
-      <Radio.Group onChange={handleChange} defaultValue={this.props.radioVal}>
+      <Radio.Group onChange={handleChange} defaultValue={this.props.radios[record.username]}>
         {showRadio && (
           <React.Fragment>
             <Radio value={1}>通过</Radio>
@@ -205,13 +205,13 @@ const mapStateToProps = (state: RootState) => {
 
   const isSuperAdmin = state.user.permission === 2;
   const dataSource = isSuperAdmin ? superData : normalData;
-  const radioVal = state.admin.userState.radio;
+  const radios = state.admin.userState.radios;
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
     dataSource,
     isSuperAdmin,
-    radioVal,
+    radios,
   };
 };
 
