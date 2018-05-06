@@ -14,6 +14,7 @@ import uniq from 'lodash/uniq';
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
   statusChange: any;
+  radioVal: number;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
@@ -28,16 +29,17 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
   renderOperation = (record: any) => {
     const handleChange = (e: any) => {
+      const radioVal = e.target.value;
       if (e.target.value !== 2) {
-        this.props.statusChange(record.username, e.target.value);
+        this.props.statusChange(radioVal, record.username, e.target.value);
       } else {
-        this.props.statusChange(record.username, undefined, true);
+        this.props.statusChange(radioVal, record.username, undefined, true);
       }
     };
+
     const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
     return (
-      /* tslint:disable-next-line:jsx-no-lambda */
-      <Radio.Group onChange={handleChange}>
+      <Radio.Group onChange={handleChange} defaultValue={this.props.radioVal}>
         {showRadio && (
           <React.Fragment>
             <Radio value={1}>通过</Radio>
@@ -103,6 +105,17 @@ class UserVerify extends React.Component<UserVerifyProps> {
     return record.verifyState === +value;
   }
 
+  renderStatus = (status: any, record: any) =>
+    status === 3 ? (
+      <Badge status="success" text="已通过" />
+    ) : status === 2 ? (
+      <Badge status="error" text="未通过" />
+    ) : record.inWaitList ? (
+      <Badge status="default" text="等待中" />
+    ) : (
+      <Badge status="processing" text="审核中" />
+    );
+
   render() {
     const Column = Table.Column;
     const { dataSource } = this.props;
@@ -138,18 +151,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             title="审核状态"
             dataIndex="verifyState"
             key="status"
-            // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
-            render={(status, record) =>
-              status === 3 ? (
-                <Badge status="success" text="已通过" />
-              ) : status === 2 ? (
-                <Badge status="error" text="未通过" />
-              ) : record.inWaitList ? (
-                <Badge status="default" text="等待中" />
-              ) : (
-                <Badge status="processing" text="审核中" />
-              )
-            }
+            render={this.renderStatus}
             filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
             onFilter={this.filterStatus}
           />
@@ -202,21 +204,24 @@ const mapStateToProps = (state: RootState) => {
 
   const isSuperAdmin = state.user.permission === 2;
   const dataSource = isSuperAdmin ? superData : normalData;
+  const radioVal = state.admin.userState.radio;
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
     dataSource,
     isSuperAdmin,
+    radioVal,
   };
 };
 
 export default connect(mapStateToProps, {
-  statusChange(username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
+  statusChange(radioVal: number, username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
     return {
       type: TYPE.ADMIN_USER_STATUS_CHANGE._,
       username,
       state,
       inWaitList,
+      radioVal,
     };
   },
   stateChangeSubmit() {
