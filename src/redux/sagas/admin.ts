@@ -6,7 +6,7 @@ import * as req from '../../lib/requests';
 
 export function* userStateChnage() {
   while (true) {
-    const { username, state, inWaitList } = yield take(TYPE.ADMIN_USER_STATUS_CHANGE._);
+    const { username, state, inWaitList, radioVal } = yield take(TYPE.ADMIN_USER_STATUS_CHANGE._);
     const userStatusList = yield select((root: RootState) => root.admin.userState.value);
     let flag = 1;
 
@@ -23,7 +23,7 @@ export function* userStateChnage() {
     if (flag) {
       newList.push({ username, state, inWaitList });
     }
-    yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.OK, payload: newList });
+    yield put({ type: TYPE.ADMIN_USER_STATUS_CHANGE.OK, payload: newList, radioVal });
   }
 }
 

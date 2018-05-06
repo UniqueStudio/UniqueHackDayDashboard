@@ -7,6 +7,7 @@ interface Status {
 }
 export interface UserStatus {
   value: Status[];
+  radio?: number;
   isSubmitting: boolean;
   error: { value?: string; time?: number };
 }
@@ -20,6 +21,7 @@ export default (
       return {
         ...state,
         value: action.payload,
+        radio: action.radioVal,
       };
     case TYPE.ADMIN_USER_STATUS_CHANGE.FAIL:
       return {

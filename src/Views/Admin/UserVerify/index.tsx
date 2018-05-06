@@ -14,6 +14,8 @@ import uniq from 'lodash/uniq';
 export interface UserVerifyProps {
   dataSource: AdminUser['items'];
   statusChange: any;
+  radioChange: (radio: number) => any;
+  radioVal: number;
   isSubmitting: boolean;
   stateChangeSubmit: () => { type: string };
   isSuperAdmin: boolean;
@@ -28,15 +30,17 @@ class UserVerify extends React.Component<UserVerifyProps> {
 
   renderOperation = (record: any) => {
     const handleChange = (e: any) => {
+      const radioVal = e.target.value;
       if (e.target.value !== 2) {
-        this.props.statusChange(record.username, e.target.value);
+        this.props.statusChange(radioVal, record.username, e.target.value);
       } else {
-        this.props.statusChange(record.username, undefined, true);
+        this.props.statusChange(radioVal, record.username, undefined, true);
       }
     };
+
     const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
     return (
-      <Radio.Group onChange={handleChange}>
+      <Radio.Group onChange={handleChange} defaultValue={this.props.radioVal}>
         {showRadio && (
           <React.Fragment>
             <Radio value={1}>通过</Radio>
@@ -201,21 +205,24 @@ const mapStateToProps = (state: RootState) => {
 
   const isSuperAdmin = state.user.permission === 2;
   const dataSource = isSuperAdmin ? superData : normalData;
+  const radioVal = state.admin.userState.radio;
 
   return {
     isSubmitting: state.admin.userState.isSubmitting,
     dataSource,
     isSuperAdmin,
+    radioVal,
   };
 };
 
 export default connect(mapStateToProps, {
-  statusChange(username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
+  statusChange(radioVal: number, username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
     return {
       type: TYPE.ADMIN_USER_STATUS_CHANGE._,
       username,
       state,
       inWaitList,
+      radioVal,
     };
   },
   stateChangeSubmit() {
