@@ -11,7 +11,7 @@ import './lib/specialLog';
 const App = Loadable({
   loader: () => import('./App'),
   loading: () => null,
-  delay: 300
+  delay: 300,
 });
 
 const root = document.getElementById('root') as HTMLElement;
