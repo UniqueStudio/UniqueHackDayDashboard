@@ -10,7 +10,6 @@ import Tabs from 'antd/es/tabs';
 import { Switch, Route, RouteComponentProps, Redirect } from 'react-router';
 
 import UserEntryLayout from '../../Layouts/UserEntryLayout/index';
-import WithRecaptcha from '../../lib/withRecaptcha';
 
 import MyForm from '../../Components/MyForm/MyForm';
 import Username from '../../Components/MyForm/Username';
@@ -22,6 +21,7 @@ import Submit from '../../Components/MyForm/Submit';
 import Text from '../../Components/MyForm/Text';
 import { usernameValidator, phoneValidator } from '../../Components/MyForm/validators';
 import { patterns } from '../../lib/patterns';
+// import WithRecaptcha from '../../lib/withRecaptcha';
 
 export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
@@ -247,4 +247,30 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WithRecaptcha(LoginView));
+export default connect(mapStateToProps, mapDispatchToProps)(FakeWithRecaptcha(LoginView));
+
+export interface RecaptchaProps {
+  withVerify: (callback: (token: string) => any) => () => Promise<void>;
+  recaptchaReady: boolean;
+}
+
+function FakeWithRecaptcha<P>(
+  WrappedComponent: React.ComponentType<P & RecaptchaProps>,
+): React.ComponentType<P> {
+  function randomString() {
+    return new Array(6)
+      .fill(0)
+      .map(() =>
+        Math.random()
+          .toString(16)
+          .slice(2),
+      )
+      .join('');
+  }
+  function fakeWithVerify(callback: (token: string) => any) {
+    return () => (callback(randomString()), Promise.resolve());
+  }
+  return props => {
+    return <WrappedComponent {...props} withVerify={fakeWithVerify} recaptchaReady={true} />;
+  };
+}
