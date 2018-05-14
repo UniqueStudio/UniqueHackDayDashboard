@@ -21,7 +21,7 @@ import Submit from '../../Components/MyForm/Submit';
 import Text from '../../Components/MyForm/Text';
 import { usernameValidator, phoneValidator } from '../../Components/MyForm/validators';
 import { patterns } from '../../lib/patterns';
-import WithRecaptcha from '../../lib/withRecaptcha';
+// import WithRecaptcha from '../../lib/withRecaptcha';
 
 export interface LoginViewProps extends RouteComponentProps<{}> {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
@@ -247,9 +247,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WithRecaptcha(LoginView));
+export default connect(mapStateToProps, mapDispatchToProps)(FakeWithRecaptcha(LoginView));
 
-/*
 export interface RecaptchaProps {
   withVerify: (callback: (token: string) => any) => () => Promise<void>;
   recaptchaReady: boolean;
@@ -275,4 +274,3 @@ function FakeWithRecaptcha<P>(
     return <WrappedComponent {...props} withVerify={fakeWithVerify} recaptchaReady={true} />;
   };
 }
-*/
