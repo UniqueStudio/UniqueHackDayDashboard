@@ -10,8 +10,8 @@ const HackdayProgress = () => {
     <Card bordered={false} title="比赛进程">
       <Steps progressDot={true} direction="vertical">
         <Steps.Step title="2018/4/17 开始报名" />
-        <Steps.Step title="2018/5/15 停止报名" />
-        <Steps.Step title="2018/5/19 确认是否参赛" />
+        <Steps.Step title="2018/5/20 停止报名" />
+        <Steps.Step title="2018/5/25 确认是否参赛" />
         <Steps.Step title="2018/6/2 开幕式，Hackday 比赛开始" />
         <Steps.Step title="2018/6/3 作品提交，评分，闭幕式&颁奖" />
       </Steps>
