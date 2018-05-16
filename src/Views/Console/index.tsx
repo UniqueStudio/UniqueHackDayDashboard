@@ -52,10 +52,7 @@ class Console extends React.Component<{
 
   renderScanCode() {
     return (
-      <Card
-        style={{ width: 240 }}
-        cover={<img alt="example" src="https://storage.fredliang.cn/hack/hackday2018.jpg" />}
-      >
+      <Card cover={<img alt="scan code" src="https://storage.fredliang.cn/hack/hackday2018.jpg" />}>
         <Card.Meta
           title="hackday 小助手微信"
           description="扫描上方二维码，备注自己的姓名学校，小助手会在三个工作日内将你拉入选手群。"
