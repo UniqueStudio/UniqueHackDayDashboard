@@ -53,7 +53,7 @@ class Console extends React.Component<{
   renderScanCode() {
     return (
       <Card
-        style={{ maxWidth: '400px' }}
+        style={{ maxWidth: '250px' }}
         cover={<img alt="scan code" src="https://storage.fredliang.cn/hack/hackday2018.jpg" />}
       >
         <Card.Meta
