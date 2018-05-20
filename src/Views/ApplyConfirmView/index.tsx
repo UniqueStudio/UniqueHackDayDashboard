@@ -30,12 +30,6 @@ class ApplyConfirmView extends React.Component<
     date: '',
   };
 
-  componentDidMount() {
-    fetch('https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp')
-      .then(response => response.json())
-      .then(json => this.setState({ date: json.data.t }));
-  }
-
   handleCheckbox = () => {
     this.setState(({ confirmButtonDisabled }) => ({
       confirmButtonDisabled: !confirmButtonDisabled,
@@ -49,11 +43,8 @@ class ApplyConfirmView extends React.Component<
     });
   };
 
-  timeOutDate(date: string) {
-    if (+new Date(date) < +this.state.date) {
-      return true;
-    }
-    return false;
+  timeOutDate() {
+    return true;
   }
 
   outDateHandler() {
@@ -104,9 +95,7 @@ class ApplyConfirmView extends React.Component<
               disabled={this.state.confirmButtonDisabled || this.props.ing}
               type="primary"
               style={{ marginTop: '10px' }}
-              onClick={
-                this.timeOutDate('2018/5/21') ? this.outDateHandler : this.props.handleConfirm
-              }
+              onClick={this.timeOutDate() ? this.outDateHandler : this.props.handleConfirm}
             >
               {this.props.ing ? <Icon type="loading" /> : '确认参赛'}
             </Button>
