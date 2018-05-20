@@ -5,6 +5,7 @@ import Button from 'antd/es/button';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 import Checkbox from 'antd/es/checkbox';
+import Message from 'antd/es/message';
 
 import { connect } from 'react-redux';
 import Icon from 'antd/es/icon';
@@ -21,12 +22,19 @@ export interface ApplyConfirmViewProps {
 
 class ApplyConfirmView extends React.Component<
   ApplyConfirmViewProps,
-  { confirmButtonDisabled: boolean; showMessage: boolean }
+  { confirmButtonDisabled: boolean; showMessage: boolean; date: string | null }
 > {
   state = {
     confirmButtonDisabled: true,
     showMessage: false,
+    date: '',
   };
+
+  componentDidMount() {
+    fetch('http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp')
+      .then(response => response.json())
+      .then(json => this.setState({ date: json.data.t }));
+  }
 
   handleCheckbox = () => {
     this.setState(({ confirmButtonDisabled }) => ({
@@ -40,6 +48,17 @@ class ApplyConfirmView extends React.Component<
       showMessage: false,
     });
   };
+
+  timeOutDate(date: string) {
+    if (+new Date(date) < +this.state.date) {
+      return true;
+    }
+    return false;
+  }
+
+  outDateHandler() {
+    Message.warn('报名已经截止啦>_<');
+  }
 
   render() {
     return (
@@ -85,7 +104,9 @@ class ApplyConfirmView extends React.Component<
               disabled={this.state.confirmButtonDisabled || this.props.ing}
               type="primary"
               style={{ marginTop: '10px' }}
-              onClick={this.props.handleConfirm}
+              onClick={
+                this.timeOutDate('2018/5/21') ? this.outDateHandler : this.props.handleConfirm
+              }
             >
               {this.props.ing ? <Icon type="loading" /> : '确认参赛'}
             </Button>
