@@ -31,7 +31,7 @@ class ApplyConfirmView extends React.Component<
   };
 
   componentDidMount() {
-    fetch('http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp')
+    fetch('https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp')
       .then(response => response.json())
       .then(json => this.setState({ date: json.data.t }));
   }
