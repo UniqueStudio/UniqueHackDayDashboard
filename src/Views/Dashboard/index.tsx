@@ -39,7 +39,6 @@ const Dashboard = (props: DashboardProps) => {
         <Route path="/apply" component={ApplyView} />
         <Route path="/detail_edit" component={DetailView} />
         <Route path="/admin" component={Admin} />
-        {/* <Route path="/project" component={} /> */}
         <Route path="/team" component={isC ? TeamConsole : RedirectToApply} />
         <Route path="/" component={isC ? ConsoleView : RedirectToApply} />
       </Switch>

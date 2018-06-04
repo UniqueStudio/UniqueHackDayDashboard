@@ -54,11 +54,10 @@ class Console extends React.Component<{
     return (
       <Card
         style={{ maxWidth: '250px' }}
-        cover={<img alt="scan code" src="https://storage.fredliang.cn/hack/hackday2018.jpg" />}
       >
         <Card.Meta
-          title="hackday微信小助手"
-          description="请扫描上方二维码加入 hackday 小助手微信，备注自己的姓名学校，小助手会在三个工作日内将你拉入选手群。"
+          title="邮寄回程票"
+          description="地址: 湖北省武汉市华中科技大学启明学院809\n收件人: 梁志博\n电话: 13207116552"
         />
       </Card>
     );

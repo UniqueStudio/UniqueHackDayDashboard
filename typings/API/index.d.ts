@@ -697,9 +697,39 @@ declare namespace API {
     }
   }
 
+  namespace Project {
+    interface ProjectInfo {
+      projId: number | null;
+      projectName: string;
+      description: string;
+      memberLabour: string;
+      techDescription: string;
+      designDescription: string;
+      sponsorTech: string;
+      link: string;
+      memberList: string[];
+    }
+
+    interface RequestFunc {
+      (req: RequestWithAuth<'/v1/project/', 'GET', {}>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, ProjectInfo>
+      >;
+      (req: RequestWithAuth<'/v1/project/', 'POST', ProjectInfo>): Response<
+        | ResponseWithoutData<401, Message.LoginNeeded>
+        | ResponseWithoutData<400, Message.TeamNotExists>
+        | ResponseWithoutData<403, Message.Forbidden>
+        | ResponseWithData<200, Message.Success, ProjectInfo>
+      >;
+    }
+  }
+
   type RequestFunc = User.RequestFunc &
     Team.RequestFunc &
     File.RequestFunc &
     Message.RequestFunc &
-    Admin.RequestFunc;
+    Admin.RequestFunc &
+    Project.RequestFunc;
 }
