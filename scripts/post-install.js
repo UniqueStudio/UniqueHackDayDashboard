@@ -25,7 +25,7 @@ glob(`${antdProSrcDirPath}/**/*.less`, {}, function(er, lessFiles) {
   lessFiles.forEach(lessFile => {
     let content = fs.readFileSync(lessFile).toString();
     content = content.replace(
-      /^@import "~antd\/lib\/(.+?)\.less";$/m,
+      /^@import ["|']~antd\/lib\/(.+?)\.less["|'];$/m,
       '@import "node_modules/antd/es/$1.less";',
     );
     fs.writeFileSync(lessFile, content);
