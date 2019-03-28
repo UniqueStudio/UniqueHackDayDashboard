@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import DescriptionList from 'ant-design-pro/es/DescriptionList';
+import DescriptionList from 'ant-design-pro/lib/DescriptionList';
 import Card from 'antd/es/card';
 import Table from 'antd/es/table';
 import Button from 'antd/es/button';
@@ -66,7 +66,9 @@ const TeamInfo = (props: TeamInfoProps) => {
           <Popconfirm
             title={
               <p>
-                这会使你成为队员，该用户成为<br />队长，该用户会收到一个消息通知
+                这会使你成为队员，该用户成为
+                <br />
+                队长，该用户会收到一个消息通知
               </p>
             }
             okText="确定"
@@ -79,7 +81,9 @@ const TeamInfo = (props: TeamInfoProps) => {
           <Popconfirm
             title={
               <p>
-                这会使从队伍中移出该队员，<br />他本人会收到消息通知
+                这会使从队伍中移出该队员，
+                <br />
+                他本人会收到消息通知
               </p>
             }
             okText="确定"
@@ -97,7 +101,9 @@ const TeamInfo = (props: TeamInfoProps) => {
           <Popconfirm
             title={
               <p>
-                这会使你退出这个队伍，只<br />有队长会收到消息通知
+                这会使你退出这个队伍，只
+                <br />
+                有队长会收到消息通知
               </p>
             }
             okText="确定"
@@ -179,14 +185,16 @@ const TeamInfo = (props: TeamInfoProps) => {
         <Popconfirm
           title={
             <p>
-              解散队伍会使所有队员及<br />队长变为<b>暂未组队</b>状态
+              解散队伍会使所有队员及
+              <br />
+              队长变为<b>暂未组队</b>状态
             </p>
           }
           okText="确定"
           cancelText="取消"
           onConfirm={props.dissolutionTeam.bind(null, props.user.teamId)}
         >
-          <Button children="解散队伍" type="danger" />
+          <Button href="" children="解散队伍" type="danger" />
         </Popconfirm>
       )}
     </Card>

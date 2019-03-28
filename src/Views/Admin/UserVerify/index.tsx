@@ -179,6 +179,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
           <Column title="操作" key="operate" render={this.renderOperation} />
         </Table>
         <Button
+          href=""
           type="primary"
           disabled={this.props.isSubmitting || this.props.dataSource.length === 0}
           onClick={this.props.stateChangeSubmit}
@@ -215,19 +216,27 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  statusChange(radioVal: number, username: string, state: 0 | 1 | undefined, inWaitList?: boolean) {
-    return {
-      type: TYPE.ADMIN_USER_STATUS_CHANGE._,
-      username,
-      state,
-      inWaitList,
-      radioVal,
-    };
+export default connect(
+  mapStateToProps,
+  {
+    statusChange(
+      radioVal: number,
+      username: string,
+      state: 0 | 1 | undefined,
+      inWaitList?: boolean,
+    ) {
+      return {
+        type: TYPE.ADMIN_USER_STATUS_CHANGE._,
+        username,
+        state,
+        inWaitList,
+        radioVal,
+      };
+    },
+    stateChangeSubmit() {
+      return {
+        type: TYPE.ADMIN_USER_SUBMIT._,
+      };
+    },
   },
-  stateChangeSubmit() {
-    return {
-      type: TYPE.ADMIN_USER_SUBMIT._,
-    };
-  },
-})(UserVerify);
+)(UserVerify);

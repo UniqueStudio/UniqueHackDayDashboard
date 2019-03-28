@@ -8,7 +8,7 @@ import Button from 'antd/es/button';
 
 export default function Submit(props: any, context: any) {
   const { form, onSubmit } = context;
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: /* React.FormEvent<HTMLFormElement> */ any) {
     e.preventDefault();
     form.validateFieldsAndScroll((err: any) => {
       if (!err) {
@@ -31,6 +31,7 @@ export default function Submit(props: any, context: any) {
       }
     >
       <Button
+        href=""
         size={context.size}
         type="primary"
         style={{ marginTop: '0px', ...(props.fullWidth ? { width: '100%' } : {}) }}

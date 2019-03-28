@@ -1,4 +1,4 @@
-import { INoticeIconData } from 'ant-design-pro/es/NoticeIcon/NoticeIconTab';
+import { NoticeIconData } from 'ant-design-pro/lib/NoticeIcon/NoticeIconTab';
 import originGenIconImage, { IconType } from '../../lib/genIconImage';
 import memoize from 'lodash-es/memoize';
 import { SingleMessage } from '../../redux/reducers/msg';
@@ -20,7 +20,7 @@ function fmtString(str: string, ...params: string[]) {
 
 const genIconImage = memoize(originGenIconImage);
 
-export default function msgMap(msg: SingleMessage): INoticeIconData {
+export default function msgMap(msg: SingleMessage): NoticeIconData {
   const datetime = new Date(msg.time * 1000).toLocaleString();
   switch (msg.type) {
     case 'LoginElseWhere':

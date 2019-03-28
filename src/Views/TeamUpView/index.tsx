@@ -174,6 +174,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
               message="注意"
             />
             <Button
+              href={''}
               type="primary"
               style={{ marginTop: '10px' }}
               onClick={this.props.onSkipTeamUpClick}

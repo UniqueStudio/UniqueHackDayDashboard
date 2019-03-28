@@ -53,10 +53,10 @@ class Console extends React.Component<{
 
   renderStatusButtons() {
     return [
-      <Button key={0} type="primary" onClick={this.redirectToTeam}>
+      <Button href="" key={0} type="primary" onClick={this.redirectToTeam}>
         组队
       </Button>,
-      <Button key={1} type="danger" onClick={this.props.abortCompetition}>
+      <Button href="" key={1} type="danger" onClick={this.props.abortCompetition}>
         退出比赛
       </Button>,
     ];
@@ -72,9 +72,12 @@ const mapStateToProps = ({ user }: RootState) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  push,
-  abortCompetition() {
-    return { type: TYPE.ABORT_CONFIRM_SUBMIT._ };
+export default connect(
+  mapStateToProps,
+  {
+    push,
+    abortCompetition() {
+      return { type: TYPE.ABORT_CONFIRM_SUBMIT._ };
+    },
   },
-})(Console);
+)(Console);

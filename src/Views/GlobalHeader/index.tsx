@@ -7,8 +7,8 @@ import Menu from 'antd/es/menu';
 import Dropdown from 'antd/es/dropdown';
 import Icon from 'antd/es/icon';
 
-import NoticeIcon from 'ant-design-pro/es/NoticeIcon';
-import { INoticeIconData } from 'ant-design-pro/es/NoticeIcon/NoticeIconTab';
+import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
+import { NoticeIconData } from 'ant-design-pro/lib/NoticeIcon/NoticeIconTab';
 
 import { RootState } from '../../redux/reducers';
 import { PartialUserInfo } from '../../redux/reducers/user';
@@ -17,6 +17,8 @@ import * as TYPE from '../../redux/actions';
 
 import cls from '../../Layouts/DashboardLayout/layout.less';
 import msgMap from './msgMap';
+
+const noop = () => void 0;
 
 class GlobalHeader extends React.Component<{
   inUserEntry: boolean;
@@ -31,7 +33,7 @@ class GlobalHeader extends React.Component<{
   deleteAll: () => void;
   dispatch: Dispatch<any>;
 }> {
-  handleMessageClick = (item: INoticeIconData) => {
+  handleMessageClick = (item: NoticeIconData) => {
     this.props.setRead((item as any).id);
     (item as any).clickHandler(this.props.dispatch);
   };
@@ -105,12 +107,20 @@ class GlobalHeader extends React.Component<{
           onClear={this.handleClear}
         >
           <NoticeIcon.Tab
+            locale=""
+            onClear={noop}
+            onClick={noop}
+            onViewMore={noop}
             emptyText="没有未读消息"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
             list={this.props.unreadMsgs.map(msgMap)}
             title="未读消息"
           />
           <NoticeIcon.Tab
+            locale=""
+            onClear={noop}
+            onClick={noop}
+            onViewMore={noop}
             emptyText="没有消息"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
             list={this.props.msgs.map(msgMap)}
