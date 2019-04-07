@@ -3,6 +3,9 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
+// import 'antd/dist/antd.css';
+import 'ant-design-pro/dist/ant-design-pro.css';
+
 import 'antd/es/form/style';
 import 'antd/es/card/style';
 import 'antd/es/input/style';
@@ -38,7 +41,7 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <React.Fragment>
+        <>
           <ConnectedRouter history={history}>
             <Switch>
               <Route path="/user_entry" component={UserEntryView} />
@@ -46,7 +49,7 @@ class App extends React.Component {
             </Switch>
           </ConnectedRouter>
           <GlobalLoading />
-        </React.Fragment>
+        </>
       </Provider>
     );
   }

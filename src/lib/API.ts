@@ -21,6 +21,7 @@ const request = (async (req: any) => {
       endpoint = `${pathname}?${composedQuery}`;
     }
   }
+  // endpoint = `https://${hostname}${endpoint}`;
   endpoint = `https://${hostname}${endpoint}`;
   try {
     const res = await fetch(endpoint, {

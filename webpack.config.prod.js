@@ -50,6 +50,7 @@ module.exports = {
         test: /\.(less|css)$/,
         include: /node_modules/,
         use: [
+          'style-loader',
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
@@ -67,6 +68,7 @@ module.exports = {
         test: /\.(less|css)$/,
         exclude: /node_modules/,
         use: [
+          'style-loader',
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',

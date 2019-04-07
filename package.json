@@ -45,7 +45,7 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
-    "ant-design-pro": "^2.3.1",
+    "ant-design-pro": "1.2.1",
     "antd": "^3.15.2",
     "classnames": "^2.2.5",
     "history": "^4.7.2",
