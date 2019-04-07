@@ -1,5 +1,5 @@
 {
-  "noIeCompat": true,
+  "noIeCompat": false,
   "modifyVars": {
     "primary-color": "#3D4FB1",
     "success-color": "#44B800",

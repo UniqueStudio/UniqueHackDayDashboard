@@ -47,7 +47,21 @@ module.exports = {
         },
       },
       {
-        test: /\.(less|css)$/,
+        test: /\.css$/,
+        include: /node_modules/,
+        use: [
+          'style-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.less$/,
         include: /node_modules/,
         use: [
           'style-loader',

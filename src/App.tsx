@@ -6,6 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 // import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
+import 'antd/dist/antd.css';
 import 'antd/es/form/style';
 import 'antd/es/card/style';
 import 'antd/es/input/style';
