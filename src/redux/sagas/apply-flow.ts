@@ -1,7 +1,7 @@
 import { take, put, fork, select, takeEvery } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { RootState } from '../reducers/index';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 import { AnyAction } from 'redux';
 /**
  * This is a generator function / saga for user entry flow.

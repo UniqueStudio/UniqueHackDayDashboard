@@ -1,6 +1,6 @@
 import { take, put } from 'redux-saga/effects';
 import * as TYPE from '../actions';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 
 /**
  * This is a generator function / saga for

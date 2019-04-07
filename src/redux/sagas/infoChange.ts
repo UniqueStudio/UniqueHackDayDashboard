@@ -1,7 +1,7 @@
 import { delay } from 'redux-saga';
 // edit the user's info
 import { take, fork, put } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import Message from 'antd/es/message';
 import * as TYPE from '../actions';
 

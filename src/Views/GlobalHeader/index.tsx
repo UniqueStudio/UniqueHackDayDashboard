@@ -145,7 +145,7 @@ export default connect(
     const unreadMsgs = state.msgData.unreadMessages.map(m => ({ ...m, read: false }));
     const readMsgs = state.msgData.readMessages.map(m => ({ ...m, read: true }));
     return {
-      inUserEntry: state.route!.location.pathname.indexOf('/user_entry') === 0,
+      inUserEntry: state.router!.location.pathname.indexOf('/user_entry') === 0,
       loggedIn: state.auth.loggedIn,
       user: state.user,
       unreadMsgs,

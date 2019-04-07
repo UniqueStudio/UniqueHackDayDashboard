@@ -14,7 +14,7 @@ import { TeamInfo } from '../../redux/reducers/teamInfo';
 import * as TYPE from '../../redux/actions';
 // import withLoading from '../../lib/withLoading';
 import noop from 'lodash-es/noop';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 
 const Description = DescriptionList.Description;
 

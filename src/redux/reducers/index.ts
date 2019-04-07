@@ -1,6 +1,6 @@
 import { combineReducers, AnyAction } from 'redux';
-import { routerReducer as route } from 'react-router-redux';
-
+import { connectRouter, RouterState } from 'connected-react-router';
+import { History } from 'history';
 import auth, { AuthData } from './auth';
 import user, { PartialUserInfo } from './user';
 import msgData from './msg';
@@ -30,9 +30,7 @@ import admin, { Admin } from './admin';
 import loadingCount from './loading';
 
 export interface RootState {
-  route?: {
-    location: Location;
-  };
+  router: RouterState;
   registerForm: RegisterForm;
   detailForm: DetailForm;
   loginForm: LoginForm;
@@ -42,7 +40,6 @@ export interface RootState {
   smsLoading: boolean;
   confirmApplyStatus: ConfirmApplyStatus;
 
-  // loadingStatus: LoadingStatus;
   auth: AuthData;
   user: PartialUserInfo;
   msgData: ReturnType<typeof msgData>;
@@ -53,27 +50,28 @@ export interface RootState {
 }
 
 export { AnyAction };
-export default combineReducers<RootState>({
-  route,
+export default (history: History) =>
+  combineReducers<RootState>({
+    // route, connected-react-router
+    router: connectRouter(history),
+    registerForm,
+    loginForm,
+    detailForm,
+    newTeamForm,
+    joinTeamForm,
+    resetPwdForm,
+    smsLoading,
+    confirmApplyStatus,
 
-  registerForm,
-  loginForm,
-  detailForm,
-  newTeamForm,
-  joinTeamForm,
-  resetPwdForm,
-  smsLoading,
-  confirmApplyStatus,
-
-  // loadingStatus,
-  auth,
-  user,
-  msgData,
-  applyProcess,
-  teamInfo,
-  loadingCount,
-  admin,
-});
+    // loadingStatus,
+    auth,
+    user: user as any,
+    msgData,
+    applyProcess,
+    teamInfo,
+    loadingCount,
+    admin,
+  });
 
 // export type Diff<T extends string, U extends string> = ({ [P in T]: P } &
 // { [P in U]: never } & { [x: string]: never })[T];

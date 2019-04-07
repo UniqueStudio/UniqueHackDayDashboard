@@ -8,7 +8,7 @@ import ConsoleView from '../Console';
 import TeamConsole from '../TeamConsole';
 import ApplyView from '../ApplyView';
 import Admin from '../Admin';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 import OriginDetailView from '../DetailView/index';
 import Card from 'antd/es/card';
 
@@ -57,7 +57,8 @@ const DetailView = () => {
 
 export default connect(
   (state: RootState) => {
-    const pathname = (state.route && state.route.location && state.route.location.pathname) || '';
+    const pathname =
+      (state.router && state.router.location && state.router.location.pathname) || '';
     return {
       loggedIn: state.auth.loggedIn,
       menuItemDisabled: pathname.indexOf('/apply') === 0,

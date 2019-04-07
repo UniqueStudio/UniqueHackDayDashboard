@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
-// import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 import 'antd/dist/antd.css';

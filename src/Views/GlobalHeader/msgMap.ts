@@ -4,7 +4,7 @@ import memoize from 'lodash-es/memoize';
 import { SingleMessage } from '../../redux/reducers/msg';
 
 import locales from '../../lib/i18n';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 import { noop } from 'redux-saga/utils';
 
 function fmtString(str: string, ...params: string[]) {

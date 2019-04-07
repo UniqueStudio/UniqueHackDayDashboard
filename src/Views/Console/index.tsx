@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from 'antd/es/button';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 // import { Redirect } from 'react-router';
 
 import Status from '../../Components/Status';

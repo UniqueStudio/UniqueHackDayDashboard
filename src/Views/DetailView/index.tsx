@@ -186,6 +186,8 @@ class DetailView extends React.Component<DetailViewProps> {
           <Select required={true} id="skills" fieldName="技能" label="技能" mode="tags">
             <SelectOption value="JavaScript"> JavaScript </SelectOption>
             <SelectOption value="CSS/HTML"> CSS/HTML </SelectOption>
+            <SelectOption value="Rust"> Rust </SelectOption>
+            <SelectOption value="PHP"> PHP </SelectOption>
             <SelectOption value="Swift"> Swift </SelectOption>
             <SelectOption value="Object-C"> Object-C </SelectOption>
             <SelectOption value="Kotlin"> Kotlin </SelectOption>
@@ -195,7 +197,6 @@ class DetailView extends React.Component<DetailViewProps> {
             <SelectOption value="C/C++"> C/C++ </SelectOption>
             <SelectOption value="C#"> C# </SelectOption>
             <SelectOption value="Java"> Java </SelectOption>
-            <SelectOption value="PHP"> PHP </SelectOption>
             <SelectOption value="Ruby"> Ruby </SelectOption>
             <SelectOption value="Sketch"> Sketch </SelectOption>
             <SelectOption value="PhotoShop"> PhotoShop </SelectOption>

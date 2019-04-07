@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose, Store } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 
 import createHistory from 'history/createHashHistory';
@@ -17,7 +17,7 @@ const composeEnhancers =
   compose;
 
 const store: Store<RootState> = createStore(
-  reducer,
+  reducer(history),
   composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
 );
 

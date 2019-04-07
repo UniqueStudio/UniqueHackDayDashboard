@@ -2,7 +2,7 @@ import { take, put, fork, select, takeEvery, all } from 'redux-saga/effects';
 import * as TYPE from '../actions';
 import { delay } from 'redux-saga';
 import { RootState } from '../reducers/index';
-import { replace } from 'react-router-redux';
+import { replace } from 'connected-react-router';
 /**
  * This is a generator function / saga for user entry flow.
  */
@@ -97,7 +97,9 @@ export default function* entryFlow() {
      * Watch user operations like clear msg
      */
     yield takeEvery(TYPE.SET_MSG_READ_ALL, function*() {
-      const { msgData: { unreadMessages } } = yield select();
+      const {
+        msgData: { unreadMessages },
+      } = yield select();
       yield all(
         unreadMessages.map((msg: API.Message.SingleMessage) =>
           put({ type: TYPE.SET_MSG_READ._, payload: msg.id }),
@@ -105,7 +107,9 @@ export default function* entryFlow() {
       );
     });
     yield takeEvery(TYPE.DELETE_MSG_ALL, function*() {
-      const { msgData: { unreadMessages, readMessages } } = yield select();
+      const {
+        msgData: { unreadMessages, readMessages },
+      } = yield select();
       yield all(
         [...unreadMessages, ...readMessages].map((msg: API.Message.SingleMessage) =>
           put({ type: TYPE.DELETE_MSG._, payload: msg.id }),
