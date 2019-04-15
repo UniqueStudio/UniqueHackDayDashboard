@@ -7,6 +7,9 @@ export const LOAD_USER_INFO = {
   OK: 'LOAD_USER_INFO_OK',
 };
 
+export type LOAD_USER_INFO_OK = typeof LOAD_USER_INFO.OK;
+export type LOAD_USER_INFO_FAIL = typeof LOAD_USER_INFO.FAIL;
+
 // prettier-ignore
 export const LOGIN_FORM_SUBMIT = {
   _:     'LOGIN_FORM_SUBMIT',
@@ -194,8 +197,11 @@ export const DELETE_TEAM = {
 }
 
 export const ADMIN_TEAMS_INFO = createActions('ADMIN_TEAMS_INFO');
+export type ADMIN_TEAMS_INFO = typeof ADMIN_TEAMS_INFO._;
 export const ADMIN_USER_STATUS_CHANGE = createActions('ADMIN_USER_STATUS_CHANGE');
+export type ADMIN_USER_STATUS_CHANGE = typeof ADMIN_USER_STATUS_CHANGE._;
 export const ADMIN_USER_SUBMIT = createActions('ADMIN_USER_SUBMIT');
+export type ADMIN_USER_SUBMIT = typeof ADMIN_USER_SUBMIT._;
 
-export const MSG_USER_ACCEPTED = 'MSG_USER_ACCEPTED'
-export const MSG_USER_REJECTED = 'MSG_USER_REJECTED'
+export const MSG_USER_ACCEPTED = 'MSG_USER_ACCEPTED';
+export const MSG_USER_REJECTED = 'MSG_USER_REJECTED';

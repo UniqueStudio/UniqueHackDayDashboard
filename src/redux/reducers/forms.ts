@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 import * as TYPE from '../actions/index';
+import { any } from 'prop-types';
 /**
  * This file is forms' reducers.
  */
@@ -11,7 +12,7 @@ type ToFormData<T> = {
     dirty?: boolean;
     touched?: boolean;
     validating?: boolean;
-  }
+  },
 };
 interface ToForm<T> {
   data: T;
