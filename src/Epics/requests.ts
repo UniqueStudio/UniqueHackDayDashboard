@@ -12,6 +12,7 @@ import {
     getDetailedForm,
     getNewTeamForm,
     getJoinTeamForm,
+    getTeamId,
 } from './storeState';
 import { AnyAction } from 'redux';
 
@@ -228,4 +229,220 @@ export const joinTeamSubmit: Epic = action$ =>
             );
         }),
         startWith({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START }),
+    );
+
+export const changeIsTSubmit: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.CHANGE_IS_T_SUBMIT._),
+        switchMap(() => {
+            return from(req.changeIsT(true)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.CHANGE_IS_T_SUBMIT.OK });
+                    } else {
+                        return of({ type: TYPE.CHANGE_IS_T_SUBMIT.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.CHANGE_IS_T_SUBMIT.START }),
+    );
+
+export const applyConfirmSubmit: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.APPLY_CONFIRM_SUBMIT._),
+        switchMap(() => {
+            return from(req.confirmApply()).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.APPLY_CONFIRM_SUBMIT.OK });
+                    } else {
+                        return of({ type: TYPE.APPLY_CONFIRM_SUBMIT.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.APPLY_CONFIRM_SUBMIT.START }),
+    );
+
+export const getUserDetailSubmit: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.GET_USER_DETAIL._),
+        switchMap(() =>
+            from(req.getUserDetail()).pipe(
+                mergeMap(res => {
+                    const [data, message] = res;
+                    if (data) {
+                        return of({
+                            type: TYPE.GET_USER_DETAIL.OK,
+                            payload: Object.keys(data).reduce((p, k) => {
+                                return {
+                                    ...p,
+                                    [k]: {
+                                        value: (data as any)[k],
+                                        name: k,
+                                        touched: false,
+                                        validating: false,
+                                        dirty: false,
+                                    },
+                                };
+                            }, {}),
+                        });
+                    } else {
+                        return of({ type: TYPE.GET_USER_DETAIL.FAIL, payload: message });
+                    }
+                }),
+            ),
+        ),
+        startWith({ type: TYPE.GET_USER_DETAIL.START }),
+    );
+
+export const getMessageAll: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.GET_MSG_ALL._),
+        switchMap(() =>
+            from(req.getReadMsgAll()).pipe(
+                mergeMap(res => {
+                    const [msg, message] = res;
+                    if (msg) {
+                        return of({ type: TYPE.GET_MSG_ALL.OK, payload: msg });
+                    } else {
+                        return of({ type: TYPE.GET_MSG_ALL.FAIL, payload: message });
+                    }
+                }),
+            ),
+        ),
+        startWith({ type: TYPE.GET_MSG_ALL.START }),
+    );
+
+export const getUnreadMessageAll: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.GET_UNREAD_MSG_ALL._),
+        switchMap(() =>
+            from(req.getUnreadMsgAll()).pipe(
+                mergeMap(res => {
+                    const [msg, message] = res;
+                    if (msg) {
+                        return of({ type: TYPE.GET_UNREAD_MSG_ALL.OK, payload: msg });
+                    } else {
+                        return of({ type: TYPE.GET_UNREAD_MSG_ALL.FAIL, payload: message });
+                    }
+                }),
+            ),
+        ),
+        startWith({ type: TYPE.GET_UNREAD_MSG_ALL.START }),
+    );
+
+export const setMessageRead: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.SET_MSG_READ._),
+        mergeMap((a: AnyAction) =>
+            from(req.setMsgRead(a.payload)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.SET_MSG_READ.OK, payload: a.payload });
+                    } else {
+                        return of({ type: TYPE.SET_MSG_READ.FAIL, payload: message });
+                    }
+                }),
+            ),
+        ),
+        startWith({ type: TYPE.SET_MSG_READ.START }),
+    );
+
+export const deleteMessage: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.DELETE_MSG._),
+        mergeMap((a: AnyAction) =>
+            from(req.deleteMsg(a.payload)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.DELETE_MSG.OK, payload: a.payload });
+                    } else {
+                        return of({ type: TYPE.DELETE_MSG.FAIL, payload: message });
+                    }
+                }),
+            ),
+        ),
+        startWith({ type: TYPE.DELETE_MSG.START }),
+    );
+
+export const deleteTeamMember: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.DELETE_TEAM_MEMBER._),
+        mergeMap((a: AnyAction) => {
+            const teamId = getTeamId();
+            return from(req.deleteTeamMember(a.payload, teamId!)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.DELETE_TEAM_MEMBER.OK, payload: a.payload });
+                    } else {
+                        return of({ type: TYPE.DELETE_TEAM_MEMBER.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.DELETE_TEAM_MEMBER.START }),
+    );
+
+export const exitTeam: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.EXIT_TEAM._),
+        mergeMap(() => {
+            const [teamId, username] = [getTeamId(), getUserInfo().username];
+            return from(req.deleteTeamMember(username!, teamId!)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.EXIT_TEAM.OK, payload: username });
+                    } else {
+                        return of({ type: TYPE.EXIT_TEAM.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.EXIT_TEAM.START }),
+    );
+
+export const deleteTeam: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.DELETE_TEAM._),
+        mergeMap(() => {
+            const teamId = getTeamId();
+            return from(req.deleteTeam(teamId!)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.DELETE_TEAM.OK, payload: teamId });
+                    } else {
+                        return of({ type: TYPE.DELETE_TEAM.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.DELETE_TEAM.START }),
+    );
+
+export const changeTeamLeader: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.CHANGE_TEAM_LEADER._),
+        mergeMap((a: AnyAction) => {
+            const teamId = getTeamId();
+            return from(req.changeTeamLeader(a.payload, teamId!)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.CHANGE_TEAM_LEADER.OK });
+                    } else {
+                        return of({ type: TYPE.CHANGE_TEAM_LEADER.FAIL, payload: message });
+                    }
+                }),
+            );
+        }),
+        startWith({ type: TYPE.CHANGE_TEAM_LEADER.START }),
     );

@@ -64,3 +64,8 @@ export const getJoinTeamForm = () => {
     const state = store.getState();
     return state.joinTeamForm;
 };
+
+export const getTeamId = () => {
+    const state = store.getState();
+    return state.user.teamId;
+};
