@@ -16,7 +16,7 @@ import {
 } from './storeState';
 import { AnyAction } from 'redux';
 
-export const loadUserInfo: Epic = action$ =>
+const loadUserInfo: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.LOAD_USER_INFO._),
         switchMap(() =>
@@ -29,16 +29,15 @@ export const loadUserInfo: Epic = action$ =>
                         return of({ type: TYPE.LOAD_USER_INFO.FAIL });
                     }
                 }),
+                startWith({ type: TYPE.LOAD_USER_INFO.START }),
             ),
         ),
-        startWith({ type: TYPE.LOAD_USER_INFO.START }),
     );
 
-export const loadTeamInfo: Epic = action$ =>
+const loadTeamInfo: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.LOAD_TEAM_INFO._),
-        switchMap(() => {
-            const { teamId } = getUserInfo();
+        switchMap(({ payload: { teamId } }: AnyAction) => {
             return from(req.getTeamInfo(teamId!)).pipe(
                 mergeMap(res => {
                     const [teamInfo] = res;
@@ -48,11 +47,12 @@ export const loadTeamInfo: Epic = action$ =>
                         return of({ type: TYPE.LOAD_TEAM_INFO.FAIL });
                     }
                 }),
+                startWith({ type: TYPE.LOAD_TEAM_INFO.START }),
             );
         }),
     );
 
-export const getAdminTeamsInfo: Epic = action$ =>
+const getAdminTeamsInfo: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.ADMIN_TEAMS_INFO._),
         switchMap(() =>
@@ -65,12 +65,12 @@ export const getAdminTeamsInfo: Epic = action$ =>
                         return of({ type: TYPE.ADMIN_TEAMS_INFO.FAIL });
                     }
                 }),
+                startWith({ type: TYPE.ADMIN_TEAMS_INFO.START }),
             ),
         ),
-        startWith({ type: TYPE.ADMIN_TEAMS_INFO.START }),
     );
 
-export const loginFormSubmit: Epic = action$ =>
+const loginFormSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.LOGIN_FORM_SUBMIT._),
         switchMap((action: AnyAction) => {
@@ -87,12 +87,12 @@ export const loginFormSubmit: Epic = action$ =>
                         return of({ type: TYPE.LOGIN_FORM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.LOGIN_FORM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.LOGIN_FORM_SUBMIT.START }),
     );
 
-export const regFormSubmit: Epic = action$ =>
+const regFormSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.REGISTER_FORM_SUBMIT._),
         switchMap((action: AnyAction) => {
@@ -114,12 +114,12 @@ export const regFormSubmit: Epic = action$ =>
                         return of({ type: TYPE.REGISTER_FORM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.REGISTER_FORM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.REGISTER_FORM_SUBMIT.START }),
     );
 
-export const resetPwdSubmit: Epic = action$ =>
+const resetPwdSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.RESET_PWD_FORM_SUBMIT._),
         switchMap((action: AnyAction) => {
@@ -140,12 +140,12 @@ export const resetPwdSubmit: Epic = action$ =>
                         return of({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.START }),
     );
 
-export const sendSMSSubmit: Epic = action$ =>
+const sendSMSSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.REGISITER_SEND_SMS_SUBMIT._),
         switchMap((action: AnyAction) => {
@@ -159,12 +159,12 @@ export const sendSMSSubmit: Epic = action$ =>
                         return of({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.REGISITER_SEND_SMS_SUBMIT.START }),
     );
 
-export const detailFormSubmit: Epic = action$ =>
+const detailFormSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.DETAIL_FORM_SUBMIT._),
         switchMap(() => {
@@ -186,12 +186,12 @@ export const detailFormSubmit: Epic = action$ =>
                         return of({ type: TYPE.DETAIL_FORM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.DETAIL_FORM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.DETAIL_FORM_SUBMIT.START }),
     );
 
-export const newTeamFormSubmit: Epic = action$ =>
+const newTeamFormSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.NEW_TEAM_FORM_SUBMIT._),
         switchMap(() => {
@@ -205,12 +205,12 @@ export const newTeamFormSubmit: Epic = action$ =>
                         return of({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.NEW_TEAM_FORM_SUBMIT.START }),
     );
 
-export const joinTeamSubmit: Epic = action$ =>
+const joinTeamSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.JOIN_TEAM_FORM_SUBMIT._),
         switchMap(() => {
@@ -226,12 +226,12 @@ export const joinTeamSubmit: Epic = action$ =>
                         return of({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.JOIN_TEAM_FORM_SUBMIT.START }),
     );
 
-export const changeIsTSubmit: Epic = action$ =>
+const changeIsTSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.CHANGE_IS_T_SUBMIT._),
         switchMap(() => {
@@ -244,12 +244,12 @@ export const changeIsTSubmit: Epic = action$ =>
                         return of({ type: TYPE.CHANGE_IS_T_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.CHANGE_IS_T_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.CHANGE_IS_T_SUBMIT.START }),
     );
 
-export const applyConfirmSubmit: Epic = action$ =>
+const applyConfirmSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.APPLY_CONFIRM_SUBMIT._),
         switchMap(() => {
@@ -262,12 +262,12 @@ export const applyConfirmSubmit: Epic = action$ =>
                         return of({ type: TYPE.APPLY_CONFIRM_SUBMIT.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.APPLY_CONFIRM_SUBMIT.START }),
             );
         }),
-        startWith({ type: TYPE.APPLY_CONFIRM_SUBMIT.START }),
     );
 
-export const getUserDetailSubmit: Epic = action$ =>
+const getUserDetailSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.GET_USER_DETAIL._),
         switchMap(() =>
@@ -294,12 +294,12 @@ export const getUserDetailSubmit: Epic = action$ =>
                         return of({ type: TYPE.GET_USER_DETAIL.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.GET_USER_DETAIL.START }),
             ),
         ),
-        startWith({ type: TYPE.GET_USER_DETAIL.START }),
     );
 
-export const getMessageAll: Epic = action$ =>
+const getMessageAll: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.GET_MSG_ALL._),
         switchMap(() =>
@@ -312,12 +312,12 @@ export const getMessageAll: Epic = action$ =>
                         return of({ type: TYPE.GET_MSG_ALL.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.GET_MSG_ALL.START }),
             ),
         ),
-        startWith({ type: TYPE.GET_MSG_ALL.START }),
     );
 
-export const getUnreadMessageAll: Epic = action$ =>
+const getUnreadMessageAll: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.GET_UNREAD_MSG_ALL._),
         switchMap(() =>
@@ -330,12 +330,12 @@ export const getUnreadMessageAll: Epic = action$ =>
                         return of({ type: TYPE.GET_UNREAD_MSG_ALL.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.GET_UNREAD_MSG_ALL.START }),
             ),
         ),
-        startWith({ type: TYPE.GET_UNREAD_MSG_ALL.START }),
     );
 
-export const setMessageRead: Epic = action$ =>
+const setMessageRead: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.SET_MSG_READ._),
         mergeMap((a: AnyAction) =>
@@ -348,12 +348,12 @@ export const setMessageRead: Epic = action$ =>
                         return of({ type: TYPE.SET_MSG_READ.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.SET_MSG_READ.START }),
             ),
         ),
-        startWith({ type: TYPE.SET_MSG_READ.START }),
     );
 
-export const deleteMessage: Epic = action$ =>
+const deleteMessage: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.DELETE_MSG._),
         mergeMap((a: AnyAction) =>
@@ -366,12 +366,13 @@ export const deleteMessage: Epic = action$ =>
                         return of({ type: TYPE.DELETE_MSG.FAIL, payload: message });
                     }
                 }),
+
+                startWith({ type: TYPE.DELETE_MSG.START }),
             ),
         ),
-        startWith({ type: TYPE.DELETE_MSG.START }),
     );
 
-export const deleteTeamMember: Epic = action$ =>
+const deleteTeamMember: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.DELETE_TEAM_MEMBER._),
         mergeMap((a: AnyAction) => {
@@ -385,12 +386,12 @@ export const deleteTeamMember: Epic = action$ =>
                         return of({ type: TYPE.DELETE_TEAM_MEMBER.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.DELETE_TEAM_MEMBER.START }),
             );
         }),
-        startWith({ type: TYPE.DELETE_TEAM_MEMBER.START }),
     );
 
-export const exitTeam: Epic = action$ =>
+const exitTeam: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.EXIT_TEAM._),
         mergeMap(() => {
@@ -404,12 +405,12 @@ export const exitTeam: Epic = action$ =>
                         return of({ type: TYPE.EXIT_TEAM.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.EXIT_TEAM.START }),
             );
         }),
-        startWith({ type: TYPE.EXIT_TEAM.START }),
     );
 
-export const deleteTeam: Epic = action$ =>
+const deleteTeam: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.DELETE_TEAM._),
         mergeMap(() => {
@@ -423,12 +424,12 @@ export const deleteTeam: Epic = action$ =>
                         return of({ type: TYPE.DELETE_TEAM.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.DELETE_TEAM.START }),
             );
         }),
-        startWith({ type: TYPE.DELETE_TEAM.START }),
     );
 
-export const changeTeamLeader: Epic = action$ =>
+const changeTeamLeader: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.CHANGE_TEAM_LEADER._),
         mergeMap((a: AnyAction) => {
@@ -442,7 +443,31 @@ export const changeTeamLeader: Epic = action$ =>
                         return of({ type: TYPE.CHANGE_TEAM_LEADER.FAIL, payload: message });
                     }
                 }),
+                startWith({ type: TYPE.CHANGE_TEAM_LEADER.START }),
             );
         }),
-        startWith({ type: TYPE.CHANGE_TEAM_LEADER.START }),
     );
+
+export default [
+    loadUserInfo,
+    loadTeamInfo,
+    getAdminTeamsInfo,
+    loginFormSubmit,
+    regFormSubmit,
+    sendSMSSubmit,
+    resetPwdSubmit,
+    detailFormSubmit,
+    newTeamFormSubmit,
+    joinTeamSubmit,
+    changeIsTSubmit,
+    applyConfirmSubmit,
+    getUserDetailSubmit,
+    getMessageAll,
+    getUnreadMessageAll,
+    setMessageRead,
+    deleteMessage,
+    deleteTeamMember,
+    exitTeam,
+    deleteTeam,
+    changeTeamLeader,
+];

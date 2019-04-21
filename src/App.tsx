@@ -38,25 +38,25 @@ import store, { history } from './redux/store';
 import GlobalLoading from './Views/GlobalLoading';
 
 class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <>
-          <ConnectedRouter history={history}>
-            <Switch>
-              <Route path="/user_entry" component={UserEntryView} />
-              <Route path="/" component={Dashboard} />
-            </Switch>
-          </ConnectedRouter>
-          <GlobalLoading />
-        </>
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <>
+                    <ConnectedRouter history={history}>
+                        <Switch>
+                            <Route path="/user_entry" component={UserEntryView} />
+                            <Route path="/" component={Dashboard} />
+                        </Switch>
+                    </ConnectedRouter>
+                    <GlobalLoading />
+                </>
+            </Provider>
+        );
+    }
 
-  componentDidMount() {
-    store.dispatch({ type: 'LOAD_USER_INFO' });
-  }
+    componentDidMount() {
+        store.dispatch({ type: 'LOAD_USER_INFO' });
+    }
 }
 
 export default App;
