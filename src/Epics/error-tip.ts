@@ -21,4 +21,4 @@ const errorTip: Epic = action$ =>
                 }),
             ),
     );
-export default errorTip;
+export default [errorTip];

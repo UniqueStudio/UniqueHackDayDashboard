@@ -6,7 +6,7 @@ import { mergeMap, delay } from 'rxjs/operators';
 import { push } from 'connected-react-router';
 import { of } from 'rxjs';
 
-export const infoChange: Epic = action$ =>
+const infoChange: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.DETAIL_FORM_SUBMIT.OK),
         mergeMap(() => {
@@ -16,7 +16,7 @@ export const infoChange: Epic = action$ =>
         }),
     );
 
-export const resetSuccess: Epic = action$ =>
+const resetSuccess: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.RESET_PWD_FORM_SUBMIT.OK),
         mergeMap(() => {
@@ -25,3 +25,5 @@ export const resetSuccess: Epic = action$ =>
             return of(push('/'));
         }),
     );
+
+export default [infoChange, resetSuccess];

@@ -6,7 +6,7 @@ import { from, of } from 'rxjs';
 import * as TYPE from '../redux/actions';
 import { Epic } from './typings';
 
-export const abortConfirmation: Epic = action$ =>
+const abortConfirmation: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.ABORT_CONFIRM_SUBMIT._),
         switchMap(() =>
@@ -23,3 +23,5 @@ export const abortConfirmation: Epic = action$ =>
             ),
         ),
     );
+
+export default [abortConfirmation];

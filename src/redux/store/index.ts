@@ -1,30 +1,25 @@
 import { createStore, applyMiddleware, compose, Store } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
-import createSagaMiddleware from 'redux-saga';
-
+import { createEpicMiddleware } from 'redux-observable';
 import createHistory from 'history/createHashHistory';
 import { History } from 'history';
-
 import reducer, { RootState } from '../reducers';
-import SagaManager from '../sagas';
+import RootEpics from '../../Epics/index';
 
 export const history: History = createHistory();
-export const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
-  ((process.env.NODE_ENV === 'development' ||
-    window.location.host.includes('console.fredliang.cn')) &&
-    (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
-  compose;
+    ((process.env.NODE_ENV === 'development' ||
+        window.location.host.includes('console.fredliang.cn')) &&
+        (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)) ||
+    compose;
+
+const epicMiddleware = createEpicMiddleware();
 
 const store: Store<RootState> = createStore(
-  reducer(history),
-  composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
+    reducer(history),
+    composeEnhancers(applyMiddleware(routerMiddleware(history), epicMiddleware)),
 );
 
-SagaManager.startSagas(sagaMiddleware);
-
-document.addEventListener('unload', () => {
-  SagaManager.cancelSagas(store);
-});
+epicMiddleware.run(RootEpics);
 
 export default store;

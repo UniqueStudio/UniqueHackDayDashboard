@@ -7,7 +7,7 @@ import { getUserStateList } from './storeState';
 import Message from 'antd/es/message';
 import * as req from '../lib/requests';
 
-export const userStateChnage: Epic<UserStateChange> = action$ =>
+const userStateChnage: Epic<UserStateChange> = action$ =>
     action$.pipe(
         ofType(TYPE.ADMIN_USER_STATUS_CHANGE._),
         mergeMap(action => {
@@ -37,7 +37,7 @@ export const userStateChnage: Epic<UserStateChange> = action$ =>
         }),
     );
 
-export const stateChangeSubmit: Epic = action$ =>
+const stateChangeSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.ADMIN_USER_SUBMIT._),
         switchMap(() =>
@@ -60,3 +60,5 @@ export const stateChangeSubmit: Epic = action$ =>
             ),
         ),
     );
+
+export default [userStateChnage, stateChangeSubmit];
