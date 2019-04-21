@@ -39,7 +39,7 @@ const loadTeamInfo: Epic = action$ =>
         mergeMap(({ payload }: AnyAction) =>
             of(
                 { type: TYPE.SET_USER_INFO, payload: { teamId: payload } },
-                { type: TYPE.LOAD_TEAM_INFO._ },
+                { type: TYPE.LOAD_TEAM_INFO._, payload: { teamId: payload } },
             ),
         ),
     );

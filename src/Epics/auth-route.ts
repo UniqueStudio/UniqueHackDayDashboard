@@ -8,7 +8,9 @@ import { mergeMap } from 'rxjs/operators';
 const authRouteLogIn: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.SET_LOGGED_IN),
-        mergeMap(() => of(replace('/'))),
+        mergeMap(() => {
+            return of(replace('/'));
+        }),
     );
 
 const authRouteLogOut: Epic = action$ =>

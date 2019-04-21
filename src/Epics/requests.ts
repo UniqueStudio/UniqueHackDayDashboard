@@ -37,8 +37,7 @@ const loadUserInfo: Epic = action$ =>
 const loadTeamInfo: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.LOAD_TEAM_INFO._),
-        switchMap(() => {
-            const { teamId } = getUserInfo();
+        switchMap(({ payload: { teamId } }: AnyAction) => {
             return from(req.getTeamInfo(teamId!)).pipe(
                 mergeMap(res => {
                     const [teamInfo] = res;

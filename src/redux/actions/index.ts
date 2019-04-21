@@ -163,6 +163,7 @@ export const DELETE_MSG_ALL = 'DELETE_MSG_ALL';
 export const START_MSG_LOOP = 'START_MSG_LOOP';
 export const STOP_MSG_LOOP = 'STOP_MSG_LOOP';
 export const MSG_LOOP_RECEIVE_MSG = 'MSG_LOOP_RECEIVE_MSG';
+export const MSG_LOOP_ERROR = 'MSG_LOOP_ERROR';
 
 // prettier-ignore
 export const DELETE_TEAM_MEMBER = {

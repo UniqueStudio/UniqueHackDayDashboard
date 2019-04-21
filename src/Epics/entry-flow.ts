@@ -3,7 +3,7 @@ import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as TYPE from '../redux/actions';
 import { Epic, LoadUserInfoOK } from './typings';
-import { getUserTeamId, getIsDetailedSubmitted, getPermission, getMsgData } from './storeState';
+import { getMsgData, getTeamId } from './storeState';
 import { replace } from 'connected-react-router';
 import { PartialUserInfo } from '../redux/reducers/user';
 
@@ -21,7 +21,10 @@ const loadUserInfoOK: Epic<LoadUserInfoOK> = action$ =>
             const userInfoPayload: PartialUserInfo = loadUserInfoPayload;
 
             if ('number' === typeof userInfoPayload.teamId) {
-                put.push({ type: TYPE.LOAD_TEAM_INFO._ });
+                put.push({
+                    type: TYPE.LOAD_TEAM_INFO._,
+                    payload: { teamId: userInfoPayload.teamId },
+                });
             }
             if (true === userInfoPayload.isDetailFormSubmitted) {
                 put.push({ type: TYPE.GET_USER_DETAIL._ });
@@ -59,7 +62,7 @@ const loadUserAfterLogin: Epic = action$ =>
         mergeMap(() =>
             of(
                 { type: TYPE.SET_LOGGED_IN },
-                { type: TYPE.LOAD_TEAM_INFO },
+                { type: TYPE.LOAD_USER_INFO._ },
                 { type: TYPE.SHOW_APP_VIEW },
                 { type: TYPE.START_MSG_LOOP },
             ),
@@ -97,7 +100,7 @@ const setMessageDeleteAll: Epic = action$ =>
 const formSubmitOK: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.JOIN_TEAM_FORM_SUBMIT.OK, TYPE.NEW_TEAM_FORM_SUBMIT.OK),
-        mergeMap(() => of({ type: TYPE.LOAD_TEAM_INFO._ })),
+        mergeMap(() => of({ type: TYPE.LOAD_TEAM_INFO._, payload: { teamId: getTeamId() } })),
     );
 
 const userLogout: Epic = action$ =>

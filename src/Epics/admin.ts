@@ -1,7 +1,7 @@
 import { Epic, UserStateChange } from './typings';
 import { ofType } from 'redux-observable';
 import * as TYPE from '../redux/actions';
-import { mergeMap, switchMap, startWith } from 'rxjs/operators';
+import { mergeMap, switchMap, startWith, concatMap } from 'rxjs/operators';
 import { of, from } from 'rxjs';
 import { getUserStateList } from './storeState';
 import Message from 'antd/es/message';
@@ -20,13 +20,19 @@ const userStateChnage: Epic<UserStateChange> = action$ =>
                     if (user.username === username) {
                         user.state = +state;
                         flag = 0;
-                        user.inWaitList = !!inWaitList;
+                        if (inWaitList !== undefined) {
+                            user.inWaitList = !!inWaitList;
+                        }
                     }
                     return user;
                 },
             );
             if (flag) {
-                newList.push({ username, state: +state, inWaitList: !!inWaitList });
+                if (inWaitList !== undefined) {
+                    newList.push({ username, state: +state, inWaitList: !!inWaitList });
+                } else {
+                    newList.push({ username, state: +state });
+                }
             }
             return of({
                 type: TYPE.ADMIN_USER_STATUS_CHANGE.OK,
@@ -42,8 +48,8 @@ const stateChangeSubmit: Epic = action$ =>
         ofType(TYPE.ADMIN_USER_SUBMIT._),
         switchMap(() =>
             from(req.adminUserStateChange(getUserStateList())).pipe(
-                mergeMap(action => {
-                    const [ok, message] = action;
+                concatMap(res => {
+                    const [ok, message] = res;
                     if (ok) {
                         Message.success('操作成功');
                         return of(
