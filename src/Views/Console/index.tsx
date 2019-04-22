@@ -1,9 +1,7 @@
 import * as React from 'react';
 import Button from 'antd/es/button';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-// import { Redirect } from 'react-router';
-
+import { replace } from 'connected-react-router';
 import Status from '../../Components/Status';
 import TeamInfo from '../../Components/TeamInfo';
 import HackdayProgress from '../../Components/HackdayProgress';
@@ -13,9 +11,9 @@ import * as TYPE from '../../redux/actions';
 
 class Console extends React.Component<{
     userIsAccepted: boolean | null;
-    push: typeof push;
     abortCompetition: any;
     inWaitList: boolean;
+    toEditTeam: () => void;
 }> {
     renderDivider() {
         return <div style={{ height: '20px' }} />;
@@ -47,16 +45,12 @@ class Console extends React.Component<{
         );
     }
 
-    redirectToTeam = () => {
-        this.props.push('/team');
-    };
-
     renderStatusButtons() {
         return [
-            <Button href="" key={0} type="primary" onClick={this.redirectToTeam}>
+            <Button key={0} type="primary" onClick={this.props.toEditTeam}>
                 组队
             </Button>,
-            <Button href="" key={1} type="danger" onClick={this.props.abortCompetition}>
+            <Button key={1} type="danger" onClick={this.props.abortCompetition}>
                 退出比赛
             </Button>,
         ];
@@ -74,10 +68,12 @@ const mapStateToProps = ({ user }: RootState) => {
 
 export default connect(
     mapStateToProps,
-    {
-        push,
+    dispatch => ({
         abortCompetition() {
-            return { type: TYPE.ABORT_CONFIRM_SUBMIT._ };
+            dispatch({ type: TYPE.ABORT_CONFIRM_SUBMIT._ });
         },
-    },
+        toEditTeam() {
+            dispatch(replace('/team'));
+        },
+    }),
 )(Console);

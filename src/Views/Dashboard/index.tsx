@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/reducers';
-
 import DashboardLayout from '../../Layouts/DashboardLayout';
 import ConsoleView from '../Console';
 import TeamConsole from '../TeamConsole';
