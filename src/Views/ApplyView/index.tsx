@@ -99,7 +99,6 @@ class ApplyView extends React.Component<ApplyViewProps> {
                             message="恭喜"
                         />
                         <Button
-                            href=""
                             type="primary"
                             style={{ marginTop: '10px' }}
                             onClick={this.props.applyProcessEnd}

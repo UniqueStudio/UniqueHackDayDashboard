@@ -198,7 +198,7 @@ const TeamInfo = (props: TeamInfoProps) => {
                     cancelText="取消"
                     onConfirm={props.dissolutionTeam.bind(null, props.user.teamId)}
                 >
-                    <Button href="" children="解散队伍" type="danger" />
+                    <Button children="解散队伍" type="danger" />
                 </Popconfirm>
             )}
         </Card>
