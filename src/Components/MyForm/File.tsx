@@ -50,7 +50,9 @@ export default class File extends React.Component<FileProps> {
   };
 
   render() {
-    const { form: { getFieldDecorator, getFieldValue } } = this.context;
+    const {
+      form: { getFieldDecorator, getFieldValue },
+    } = this.context;
     const { noLayout } = this.props;
     const formItemLayout = {
       labelCol: { xl: 8, lg: 6, md: 7, xs: 24, sm: 24 },
@@ -79,7 +81,7 @@ export default class File extends React.Component<FileProps> {
               disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
               multiple={false}
               name={this.props.id}
-              action={`https://${hostname}/v1/file/files`}
+              action={`https://${hostname}/v1/files?t=` + this.props.id}
               listType="picture"
               headers={{ Authorization: `Bearer ${authorizationToken()}` }}
               beforeUpload={this.beforeUpload}
@@ -93,7 +95,7 @@ export default class File extends React.Component<FileProps> {
               disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
               multiple={false}
               name={this.props.id}
-              action={`https://${hostname}/v1/file/files`}
+              action={`https://${hostname}/v1/files?t=` + this.props.id}
               listType="picture"
               headers={{ Authorization: `Bearer ${authorizationToken()}` }}
               beforeUpload={this.beforeUpload}
