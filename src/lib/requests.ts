@@ -271,7 +271,7 @@ export async function confirmApply() {
 
 export async function abortConfirm() {
   const res = await request({
-    endpoint: '/v1/user/hackday/confirmation',
+    endpoint: '/v1/user/confirm',
     method: 'DELETE',
   });
   if (res.httpStatusCode === 200) {

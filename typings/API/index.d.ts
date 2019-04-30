@@ -332,7 +332,7 @@ declare namespace API {
       // 这个接口导致 user/info 种的 confirmed 变为 true 或 false
       (
         req: RequestWithAuth<
-          '/v1/user/hackday/confirmation',
+          '/v1/user/confirm',
           'DELETE',
           {
             confirmation: boolean;
