@@ -44,7 +44,7 @@ export async function resetPwdRequest(
   antiRobotToken: string,
 ) {
   const res = await request({
-    endpoint: '/v1/user/password?reset',
+    endpoint: '/v1/user/password?t=reset',
     method: 'POST',
     body: {
       phone,

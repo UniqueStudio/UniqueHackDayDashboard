@@ -168,7 +168,7 @@ declare namespace API {
       // 发短信
       (
         req: RequestWithoutAuth<
-          '/v1/user/send_sms/register',
+          '/v1/user/send_sms?t=register',
           'POST',
           {
             phone: string;
@@ -181,7 +181,7 @@ declare namespace API {
 
       (
         req: RequestWithoutAuth<
-          '/v1/user/send_sms/reset',
+          '/v1/user/send_sms?t=reset',
           'POST',
           {
             phone: string;
@@ -211,7 +211,7 @@ declare namespace API {
       // change: 改密码，提供旧密码和新密码直接修改
       (
         req: RequestWithAuth<
-          '/v1/user/password?change',
+          '/v1/user/password?t=change',
           'POST',
           {
             oldPassword: string;
@@ -227,7 +227,7 @@ declare namespace API {
       // reset: 重置密码
       (
         req: RequestWithoutAuth<
-          '/v1/user/password?reset',
+          '/v1/user/password?t=reset',
           'POST',
           {
             phone: string;
