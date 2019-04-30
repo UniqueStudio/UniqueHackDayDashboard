@@ -510,7 +510,7 @@ declare namespace API {
   namespace File {
     interface RequestFunc {
       // 变异请求，发送一个文件，Content-Type 为 form-data
-      (req: RequestWithAuth<'/v1/file/files', 'POST', {}>): Response<
+      (req: RequestWithAuth<'/v1/files?t=resume' | '/v1/files?t=collection', 'POST', {}>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { fileId: string }>
       >;

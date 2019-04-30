@@ -81,7 +81,7 @@ export default class File extends React.Component<FileProps> {
               disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
               multiple={false}
               name={this.props.id}
-              action={`https://${hostname}/v1/files?t=` + this.props.id}
+              action={`http://${hostname}/v1/files?t=` + this.props.id}
               listType="picture"
               headers={{ Authorization: `Bearer ${authorizationToken()}` }}
               beforeUpload={this.beforeUpload}
@@ -95,7 +95,7 @@ export default class File extends React.Component<FileProps> {
               disabled={(getFieldValue(this.props.id) || []).length > 0 || this.state.isUploading}
               multiple={false}
               name={this.props.id}
-              action={`https://${hostname}/v1/files?t=` + this.props.id}
+              action={`http://${hostname}/v1/files?t=` + this.props.id}
               listType="picture"
               headers={{ Authorization: `Bearer ${authorizationToken()}` }}
               beforeUpload={this.beforeUpload}
