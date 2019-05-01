@@ -244,14 +244,14 @@ declare namespace API {
       >;
 
       // 添加 detail 的接口
-      (req: RequestWithAuth<'/v1/user/detail', 'POST', UserDetailRequest>): Response<
+      (req: RequestWithAuth<'/v1/user/info', 'POST', UserDetailRequest>): Response<
         | ResponseWithoutData<400, Message.TShirtSizeInvalid>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithoutData<200, Message.Success>
       >;
 
       // 获取 detail 的接口
-      (req: RequestWithAuth<'/v1/user/detail', 'GET', never>): Response<
+      (req: RequestWithAuth<'/v1/user/info', 'GET', never>): Response<
         | ResponseWithoutData<400, Message.ApplyNeeded>
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, UserDetailRequest>
