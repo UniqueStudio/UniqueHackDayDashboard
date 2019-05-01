@@ -126,7 +126,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
         const { dataSource } = this.props;
 
         return (
-            <React.Fragment>
+            <>
                 <Table
                     scroll={{ x: 700 }}
                     pagination={{ pageSize: 10 }}
@@ -190,7 +190,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
                 >
                     提交
                 </Button>
-            </React.Fragment>
+            </>
         );
     }
 }
