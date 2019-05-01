@@ -168,7 +168,7 @@ declare namespace API {
       // 发短信
       (
         req: RequestWithoutAuth<
-          '/v1/user/send_sms/register',
+          '/v1/user/send_sms?t=register',
           'POST',
           {
             phone: string;
@@ -181,7 +181,7 @@ declare namespace API {
 
       (
         req: RequestWithoutAuth<
-          '/v1/user/send_sms/reset',
+          '/v1/user/send_sms?t=reset',
           'POST',
           {
             phone: string;
@@ -211,7 +211,7 @@ declare namespace API {
       // change: 改密码，提供旧密码和新密码直接修改
       (
         req: RequestWithAuth<
-          '/v1/user/password?change',
+          '/v1/user/password?t=change',
           'POST',
           {
             oldPassword: string;
@@ -227,7 +227,7 @@ declare namespace API {
       // reset: 重置密码
       (
         req: RequestWithoutAuth<
-          '/v1/user/password?reset',
+          '/v1/user/password?t=reset',
           'POST',
           {
             phone: string;
@@ -332,7 +332,7 @@ declare namespace API {
       // 这个接口导致 user/info 种的 confirmed 变为 true 或 false
       (
         req: RequestWithAuth<
-          '/v1/user/hackday/confirmation',
+          '/v1/user/confirm',
           'DELETE',
           {
             confirmation: boolean;
@@ -510,7 +510,7 @@ declare namespace API {
   namespace File {
     interface RequestFunc {
       // 变异请求，发送一个文件，Content-Type 为 form-data
-      (req: RequestWithAuth<'/v1/file/files', 'POST', {}>): Response<
+      (req: RequestWithAuth<'/v1/files?t=resume' | '/v1/files?t=collection', 'POST', {}>): Response<
         | ResponseWithoutData<401, Message.LoginNeeded>
         | ResponseWithData<200, Message.Success, { fileId: string }>
       >;

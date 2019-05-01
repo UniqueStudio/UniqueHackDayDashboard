@@ -44,7 +44,7 @@ export async function resetPwdRequest(
   antiRobotToken: string,
 ) {
   const res = await request({
-    endpoint: '/v1/user/password?reset',
+    endpoint: '/v1/user/password?t=reset',
     method: 'POST',
     body: {
       phone,
@@ -61,7 +61,7 @@ export async function resetPwdRequest(
 
 export async function registerSendSMS(phone: string, antiRobotToken: string) {
   const res = await request({
-    endpoint: '/v1/user/send_sms/register',
+    endpoint: '/v1/user/send_sms?t=register',
     method: 'POST',
     body: {
       phone,
@@ -76,7 +76,7 @@ export async function registerSendSMS(phone: string, antiRobotToken: string) {
 
 export async function resetPwdSendSMS(phone: string, antiRobotToken: string) {
   const res = await request({
-    endpoint: '/v1/user/send_sms/reset',
+    endpoint: '/v1/user/send_sms?t=reset',
     method: 'POST',
     body: {
       phone,
@@ -271,7 +271,7 @@ export async function confirmApply() {
 
 export async function abortConfirm() {
   const res = await request({
-    endpoint: '/v1/user/hackday/confirmation',
+    endpoint: '/v1/user/confirm',
     method: 'DELETE',
   });
   if (res.httpStatusCode === 200) {
