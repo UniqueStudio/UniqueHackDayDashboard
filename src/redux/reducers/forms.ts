@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
 import * as TYPE from '../actions/index';
-import { any } from 'prop-types';
 /**
  * This file is forms' reducers.
  */

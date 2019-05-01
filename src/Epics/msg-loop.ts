@@ -1,5 +1,4 @@
 import { Epic } from './typings';
-import { ofType } from 'redux-observable';
 import * as TYPE from '../redux/actions';
 import { mergeMap, takeUntil } from 'rxjs/operators';
 import { of, from } from 'rxjs';
