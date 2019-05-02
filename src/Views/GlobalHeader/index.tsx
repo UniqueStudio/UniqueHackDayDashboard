@@ -29,6 +29,7 @@ class GlobalHeader extends React.Component<{
     msgs: SingleMessage[];
 
     setReadAll: () => void;
+    detailEdit: () => void;
     setRead: (id: number) => void;
     deleteAll: () => void;
     dispatch: Dispatch<any>;
@@ -82,13 +83,15 @@ class GlobalHeader extends React.Component<{
         }
     };
 
+    handleEdit = () => {
+        this.props.detailEdit();
+    };
+
     renderUserMenu() {
         const subMenu = (
             <Menu>
-                <Menu.Item key="0" style={{ width: '150px' }}>
-                    <a href="detail_edit">
-                        <Icon type="edit" style={{ marginRight: '4px' }} /> 编辑报名信息
-                    </a>
+                <Menu.Item key="0" style={{ width: '150px' }} onClick={this.handleEdit}>
+                    <Icon type="edit" style={{ marginRight: '4px' }} /> 编辑报名信息
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="2">
@@ -168,6 +171,9 @@ export default connect(
         },
         deleteAll() {
             dispatch({ type: TYPE.DELETE_MSG_ALL });
+        },
+        detailEdit() {
+            dispatch({ type: TYPE.DETAIL_EDIT });
         },
         dispatch,
     }),

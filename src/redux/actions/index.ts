@@ -125,6 +125,9 @@ export const APPLY_PROCESS_SET_CURRENT = 'APPLY_PROCESS_SET_CURRENT';
 export const ADD_LOADING_COUNT = 'ADD_LOADING_COUNT';
 export const SUB_LOADING_COUNT = 'SUB_LOADING_COUNT';
 
+export const DETAIL_EDIT = 'DETAIL_EDIT';
+export type DETAIL_EDIT = typeof DETAIL_EDIT;
+
 // prettier-ignore
 export const GET_UNREAD_MSG_ALL = {
   _:     'GET_UNREAD_MSG_ALL',

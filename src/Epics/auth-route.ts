@@ -17,4 +17,10 @@ const authRouteLogOut: Epic = action$ =>
         mergeMap(() => of(replace('/user_entry'))),
     );
 
-export default [authRouteLogIn, authRouteLogOut];
+const authRouteDetailEdit: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.DETAIL_EDIT),
+        mergeMap(() => of(replace('/detail_edit'))),
+    );
+
+export default [authRouteLogIn, authRouteLogOut, authRouteDetailEdit];
