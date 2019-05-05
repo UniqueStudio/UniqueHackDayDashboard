@@ -6,112 +6,112 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  entry: './src/index.ts',
-  output: {
-    path: path.resolve(__dirname, './build'),
-    filename: '[name].[hash].js',
-    publicPath: '/',
-  },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
-    }),
-  ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // set to true if you want JS source maps
-      }),
-      new OptimizeCSSAssetsPlugin({}),
-      new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, 'index.html'),
-      }),
-    ],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        use: 'babel-loader',
-      },
-      {
-        test: /\.tsx?$/,
-        use: {
-          loader: 'ts-loader',
-          options: {
-            transpileOnly: true,
-          },
-        },
-      },
-      {
-        test: /\.css$/,
-        include: /node_modules/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            },
-          },
+    mode: 'production',
+    entry: './src/index.ts',
+    output: {
+        path: path.resolve(__dirname, './build'),
+        filename: '[name].[hash].js',
+        publicPath: '/',
+    },
+    optimization: {
+        minimizer: [
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, 'index.html'),
+            }),
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false, // set to true if you want JS source maps
+            }),
+            new OptimizeCSSAssetsPlugin({}),
+            new MiniCssExtractPlugin({
+                filename: '[name].[hash].css',
+            }),
         ],
-      },
-      {
-        test: /\.less$/,
-        include: /node_modules/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                use: 'babel-loader',
             },
-          },
-          {
-            loader: 'less-loader',
-            options: JSON.parse(fs.readFileSync('.lessrc')),
-          },
-        ],
-      },
-      {
-        test: /\.(less|css)$/,
-        exclude: /node_modules/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              module: 1,
+            {
+                test: /\.tsx?$/,
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        transpileOnly: true,
+                    },
+                },
             },
-          },
-          {
-            loader: 'less-loader',
-            options: JSON.parse(fs.readFileSync('.lessrc')),
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[hash].[ext]',
+            {
+                test: /\.css$/,
+                include: /node_modules/,
+                use: [
+                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                        },
+                    },
+                ],
             },
-          },
+            {
+                test: /\.less$/,
+                include: /node_modules/,
+                use: [
+                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                        },
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: JSON.parse(fs.readFileSync('.lessrc')),
+                    },
+                ],
+            },
+            {
+                test: /\.(less|css)$/,
+                exclude: /node_modules/,
+                use: [
+                    'style-loader',
+                    // MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            module: 1,
+                        },
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            noIeCompat: true,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[hash].[ext]',
+                        },
+                    },
+                ],
+            },
         ],
-      },
-    ],
-  },
+    },
 
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
-  },
+    resolve: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
+    },
 };
