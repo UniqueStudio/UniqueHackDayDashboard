@@ -140,7 +140,11 @@ class UserVerify extends React.Component<UserVerifyProps> {
                         key="role"
                         // tslint:disable-next-line:jsx-no-lambda jsx-no-multiline-js
                         render={(isLeader, record: any) =>
-                            record.teamId === null ? '未组队' : isLeader ? '队长' : '队员'
+                            record.teamId === null || record.teamId === 0
+                                ? '未组队'
+                                : isLeader
+                                ? '队长'
+                                : '队员'
                         }
                     />
                     <Column title="姓名" dataIndex="name" key="name" />

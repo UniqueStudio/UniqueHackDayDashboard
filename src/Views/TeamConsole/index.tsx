@@ -9,7 +9,7 @@ import { RootState } from '../../redux/reducers/index';
 
 class TeamConsole extends React.Component<{ teamId: number }> {
   render() {
-    if (this.props.teamId === null || this.props.teamId === undefined) {
+    if (this.props.teamId === null || this.props.teamId === undefined || this.props.teamId === 0) {
       return (
         <Card title="填写组队信息">
           <TeamUpView teamUpSkippable={true} />
