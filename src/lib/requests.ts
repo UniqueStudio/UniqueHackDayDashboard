@@ -91,7 +91,7 @@ export async function resetPwdSendSMS(phone: string, antiRobotToken: string) {
 
 export async function getUserDetail() {
   const res = await request({
-    endpoint: '/v1/user/info',
+    endpoint: '/v1/user/detail',
     method: 'GET',
   });
   if (res.httpStatusCode === 200) {
@@ -183,7 +183,7 @@ export async function joinTeam(teamLeaderName: string, teamLeaderPhone: string, 
 
 export async function submitDetail(detail: API.User.UserDetailRequest) {
   const res = await request({
-    endpoint: '/v1/user/info',
+    endpoint: '/v1/user/detail',
     method: 'POST',
     body: detail,
   });
@@ -257,7 +257,7 @@ export async function deleteMsg(id: number) {
 
 export async function confirmApply() {
   const res = await request({
-    endpoint: '/v1/user/apply/confirmation',
+    endpoint: '/v1/user/confirm',
     method: 'PUT',
     body: {
       confirmation: true,
