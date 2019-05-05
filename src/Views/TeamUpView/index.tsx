@@ -58,7 +58,7 @@ class TeamUpView extends React.Component<TeamUpViewProps> {
   };
 
   render() {
-    if (this.props.teamId !== null) {
+    if (this.props.teamId !== null && this.props.teamId !== 0) {
       return <TeamInfo />;
     }
     return (

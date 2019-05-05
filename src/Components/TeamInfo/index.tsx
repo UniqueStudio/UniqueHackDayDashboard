@@ -115,7 +115,7 @@ const TeamInfo = (props: TeamInfoProps) => {
                 </span>
             );
 
-        const hasTeam = props.user.teamId !== null || undefined;
+        const hasTeam = (props.user.teamId !== 0 && props.user.teamId !== null) || undefined;
 
         return (
             <Table

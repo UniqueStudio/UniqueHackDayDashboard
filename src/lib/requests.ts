@@ -257,7 +257,7 @@ export async function deleteMsg(id: number) {
 
 export async function confirmApply() {
   const res = await request({
-    endpoint: '/v1/user/apply/confirmation',
+    endpoint: '/v1/user/confirm',
     method: 'PUT',
     body: {
       confirmation: true,

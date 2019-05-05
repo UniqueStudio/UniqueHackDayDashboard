@@ -20,7 +20,7 @@ const loadUserInfoOK: Epic<LoadUserInfoOK> = action$ =>
 
             const userInfoPayload: PartialUserInfo = loadUserInfoPayload;
 
-            if ('number' === typeof userInfoPayload.teamId) {
+            if ('number' === typeof userInfoPayload.teamId && userInfoPayload.teamId !== 0) {
                 put.push({
                     type: TYPE.LOAD_TEAM_INFO._,
                     payload: { teamId: userInfoPayload.teamId },
