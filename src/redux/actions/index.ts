@@ -209,3 +209,6 @@ export type ADMIN_USER_SUBMIT = typeof ADMIN_USER_SUBMIT._;
 
 export const MSG_USER_ACCEPTED = 'MSG_USER_ACCEPTED';
 export const MSG_USER_REJECTED = 'MSG_USER_REJECTED';
+
+export const ERROR_SHOW = 'ERROR_SHOW';
+export type ERROR_SHOW = typeof ERROR_SHOW;

@@ -1,5 +1,5 @@
 import { ofType } from 'redux-observable';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as TYPE from '../redux/actions';
 import { Epic, LoadUserInfoOK } from './typings';
@@ -106,7 +106,7 @@ const formSubmitOK: Epic = action$ =>
 const userLogout: Epic = action$ =>
     action$.pipe(
         ofType('LOGOUT_CLICKED'),
-        mergeMap(() => {
+        switchMap(() => {
             localStorage.removeItem('token');
             sessionStorage.removeItem('token');
             setTimeout(() => window.location.reload(), 0);
