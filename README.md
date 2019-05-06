@@ -6,7 +6,7 @@
 
 ## Architecture
 
-The latest ant-design, react, redux and redux-saga were used in this project.
+The latest ant-design, react, redux, rxjs and `redux-observable` were used in this project.
 
 In `src` directory, there are `Components`, `Layouts` and `Views`.
 
@@ -16,8 +16,6 @@ In `src` directory, there are `Components`, `Layouts` and `Views`.
 represent the layout.
 
 `Views` are components connected to the redux store.
-
-**We are doing refactoring now, you can see it in [newSrc](./newSrc) folder**
 
 ## Principles
 
@@ -36,15 +34,17 @@ Parcel is easy to use and fast.
 
 Frontend:
 
-* [faraway](https://github.com/farawaaay)
-
-* [LLGZONE](https://github.com/LLGZONE)
+-   [faraway](https://github.com/farawaaay)
+-   [LLGZONE](https://github.com/LLGZONE)
+-   [ttzztztz](https://github.com/ttzztztz)
 
 Backend:
 
-* [NekodRider](https://github.com/NekodRider)
-* [ver217](https://github.com/ver217)
+-   [NekodRider](https://github.com/NekodRider)
+-   [ver217](https://github.com/ver217)
+-   [Colin](https://github.com/colinaaa)
 
 PM && Designer
 
-* [fredliang44](https://github.com/fredliang44)
+-   [fredliang44](https://github.com/fredliang44)
+-   [faraway](https://github.com/farawaaay)
