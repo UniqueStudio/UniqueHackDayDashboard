@@ -74,7 +74,7 @@ export default class MobileCode extends React.Component<MobileCodeProps> {
                     </Col>
                     <Col span={8}>
                         <Button
-                            style={{ width: '100%', fontSize: '1.5vw' }}
+                            style={{ width: '100%' }}
                             size="large"
                             disabled={
                                 !!this.state.count || this.props.isReady || this.props.isSending
