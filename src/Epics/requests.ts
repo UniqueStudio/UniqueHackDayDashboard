@@ -438,7 +438,11 @@ const changeTeamLeader: Epic = action$ =>
                 mergeMap(res => {
                     const [ok, message] = res;
                     if (ok) {
-                        return of({ type: TYPE.CHANGE_TEAM_LEADER.OK });
+                        return of(
+                            { type: TYPE.CHANGE_TEAM_LEADER.OK, payload: a.payload },
+                            { type: TYPE.LOAD_TEAM_INFO._, payload: { teamId: teamId! } },
+                            { type: 'LOAD_USER_INFO' },
+                        );
                     } else {
                         return of({ type: TYPE.CHANGE_TEAM_LEADER.FAIL, payload: message });
                     }
