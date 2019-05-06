@@ -199,7 +199,7 @@ const newTeamFormSubmit: Epic = action$ =>
             return from(req.createTeam(data.teamName.value!)).pipe(
                 mergeMap(res => {
                     const [teamId, message] = res;
-                    if (teamId !== null || teamId !== 0) {
+                    if (teamId !== null && teamId !== 0) {
                         return of({ type: TYPE.NEW_TEAM_FORM_SUBMIT.OK, payload: teamId });
                     } else {
                         return of({ type: TYPE.NEW_TEAM_FORM_SUBMIT.FAIL, payload: message });
