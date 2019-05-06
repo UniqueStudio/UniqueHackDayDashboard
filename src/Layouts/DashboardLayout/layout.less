@@ -1,153 +1,153 @@
 .sider-icon-wrapper {
-  width: 100%;
-  height: 64px;
-  line-height: 64px;
-  font-size: 0;
-  text-align: center;
-  white-space: nowrap;
+    width: 100%;
+    height: 64px;
+    line-height: 64px;
+    font-size: 0;
+    text-align: center;
+    white-space: nowrap;
 
-  margin: 0;
-  .sider-icon,
-  .sider-icon-text {
-    background-image: url('../../assets/images/unique-hackday-icon.png');
-    background-repeat: no-repeat;
-    background-size: auto 40px;
-    display: inline-block;
-  }
-  .sider-icon {
-    background-position: 0 0;
-    width: 41px;
-    height: 40px;
-    margin: 12px auto;
-    &-text {
-      width: 48px;
-      height: 30px;
-      margin: 17px 10px;
-      background-position: -48px -5px;
-      transform: scale(1.2);
-      transform-origin: center center;
-      transition: width 0s 0s, opacity 0.5s 0s, margin 0s 0s;
-
-      &.hidden {
-        // transition: width 0s 0s, opacity 0.5s 0s, margin 0.5s 0.5s;
-        width: 0;
-        opacity: 0;
-        margin: 0;
-      }
+    margin: 0;
+    .sider-icon,
+    .sider-icon-text {
+        background-image: url('../../assets/images/unique-hackday-icon.png');
+        background-repeat: no-repeat;
+        background-size: auto 40px;
+        display: inline-block;
     }
-  }
+    .sider-icon {
+        background-position: 0 0;
+        width: 41px;
+        height: 40px;
+        margin: 12px auto;
+        &-text {
+            width: 48px;
+            height: 30px;
+            margin: 17px 10px;
+            background-position: -48px -5px;
+            transform: scale(1.2);
+            transform-origin: center center;
+            transition: width 0s 0s, opacity 0.5s 0s, margin 0s 0s;
+
+            &.hidden {
+                // transition: width 0s 0s, opacity 0.5s 0s, margin 0.5s 0.5s;
+                width: 0;
+                opacity: 0;
+                margin: 0;
+            }
+        }
+    }
 }
 
 .bg-grey {
-  background-color: #3f3f3f !important;
+    background-color: #3f3f3f !important;
 }
 
 .header {
-  padding: 0 !important;
-  padding-right: 10px !important;
-  background-color: #fff !important;
-  border-bottom: 1px solid #eeeeee !important;
-  display: flex;
+    padding: 0 !important;
+    padding-right: 10px !important;
+    background-color: #fff !important;
+    border-bottom: 1px solid #eeeeee !important;
+    display: flex;
 
-  &-menu {
-    line-height: 64px;
-    border: none;
-    flex: 1;
-  }
-
-  &-menu-item {
-    border: none !important;
-    float: right !important;
-    padding: 0 10px !important;
-  }
-
-  &-left-icon {
-    background-image: url('../../assets/images/hackday.png');
-    width: 150px;
-    height: 63px;
-    background-position: center center;
-    background-size: 140px auto;
-    background-repeat: no-repeat;
-  }
-
-  &-menu-link {
-    border: none !important;
-  }
-
-  :global .ant-badge {
-    .anticon {
-      margin-right: 0;
+    &-menu {
+        line-height: 64px;
+        border: none;
+        flex: 1;
     }
-  }
-}
 
-@media (max-width: 575.98px) {
-  .header {
+    &-menu-item {
+        border: none !important;
+        float: right !important;
+        padding: 0 10px !important;
+    }
+
     &-left-icon {
-      margin: 0 25px;
-      width: 50px;
-      background-size: 140px auto;
-      background-position: -17px center;
+        background-image: url('../../assets/images/hackday.png');
+        width: 150px;
+        height: 63px;
+        background-position: center center;
+        background-size: 140px auto;
+        background-repeat: no-repeat;
     }
 
     &-menu-link {
-      display: none;
+        border: none !important;
     }
-  }
+
+    :global .ant-badge {
+        .anticon {
+            margin-right: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .header {
+        &-left-icon {
+            margin: 0 25px;
+            width: 50px;
+            background-size: 140px auto;
+            background-position: -17px center;
+        }
+
+        &-menu-link {
+            display: none !important;
+        }
+    }
 }
 
 .sider-link {
-  color: inherit !important;
-  &::before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
+    color: inherit !important;
+    &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
 }
 
 .content-header-wrapper {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .content-wrapper {
-  flex: 1;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 20px;
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px;
 }
 
 .login-wrapper {
-  flex: 1;
-  display: flex;
-  padding-bottom: 10%;
+    flex: 1;
+    display: flex;
+    padding-bottom: 10%;
 }
 
 .login-card-wrapper {
-  display: flex !important;
-  width: 100%;
+    display: flex !important;
+    width: 100%;
 }
 
 .login-card-col {
-  margin: auto;
-  max-width: 500px;
+    margin: auto;
+    max-width: 500px;
 }
 
 @media (max-width: 575.98px) {
-  .login-card-col {
-    margin-top: 0;
-  }
-  .login-wrapper {
-    background-color: #fff;
-  }
+    .login-card-col {
+        margin-top: 0;
+    }
+    .login-wrapper {
+        background-color: #fff;
+    }
 }
 
 @media (max-width: 575.98px) {
-  .content-wrapper {
-    padding: 10px;
-  }
+    .content-wrapper {
+        padding: 10px;
+    }
 }
