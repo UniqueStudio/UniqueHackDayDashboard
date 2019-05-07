@@ -3,4 +3,4 @@
 
 // export const hostname = 'hd.plus1sec.cn';
 
-export const hostname = 'hackday.outsiders.top';
+export const hostname = 'console.hack.hustunique.com';
