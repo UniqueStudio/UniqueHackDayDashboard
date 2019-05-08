@@ -53,7 +53,7 @@ const detailFormSubmitOKInfo: Epic = action$ =>
 const newOrJoinFormSubmitOK: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.NEW_TEAM_FORM_SUBMIT.OK, TYPE.JOIN_TEAM_FORM_SUBMIT.OK),
-        takeUntil(action$.pipe(ofType(TYPE.CHANGE_IS_T_SUBMIT.OK))),
+        // takeUntil(action$.pipe(ofType(TYPE.CHANGE_IS_T_SUBMIT.OK))),
         mergeMap(() => of({ type: TYPE.CHANGE_IS_T_SUBMIT._ })),
     );
 

@@ -15,6 +15,9 @@ import Col from 'antd/es/col';
 import ApplyConfirmView from '../ApplyConfirmView';
 import { RootState } from '../../redux/reducers/index';
 import Message from 'antd/es/message';
+
+import QQGroupImg from './group.png';
+
 export interface ApplyViewProps {
     maxStep: number;
     currentStep: number;
@@ -98,13 +101,18 @@ class ApplyView extends React.Component<ApplyViewProps> {
                             description="我们很高兴你确认报名 Unique Hackday，我们将立刻审阅你提交的信息并在第一时间将你是否入选通知于你，静候佳音吧！"
                             message="恭喜"
                         />
-                        <Button
-                            type="primary"
-                            style={{ marginTop: '10px' }}
-                            onClick={this.props.applyProcessEnd}
-                        >
-                            完成
-                        </Button>
+                        <div style={{ textAlign: 'center' }}>
+                            <Button
+                                type="primary"
+                                style={{ marginTop: '10px' }}
+                                onClick={this.props.applyProcessEnd}
+                            >
+                                完成
+                            </Button>
+                            <div>
+                                <img src={QQGroupImg} style={{ width: '80%', marginTop: '48px' }} />
+                            </div>
+                        </div>
                     </Col>
                 </Row>
             </div>

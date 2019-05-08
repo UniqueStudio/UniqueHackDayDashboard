@@ -92,13 +92,10 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif|jpeg)$/,
                 use: [
                     {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[hash].[ext]',
-                        },
+                        loader: 'url-loader',
                     },
                 ],
             },
@@ -106,6 +103,6 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.css', '.jpg', '.png'],
     },
 };
