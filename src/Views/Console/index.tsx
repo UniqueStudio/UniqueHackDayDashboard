@@ -50,9 +50,9 @@ class Console extends React.Component<{
             <Button key={0} type="primary" onClick={this.props.toEditTeam}>
                 组队
             </Button>,
-            <Button key={1} type="danger" onClick={this.props.abortCompetition}>
-                退出比赛
-            </Button>,
+            // <Button key={1} type="danger" onClick={this.props.abortCompetition}>
+            //     退出比赛
+            // </Button>,
         ];
     }
 }
