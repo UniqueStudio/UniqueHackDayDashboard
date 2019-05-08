@@ -8,7 +8,7 @@ _   _ _   _ ___ ___  _   _ _____   ____ _____ _   _ ____ ___ ___
  \___/|_| \_|___\__\_\\___/|_____| |____/ |_|  \___/|____/___\___/
  
                                                联众人之志，创非凡之事
-  Year 2019 maintainer @ttzztztz @farawaaay
+  Year 2019 maintainer @ttzztztz @Colinaaa @farawaaay
     `);
 } else {
     console.log('联众人之志，创非凡之事');

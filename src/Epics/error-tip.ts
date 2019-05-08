@@ -16,7 +16,7 @@ const errorTip: Epic = action$ =>
             TYPE.JOIN_TEAM_FORM_SUBMIT.FAIL,
         ),
         mergeMap((res: AnyAction) => {
-            const { payload: msg } = res;
+            const msg = res.payload || res.message || '未知错误';
             Message.error(msg);
             return of({
                 type: TYPE.ERROR_SHOW,

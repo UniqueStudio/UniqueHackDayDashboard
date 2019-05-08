@@ -1,11 +1,11 @@
 import { createStore, applyMiddleware, compose, Store } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { createEpicMiddleware } from 'redux-observable';
-import { History, createBrowserHistory } from 'history';
+import { History, createHashHistory } from 'history';
 import reducer, { RootState } from '../reducers';
 import RootEpics from '../../Epics/index';
 
-export const history: History = createBrowserHistory();
+export const history: History = createHashHistory();
 const composeEnhancers =
     ((process.env.NODE_ENV === 'development' ||
         window.location.host.includes('console.fredliang.cn')) &&
