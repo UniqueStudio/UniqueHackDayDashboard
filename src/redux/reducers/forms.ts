@@ -141,7 +141,7 @@ export function loginForm(
             return {
                 ...state,
                 isSubmitting: false,
-                error: { value: action.payload || action.message || '未知错误', time: Date.now() },
+                error: { value: action.payload, time: Date.now() },
             };
 
         default:

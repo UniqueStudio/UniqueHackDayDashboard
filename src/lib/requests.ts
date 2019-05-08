@@ -15,7 +15,10 @@ export async function login(usernameOrPhone: string, password: string, antiRobot
         return [res.data.token];
     }
 
-    return [null, `${locales.LOGIN_FAILED}: ${locales[res.message]}`];
+    return [
+        null,
+        `${locales.LOGIN_FAILED}: ${locales[res.message] ? locales[res.message] : res.message}`,
+    ];
 }
 // prettier-ignore
 export async function register(username: string, password: string, phone: string, code: string, antiRobotToken: string) {
