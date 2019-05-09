@@ -209,9 +209,11 @@ class DetailView extends React.Component<DetailViewProps> {
 
                     <Select required={true} id="role" fieldName="角色" label="角色" mode="tags">
                         <SelectOption value="前端">前端</SelectOption>
+                        <SelectOption value="客户端">客户端</SelectOption>
                         <SelectOption value="产品">产品</SelectOption>
                         <SelectOption value="设计">设计</SelectOption>
                         <SelectOption value="后端">后端</SelectOption>
+                        <SelectOption value="游戏开发">游戏开发</SelectOption>
                         <SelectOption value="机器学习">机器学习</SelectOption>
                         <SelectOption value="硬件开发">硬件开发</SelectOption>
                         <SelectOption value="其他">其他</SelectOption>
@@ -224,6 +226,8 @@ class DetailView extends React.Component<DetailViewProps> {
                         <SelectOption value="PHP"> PHP </SelectOption>
                         <SelectOption value="Swift"> Swift </SelectOption>
                         <SelectOption value="Object-C"> Object-C </SelectOption>
+                        <SelectOption value="Android"> Android </SelectOption>
+                        <SelectOption value="iOS"> iOS </SelectOption>
                         <SelectOption value="Kotlin"> Kotlin </SelectOption>
                         <SelectOption value="Erlang"> Erlang </SelectOption>
                         <SelectOption value="Python"> Python </SelectOption>
