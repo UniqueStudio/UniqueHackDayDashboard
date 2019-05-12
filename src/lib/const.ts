@@ -3,4 +3,4 @@
 
 // export const hostname = 'hd.plus1sec.cn';
 
-export const hostname = 'hustunique.com:8088';
+export const hostname = '129.211.140.244:8081';
