@@ -193,7 +193,7 @@ export async function submitDetail(detail: API.User.UserDetailRequest) {
     if (res.httpStatusCode === 200) {
         return [true];
     }
-    return [null, `${locales.SUBMIT_DETAIL}: ${locales[res.message]}`];
+    return [null, `${locales.SUBMIT_DETAIL}: ${res.message}`];
 }
 
 export async function msgPoll() {
