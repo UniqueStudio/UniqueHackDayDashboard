@@ -25,3 +25,11 @@ export interface LoadUserInfoOK {
     type: TYPE.LOAD_USER_INFO_OK | TYPE.LOAD_USER_INFO_FAIL;
     payload: any;
 }
+
+export interface DeleteFile {
+    type: TYPE.DELETE_FILE;
+    payload: {
+        id: string;
+        type: string;
+    };
+}

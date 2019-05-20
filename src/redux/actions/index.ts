@@ -206,6 +206,8 @@ export const ADMIN_USER_STATUS_CHANGE = createActions('ADMIN_USER_STATUS_CHANGE'
 export type ADMIN_USER_STATUS_CHANGE = typeof ADMIN_USER_STATUS_CHANGE._;
 export const ADMIN_USER_SUBMIT = createActions('ADMIN_USER_SUBMIT');
 export type ADMIN_USER_SUBMIT = typeof ADMIN_USER_SUBMIT._;
+export const DELETE_FILE = createActions('DELETE_FILE');
+export type DELETE_FILE = typeof DELETE_FILE._;
 
 export const MSG_USER_ACCEPTED = 'MSG_USER_ACCEPTED';
 export const MSG_USER_REJECTED = 'MSG_USER_REJECTED';

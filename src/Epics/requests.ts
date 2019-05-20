@@ -1,6 +1,6 @@
 import * as TYPE from '../redux/actions';
 import * as req from '../lib/requests';
-import { Epic } from './typings';
+import { Epic, DeleteFile } from './typings';
 import { ofType } from 'redux-observable';
 import { mergeMap, startWith, switchMap } from 'rxjs/operators';
 import { of, from } from 'rxjs';
@@ -429,6 +429,24 @@ const deleteTeam: Epic = action$ =>
         }),
     );
 
+const deleteFile: Epic<DeleteFile> = action$ =>
+    action$.pipe(
+        ofType(TYPE.DELETE_FILE._),
+        mergeMap(({ payload: { id, type } }) => {
+            return from(req.deleteResume(id, type)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of({ type: TYPE.DELETE_FILE.OK });
+                    } else {
+                        return of({ type: TYPE.DELETE_FILE.FAIL, payload: message });
+                    }
+                }),
+                startWith({ type: TYPE.DELETE_FILE.START }),
+            );
+        }),
+    );
+
 const changeTeamLeader: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.CHANGE_TEAM_LEADER._),
@@ -474,4 +492,5 @@ export default [
     exitTeam,
     deleteTeam,
     changeTeamLeader,
+    deleteFile,
 ];

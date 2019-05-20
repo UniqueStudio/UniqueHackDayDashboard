@@ -1,13 +1,15 @@
 // tslint:disable: jsx-no-multiline-js
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-
+import * as TYPE from '../../redux/actions';
 import Form from 'antd/es/form';
 import Upload, { UploadChangeParam } from 'antd/es/upload';
 import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 import { hostname } from '../../lib/const';
 import Message from 'antd/es/message';
+import { UploadFile } from 'antd/es/upload/interface';
+import { connect } from 'react-redux';
 
 const authorizationToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
 
@@ -17,9 +19,10 @@ export interface FileProps {
     required: boolean;
     fieldName: string;
     label: string;
+    deleteFileDispatch: (id: string, type: string) => void;
 }
 
-export default class File extends React.Component<FileProps> {
+class File extends React.Component<FileProps> {
     state = {
         isUploading: false,
     };
@@ -47,6 +50,13 @@ export default class File extends React.Component<FileProps> {
             return false;
         }
         return true;
+    };
+
+    removeFile = (file: UploadFile) => {
+        const { id: type } = this.props;
+        const fileId = file.uid;
+
+        this.props.deleteFileDispatch(fileId, type);
     };
 
     render() {
@@ -88,6 +98,7 @@ export default class File extends React.Component<FileProps> {
                             listType="picture"
                             headers={{ Authorization: `Bearer ${authorizationToken()}` }}
                             beforeUpload={this.beforeUpload}
+                            onRemove={this.removeFile}
                         >
                             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
                                 <Icon type="upload" /> 点击上传{this.props.fieldName}
@@ -106,6 +117,7 @@ export default class File extends React.Component<FileProps> {
                             headers={{ Authorization: `Bearer ${authorizationToken()}` }}
                             beforeUpload={this.beforeUpload}
                             defaultFileList={getFieldValue(this.props.id)}
+                            onRemove={this.removeFile}
                         >
                             <Button style={{ color: 'rgba(0,0,0,0.5)' }}>
                                 <Icon type="upload" /> 点击上传{this.props.fieldName}
@@ -122,3 +134,18 @@ export default class File extends React.Component<FileProps> {
         size: PropTypes.string,
     };
 }
+
+export default connect(
+    () => ({}),
+    dispatch => ({
+        deleteFileDispatch(id: string, type: string) {
+            dispatch({
+                type: TYPE.DELETE_FILE._,
+                payload: {
+                    id,
+                    type,
+                },
+            });
+        },
+    }),
+)(File);

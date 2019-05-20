@@ -207,6 +207,21 @@ export async function msgPoll() {
     return [null, `${locales.MSG_POLL_FAILED}: ${locales[res.message]}`];
 }
 
+export async function deleteResume(id: string, type: string) {
+    const res = await request({
+        endpoint: '/v1/files',
+        method: 'DELETE',
+        body: {
+            id,
+            type,
+        },
+    });
+    if (res.httpStatusCode === 200) {
+        return [true];
+    }
+    return [false, `${locales.DELETE_MSG}: ${res.message}`];
+}
+
 export async function getUnreadMsgAll() {
     const res = await request({
         endpoint: '/v1/message/messages/all?filter=unread',
