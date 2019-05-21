@@ -122,6 +122,7 @@ const TeamInfo = (props: TeamInfoProps) => {
                 dataSource={data}
                 pagination={false}
                 scroll={{ x: showEditButton ? '500px' : '400px' }}
+                style={{ overflowX: 'hidden' }}
             >
                 <Column
                     title="角色"
