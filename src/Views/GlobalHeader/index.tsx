@@ -93,6 +93,14 @@ class GlobalHeader extends React.Component<{
                 <Menu.Item key="0" style={{ width: '150px' }} onClick={this.handleEdit}>
                     <Icon type="edit" style={{ marginRight: '4px' }} /> 编辑报名信息
                 </Menu.Item>
+                <Menu.Item key="0" style={{ width: '150px' }}>
+                    <a
+                        href="https://hackday-dashboard.oss-cn-hangzhou.aliyuncs.com/files/2019%20UniqueHackday%E5%8F%82%E8%B5%9B%E5%8D%8F%E8%AE%AE%20.pdf"
+                        target="_blank"
+                    >
+                        <Icon type="form" style={{ marginRight: '4px' }} /> 阅读参赛协议
+                    </a>
+                </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="2">
                     <span onClick={this.props.handleLogout}>
