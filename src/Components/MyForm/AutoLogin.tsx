@@ -12,7 +12,7 @@ export default function AutoLogin(_: any, context: any) {
     return (
         <Form.Item style={{ marginBottom: 0 }}>
             {getFieldDecorator('autoLogin')(<Checkbox defaultChecked={true}>自动登录</Checkbox>)}
-            <a style={{ float: 'right' }} href="user_entry/reset_pwd">
+            <a style={{ float: 'right' }} href="/#/user_entry/reset_pwd">
                 忘记密码
             </a>
         </Form.Item>

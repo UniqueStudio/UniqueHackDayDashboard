@@ -135,6 +135,25 @@ const resetPwdSubmit: Epic = action$ =>
                 mergeMap(res => {
                     const [ok, message] = res;
                     if (ok) {
+                        return of({ type: TYPE.RESET_PWD_FORM_SUBMIT.OK });
+                    } else {
+                        return of({ type: TYPE.RESET_PWD_FORM_SUBMIT.FAIL, payload: message });
+                    }
+                }),
+                startWith({ type: TYPE.RESET_PWD_FORM_SUBMIT.START }),
+            );
+        }),
+    );
+
+const resetPwdSmsSubmit: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.RESET_PWD_SEND_SMS_SUBMIT._),
+        mergeMap((action: AnyAction) => {
+            const { data } = getResetPwdForm();
+            return from(req.resetPwdSendSMS(data.phone.value!, action.payload)).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
                         return of({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.OK });
                     } else {
                         return of({ type: TYPE.RESET_PWD_SEND_SMS_SUBMIT.FAIL, payload: message });
@@ -145,7 +164,7 @@ const resetPwdSubmit: Epic = action$ =>
         }),
     );
 
-const sendSMSSubmit: Epic = action$ =>
+const regSendSMSSubmit: Epic = action$ =>
     action$.pipe(
         ofType(TYPE.REGISITER_SEND_SMS_SUBMIT._),
         switchMap((action: AnyAction) => {
@@ -476,7 +495,8 @@ export default [
     getAdminTeamsInfo,
     loginFormSubmit,
     regFormSubmit,
-    sendSMSSubmit,
+    regSendSMSSubmit,
+    resetPwdSmsSubmit,
     resetPwdSubmit,
     detailFormSubmit,
     newTeamFormSubmit,
