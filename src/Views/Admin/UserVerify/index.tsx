@@ -24,7 +24,8 @@ class UserVerify extends React.Component<UserVerifyProps> {
     statusFilters = [
         { text: '审核中', value: '0' || '1' },
         { text: '未通过', value: '2' },
-        { text: '已通过', value: '3' },
+        { text: '已通过,待确认', value: '3' },
+        { text: '确认参赛', value: '4' },
     ];
 
     renderOperation = (record: any) => {
@@ -37,32 +38,49 @@ class UserVerify extends React.Component<UserVerifyProps> {
             }
         };
 
-        const showRadio = record.verifyState !== 2 && record.verifyState !== 3;
+        const showRadio = record.verifyState !== 2;
 
         return (
             <Radio.Group onChange={handleChange} defaultValue={this.props.radios[record.username]}>
-                {showRadio && (
-                    <React.Fragment>
+                {showRadio && record.verifyState !== 3 && record.verifyState !== 4 && (
+                    <>
                         <Radio value={1}>通过</Radio>
                         <Radio value={0}>拒绝</Radio>
                         {this.props.isSuperAdmin && !record.inWaitList && (
                             <Radio value={2}>等待列表</Radio>
                         )}
-                    </React.Fragment>
+                    </>
+                )}
+                {showRadio && record.verifyState === 3 && (
+                    <>
+                        <Radio value={3}>参赛</Radio>
+                    </>
+                )}
+                {showRadio && record.verifyState === 4 && (
+                    <>
+                        <Radio value={4}>不参赛</Radio>
+                    </>
                 )}
             </Radio.Group>
         );
     };
 
-    renderSuperAdminFooter(passNum: number, pengdingNum: number, rejectNum: number) {
+    renderSuperAdminFooter(
+        passNum: number,
+        pengdingNum: number,
+        rejectNum: number,
+        determinedNum: number,
+    ) {
         return (
             <React.Fragment>
                 <Dvider type="vertical" />
                 <span>审核中: {pengdingNum}</span>
                 <Dvider type="vertical" />
-                <span>已通过: {passNum}</span>
+                <span>已通过,待确认: {passNum}</span>
                 <Dvider type="vertical" />
                 <span>未通过: {rejectNum}</span>
+                <Dvider type="vertical" />
+                <span>确认参赛: {determinedNum}</span>
             </React.Fragment>
         );
     }
@@ -85,14 +103,16 @@ class UserVerify extends React.Component<UserVerifyProps> {
             user => user.verifyState === 0 || user.verifyState === 1,
         ).length;
         const rejectNum = dataSource.filter(user => user.verifyState === 2).length;
-        const passNum = total - pengdingNum - rejectNum;
+        const passNum = dataSource.filter(user => user.verifyState === 3 || user.verifyState === 4)
+            .length;
+        const determinedNum = dataSource.filter(user => user.verifyState === 4).length;
 
         return (
-            <React.Fragment>
+            <>
                 <span>总数: {total}</span>
                 {this.props.isSuperAdmin &&
-                    this.renderSuperAdminFooter(passNum, pengdingNum, rejectNum)}
-            </React.Fragment>
+                    this.renderSuperAdminFooter(passNum, pengdingNum, rejectNum, determinedNum)}
+            </>
         );
     };
 
@@ -111,8 +131,10 @@ class UserVerify extends React.Component<UserVerifyProps> {
     }
 
     renderStatus = (status: any, record: any) =>
-        status === 3 ? (
-            <Badge status="success" text="已通过" />
+        status === 4 ? (
+            <Badge status="success" text="确认参赛" />
+        ) : status === 3 ? (
+            <Badge status="success" text="已通过,待确认" />
         ) : status === 2 ? (
             <Badge status="error" text="未通过" />
         ) : record.inWaitList ? (

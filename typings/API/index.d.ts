@@ -685,7 +685,7 @@ declare namespace API {
             username: string;
             edited: number;
             collection: string;
-            verifyState: 0 | 1 | 2 | 3;
+            verifyState: 0 | 1 | 2 | 3 | 4;
             adminDict: {
                 0: string[];
                 1: string[];

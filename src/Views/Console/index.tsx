@@ -7,7 +7,6 @@ import TeamInfo from '../../Components/TeamInfo';
 import HackdayProgress from '../../Components/HackdayProgress';
 import { RootState } from '../../redux/reducers';
 import * as TYPE from '../../redux/actions';
-// import { connect } from 'react-redux';
 
 class Console extends React.Component<{
     userIsAccepted: boolean | null;
@@ -24,7 +23,6 @@ class Console extends React.Component<{
         const { userIsAccepted, inWaitList, checkedIn } = this.props;
         let icon = { type: 'question', color: '#ffaf40' };
         let statusText = '等待审核';
-        let confirmText = '';
 
         if (userIsAccepted === true) {
             statusText = '已通过';
@@ -36,18 +34,13 @@ class Console extends React.Component<{
             statusText = '等待列表';
         }
 
-        if (checkedIn !== undefined) {
-            confirmText = checkedIn ? '已确认参赛' : '未确认参赛';
+        if (checkedIn) {
+            statusText += '已确认参赛';
         }
 
         return (
             <div style={{ paddingBottom: '40px' }}>
-                <Status
-                    icon={icon}
-                    statusText={statusText}
-                    confirmText={confirmText}
-                    buttons={this.renderStatusButtons()}
-                />
+                <Status icon={icon} statusText={statusText} buttons={this.renderStatusButtons()} />
                 {this.renderDivider()}
                 <TeamInfo />
                 {this.renderDivider()}
