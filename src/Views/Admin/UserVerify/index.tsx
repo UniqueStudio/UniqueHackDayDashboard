@@ -78,9 +78,9 @@ class UserVerify extends React.Component<UserVerifyProps> {
                 <Dvider type="vertical" />
                 <span>已通过,待确认: {passNum}</span>
                 <Dvider type="vertical" />
-                <span>未通过: {rejectNum}</span>
-                <Dvider type="vertical" />
                 <span>确认参赛: {determinedNum}</span>
+                <Dvider type="vertical" />
+                <span>未通过: {rejectNum}</span>
             </React.Fragment>
         );
     }
