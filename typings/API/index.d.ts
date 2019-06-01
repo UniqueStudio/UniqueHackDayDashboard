@@ -361,6 +361,19 @@ declare namespace API {
                 | ResponseWithoutData<401, Message.LoginNeeded>
                 | ResponseWithoutData<200, Message.Success>
             >;
+
+            (
+                req: RequestWithAuth<
+                    '/v1/user/checkin',
+                    'POST',
+                    {
+                        checkIn: boolean;
+                    }
+                >,
+            ): Response<
+                | ResponseWithoutData<401, Message.LoginNeeded>
+                | ResponseWithoutData<200, Message.Success>
+            >;
         }
     }
 

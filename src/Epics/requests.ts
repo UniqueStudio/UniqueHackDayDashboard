@@ -489,6 +489,27 @@ const changeTeamLeader: Epic = action$ =>
         }),
     );
 
+const submitCheckIn: Epic = action$ =>
+    action$.pipe(
+        ofType(TYPE.CHECK_IN_SUBMIT._),
+        mergeMap(() => {
+            return from(req.submitCheckIn()).pipe(
+                mergeMap(res => {
+                    const [ok, message] = res;
+                    if (ok) {
+                        return of(
+                            { type: TYPE.CHECK_IN_SUBMIT.OK },
+                            { type: TYPE.LOAD_USER_INFO._ },
+                        );
+                    } else {
+                        return of({ type: TYPE.CHECK_IN_SUBMIT.FAIL, payload: message });
+                    }
+                }),
+                startWith({ type: TYPE.CHECK_IN_SUBMIT.START }),
+            );
+        }),
+    );
+
 export default [
     loadUserInfo,
     loadTeamInfo,
@@ -513,4 +534,5 @@ export default [
     deleteTeam,
     changeTeamLeader,
     deleteFile,
+    submitCheckIn,
 ];

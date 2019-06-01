@@ -12,8 +12,9 @@ class Console extends React.Component<{
     userIsAccepted: boolean | null;
     abortCompetition: any;
     inWaitList: boolean;
-    checkedIn?: boolean;
+    checkedIn: boolean;
     toEditTeam: () => void;
+    submitCheckIn: () => void;
 }> {
     renderDivider() {
         return <div style={{ height: '20px' }} />;
@@ -50,14 +51,23 @@ class Console extends React.Component<{
     }
 
     renderStatusButtons() {
-        return [
+        const { userIsAccepted, checkedIn } = this.props;
+
+        const buttonArrs = [
             <Button key={0} type="primary" onClick={this.props.toEditTeam}>
                 组队
             </Button>,
-            // <Button key={1} type="danger" onClick={this.props.abortCompetition}>
-            //     退出比赛
-            // </Button>,
         ];
+
+        if (userIsAccepted && !checkedIn) {
+            buttonArrs.push(
+                <Button key={1} type="danger" onClick={this.props.submitCheckIn}>
+                    确认参赛
+                </Button>,
+            );
+        }
+
+        return buttonArrs;
     }
 }
 
@@ -79,6 +89,9 @@ export default connect(
         },
         toEditTeam() {
             dispatch(replace('/team'));
+        },
+        submitCheckIn() {
+            dispatch({ type: TYPE.CHECK_IN_SUBMIT._ });
         },
     }),
 )(Console);

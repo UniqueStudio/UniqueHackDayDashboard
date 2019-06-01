@@ -364,3 +364,17 @@ export async function adminUserStateChange(stateList: API.Admin.AdminUserState[]
     }
     return [false, `admin: ${res.message}`];
 }
+
+export async function submitCheckIn() {
+    const res = await request({
+        endpoint: '/v1/user/checkin',
+        method: 'POST',
+        body: {
+            checkIn: true,
+        },
+    });
+    if (res.httpStatusCode === 200) {
+        return [true];
+    }
+    return [false, res.message];
+}
