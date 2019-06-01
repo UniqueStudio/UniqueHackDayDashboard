@@ -1,15 +1,19 @@
 // tslint:disable: jsx-no-multiline-js
+// tslint:disable: jsx-no-lambda
 import * as React from 'react';
-import Table from 'antd/es/table';
 import { RootState } from '../../../redux/reducers';
 import { connect } from 'react-redux';
 import { AdminUser } from '../../../redux/reducers/admin/userVerify';
 import * as TYPE from '../../../redux/actions';
+import uniq from 'lodash/uniq';
+
+import Table from 'antd/es/table';
+import Input from 'antd/es/input';
 import Radio from 'antd/es/radio';
+import Icon from 'antd/es/icon';
 import Button from 'antd/es/button';
 import Badge from 'antd/es/badge';
 import Dvider from 'antd/es/divider';
-import uniq from 'lodash/uniq';
 
 export interface UserVerifyProps {
     dataSource: AdminUser['items'];
@@ -21,6 +25,10 @@ export interface UserVerifyProps {
 }
 
 class UserVerify extends React.Component<UserVerifyProps> {
+    state = {
+        searchText: '',
+    };
+
     statusFilters = [
         { text: '审核中', value: '0' || '1' },
         { text: '未通过', value: '2' },
@@ -143,9 +151,68 @@ class UserVerify extends React.Component<UserVerifyProps> {
             <Badge status="processing" text="审核中" />
         );
 
+    searchInput: any;
+    getColumnSearchProps = (dataIndex: any) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={(node: any) => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={'Search ' + dataIndex}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    搜索
+                </Button>
+                <Button
+                    onClick={() => this.handleReset(clearFilters)}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    重置
+                </Button>
+            </div>
+        ),
+        filterIcon: (filtered: boolean) => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value: any, record: any) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: (visible: any) => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: (text: string) => <>{text}</>,
+    });
+
+    handleSearch = (selectedKeys: any, confirm: any) => {
+        confirm();
+        this.setState({ searchText: selectedKeys[0] });
+    };
+
+    handleReset = (clearFilters: any) => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
     render() {
         const Column = Table.Column;
         const { dataSource } = this.props;
+        const searchProps = this.getColumnSearchProps('name');
 
         return (
             <>
@@ -169,7 +236,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
                                 : '队员'
                         }
                     />
-                    <Column title="姓名" dataIndex="name" key="name" />
+                    <Column title="姓名" dataIndex="name" key="name" {...searchProps} />
                     {this.props.isSuperAdmin && (
                         <Column
                             title="当前通过"
@@ -185,6 +252,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
                         render={this.renderStatus}
                         filters={this.props.isSuperAdmin ? this.statusFilters : undefined}
                         onFilter={this.filterStatus}
+                        filterMultiple={false}
                     />
                     <Column title="学校" dataIndex="school" key="school" />
                     <Column title="城市" dataIndex="city" key="city" />
