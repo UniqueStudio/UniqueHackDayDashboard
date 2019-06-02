@@ -234,7 +234,7 @@ declare namespace API {
                     {
                         phone: string;
                         code: string;
-                        newPassword: string;
+                        password: string;
                         antiRobotToken: string;
                     }
                 >,

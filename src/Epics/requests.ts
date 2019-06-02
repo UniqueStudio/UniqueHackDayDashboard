@@ -128,7 +128,7 @@ const resetPwdSubmit: Epic = action$ =>
                 req.resetPwdRequest(
                     data.phone.value!,
                     data.code.value!,
-                    data.password.value!,
+                    data.newPassword.value!,
                     action.payload,
                 ),
             ).pipe(

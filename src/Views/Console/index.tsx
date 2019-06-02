@@ -59,7 +59,7 @@ class Console extends React.Component<{
             </Button>,
         ];
 
-        if (userIsAccepted && !checkedIn && new Date().getTime() >= 1559404799000) {
+        if (userIsAccepted && !checkedIn) {
             buttonArrs.push(
                 <Button key={1} type="danger" onClick={this.props.submitCheckIn}>
                     确认参赛

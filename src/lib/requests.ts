@@ -52,14 +52,14 @@ export async function resetPwdRequest(
         body: {
             phone,
             code,
-            newPassword,
+            password: newPassword,
             antiRobotToken,
         },
     });
     if (res.httpStatusCode === 200) {
         return [true];
     }
-    return [false, `${locales.RESET_PWD_FAILED}: ${locales[res.message]}`];
+    return [false, `${locales.RESET_PWD_FAILED}: ${res.message}`];
 }
 
 export async function registerSendSMS(phone: string, antiRobotToken: string) {

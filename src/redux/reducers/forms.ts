@@ -217,7 +217,7 @@ export type ResetPwdForm = ToForm<
     ToFormData<{
         phone: string;
         code: string;
-        password: string;
+        newPassword: string;
     }>
 >;
 /**
@@ -226,7 +226,7 @@ export type ResetPwdForm = ToForm<
 export function resetPwdForm(
     state: ResetPwdForm = {
         data: {
-            password: {},
+            newPassword: {},
             code: {},
             phone: {},
         },
