@@ -218,7 +218,7 @@ class UserVerify extends React.Component<UserVerifyProps> {
             <>
                 <Table
                     scroll={{ x: 700 }}
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 25 }}
                     dataSource={dataSource}
                     rowKey="name"
                     footer={this.renderFooter}
