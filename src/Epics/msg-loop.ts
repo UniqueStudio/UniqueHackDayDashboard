@@ -19,6 +19,7 @@ const messageLoop: Epic = action$ =>
                             type: TYPE.GET_UNREAD_MSG_ALL.OK,
                             payload: messages,
                         });
+                        returnArr.push({ type: TYPE.STOP_MSG_LOOP });
                         if (messages[0] && messages[0].type === 'Accepted') {
                             returnArr.push({ type: TYPE.MSG_USER_ACCEPTED });
                         }
